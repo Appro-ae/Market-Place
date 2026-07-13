@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appro · API Marketplace</title>
+  <link rel="icon" href="assets/logos/appro-logo-color.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <style>
+    body { margin: 0; min-height: 100vh; background: var(--navy-900);
+      background-image: radial-gradient(1200px 600px at 80% -10%, rgba(59,126,246,.25), transparent 60%),
+                        radial-gradient(900px 500px at 0% 110%, rgba(0,174,239,.15), transparent 60%);
+      color: #fff; font-family: var(--font-ui); display: flex; align-items: center; justify-content: center; }
+    .wrap { width: min(960px, 92vw); padding: 48px 0; }
+    .brand img { height: 34px; display: block; }
+    .kicker { margin-top: 14px; font-size: 12px; letter-spacing: .2em; font-weight: 700; color: rgba(255,255,255,.55); text-transform: uppercase; font-family: var(--font-display); }
+    h1 { font-family: var(--font-display); font-size: 40px; line-height: 1.1; letter-spacing: -0.02em; margin: 20px 0 12px; color: #fff; }
+    p.lead { font-size: 16px; line-height: 1.55; color: rgba(255,255,255,.72); max-width: 560px; margin: 0 0 36px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px;
+      padding: 26px; text-decoration: none; color: #fff; display: flex; flex-direction: column; gap: 10px;
+      transition: transform .15s, border-color .15s, background .15s; }
+    .card:hover { transform: translateY(-3px); border-color: var(--appro-blue); background: rgba(59,126,246,.1); }
+    .card .tag { font-size: 11px; letter-spacing: .16em; font-weight: 700; text-transform: uppercase; color: var(--appro-blue-400); }
+    .card h2 { font-family: var(--font-display); font-size: 22px; margin: 0; color: #fff; }
+    .card p { margin: 0; font-size: 13.5px; line-height: 1.5; color: rgba(255,255,255,.66); }
+    .card .go { margin-top: 8px; font-size: 13px; font-weight: 700; color: var(--appro-blue-400); }
+    .card.soon { opacity: .72; }
+    .card.soon .tag { color: var(--warning); }
+    footer { margin-top: 40px; font-size: 12px; color: rgba(255,255,255,.4); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand"><img src="assets/logos/appro-logo-white.svg" alt="Appro"></div>
+    <div class="kicker">API Marketplace</div>
+    <h1>Appro API Marketplace</h1>
+    <p class="lead">A UAE-first marketplace for banking &amp; fintech APIs. Choose a portal to continue.</p>
+
+    <div class="cards">
+      <a class="card" href="admin/">
+        <span class="tag">Internal</span>
+        <h2>Admin Console</h2>
+        <p>Govern the marketplace — onboard tenants, publish products, manage pricing &amp; subscriptions, and oversee usage across every organization.</p>
+        <span class="go">Open Admin Console →</span>
+      </a>
+      <a class="card soon" href="customer/">
+        <span class="tag">Tenant</span>
+        <h2>Customer Portal</h2>
+        <p>Discover &amp; subscribe to APIs, manage keys and credentials, monitor usage, and handle billing. Reconstruction pending the customer standalone.</p>
+        <span class="go">Open Customer Portal →</span>
+      </a>
+    </div>
+
+    <footer>© 2026 Appro · UAE-first API Marketplace</footer>
+  </div>
+</body>
+</html>
