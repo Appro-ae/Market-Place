@@ -33,9 +33,12 @@ const subscriptions = [
 ];
 
 const users = [
-  { id: 'U-ADMIN', email: 'admin@appro.ae',   password: 'Appro@12345', name: 'Amira Saleh', role: 'super_admin', tenant_id: null },
-  { id: 'U-NUQUD', email: 'admin@nuqud.ae',   password: 'Demo@12345',  name: 'Yusuf Al Hammadi', role: 'admin', tenant_id: 'TEN-1004' },
-  { id: 'U-DEV',   email: 'dev@nuqud.ae',     password: 'Demo@12345',  name: 'Layla Mansoori', role: 'developer', tenant_id: 'TEN-1004' },
+  // Credentials match the login screen's pre-filled demo values so the demo "just works".
+  { id: 'U-ADMIN', email: 'rana.adel@appro.ae', password: 'appro1234', name: 'Rana Adel', role: 'super_admin', tenant_id: null },
+  { id: 'U-NUQUD', email: 'amira@nuqud.ae',     password: 'appro1234', name: 'Amira Saleh', role: 'admin', tenant_id: 'TEN-1004' },
+  { id: 'U-DEV',   email: 'dev@nuqud.ae',       password: 'appro1234', name: 'Layla Mansoori', role: 'developer', tenant_id: 'TEN-1004' },
+  // The real Appro/tenant credentials from the brief also work:
+  { id: 'U-ADMIN2', email: 'admin@appro.ae',    password: 'Appro@12345', name: 'Platform Admin', role: 'super_admin', tenant_id: null },
 ];
 
 const apiKeys = [

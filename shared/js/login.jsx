@@ -58,30 +58,51 @@ function LoginScreen({ variant = 'customer', onLogin }) {
   const inp = { width: '100%', height: 44, padding: '0 12px', border: '1px solid var(--ink-300)', borderRadius: 10, fontSize: 14, fontFamily: 'var(--font-ui)', outline: 'none', boxSizing: 'border-box', color: 'var(--ink-900)' };
   const lab = { fontSize: 12.5, fontWeight: 600, color: 'var(--ink-700)', marginBottom: 6, display: 'block', fontFamily: 'var(--font-ui)' };
 
+  const onSuccess = () => {
+    setBusy(false);
+    setAttempts(0); sessionStorage.removeItem(ATTEMPT_KEY); sessionStorage.removeItem(LOCK_KEY);
+    onLogin && onLogin({ email });
+  };
+  const onFail = () => {
+    setBusy(false);
+    const next = attempts + 1;
+    setAttempts(next); sessionStorage.setItem(ATTEMPT_KEY, String(next));
+    if (next >= MAX_ATTEMPTS) {
+      const until = Date.now() + LOCK_SECONDS * 1000;
+      setLockUntil(until); setNow(Date.now()); sessionStorage.setItem(LOCK_KEY, String(until));
+      setErr('');
+      window.toast && window.toast.error('Account locked', 'Too many failed attempts. Try again in 5 minutes or reset your password.');
+    } else {
+      setErr('invalid');
+    }
+  };
+
   const submit = (e) => {
     if (e && e.preventDefault) e.preventDefault();
     if (locked) return;
     if (!valid) { setErr('Enter your email and password to continue.'); return; }
     setErr(''); setBusy(true);
+
+    // Real backend when configured; otherwise the built-in demo credentials.
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.login(email.trim(), pw)
+        .then(() => onSuccess())
+        .catch((err) => {
+          if (err && err.status && err.status !== 401 && err.status !== 400) {
+            // Backend unreachable/error (e.g. cold start) — fall back to demo creds so the demo never locks up.
+            const good = DEMO_VALID[variant];
+            if (email.trim().toLowerCase() === good.email && pw === good.pw) return onSuccess();
+          }
+          onFail();
+        });
+      return;
+    }
+
     setTimeout(() => {
-      setBusy(false);
       const good = DEMO_VALID[variant];
       const ok = email.trim().toLowerCase() === good.email && pw === good.pw;
-      if (ok) {
-        setAttempts(0); sessionStorage.removeItem(ATTEMPT_KEY); sessionStorage.removeItem(LOCK_KEY);
-        onLogin && onLogin({ email });
-        return;
-      }
-      const next = attempts + 1;
-      setAttempts(next); sessionStorage.setItem(ATTEMPT_KEY, String(next));
-      if (next >= MAX_ATTEMPTS) {
-        const until = Date.now() + LOCK_SECONDS * 1000;
-        setLockUntil(until); setNow(Date.now()); sessionStorage.setItem(LOCK_KEY, String(until));
-        setErr('');
-        window.toast && window.toast.error('Account locked', 'Too many failed attempts. Try again in 5 minutes or reset your password.');
-      } else {
-        setErr('invalid');
-      }
+      if (ok) return onSuccess();
+      onFail();
     }, 850);
   };
 
