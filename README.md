@@ -3,16 +3,16 @@
 A faithful, editable reconstruction of the **Appro API Marketplace** portals — a
 UAE-first marketplace for banking & fintech APIs.
 
-The project was rebuilt from the Appro Admin Console reference (a self-contained
-prototype) into clean, multi-file source that renders identically.
+The project was rebuilt from the Appro Admin Console and Customer Portal
+reference prototypes into clean, multi-file source that renders identically.
 
 ## Portals
 
-| Portal | Path | Status |
-|--------|------|--------|
-| **Admin Console** | [`admin/`](admin/) | ✅ Complete — login, tenant management, product setup, billing, subscriptions, user roles, usage & analytics, request logs |
-| **Customer Portal** | [`customer/`](customer/) | 🟡 Shell + design system + login reconstructed; tenant screens pending the customer standalone |
-| Marketplace home | [`index.html`](index.html) | ✅ Landing page linking to both portals |
+| Portal | Path | Screens |
+|--------|------|---------|
+| **Admin Console** | [`admin/`](admin/) | Login, Tenant Management, Product Setup, Billing Management, Subscription Management, User Role Management, Usage & Analytics, Request Logs |
+| **Customer Portal** | [`customer/`](customer/) | Login, Dashboard, Product Catalogue, Product Detail, API Keys, API Credentials, IP Allowlists, Usage & Analytics, Request Logs, Consent, Subscriptions & Billing, Access Requests, Team, Settings, Verification (KYC/KYB), Environments |
+| Marketplace home | [`index.html`](index.html) | Landing page linking to both portals |
 
 ## Tech stack
 
@@ -47,26 +47,38 @@ Any static server works (`npx serve`, `php -S`, nginx, etc.).
 
 ```
 .
-├── index.html                 # marketplace landing page
+├── index.html                     # marketplace landing page
+├── shared/
+│   └── js/                        # atoms shared by both portals
+│       ├── shell.jsx                  # Icon set, Sidebar/Topbar, Btn/Card/StatusPill/…
+│       ├── login.jsx                  # LoginScreen (admin + customer variants)
+│       ├── toasts.jsx                 # toast + inline-error helpers
+│       └── billing-model.jsx          # billing model + compute
 ├── admin/
-│   ├── index.html             # admin console entry (loads vendor + modules)
+│   ├── index.html                 # admin console entry
 │   └── js/
-│       ├── 00-shell.jsx           # Icon set, shared atoms, customer Sidebar/Topbar
-│       ├── 01-login.jsx           # LoginScreen (admin + customer variants)
-│       ├── 02-toasts.jsx          # toast + inline-error helpers
-│       ├── 03-admin-shell.jsx     # AdminSidebar, AdminTopbar, catalog seed data
-│       ├── 04-admin-catalog.jsx   # Overview, Catalog, Onboard wizard
-│       ├── 05-product-setup.jsx   # Product Setup / governance
-│       ├── 06-admin-secondary.jsx # Access Requests, Tenants, Audit, Settings
+│       ├── 03-admin-shell.jsx         # AdminSidebar, AdminTopbar, catalog seed data
+│       ├── 04-admin-catalog.jsx       # Overview, Catalog, Onboard wizard
+│       ├── 05-product-setup.jsx       # Product Setup / governance
+│       ├── 06-admin-secondary.jsx     # Access Requests, Tenants, Audit, Settings
 │       ├── 07-tenant-management.jsx
 │       ├── 08-user-roles.jsx
-│       ├── 09-billing-model.jsx   # billing model + compute
 │       ├── 10-billing-subscriptions.jsx
-│       ├── 11-usage-logs.jsx      # Usage & Analytics + Request Logs
-│       ├── 12-tweaks.jsx          # theming tweaks panel
-│       └── app.jsx                # auth gate + screen router + mount
+│       ├── 11-usage-logs.jsx          # Usage & Analytics + Request Logs
+│       ├── 12-tweaks.jsx              # theming tweaks panel
+│       └── app.jsx                    # auth gate + screen router + mount
 ├── customer/
-│   └── index.html             # customer portal (placeholder — see status above)
+│   ├── index.html                 # customer portal entry
+│   └── js/
+│       ├── 01-dashboard-catalog.jsx   # Dashboard + Product Catalogue
+│       ├── 02-api-detail-keys.jsx     # Product Detail, API Keys, IP Allowlists, Subscribe modal
+│       ├── 03-operate-screens.jsx     # Usage, Logs, Access Requests, Team, Settings, key modals
+│       ├── 04-verification.jsx        # KYC/KYB verification + banner
+│       ├── 05-environments.jsx        # AWS / Azure environments + provision modal
+│       ├── 06-credentials.jsx         # API Credentials
+│       ├── 07-consent.jsx             # Consent management
+│       ├── 08-customer-billing.jsx    # Subscriptions & Billing (tenant view)
+│       └── app.jsx                    # auth gate + screen router + mount
 └── assets/
     ├── css/design-system.css
     ├── logos/appro-logo-{color,white}.svg
@@ -76,8 +88,7 @@ Any static server works (`npx serve`, `php -S`, nginx, etc.).
 ## Notes
 
 - State is prototype-local: seed data plus `localStorage` (auth flag, current
-  screen, locally-published APIs). No backend calls.
-- The admin login accepts any input — it is a front-end gate for the prototype.
-- Adding the Customer Portal: drop its screen modules into `customer/js/` and an
-  `index.html` mirroring the admin entry. The shared shell, login and design
-  system are already in place.
+  screen, subscriptions, verification status). No backend calls.
+- Both logins accept any input — they are front-end gates for the prototype.
+- The `shared/js/` atoms are byte-identical across portals (`login.jsx` differs
+  from the original only in the admin→customer cross-link path).
