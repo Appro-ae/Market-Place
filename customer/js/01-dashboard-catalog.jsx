@@ -278,10 +278,24 @@ function Dashboard({ env, goTo }) {
 }
 
 /* ---------- CATALOG ---------- */
+// Map a backend product to the catalogue card shape (colour derived from category).
+const CAT_COLOR = { credit: 'var(--success)', identity: 'var(--appro-blue)', compliance: '#EBBE00', income: '#7C3AED', analytics: '#00AEEF', banking: '#0072BC' };
+function mapApiProduct(p) {
+  return { id: p.id, name: p.name, cat: p.category, v: p.version, status: p.status, desc: p.description || '',
+    owner: p.owner, auth: p.auth, rate: p.rate_limit, cloud: p.cloud, region: p.region,
+    color: CAT_COLOR[p.category] || 'var(--appro-blue)', variants: 1 };
+}
+
 function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], onSubscribe }) {
   const { useState } = React;
   const [cat, setCat] = useState('all');
   const [q, setQ] = useState('');
+  const [apiProducts, setApiProducts] = useState(null);
+  React.useEffect(() => {
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.products().then(rows => setApiProducts(rows.map(mapApiProduct))).catch(() => {});
+    }
+  }, []);
 
   const categories = [
     { id: 'all', label: 'All Products', count: 36 },
@@ -336,10 +350,11 @@ function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], onSubscr
     try { return JSON.parse(localStorage.getItem('appro.publishedApis') || '[]'); } catch(e) { return []; }
   })();
 
-  const filtered = [...publishedApis, ...apis]
+  const baseApis = apiProducts || apis;
+  const filtered = [...publishedApis, ...baseApis]
     .map(a => ({ ...a, subscribed: subscribedIds.includes(a.id) }))
     .filter(a => (cat === 'all' || a.cat === cat) && (a.name.toLowerCase().includes(q.toLowerCase()) || a.desc.toLowerCase().includes(q.toLowerCase())));
-  try { window.PORTAL_PRODUCTS = [...publishedApis, ...apis].map(a => ({ id: a.id, name: a.name, desc: a.desc })); } catch(e) {}
+  try { window.PORTAL_PRODUCTS = [...publishedApis, ...baseApis].map(a => ({ id: a.id, name: a.name, desc: a.desc })); } catch(e) {}
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>

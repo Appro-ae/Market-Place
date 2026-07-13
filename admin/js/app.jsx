@@ -70,6 +70,6 @@ function AdminApp({ onLogout }) {
 function AdminRoot() {
   const [authed, setAuthed] = useState(() => localStorage.getItem('admin.authed') === '1');
   if (!authed) return <><ToastHost/><LoginScreen variant="admin" onLogin={() => { localStorage.setItem('admin.authed', '1'); setAuthed(true); }}/></>;
-  return <AdminApp onLogout={() => { localStorage.removeItem('admin.authed'); setAuthed(false); }}/>;
+  return <AdminApp onLogout={() => { localStorage.removeItem('admin.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<AdminRoot/>);

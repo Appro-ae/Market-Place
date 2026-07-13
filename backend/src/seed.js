@@ -12,24 +12,22 @@ const tenants = [
   { id: 'TEN-1006', name: 'Oasis Wallet',           plan: 'Growth',     status: 'Suspended', annual_spend: 210000 },
 ];
 
-const products = [
-  { id: 'email-verification', name: 'Email Verification', category: 'identity', version: 'v1.3', status: 'live', owner: 'Identity Team', auth: 'OAuth 2.0', rate_limit: '300 req/s', cloud: 'aws', region: 'me-central-1', description: 'Validate email deliverability, detect disposable domains, and confirm ownership with one-time codes.' },
-  { id: 'aecb', name: 'AECB Credit Report', category: 'credit', version: 'v2.0', status: 'live', owner: 'Credit Team', auth: 'mTLS + OAuth', rate_limit: '120 req/s', cloud: 'aws', region: 'me-central-1', description: 'Pull Al Etihad Credit Bureau reports and credit scores for individuals and companies, with consent capture.' },
-  { id: 'efr', name: 'EFR — Establishment Financial Report', category: 'credit', version: 'v1.1', status: 'live', owner: 'Credit Team', auth: 'mTLS + OAuth', rate_limit: '80 req/s', cloud: 'azure', region: 'UAE North', description: 'Retrieve establishment financial reports and entity risk profiles for corporate onboarding and lending.' },
-  { id: 'income-verify', name: 'Income Verification', category: 'credit', version: 'v0.9', status: 'review', owner: 'Credit Team', auth: 'OAuth 2.0', rate_limit: '60 req/s', cloud: 'aws', region: 'me-central-1', description: 'Verify salary and income streams against payroll and bank statement data.' },
-  { id: 'aml-screening', name: 'AML & Sanctions Screening', category: 'identity', version: 'v0.4', status: 'draft', owner: 'Compliance', auth: 'mTLS + OAuth', rate_limit: '40 req/s', cloud: 'aws', region: 'me-central-1', description: 'Screen individuals and entities against global sanctions, PEP and adverse-media lists.' },
-  { id: 'id-document-extraction', name: 'ID Document Extraction', category: 'identity', version: 'v1.2', status: 'live', owner: 'Identity Team', auth: 'OAuth 2.0', rate_limit: '150 req/s', cloud: 'aws', region: 'me-central-1', description: 'Extract and validate data from Emirates ID, passports and trade licences via OCR.' },
-];
+// Full 36-product catalogue, extracted from the customer portal design.
+const products = require('./products.seed.json');
 
 // tenant_id, product_id, environment, status
+// TEN-1004 (Amira / Nuqud Pay) mirrors the customer portal's default subscriptions.
 const subscriptions = [
-  ['TEN-1004', 'email-verification', 'production', 'active'],
-  ['TEN-1004', 'aecb',               'production', 'active'],
-  ['TEN-1004', 'id-document-extraction', 'sandbox', 'active'],
-  ['TEN-1001', 'aecb',               'production', 'active'],
-  ['TEN-1001', 'efr',                'production', 'active'],
-  ['TEN-1005', 'email-verification', 'sandbox',    'pending'],
-  ['TEN-1003', 'income-verify',      'sandbox',    'pending'],
+  ['TEN-1004', 'email-verification',      'production', 'active'],
+  ['TEN-1004', 'credit-score-company',    'production', 'active'],
+  ['TEN-1004', 'credit-full-company',     'production', 'active'],
+  ['TEN-1004', 'credit-score-individual', 'production', 'active'],
+  ['TEN-1004', 'id-document-extraction',  'sandbox',    'active'],
+  ['TEN-1001', 'credit-score-individual', 'production', 'active'],
+  ['TEN-1001', 'uae-pass',                'production', 'active'],
+  ['TEN-1005', 'email-verification',      'sandbox',    'pending'],
+  ['TEN-1003', 'credit-full-individual',  'sandbox',    'pending'],
+  ['TEN-1006', 'identity-verification',   'production', 'pending'],
 ];
 
 const users = [

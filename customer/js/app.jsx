@@ -34,6 +34,16 @@ function App({ onLogout }) {
   useEffect(() => { localStorage.setItem('portal.screen', screen); }, [screen]);
   useEffect(() => { localStorage.setItem('portal.env', env); }, [env]);
 
+  // When a real backend is configured, load the tenant's actual subscriptions.
+  useEffect(() => {
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.subscriptions().then(rows => {
+        setSubscribedIds(rows.filter(s => s.status === 'active').map(s => s.product_id));
+        setRequestedIds(rows.filter(s => s.status === 'pending').map(s => s.product_id));
+      }).catch(() => {});
+    }
+  }, []);
+
   useEffect(() => {
     const onMsg = (e) => {
       if (e.data?.type === '__activate_edit_mode') setTweaksOpen(true);
@@ -66,7 +76,15 @@ function App({ onLogout }) {
   const openApi = (a) => { setApi(a); setScreen('apiDetail'); };
   const goTo = (s) => { setScreen(s); };
   const onSubscribe = (a) => setSubscribeApi(a);
-  const onUnsubscribe = (a) => { setSubscribedIds(ids => ids.filter(i => i !== a.id)); window.toast && window.toast.info('Unsubscribed from ' + a.name, 'Production access has been revoked.'); };
+  const apiOn = () => window.approApi && window.approApi.enabled();
+  const onUnsubscribe = (a) => {
+    setSubscribedIds(ids => ids.filter(i => i !== a.id));
+    if (apiOn()) window.approApi.subscriptions().then(rows => {
+      const sub = rows.find(s => s.product_id === a.id);
+      if (sub) window.approApi.unsubscribe(sub.id).catch(() => {});
+    }).catch(() => {});
+    window.toast && window.toast.info('Unsubscribed from ' + a.name, 'Production access has been revoked.');
+  };
   const onMigrate = (a) => {
     const v2 = { id: 'documents-v2', name: 'Documents API', v: 'v2.0', status: 'live', cat: 'accounts', desc: 'Async PDF & statement generation with webhook callbacks. Replaces Statements & Documents v1.', owner: 'Retail Banking', auth: 'OAuth 2.0', rate: '200 req/s', subscribed: subscribedIds.includes('documents-v2'), color: 'var(--appro-blue)', cloud: 'aws', region: 'me-central-1', variants: 1 };
     setApi(v2); setScreen('apiDetail');
@@ -76,6 +94,10 @@ function App({ onLogout }) {
       setRequestedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
       window.toast && window.toast.success('Price request submitted', 'We\u2019ll prepare a quote for ' + a.name + ' and get back to you.');
       return;
+    }
+    if (apiOn()) {
+      const targetEnv = (environments && environments.length) ? (environments.includes('production') ? 'production' : environments[0]) : 'sandbox';
+      window.approApi.subscribe(a.id, targetEnv).catch(() => {});
     }
     setSubscribedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
     if (environments && environments.length) setSubscribedEnvs(m => ({ ...m, [a.id]: environments }));
@@ -189,7 +211,7 @@ function App({ onLogout }) {
 function Root() {
   const [authed, setAuthed] = useState(() => localStorage.getItem('portal.authed') === '1');
   if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
-  return <App onLogout={() => { localStorage.removeItem('portal.authed'); setAuthed(false); }}/>;
+  return <App onLogout={() => { localStorage.removeItem('portal.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
 window.DEMO_EMPTY = true;
 ReactDOM.createRoot(document.getElementById('root')).render(<Root/>);

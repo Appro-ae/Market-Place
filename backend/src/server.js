@@ -63,7 +63,12 @@ app.get('/api/products/:id', auth, (req, res) => {
 // ---- tenants (platform admin) ----
 app.get('/api/tenants', auth, (req, res) => {
   if (!isPlatformAdmin(req.user)) return res.status(403).json({ error: 'Admin only' });
-  res.json(db.prepare('SELECT * FROM tenants ORDER BY annual_spend DESC').all());
+  const rows = db.prepare(`
+    SELECT t.*, (
+      SELECT COUNT(*) FROM subscriptions s WHERE s.tenant_id = t.id AND s.status = 'active'
+    ) AS products
+    FROM tenants t ORDER BY annual_spend DESC`).all();
+  res.json(rows);
 });
 
 // ---- subscriptions (admin: all; tenant: own) ----

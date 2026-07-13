@@ -32,6 +32,14 @@ function TMStatCard({ label, value, foot, dot }) {
 
 function TenantManagement() {
   const [tenants, setTenants] = useTMState(TM_SEED);
+  React.useEffect(() => {
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.tenants().then(rows => setTenants(rows.map(t => {
+        const status = (t.status || '').toLowerCase();
+        return { name: t.name, id: t.id, plan: t.plan, status, products: t.products || 0, spend: status === 'trial' ? null : t.annual_spend };
+      }))).catch(() => {});
+    }
+  }, []);
   const [q, setQ] = useTMState('');
   const [filter, setFilter] = useTMState('all');
   const [show, setShow] = useTMState(false);
