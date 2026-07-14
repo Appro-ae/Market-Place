@@ -15,7 +15,7 @@ function AdminBilling() {
   return <ModuleFrame src="modules/BillingManagement.module.html?v=7" title="Billing Management"/>;
 }
 function SubscriptionManagement() {
-  return <ModuleFrame src="modules/SubscriptionManagement.module.html?v=8" title="Subscription Management"/>;
+  return <ModuleFrame src="modules/SubscriptionManagement.module.html?v=9" title="Subscription Management"/>;
 }
 
 window.AdminBilling = AdminBilling;

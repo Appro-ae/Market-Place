@@ -203,7 +203,7 @@
 
 <div class="scrim" id="scrim" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-  <div class="dh"><div class="ic" id="dIc">!</div><div><b id="dName">—</b><small id="dSub">—</small></div><button class="x" onclick="closeDrawer()">&times;</button></div>
+  <div class="dh"><div class="ic" id="dIc">!</div><div><b id="dName">—</b><small id="dSub">—</small></div><button class="lk2" id="dCustom" style="margin-left:auto" onclick="customizePricing(DCUR)">Customize in Billing ↗</button><button class="x" onclick="closeDrawer()">&times;</button></div>
   <div class="db" id="dBody"></div>
   <div class="df" id="dFoot"></div>
 </aside>
@@ -303,9 +303,10 @@ function renderReq(){
 }
 
 /* ---- REVIEW DRAWER ---- */
-var DRAFT=null;
+var DRAFT=null, DCUR=null;
 function review(id){
   var r=REQUESTS.filter(function(x){return x.id===id;})[0];if(!r)return;var p=PRODUCTS[r.pid];
+  DCUR=id;
   DRAFT={id:id,fields:flds(r.pid,{}),pkgs:(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[]};
   document.getElementById('dIc').textContent='!';
   document.getElementById('dName').textContent=r.tenant+' · '+p.name;
@@ -319,9 +320,9 @@ function review(id){
       +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
-    +'<div class="seclbl">Pricing — select package(s) to approve<button class="lk2" style="margin-left:auto" onclick="customizePricing(\''+id+'\')">Customize for this tenant ↗</button></div>'
+    +'<div class="seclbl">Pricing — select package(s) to approve</div>'
     +pkgSelect(r.pid,(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[])
-    +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve, or <b>Customize for this tenant</b> to set a custom price in Billing. Prices are owned by Billing.</div>'
+    +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve for this product. Prices are owned by Billing.</div>'
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box" id="dFlds"></div>'
     +'<div class="failnote" style="background:var(--amber-bg);border-color:#F2DDB0;color:#8A6A1E"><span>Mandatory fields are locked on; at least one field must remain enabled.</span></div>';
   renderDFields();
