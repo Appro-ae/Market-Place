@@ -8,6 +8,28 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
   "verification": "incomplete"
 }/*EDITMODE-END*/;
 
+// "Request for Price" confirmation — no packages shown; sets expectations on review time.
+function RequestPriceModal({ api, onClose, onSubmit }) {
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(12,25,49,.55)', zIndex: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, width: 460, maxWidth: '94vw', padding: 26, fontFamily: 'var(--font-ui)', boxShadow: '0 24px 60px rgba(12,25,49,.28)' }}>
+        <div style={{ width: 46, height: 46, borderRadius: 12, background: 'var(--appro-blue-50)', color: 'var(--appro-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}><Icon name="book" size={22}/></div>
+        <div style={{ fontSize: 18, fontWeight: 800, color: '#0C1931', marginBottom: 8, fontFamily: 'var(--font-display)' }}>Request pricing for {api.name}</div>
+        <div style={{ fontSize: 13.5, color: 'var(--ink-600)', lineHeight: 1.65, marginBottom: 18 }}>
+          Thanks for your interest. Our team will review your request and prepare pricing tailored to your organization. You’ll be notified here once it’s approved — reviews typically take <b>1–2 business days</b>. Submitting this request doesn’t commit you to anything.
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--ink-50)', border: '1px solid var(--ink-100)', borderRadius: 10, padding: '10px 12px', marginBottom: 20 }}>
+          <Icon name="info" size={15}/><span style={{ fontSize: 12, color: 'var(--ink-600)' }}>You can track this under <b style={{ color: 'var(--ink-800)' }}>Under review</b> in the catalogue until the team responds.</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <Btn variant="secondary" onClick={onClose}>Cancel</Btn>
+          <Btn variant="primary" icon="check" onClick={onSubmit}>Submit request</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App({ onLogout }) {
   const [screen, setScreen] = useState(() => localStorage.getItem('portal.screen') || 'dashboard');
   const [env, setEnv] = useState(() => localStorage.getItem('portal.env') || 'sandbox');
@@ -24,6 +46,12 @@ function App({ onLogout }) {
     try { return JSON.parse(localStorage.getItem('portal.requested') || '[]'); } catch(e){ return []; }
   });
   useEffect(() => { localStorage.setItem('portal.requested', JSON.stringify(requestedIds)); }, [requestedIds]);
+  // Products the Admin has approved — tenant may now complete the subscription (green "Subscribe").
+  const [approvedIds, setApprovedIds] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('portal.approved') || '[]'); } catch(e){ return []; }
+  });
+  useEffect(() => { localStorage.setItem('portal.approved', JSON.stringify(approvedIds)); }, [approvedIds]);
+  const [requestApi, setRequestApi] = useState(null);
   const [subscribedEnvs, setSubscribedEnvs] = useState(() => {
     try { return JSON.parse(localStorage.getItem('portal.subscribedEnvs') || '{}'); } catch(e){ return {}; }
   });
@@ -50,9 +78,10 @@ function App({ onLogout }) {
       try {
         const reqs = JSON.parse(localStorage.getItem('appro.accessRequests') || '[]');
         const mine = reqs.filter(r => r.tenantId === 'TEN-1004');
+        // Approved by admin -> tenant can now finish subscribing (green "Subscribe").
         const approved = mine.filter(r => r.status === 'approved').map(r => r.apiId).filter(Boolean);
         const settled = mine.filter(r => r.status !== 'pending').map(r => r.apiId).filter(Boolean);
-        if (approved.length) setSubscribedIds(ids => Array.from(new Set([...ids, ...approved])));
+        if (approved.length) setApprovedIds(ids => Array.from(new Set([...ids, ...approved])));
         if (settled.length) setRequestedIds(ids => ids.filter(id => !settled.includes(id)));
       } catch (e) {}
     };
@@ -95,6 +124,25 @@ function App({ onLogout }) {
   const goTo = (s) => { setScreen(s); };
   const onSubscribe = (a) => setSubscribeApi(a);
   const apiOn = () => window.approApi && window.approApi.enabled();
+
+  // New flow: Request for Price -> Admin review -> tenant completes subscription.
+  const onRequestPrice = (a) => setRequestApi(a);
+  const confirmRequest = (a) => {
+    setRequestedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
+    try {
+      const list = JSON.parse(localStorage.getItem('appro.accessRequests') || '[]');
+      list.unshift({ id: 'REQ-' + Date.now(), tenant: 'Nuqud Pay', tenantId: 'TEN-1004', api: a.name, apiId: a.id, env: 'production', plan: 'On request', when: 'Just now', status: 'pending' });
+      localStorage.setItem('appro.accessRequests', JSON.stringify(list));
+    } catch (e) {}
+    setRequestApi(null);
+    window.toast && window.toast.success('Request submitted', 'Our team will review and get back to you shortly.');
+  };
+  const onActivate = (a) => {   // tenant clicks green "Subscribe" after approval
+    setSubscribedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
+    setApprovedIds(ids => ids.filter(id => id !== a.id));
+    if (apiOn()) window.approApi.subscribe(a.id, 'production').catch(() => {});
+    window.toast && window.toast.success('Subscribed to ' + a.name, 'Your subscription is now active. Sandbox keys are ready in API Keys.', { action: { label: 'View API Keys', onClick: () => setScreen('keys') } });
+  };
   const onUnsubscribe = (a) => {
     setSubscribedIds(ids => ids.filter(i => i !== a.id));
     if (apiOn()) window.approApi.subscriptions().then(rows => {
@@ -131,7 +179,7 @@ function App({ onLogout }) {
 
   let body;
   if (screen === 'dashboard') body = <Dashboard env={env} goTo={goTo}/>;
-  else if (screen === 'catalog') body = <Catalog env={env} openApi={openApi} subscribedIds={subscribedIds} requestedIds={requestedIds} onSubscribe={onSubscribe}/>;
+  else if (screen === 'catalog') body = <Catalog env={env} openApi={openApi} subscribedIds={subscribedIds} requestedIds={requestedIds} approvedIds={approvedIds} onSubscribe={onSubscribe} onRequestPrice={onRequestPrice} onActivate={onActivate}/>;
   else if (screen === 'apiDetail' && api) body = <ApiDetail api={withSub(api)} env={env} onBack={() => setScreen('catalog')} onSubscribe={onSubscribe} onUnsubscribe={onUnsubscribe} onMigrate={onMigrate} subscribedEnvs={subscribedEnvs[api.id]}/>;
   else if (screen === 'keys') body = <Keys env={env} setModal={setModal}/>;
   else if (screen === 'credentials') body = <ApiCredentials env={env}/>;
@@ -173,6 +221,7 @@ function App({ onLogout }) {
       </main>
 
       {subscribeApi && <SubscribeModal api={subscribeApi} env={env} onClose={() => setSubscribeApi(null)} onConfirm={confirmSubscribe}/>}
+      {requestApi && <RequestPriceModal api={requestApi} onClose={() => setRequestApi(null)} onSubmit={() => confirmRequest(requestApi)}/>}
       {modal === 'createKey' && <CreateKeyModal env={env} onClose={() => setModal(null)}/>}
       {modal === 'provision' && <ProvisionModal onClose={() => setModal(null)}/>}
       {modal === 'rotateKey' && (

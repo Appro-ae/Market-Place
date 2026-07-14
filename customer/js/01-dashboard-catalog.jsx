@@ -286,7 +286,7 @@ function mapApiProduct(p) {
     color: CAT_COLOR[p.category] || 'var(--appro-blue)', variants: 1 };
 }
 
-function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], onSubscribe }) {
+function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], approvedIds = [], onSubscribe, onRequestPrice, onActivate }) {
   const { useState } = React;
   const [cat, setCat] = useState('all');
   const [q, setQ] = useState('');
@@ -462,18 +462,24 @@ function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], onSubscr
                   </span>
                   {a.cloud && <CloudChip cloud={a.cloud} region={a.region}/>}
                 </div>
+              ) : approvedIds.includes(a.id) ? (
+                <span style={{ fontSize: 11, color: 'var(--success)', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5, background: 'var(--success-tint)', padding: '3px 9px', borderRadius: 999 }}>
+                  <Icon name="check" size={11} stroke={3}/> Approved · ready to subscribe
+                </span>
               ) : requestedIds.includes(a.id) ? (
                 <span style={{ fontSize: 11, color: '#8a6c00', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5, background: 'var(--warning-tint)', padding: '3px 9px', borderRadius: 999 }}>
-                  <Icon name="refresh" size={11}/> Requested
+                  <Icon name="refresh" size={11}/> Under review
                 </span>
               ) : (
-                <span style={{ fontSize: 11, color: 'var(--ink-500)', fontWeight: 600 }}>{!apiHasPlan(a) ? 'Price on request' : (a.variants > 1 ? `${a.variants} regional variants` : 'Not subscribed')}</span>
+                <span style={{ fontSize: 11, color: 'var(--ink-500)', fontWeight: 600 }}>Price on request</span>
               )}
               {a.subscribed
                 ? <span style={{ fontSize: 12, color: 'var(--appro-blue)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>View details <Icon name="arrow" size={12}/></span>
+                : approvedIds.includes(a.id)
+                ? <button onClick={(e) => { e.stopPropagation(); onActivate && onActivate(a); }} style={{ background: 'var(--success)', color: '#fff', border: 0, padding: '6px 12px', borderRadius: 6, fontSize: 11.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-ui)', display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>Subscribe <Icon name="arrow" size={11}/></button>
                 : requestedIds.includes(a.id)
-                ? <span style={{ fontSize: 12, color: 'var(--appro-blue)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>View details <Icon name="arrow" size={12}/></span>
-                : <button onClick={(e) => { e.stopPropagation(); onSubscribe && onSubscribe(a); }} style={{ background: apiHasPlan(a) ? 'var(--success)' : 'var(--appro-blue)', color: '#fff', border: 0, padding: '6px 12px', borderRadius: 6, fontSize: 11.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-ui)', display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>{apiHasPlan(a) ? 'Subscribe' : 'Request price'} <Icon name="arrow" size={11}/></button>}
+                ? <span style={{ fontSize: 12, color: 'var(--ink-400)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>Awaiting review</span>
+                : <button onClick={(e) => { e.stopPropagation(); onRequestPrice && onRequestPrice(a); }} style={{ background: 'var(--appro-blue)', color: '#fff', border: 0, padding: '6px 12px', borderRadius: 6, fontSize: 11.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-ui)', display: 'inline-flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>Request for Price <Icon name="arrow" size={11}/></button>}
             </div>
           </div>
         ))}

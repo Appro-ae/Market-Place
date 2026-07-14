@@ -61,16 +61,9 @@ function AdminApp({ onLogout }) {
   const setReqStatus = (r, status) => setRequests(rs => { const next = rs.map(x => x.id === r.id ? { ...x, status } : x); persistLiveRequests(next); return next; });
   const onApprove = (r) => {
     setReqStatus(r, 'approved');
-    // Grant the product to the tenant so the Customer Portal reflects it.
-    if (r.apiId) {
-      try {
-        const sub = JSON.parse(localStorage.getItem('portal.subscribed') || '[]');
-        if (!sub.includes(r.apiId)) { sub.push(r.apiId); localStorage.setItem('portal.subscribed', JSON.stringify(sub)); }
-        const reqd = JSON.parse(localStorage.getItem('portal.requested') || '[]').filter(id => id !== r.apiId);
-        localStorage.setItem('portal.requested', JSON.stringify(reqd));
-      } catch (e) {}
-    }
-    window.toast.success('Request approved', r.tenant + ' → ' + r.api + ' (' + r.env + ') granted.');
+    // Approval makes the tenant eligible; they complete the subscription from their portal
+    // (the "Subscribe" button turns green there via the shared request store).
+    window.toast.success('Request approved', r.tenant + ' → ' + r.api + ' can now complete their subscription.');
   };
   const onReject = (r) => { setReqStatus(r, 'rejected'); window.toast.error('Request rejected', r.tenant + ' → ' + r.api + ' was declined.'); };
   const onReset = () => { persist([]); window.toast.info('Catalog reset', 'Locally-published APIs cleared; seeded set restored.'); };
