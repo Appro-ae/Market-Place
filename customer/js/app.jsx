@@ -209,7 +209,13 @@ function App({ onLogout }) {
   );
 }
 function Root() {
-  const [authed, setAuthed] = useState(() => localStorage.getItem('portal.authed') === '1');
+  const [authed, setAuthed] = useState(() => {
+    const flag = localStorage.getItem('portal.authed') === '1';
+    // With a real backend, require an actual token — a stale flag from a
+    // fallback login (no token) must not grant access, or data would show mock.
+    if (window.approApi && window.approApi.enabled()) return flag && !!window.approApi.token();
+    return flag;
+  });
   if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
   return <App onLogout={() => { localStorage.removeItem('portal.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }

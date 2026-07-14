@@ -68,7 +68,13 @@ function AdminApp({ onLogout }) {
   );
 }
 function AdminRoot() {
-  const [authed, setAuthed] = useState(() => localStorage.getItem('admin.authed') === '1');
+  const [authed, setAuthed] = useState(() => {
+    const flag = localStorage.getItem('admin.authed') === '1';
+    // With a real backend, require an actual token — a stale flag from a
+    // fallback login (no token) must not grant access, or data would show mock.
+    if (window.approApi && window.approApi.enabled()) return flag && !!window.approApi.token();
+    return flag;
+  });
   if (!authed) return <><ToastHost/><LoginScreen variant="admin" onLogin={() => { localStorage.setItem('admin.authed', '1'); setAuthed(true); }}/></>;
   return <AdminApp onLogout={() => { localStorage.removeItem('admin.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
