@@ -55,11 +55,35 @@ function Usage({ env }) {
     },
   };
   const { bars, xLabel, lastLabel, total: totalReq, unit } = seriesByRange[range];
-  const apis = [
-    { n: 'Credit Score (Individual)',  v: env === 'production' ? '612K' : '4,812', pct: 52, c: 'var(--success)' },
-    { n: 'ID Document Data Extraction',v: env === 'production' ? '489K' : '3,104', pct: 33, c: 'var(--appro-blue)' },
-    { n: 'Credit Full Report (Company)',v: env === 'production' ? '—'   : '1,620', pct: 15, c: '#7C3AED' },
-  ];
+
+  // Products come from the live catalogue (the tenant's subscribed products) when the backend is on.
+  const [apiProducts, setApiProducts] = React.useState(null);
+  React.useEffect(() => {
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.products().then(setApiProducts).catch(() => {});
+    }
+  }, []);
+  const U_CAT_COLOR = { credit: 'var(--success)', identity: 'var(--appro-blue)', compliance: 'var(--warning)', income: '#7C3AED', analytics: 'var(--info)', banking: '#0072BC' };
+  let apis;
+  if (apiProducts && apiProducts.length) {
+    let subs = []; try { subs = JSON.parse(localStorage.getItem('portal.subscribed') || '[]'); } catch (e) {}
+    const mine = apiProducts.filter(p => subs.includes(p.id));
+    const list = (mine.length ? mine : apiProducts).slice(0, 6);
+    const withVol = list.map((p, i) => ({ p, vol: 3 + ((p.name.length * 5 + i * 11) % 80) })).sort((a, b) => b.vol - a.vol);
+    const total = withVol.reduce((s, x) => s + x.vol, 0) || 1;
+    apis = withVol.map(({ p, vol }) => ({
+      n: p.name,
+      v: env === 'production' ? Math.round(vol * 9) + 'K' : Math.round(vol * 80).toLocaleString(),
+      pct: Math.round(vol / total * 100),
+      c: U_CAT_COLOR[p.category] || 'var(--appro-blue)',
+    }));
+  } else {
+    apis = [
+      { n: 'Credit Score (Individual)',  v: env === 'production' ? '612K' : '4,812', pct: 52, c: 'var(--success)' },
+      { n: 'ID Document Data Extraction',v: env === 'production' ? '489K' : '3,104', pct: 33, c: 'var(--appro-blue)' },
+      { n: 'Credit Full Report (Company)',v: env === 'production' ? '—'   : '1,620', pct: 15, c: '#7C3AED' },
+    ];
+  }
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
       {/* Sub-environment selector */}

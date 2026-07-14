@@ -5,10 +5,30 @@ const { useState: useAU } = React;
 const AU_TENANTS = ['All tenants', 'Nuqud Pay', 'Marble Bank', 'Falcon Lending', 'Oasis Wallet', 'Cedar Finance'];
 const AU_PRODUCTS = ['All products', 'Email Verification', 'AECB Credit Report', 'EFR', 'Identity Verification', 'Income Verification'];
 
+// Colour a product by its catalogue category (keeps the usage view in sync with the catalogue).
+const AU_CAT_COLOR = { credit: 'var(--success)', identity: 'var(--appro-blue)', compliance: 'var(--warning)', income: '#7C3AED', analytics: 'var(--info)', banking: '#0072BC' };
+// React hook: load the real product catalogue from the backend (null until loaded / when using mock data).
+function useApiProducts() {
+  const [products, setProducts] = React.useState(null);
+  React.useEffect(() => {
+    if (window.approApi && window.approApi.enabled()) {
+      window.approApi.products().then(setProducts).catch(() => {});
+    }
+  }, []);
+  return products;
+}
+// Build a "calls by product" breakdown from real products (deterministic, illustrative volumes).
+function buildByProduct(products, topN) {
+  const withVol = products.map((p, i) => ({ p, vol: 4 + ((p.name.length * 7 + i * 13) % 92) })).sort((a, b) => b.vol - a.vol).slice(0, topN);
+  const total = withVol.reduce((s, x) => s + x.vol, 0) || 1;
+  return withVol.map(({ p, vol }) => ({ n: p.name, calls: vol.toFixed(1) + 'M', pct: Math.round(vol / total * 100), c: AU_CAT_COLOR[p.category] || 'var(--appro-blue)' }));
+}
+
 /* ============================ USAGE & ANALYTICS ============================ */
 function AdminUsageAnalytics() {
   const [range, setRange] = useAU('30d');
   const [tenant, setTenant] = useAU('All tenants');
+  const apiProducts = useApiProducts();
   const series = {
     '24h': { bars: [62,70,68,75,82,78,88,90,85,92,96,94,90,88,92,95,99,96,93,90,88,85,80,76], unit: 'Hourly · last 24h', total: '5.9M', x: i => i % 4 === 0 ? String(i).padStart(2,'0')+':00' : null, last: 'now' },
     '7d':  { bars: [820,910,1120,980,1040,760,690], unit: 'Daily · last 7 days', total: '41.2M', x: i => ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i], last: null },
@@ -16,7 +36,8 @@ function AdminUsageAnalytics() {
   }[range];
   const bars = series.bars, max = Math.max(...bars);
 
-  const byProduct = [
+  // Products come from the live catalogue (Product Setup) when the backend is on; mock otherwise.
+  const byProduct = (apiProducts && apiProducts.length) ? buildByProduct(apiProducts, 8) : [
     { n: 'Email Verification', calls: '84.2M', pct: 46, c: 'var(--appro-blue)' },
     { n: 'AECB Credit Report', calls: '41.9M', pct: 23, c: 'var(--success)' },
     { n: 'Identity Verification', calls: '29.1M', pct: 16, c: 'var(--info)' },
@@ -118,6 +139,8 @@ function AdminUsageAnalytics() {
 function AdminRequestLogs() {
   const [tenant, setTenant] = useAU('All tenants');
   const [product, setProduct] = useAU('All products');
+  const apiProducts = useApiProducts();
+  const productOptions = (apiProducts && apiProducts.length) ? ['All products', ...apiProducts.map(p => p.name)] : AU_PRODUCTS;
   const rows = [
     { t: '14:22:08.412', ten: 'Nuqud Pay', m: 'GET', p: '/v2/email/verify', s: 200, l: 84, k: 'pk_live_9c7b' },
     { t: '14:22:07.980', ten: 'Marble Bank', m: 'POST', p: '/v2/aecb/report', s: 201, l: 212, k: 'pk_live_2a1f' },
@@ -145,7 +168,7 @@ function AdminRequestLogs() {
             <input placeholder='Filter: path="/v2/aecb*" status>=400' style={{ flex: 1, border: 0, background: 'transparent', outline: 'none', fontSize: 13, fontFamily: 'var(--font-mono)' }}/>
           </div>
           <select value={tenant} onChange={e => setTenant(e.target.value)} style={sel}>{AU_TENANTS.map(t => <option key={t}>{t}</option>)}</select>
-          <select value={product} onChange={e => setProduct(e.target.value)} style={sel}>{AU_PRODUCTS.map(p => <option key={p}>{p}</option>)}</select>
+          <select value={product} onChange={e => setProduct(e.target.value)} style={sel}>{productOptions.map(p => <option key={p}>{p}</option>)}</select>
           <select style={sel}><option>All methods</option><option>GET</option><option>POST</option><option>DELETE</option></select>
           <select style={sel}><option>All status codes</option><option>2xx</option><option>4xx</option><option>5xx</option></select>
           <select style={sel}><option>Last 15 minutes</option><option>Last hour</option><option>Last 24h</option></select>
