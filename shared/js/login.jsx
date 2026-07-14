@@ -88,8 +88,11 @@ function LoginScreen({ variant = 'customer', onLogin }) {
       window.approApi.login(email.trim(), pw)
         .then(() => onSuccess())
         .catch((err) => {
-          if (err && err.status && err.status !== 401 && err.status !== 400) {
-            // Backend unreachable/error (e.g. cold start) — fall back to demo creds so the demo never locks up.
+          const st = err && err.status;
+          // Only a real 401/400 from the server means "wrong credentials".
+          // Anything else (network error / CORS / server down — no HTTP status)
+          // falls back to the built-in demo credentials so the demo never locks up.
+          if (st !== 401 && st !== 400) {
             const good = DEMO_VALID[variant];
             if (email.trim().toLowerCase() === good.email && pw === good.pw) return onSuccess();
           }
