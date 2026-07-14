@@ -44,6 +44,24 @@ function App({ onLogout }) {
     }
   }, []);
 
+  // Reflect Admin approvals/rejections (shared via same-origin localStorage) — live across tabs.
+  useEffect(() => {
+    const reconcile = () => {
+      try {
+        const reqs = JSON.parse(localStorage.getItem('appro.accessRequests') || '[]');
+        const mine = reqs.filter(r => r.tenantId === 'TEN-1004');
+        const approved = mine.filter(r => r.status === 'approved').map(r => r.apiId).filter(Boolean);
+        const settled = mine.filter(r => r.status !== 'pending').map(r => r.apiId).filter(Boolean);
+        if (approved.length) setSubscribedIds(ids => Array.from(new Set([...ids, ...approved])));
+        if (settled.length) setRequestedIds(ids => ids.filter(id => !settled.includes(id)));
+      } catch (e) {}
+    };
+    reconcile();
+    const onStore = (e) => { if (!e || e.key === 'appro.accessRequests') reconcile(); };
+    window.addEventListener('storage', onStore);
+    return () => window.removeEventListener('storage', onStore);
+  }, []);
+
   useEffect(() => {
     const onMsg = (e) => {
       if (e.data?.type === '__activate_edit_mode') setTweaksOpen(true);
@@ -89,9 +107,16 @@ function App({ onLogout }) {
     const v2 = { id: 'documents-v2', name: 'Documents API', v: 'v2.0', status: 'live', cat: 'accounts', desc: 'Async PDF & statement generation with webhook callbacks. Replaces Statements & Documents v1.', owner: 'Retail Banking', auth: 'OAuth 2.0', rate: '200 req/s', subscribed: subscribedIds.includes('documents-v2'), color: 'var(--appro-blue)', cloud: 'aws', region: 'me-central-1', variants: 1 };
     setApi(v2); setScreen('apiDetail');
   };
-  const confirmSubscribe = ({ api: a, environments, requested }) => {
+  const confirmSubscribe = ({ api: a, environments, requested, plan }) => {
     if (requested) {
       setRequestedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
+      // Cross-portal: record a pending access request the Admin console can approve.
+      try {
+        const list = JSON.parse(localStorage.getItem('appro.accessRequests') || '[]');
+        const env = (environments && environments.length && environments.some(e => /prod/i.test((e && (e.name || e.id)) || ''))) ? 'production' : 'production';
+        list.unshift({ id: 'REQ-' + Date.now(), tenant: 'Nuqud Pay', tenantId: 'TEN-1004', api: a.name, apiId: a.id, env, plan: plan || 'On request', when: 'Just now', status: 'pending' });
+        localStorage.setItem('appro.accessRequests', JSON.stringify(list));
+      } catch (e) {}
       window.toast && window.toast.success('Price request submitted', 'We\u2019ll prepare a quote for ' + a.name + ' and get back to you.');
       return;
     }

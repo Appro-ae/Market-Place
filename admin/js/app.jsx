@@ -10,16 +10,32 @@ const SEED_REQUESTS = [
   { id: 'REQ-5810', tenant: 'Marble Bank', api: 'Income Verification', env: 'sandbox', plan: 'Enterprise', when: '2 days ago', status: 'approved' },
 ];
 
-const ADMIN_SCREENS = ['tenant-management','product-setup','billing','subscriptions','user-roles'];
+// Cross-portal access-request store (shared with the Customer Portal via same-origin localStorage).
+const REQ_KEY = 'appro.accessRequests';
+const SEED_REQ_IDS = new Set(SEED_REQUESTS.map(r => r.id));
+function loadLiveRequests() { try { return JSON.parse(localStorage.getItem(REQ_KEY) || '[]'); } catch (e) { return []; } }
+function loadRequests() { return [...loadLiveRequests(), ...SEED_REQUESTS]; }        // tenant requests first, then seed
+function persistLiveRequests(all) { localStorage.setItem(REQ_KEY, JSON.stringify(all.filter(r => !SEED_REQ_IDS.has(r.id)))); }
+
+const ADMIN_SCREENS = ['tenant-management','product-setup','billing','subscriptions','requests','user-roles'];
 function AdminApp({ onLogout }) {
   const [screen, setScreen] = useState(() => { const s = localStorage.getItem('admin.screen') || 'tenant-management'; return ADMIN_SCREENS.includes(s) ? s : 'tenant-management'; });
   const [published, setPublished] = useState(loadPublished);
-  const [requests, setRequests] = useState(SEED_REQUESTS);
+  const [requests, setRequests] = useState(loadRequests);
   useEffect(() => { localStorage.setItem('admin.screen', screen); }, [screen]);
+
+  // Live sync: pick up new tenant requests from the Customer Portal (fires across tabs),
+  // and re-read when opening the Access Requests screen (same-tab changes).
+  useEffect(() => {
+    const onStore = (e) => { if (!e || e.key === REQ_KEY || e.key === null) setRequests(loadRequests()); };
+    window.addEventListener('storage', onStore);
+    return () => window.removeEventListener('storage', onStore);
+  }, []);
+  useEffect(() => { if (screen === 'requests') setRequests(loadRequests()); }, [screen]);
 
   const allApis = [...published.map(p => ({ ...p, subs: p.subs || 0 })), ...SEED_APIS];
   const pendingReqs = requests.filter(r => r.status === 'pending').length;
-  const counts = { 'tenant-management': 6, 'user-roles': 5 };
+  const counts = { 'tenant-management': 6, 'user-roles': 5, 'requests': pendingReqs };
 
   const persist = (list) => { setPublished(list); savePublished(list); };
 
@@ -42,8 +58,21 @@ function AdminApp({ onLogout }) {
     if (a.published) persist(published.map(p => p.id === a.id ? { ...p, status: 'deprecated' } : p));
     window.toast.warning('API deprecated', a.name + ' is marked deprecated; existing subscribers keep access until sunset.');
   };
-  const onApprove = (r) => { setRequests(rs => rs.map(x => x.id === r.id ? { ...x, status: 'approved' } : x)); window.toast.success('Request approved', r.tenant + ' → ' + r.api + ' (' + r.env + ') granted.'); };
-  const onReject = (r) => { setRequests(rs => rs.map(x => x.id === r.id ? { ...x, status: 'rejected' } : x)); window.toast.error('Request rejected', r.tenant + ' → ' + r.api + ' was declined.'); };
+  const setReqStatus = (r, status) => setRequests(rs => { const next = rs.map(x => x.id === r.id ? { ...x, status } : x); persistLiveRequests(next); return next; });
+  const onApprove = (r) => {
+    setReqStatus(r, 'approved');
+    // Grant the product to the tenant so the Customer Portal reflects it.
+    if (r.apiId) {
+      try {
+        const sub = JSON.parse(localStorage.getItem('portal.subscribed') || '[]');
+        if (!sub.includes(r.apiId)) { sub.push(r.apiId); localStorage.setItem('portal.subscribed', JSON.stringify(sub)); }
+        const reqd = JSON.parse(localStorage.getItem('portal.requested') || '[]').filter(id => id !== r.apiId);
+        localStorage.setItem('portal.requested', JSON.stringify(reqd));
+      } catch (e) {}
+    }
+    window.toast.success('Request approved', r.tenant + ' → ' + r.api + ' (' + r.env + ') granted.');
+  };
+  const onReject = (r) => { setReqStatus(r, 'rejected'); window.toast.error('Request rejected', r.tenant + ' → ' + r.api + ' was declined.'); };
   const onReset = () => { persist([]); window.toast.info('Catalog reset', 'Locally-published APIs cleared; seeded set restored.'); };
 
   let body, title;
@@ -51,6 +80,7 @@ function AdminApp({ onLogout }) {
   else if (screen === 'product-setup') { title = 'Product Setup'; body = <ProductSetup/>; }
   else if (screen === 'billing') { title = 'Billing Management'; body = <AdminBilling/>; }
   else if (screen === 'subscriptions') { title = 'Subscription Management'; body = <SubscriptionManagement/>; }
+  else if (screen === 'requests') { title = 'Access Requests'; body = <AdminRequests requests={requests} onApprove={onApprove} onReject={onReject}/>; }
   else if (screen === 'usage') { title = 'Usage & Analytics'; body = <AdminUsageAnalytics/>; }
   else if (screen === 'logs') { title = 'Request Logs'; body = <AdminRequestLogs/>; }
   else if (screen === 'user-roles') { title = 'User Role Management'; body = <UserRoleManagement/>; }

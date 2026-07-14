@@ -84,6 +84,7 @@ function AdminSidebar({ screen, onNav, counts, onLogout }) {
       { id: 'product-setup', label: 'Product Setup', icon: 'product' },
       { id: 'billing', label: 'Billing Management', icon: 'billing' },
       { id: 'subscriptions', label: 'Subscription Management', icon: 'product' },
+      { id: 'requests', label: 'Access Requests', icon: 'requests', count: counts['requests'] },
       { id: 'user-roles', label: 'User Role Management', icon: 'users', count: counts['user-roles'] },
     ]},
     { grp: 'Operations', items: [
