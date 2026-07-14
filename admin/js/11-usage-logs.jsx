@@ -17,6 +17,18 @@ function useApiProducts() {
   }, []);
   return products;
 }
+// The admin's product universe from Product Setup (published + seed catalogue) — used
+// when there is no backend so Usage still reflects the products in Product Setup.
+function adminCatalogue() {
+  let published = [];
+  try { published = JSON.parse(localStorage.getItem('appro.publishedApis') || '[]'); } catch (e) {}
+  const seed = (window.ADMIN && window.ADMIN.SEED_APIS) || [];
+  const seen = new Set(), out = [];
+  for (const p of [...published, ...seed]) {
+    if (p && p.id && !seen.has(p.id)) { seen.add(p.id); out.push({ name: p.name, category: p.cat || p.category || 'credit' }); }
+  }
+  return out;
+}
 // Build a "calls by product" breakdown from real products (deterministic, illustrative volumes).
 function buildByProduct(products, topN) {
   const withVol = products.map((p, i) => ({ p, vol: 4 + ((p.name.length * 7 + i * 13) % 92) })).sort((a, b) => b.vol - a.vol).slice(0, topN);
@@ -36,8 +48,10 @@ function AdminUsageAnalytics() {
   }[range];
   const bars = series.bars, max = Math.max(...bars);
 
-  // Products come from the live catalogue (Product Setup) when the backend is on; mock otherwise.
-  const byProduct = (apiProducts && apiProducts.length) ? buildByProduct(apiProducts, 8) : [
+  // Products come from Product Setup — the live backend catalogue when on, else the
+  // admin's front-end catalogue (published + seed). Always reflects Product Setup.
+  const catalogue = (apiProducts && apiProducts.length) ? apiProducts : adminCatalogue();
+  const byProduct = catalogue.length ? buildByProduct(catalogue, 8) : [
     { n: 'Email Verification', calls: '84.2M', pct: 46, c: 'var(--appro-blue)' },
     { n: 'AECB Credit Report', calls: '41.9M', pct: 23, c: 'var(--success)' },
     { n: 'Identity Verification', calls: '29.1M', pct: 16, c: 'var(--info)' },
@@ -140,7 +154,8 @@ function AdminRequestLogs() {
   const [tenant, setTenant] = useAU('All tenants');
   const [product, setProduct] = useAU('All products');
   const apiProducts = useApiProducts();
-  const productOptions = (apiProducts && apiProducts.length) ? ['All products', ...apiProducts.map(p => p.name)] : AU_PRODUCTS;
+  const catalogue = (apiProducts && apiProducts.length) ? apiProducts : adminCatalogue();
+  const productOptions = catalogue.length ? ['All products', ...catalogue.map(p => p.name)] : AU_PRODUCTS;
   const rows = [
     { t: '14:22:08.412', ten: 'Nuqud Pay', m: 'GET', p: '/v2/email/verify', s: 200, l: 84, k: 'pk_live_9c7b' },
     { t: '14:22:07.980', ten: 'Marble Bank', m: 'POST', p: '/v2/aecb/report', s: 201, l: 212, k: 'pk_live_2a1f' },

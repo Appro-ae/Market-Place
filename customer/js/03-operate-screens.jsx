@@ -64,18 +64,20 @@ function Usage({ env }) {
     }
   }, []);
   const U_CAT_COLOR = { credit: 'var(--success)', identity: 'var(--appro-blue)', compliance: 'var(--warning)', income: '#7C3AED', analytics: 'var(--info)', banking: '#0072BC' };
+  // Products from the catalogue — backend when on, else the front-end catalogue shared by the Catalogue screen.
+  const source = (apiProducts && apiProducts.length) ? apiProducts : (window.CUSTOMER_CATALOGUE || []);
   let apis;
-  if (apiProducts && apiProducts.length) {
+  if (source.length) {
     let subs = []; try { subs = JSON.parse(localStorage.getItem('portal.subscribed') || '[]'); } catch (e) {}
-    const mine = apiProducts.filter(p => subs.includes(p.id));
-    const list = (mine.length ? mine : apiProducts).slice(0, 6);
+    const mine = source.filter(p => subs.includes(p.id));
+    const list = (mine.length ? mine : source).slice(0, 6);
     const withVol = list.map((p, i) => ({ p, vol: 3 + ((p.name.length * 5 + i * 11) % 80) })).sort((a, b) => b.vol - a.vol);
     const total = withVol.reduce((s, x) => s + x.vol, 0) || 1;
     apis = withVol.map(({ p, vol }) => ({
       n: p.name,
       v: env === 'production' ? Math.round(vol * 9) + 'K' : Math.round(vol * 80).toLocaleString(),
       pct: Math.round(vol / total * 100),
-      c: U_CAT_COLOR[p.category] || 'var(--appro-blue)',
+      c: U_CAT_COLOR[p.category || p.cat] || 'var(--appro-blue)',
     }));
   } else {
     apis = [

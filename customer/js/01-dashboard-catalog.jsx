@@ -351,6 +351,8 @@ function Catalog({ env, openApi, subscribedIds = [], requestedIds = [], onSubscr
   })();
 
   const baseApis = apiProducts || apis;
+  // Expose the catalogue so other screens (e.g. Usage & Analytics) reflect the same products.
+  try { window.CUSTOMER_CATALOGUE = [...publishedApis, ...baseApis]; } catch (e) {}
   const filtered = [...publishedApis, ...baseApis]
     .map(a => ({ ...a, subscribed: subscribedIds.includes(a.id) }))
     .filter(a => (cat === 'all' || a.cat === cat) && (a.name.toLowerCase().includes(q.toLowerCase()) || a.desc.toLowerCase().includes(q.toLowerCase())));
