@@ -319,13 +319,13 @@ function review(id){
       +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
-    +'<div class="seclbl">Pricing — select package(s) to approve</div>'
+    +'<div class="seclbl">Pricing — select package(s) to approve<button class="lk2" style="margin-left:auto" onclick="customizePricing(\''+id+'\')">Customize for this tenant ↗</button></div>'
     +pkgSelect(r.pid,(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[])
-    +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve for this product. Prices are owned by Billing.</div>'
+    +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve, or <b>Customize for this tenant</b> to set a custom price in Billing. Prices are owned by Billing.</div>'
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box" id="dFlds"></div>'
     +'<div class="failnote" style="background:var(--amber-bg);border-color:#F2DDB0;color:#8A6A1E"><span>Mandatory fields are locked on; at least one field must remain enabled.</span></div>';
   renderDFields();
-  document.getElementById('dFoot').innerHTML='<button class="btn danger" onclick="doReject(\''+id+'\')">Reject</button><button class="btn ghost" onclick="customizePricing(\''+id+'\')">Customize pricing ↗</button><button class="btn primary" onclick="doApprove(\''+id+'\')">Approve &amp; provision</button>';
+  document.getElementById('dFoot').innerHTML='<button class="btn danger" onclick="doReject(\''+id+'\')">Reject</button><button class="btn primary" onclick="doApprove(\''+id+'\')">Approve &amp; provision</button>';
   openDrawer();
 }
 // "Customize" -> jump to Billing Management > Subscriptions > Edit > Custom for this tenant.
