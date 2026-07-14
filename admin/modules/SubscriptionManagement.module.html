@@ -203,7 +203,7 @@
 
 <div class="scrim" id="scrim" onclick="closeDrawer()"></div>
 <aside class="drawer" id="drawer">
-  <div class="dh"><div class="ic" id="dIc">!</div><div><b id="dName">—</b><small id="dSub">—</small></div><button class="lk2" id="dCustom" style="margin-left:auto" onclick="customizePricing(DCUR)">Customize in Billing ↗</button><button class="x" onclick="closeDrawer()">&times;</button></div>
+  <div class="dh"><div class="ic" id="dIc">!</div><div><b id="dName">—</b><small id="dSub">—</small></div><button class="x" style="margin-left:auto" onclick="closeDrawer()">&times;</button></div>
   <div class="db" id="dBody"></div>
   <div class="df" id="dFoot"></div>
 </aside>
@@ -320,7 +320,7 @@ function review(id){
       +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
-    +'<div class="seclbl">Pricing — select package(s) to approve</div>'
+    +'<div class="seclbl">Pricing — select package(s) to approve<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0" onclick="customizePricing(\''+id+'\')">Customize in Billing ↗</button></div>'
     +pkgSelect(r.pid,(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[])
     +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve for this product. Prices are owned by Billing.</div>'
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box" id="dFlds"></div>'
