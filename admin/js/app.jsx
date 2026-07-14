@@ -33,6 +33,13 @@ function AdminApp({ onLogout }) {
   }, []);
   useEffect(() => { if (screen === 'requests') setRequests(loadRequests()); }, [screen]);
 
+  // Cross-module navigation from the iframe apps (e.g. Subscription Management "Customize" -> Billing).
+  useEffect(() => {
+    const onMsg = (e) => { const d = e && e.data; if (d && d.type === 'appro:navigate' && typeof d.to === 'string') setScreen(d.to); };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
   const allApis = [...published.map(p => ({ ...p, subs: p.subs || 0 })), ...SEED_APIS];
   const pendingReqs = requests.filter(r => r.status === 'pending').length;
   const counts = { 'tenant-management': 6, 'user-roles': 5, 'requests': pendingReqs };

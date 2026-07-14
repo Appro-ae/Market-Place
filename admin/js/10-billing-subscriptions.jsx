@@ -12,10 +12,10 @@ function ModuleFrame({ src, title }) {
 }
 
 function AdminBilling() {
-  return <ModuleFrame src="modules/BillingManagement.module.html" title="Billing Management"/>;
+  return <ModuleFrame src="modules/BillingManagement.module.html?v=7" title="Billing Management"/>;
 }
 function SubscriptionManagement() {
-  return <ModuleFrame src="modules/SubscriptionManagement.module.html" title="Subscription Management"/>;
+  return <ModuleFrame src="modules/SubscriptionManagement.module.html?v=7" title="Subscription Management"/>;
 }
 
 window.AdminBilling = AdminBilling;

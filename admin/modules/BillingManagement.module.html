@@ -1324,5 +1324,22 @@ renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
 
 </script>
 <style>.side,.sidebar,.top,.topbar{display:none!important}.main{flex:1!important;width:100%!important;margin:0!important}html,body,.app{background:#F4F7FC!important;height:auto!important;min-height:100%!important}</style><style>.panel{animation:none!important}.panel.show{opacity:1!important;display:block!important}</style>
+<script>
+(function(){
+  function applyFocus(){
+    try{
+      var f=JSON.parse(localStorage.getItem("appro.billingFocus")||"null");
+      if(!f||(Date.now()-f.ts>60000))return;
+      localStorage.removeItem("appro.billingFocus");
+      var subsTab=document.querySelector('[data-tab="subs"]');
+      if(subsTab)subsTab.click();
+      setTimeout(function(){ try{ if(typeof openAssign==="function")openAssign("__new__"); }catch(e){}
+        setTimeout(function(){ try{ if(typeof setOvrMode==="function")setOvrMode(true); }catch(e){} },80); },120);
+    }catch(e){}
+  }
+  if(document.readyState!=="loading")setTimeout(applyFocus,350);
+  else document.addEventListener("DOMContentLoaded",function(){setTimeout(applyFocus,350);});
+})();
+</script>
 </body>
 </html>
