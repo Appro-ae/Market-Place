@@ -12,7 +12,7 @@ function ModuleFrame({ src, title }) {
 }
 
 function AdminBilling() {
-  return <ModuleFrame src="modules/BillingManagement.module.html?v=7" title="Billing Management"/>;
+  return <ModuleFrame src="modules/BillingManagement.module.html?v=11" title="Billing Management"/>;
 }
 function SubscriptionManagement() {
   return <ModuleFrame src="modules/SubscriptionManagement.module.html?v=10" title="Subscription Management"/>;
