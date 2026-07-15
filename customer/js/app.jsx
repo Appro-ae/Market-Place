@@ -16,7 +16,7 @@ function RequestPriceModal({ api, onClose, onSubmit }) {
         <div style={{ width: 46, height: 46, borderRadius: 12, background: 'var(--appro-blue-50)', color: 'var(--appro-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}><Icon name="book" size={22}/></div>
         <div style={{ fontSize: 18, fontWeight: 800, color: '#0C1931', marginBottom: 8, fontFamily: 'var(--font-display)' }}>Request pricing for {api.name}</div>
         <div style={{ fontSize: 13.5, color: 'var(--ink-600)', lineHeight: 1.65, marginBottom: 18 }}>
-          Thanks for your interest. Our team will review your request and prepare pricing tailored to your organization. You’ll be notified here once it’s approved — reviews typically take <b>1–2 business days</b>. Submitting this request doesn’t commit you to anything.
+          Thanks for your interest. Our team will review your request and prepare pricing tailored to your organization. You’ll be notified here once it’s approved. Submitting this request doesn’t commit you to anything.
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--ink-50)', border: '1px solid var(--ink-100)', borderRadius: 10, padding: '10px 12px', marginBottom: 20 }}>
           <Icon name="info" size={15}/><span style={{ fontSize: 12, color: 'var(--ink-600)' }}>You can track this under <b style={{ color: 'var(--ink-800)' }}>Under review</b> in the catalogue until the team responds.</span>
