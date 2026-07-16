@@ -137,12 +137,9 @@ function App({ onLogout }) {
     setRequestApi(null);
     window.toast && window.toast.success('Request submitted', 'Our team will review and get back to you shortly.');
   };
-  const onActivate = (a) => {   // tenant clicks green "Subscribe" after approval
-    setSubscribedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
-    setApprovedIds(ids => ids.filter(id => id !== a.id));
-    if (apiOn()) window.approApi.subscribe(a.id, 'production').catch(() => {});
-    window.toast && window.toast.success('Subscribed to ' + a.name, 'Your subscription is now active. Sandbox keys are ready in API Keys.', { action: { label: 'View API Keys', onClick: () => setScreen('keys') } });
-  };
+  // Tenant clicks green "Subscribe" after approval → open the full 4-step subscribe wizard
+  // (Plan → Deployment → Compliance → Review). Completion is handled in confirmSubscribe.
+  const onActivate = (a) => setSubscribeApi(a);
   const onUnsubscribe = (a) => {
     setSubscribedIds(ids => ids.filter(i => i !== a.id));
     if (apiOn()) window.approApi.subscriptions().then(rows => {
@@ -156,7 +153,9 @@ function App({ onLogout }) {
     setApi(v2); setScreen('apiDetail');
   };
   const confirmSubscribe = ({ api: a, environments, requested, plan }) => {
-    if (requested) {
+    // Finishing an already-approved item always subscribes (never loops back to a new request).
+    const completingApproval = approvedIds.includes(a.id);
+    if (requested && !completingApproval) {
       setRequestedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
       // Cross-portal: record a pending access request the Admin console can approve.
       try {
@@ -173,6 +172,8 @@ function App({ onLogout }) {
       window.approApi.subscribe(a.id, targetEnv).catch(() => {});
     }
     setSubscribedIds(ids => ids.includes(a.id) ? ids : [...ids, a.id]);
+    setApprovedIds(ids => ids.filter(id => id !== a.id));
+    setRequestedIds(ids => ids.filter(id => id !== a.id));
     if (environments && environments.length) setSubscribedEnvs(m => ({ ...m, [a.id]: environments }));
     window.toast && window.toast.success('Subscribed to ' + a.name, 'Sandbox keys are ready in API Keys.', { action: { label: 'View API Keys', onClick: () => setScreen('keys') } });
   };
