@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appro · API Marketplace Customer Portal</title>
+  <link rel="icon" href="../assets/logos/appro-logo-color.svg">
+
+  <!-- Fonts (Gotham/Satoshi fallbacks: Montserrat / Manrope / Lato / Inter / IBM Plex Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Lato:wght@400;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Design system -->
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <style>
+    body { margin: 0; background: var(--ink-100); font-family: var(--font-ui); color: var(--ink-700); -webkit-font-smoothing: antialiased; }
+    h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.01em; font-weight: 600; color: var(--ink-800); }
+    .layout { display: flex; min-height: 100vh; }
+    main { flex: 1; min-width: 0; }
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .toggle { -webkit-appearance:none; appearance:none; width:38px; height:22px; border-radius:999px; background:var(--ink-300); position:relative; cursor:pointer; transition:.2s; flex-shrink:0; }
+    .toggle:checked { background: var(--appro-blue); }
+    .toggle::after { content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.2s; }
+    .toggle:checked::after { transform: translateX(16px); }
+    ::-webkit-scrollbar { width:8px; height:8px; } ::-webkit-scrollbar-thumb { background:var(--ink-300); border-radius:4px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Resolve logo asset paths for components that read window.__resources -->
+  <script>
+    window.__resources = {
+      logoColor: '../assets/logos/appro-logo-color.svg',
+      logoWhite: '../assets/logos/appro-logo-white.svg'
+    };
+  </script>
+
+  <!-- Backend API base URL. Empty = built-in mock data. Set to your deployed API to use the real backend. -->
+  <script>window.APPRO_API_BASE = "";</script>
+  <script src="../shared/js/api.js?v=7"></script>
+
+  <!-- Vendored React + Babel (no build step) -->
+  <script src="../assets/vendor/react.development.js"></script>
+  <script src="../assets/vendor/react-dom.development.js"></script>
+  <script src="../assets/vendor/babel.min.js"></script>
+
+  <!-- Component modules — order matters (shared atoms first, bootstrap last) -->
+  <script type="text/babel" src="../shared/js/shell.jsx?v=7"></script>
+  <script type="text/babel" src="../shared/js/login.jsx?v=7"></script>
+  <script type="text/babel" src="../shared/js/toasts.jsx?v=7"></script>
+  <script type="text/babel" src="../shared/js/billing-model.jsx?v=7"></script>
+  <script type="text/babel" src="js/01-dashboard-catalog.jsx?v=7"></script>
+  <script type="text/babel" src="js/02-api-detail-keys.jsx?v=11"></script>
+  <script type="text/babel" src="js/03-operate-screens.jsx?v=7"></script>
+  <script type="text/babel" src="js/04-verification.jsx?v=7"></script>
+  <script type="text/babel" src="js/05-environments.jsx?v=7"></script>
+  <script type="text/babel" src="js/06-credentials.jsx?v=7"></script>
+  <script type="text/babel" src="js/07-consent.jsx?v=7"></script>
+  <script type="text/babel" src="js/08-customer-billing.jsx?v=7"></script>
+  <script type="text/babel" src="js/app.jsx?v=10"></script>
+</body>
+</html>
