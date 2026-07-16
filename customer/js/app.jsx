@@ -221,7 +221,7 @@ function App({ onLogout }) {
         {body}
       </main>
 
-      {subscribeApi && <SubscribeModal api={subscribeApi} env={env} onClose={() => setSubscribeApi(null)} onConfirm={confirmSubscribe}/>}
+      {subscribeApi && <SubscribeModal api={subscribeApi} env={env} approved={approvedIds.includes(subscribeApi.id)} onClose={() => setSubscribeApi(null)} onConfirm={confirmSubscribe}/>}
       {requestApi && <RequestPriceModal api={requestApi} onClose={() => setRequestApi(null)} onSubmit={() => confirmRequest(requestApi)}/>}
       {modal === 'createKey' && <CreateKeyModal env={env} onClose={() => setModal(null)}/>}
       {modal === 'provision' && <ProvisionModal onClose={() => setModal(null)}/>}

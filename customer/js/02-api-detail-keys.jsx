@@ -766,7 +766,7 @@ function apiCatalogPlans(api) {
 function apiHasPlan(api) { return !!apiCatalogPlans(api); }
 window.apiHasPlan = apiHasPlan;
 
-function SubscribeModal({ api, env, onClose, onConfirm }) {
+function SubscribeModal({ api, env, onClose, onConfirm, approved }) {
   const { useState, useMemo } = React;
   const isDep = api.status === 'deprecated';
   const isBeta = api.status === 'beta';
@@ -804,7 +804,9 @@ function SubscribeModal({ api, env, onClose, onConfirm }) {
   // Plans are the packages defined in Admin → Pricing & Catalog (ADM-210) for the matching product.
   const B = window.BILLING;
   const catalogPlans = apiCatalogPlans(api);
-  const noPlan = !catalogPlans;   // → "Request price" flow
+  // Approved items always run the full 4-step subscribe flow (fall back to default plans
+  // when no catalogue pricing is configured); only unapproved browsing uses "Request price".
+  const noPlan = !catalogPlans && !approved;
   const defaultPlans = [
     { id: 'free', name: 'Sandbox', price: 'Free', quota: '10k req/day · sandbox only', features: ['Full OpenAPI spec', 'Synthetic test data', 'Community support'] },
     { id: 'growth', name: 'Growth', price: 'AED 2,400/mo', quota: '2M req/day · prod + sandbox', features: ['99.9% SLA', 'Email support · 4h', 'Webhooks included'], recommended: true },
