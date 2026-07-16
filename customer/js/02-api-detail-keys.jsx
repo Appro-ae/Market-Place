@@ -870,7 +870,7 @@ function SubscribeModal({ api, env, onClose, onConfirm, approved }) {
 
         {!noPlan && step <= TOTAL && (
           <div style={{ padding: '14px 22px', borderBottom: '1px solid var(--ink-100)', display: 'flex', gap: 8 }}>
-            {['Plan','Deployment','Compliance','Review'].map((l,i)=>{
+            {['Plan','Deployment','Compliance','Confirm'].map((l,i)=>{
               const n=i+1, done=n<step, cur=n===step;
               return (
                 <div key={l} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
@@ -963,7 +963,7 @@ function SubscribeModal({ api, env, onClose, onConfirm, approved }) {
 
           {step===4 && (
             <div>
-              <div style={{ fontSize: 13, color: 'var(--ink-700)', marginBottom: 14 }}>Review and submit.</div>
+              <div style={{ fontSize: 13, color: 'var(--ink-700)', marginBottom: 14 }}>Final step — confirm and activate your subscription.</div>
               <div style={{ border: '1px solid var(--ink-200)', borderRadius: 10, overflow: 'hidden' }}>
                 {[
                   ['API', api.name+' · '+api.v],
@@ -1042,7 +1042,7 @@ function SubscribeModal({ api, env, onClose, onConfirm, approved }) {
             {step===3 && !step3Done && <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Tick all to continue</span>}
             {!noPlan && step>1 && step<=TOTAL && <Btn variant="secondary" onClick={back}>Back</Btn>}
             {!noPlan && step<TOTAL && <Btn variant="primary" icon="arrow" onClick={next} disabled={(step===2 && selectedSubEnvs.length===0) || (step===3 && !step3Done)}>Continue</Btn>}
-            {(noPlan ? step===1 : step===TOTAL) && <Btn variant="primary" icon="check" onClick={submit}>{noPlan ? 'Submit' : 'Submit request'}</Btn>}
+            {(noPlan ? step===1 : step===TOTAL) && <Btn variant="primary" icon="check" onClick={submit}>{noPlan ? 'Submit' : 'Confirm subscription'}</Btn>}
             {step>TOTAL+1 && <Btn variant="primary" onClick={onClose}>Done</Btn>}
           </div>
         </div>
