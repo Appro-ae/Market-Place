@@ -252,7 +252,7 @@ var CATALOGUE={
 };
 function aed(n){return 'AED '+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function intc(n){return Number(n).toLocaleString('en-US');}
-function pkgDetail(pid,label){var c=CATALOGUE[pid];if(!c||!c.pkgs[label])return 'Defined in Billing catalogue';var p=c.pkgs[label],a=[];if(p.type==='Committed volume'){a.push('Committed volume');if(p.txns)a.push(intc(p.txns)+' txns/yr');if(p.unit)a.push(aed(p.unit)+'/unit');if(p.over)a.push('overage '+aed(p.over));if(p.renew)a.push('auto-renew \u00d7'+p.renew);if(p.licence)a.push('licence '+aed(p.licence)+'/yr');}else{a.push('Per transaction');if(p.unit)a.push(aed(p.unit)+'/txn');}return a.join(' \u00b7 ');}
+function pkgDetail(pid,label){var c=CATALOGUE[pid];if(!c||!c.pkgs[label])return 'Defined in Billing catalogue';var p=c.pkgs[label],a=[];if(p.type==='On request'&&!p.unit)return 'Priced on request';if(p.type==='Committed volume'){a.push('Committed volume');if(p.txns)a.push(intc(p.txns)+' txns/yr');if(p.unit)a.push(aed(p.unit)+'/unit');if(p.over)a.push('overage '+aed(p.over));if(p.renew)a.push('auto-renew \u00d7'+p.renew);if(p.licence)a.push('licence '+aed(p.licence)+'/yr');}else{a.push('Per transaction');if(p.unit)a.push(aed(p.unit)+'/txn');}return a.join(' \u00b7 ');}
 /* All packages configured for a product in Billing → Pricing & Catalog. selLabel = the one this subscription references. */
 function pkgOptions(pid,selLabel){var c=CATALOGUE[pid];var names=c&&c.pkgs?Object.keys(c.pkgs):[];if(!names.length){return '<div class="pricebox" style="background:var(--amber-bg);border-color:#F2DDB0"><div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#8A6A1E;font-weight:900">!</span><div><b style="color:#8A6A1E">No pricing configured</b><div class="pdetail" style="color:#8A6A1E;margin-top:3px">This product has no packages in Billing yet. Configure pricing for it before this subscription can be provisioned.</div><button class="lk" style="margin-top:9px" onclick="toast(\'Deep-link \u2192 Billing \u00b7 Pricing &amp; Catalog\')">Configure pricing in Billing \u2197</button></div></div></div>';}
   return '<div class="pkgopts">'+names.map(function(nm){var on=nm===selLabel;return '<div class="pricebox'+(on?' sel':'')+'" style="'+(on?'border-color:var(--brand);background:var(--soft)':'')+';margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div class="big">'+nm+'</div>'+(on?'<span class="pill ok" style="font-size:11px">Requested</span>':'')+'</div><div class="pdetail">'+pkgDetail(pid,nm)+'</div></div>';}).join('')+'</div>';}
@@ -268,6 +268,26 @@ var REQUESTS=[
   {id:"req_1063",tenant:"CITI NA UAE",tid:"tnt_8f3a2c",contact:"onboarding@citi.ae",pid:"cs",priceRef:pref('cust','Package 3'),ptype:"change",prevLabel:"Package 2",submittedAt:"2026-06-27T09:12:00",provided:{"Use case":"Limit uplift — higher volume","Est. monthly volume":"15,000","Environment":"Production"}},
   {id:"req_1066",tenant:"First Abu Dhabi Bank",tid:"tnt_fab001",contact:"api@fab.ae",pid:"cfr",priceRef:pref('cust','Committed volume'),ptype:"new",submittedAt:"2026-06-25T10:30:00",provided:{"Use case":"Mortgage underwriting","Est. monthly volume":"2,500","Environment":"Production"}}
 ];
+/* ---- Live requests bridge ----
+   Tenant "Request for Price" submissions arrive via the same-origin store the Customer
+   Portal writes (appro.accessRequests). We surface pending ones here; approving/rejecting
+   writes the status back so the tenant's catalogue button flips (green "Subscribe"). */
+var LIVE_KEY='appro.accessRequests';
+function matchPid(name){var keys=Object.keys(PRODUCTS);for(var i=0;i<keys.length;i++){if(PRODUCTS[keys[i]].name.toLowerCase()===String(name||'').toLowerCase())return keys[i];}return null;}
+function synthPid(name){
+  var pid='live_'+String(name||'product').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,44);
+  if(!PRODUCTS[pid])PRODUCTS[pid]={name:name||'Requested product',fields:[{g:"Outbound fields",items:[
+    {id:"result",name:"Result payload",k:"api.result",mand:true},
+    {id:"score",name:"Score / decision",k:"api.score"},
+    {id:"meta",name:"Response metadata",k:"api.meta"}
+  ]}]};
+  if(!CATALOGUE[pid])CATALOGUE[pid]={pkgs:{"On request":{type:"On request"}}};
+  return pid;
+}
+function loadLiveRequests(){var out=[];try{var list=JSON.parse(localStorage.getItem(LIVE_KEY)||'[]');list.forEach(function(r){if(!r||r.status!=='pending')return;var pid=matchPid(r.api)||synthPid(r.api);out.push({id:r.id,live:true,tenant:r.tenant||'Tenant',tid:r.tenantId||'—',contact:String(r.tenantId||'tenant').toLowerCase()+'@tenant.ae',pid:pid,priceRef:pref('cat','On request'),ptype:'new',submittedAt:new Date().toISOString(),provided:{"Environment":r.env||'production',"Requested plan":r.plan||'On request',"Channel":"Customer Portal"}});});}catch(e){}return out;}
+function markLive(id,status){try{var list=JSON.parse(localStorage.getItem(LIVE_KEY)||'[]');var ch=false;list.forEach(function(r){if(r&&r.id===id){r.status=status;ch=true;}});if(ch)localStorage.setItem(LIVE_KEY,JSON.stringify(list));}catch(e){}}
+function refreshLive(){var base=REQUESTS.filter(function(r){return !r.live;});REQUESTS=loadLiveRequests().concat(base);if(typeof fillFilters==='function')fillFilters();if(typeof renderReq==='function')renderReq();}
+
 var SUBS=[
   {id:"sub_900",tid:"tnt_8f3a2c",tenant:"CITI NA UAE",pid:"eiv",priceRef:pref('cust','Package 2'),status:"Active",approvedAt:"2026-03-02T10:00:00",approvedBy:"k.menon@appro.ae",fields:flds("eiv",{}),audit:[{t:"2026-03-02T10:00:00",by:"k.menon@appro.ae",txt:"Approved · provisioned · 4/4 fields enabled"}]},
   {id:"sub_812",tid:"tnt_3b91de",tenant:"Reem Finance",pid:"gdi",priceRef:pref('cat','Per transaction'),status:"Scheduled",approvedAt:"2026-01-15T13:20:00",approvedBy:"k.menon@appro.ae",scheduledAt:"2026-06-20T11:00:00",scheduledBy:"k.menon@appro.ae",effectiveCancelAt:"2026-09-30T00:00:00",cancelReason:"Tenant consolidating to a single identity provider at quarter-end.",fields:flds("gdi",{nat:false}),audit:[{t:"2026-01-15T13:20:00",by:"k.menon@appro.ae",txt:"Approved · 3/4 fields enabled (Nationality off)"},{t:"2026-06-20T11:00:00",by:"k.menon@appro.ae",txt:"Cancellation scheduled for 30 Sep 2026 — remains active and billable until then; settlement as of that date."}]},
@@ -278,7 +298,7 @@ var SUBS=[
 function switchTab(t){document.querySelectorAll('.seg .chip').forEach(function(c){c.classList.toggle('on',c.dataset.tab===t);});document.getElementById('tab-req').style.display=t==='req'?'block':'none';document.getElementById('tab-life').style.display=t==='life'?'block':'none';if(t==='life')renderLife();}
 
 /* ---- REQUESTS ---- */
-function fillFilters(){var fp=document.getElementById('fProd');Object.keys(PRODUCTS).forEach(function(p){var o=document.createElement('option');o.value=p;o.textContent=PRODUCTS[p].name;fp.appendChild(o);});var fc=document.getElementById('fCust'),seen={};REQUESTS.forEach(function(r){if(!seen[r.tid]){seen[r.tid]=1;var o=document.createElement('option');o.value=r.tid;o.textContent=r.tenant;fc.appendChild(o);}});}
+function fillFilters(){var fp=document.getElementById('fProd');fp.innerHTML='<option value="">All products</option>';Object.keys(PRODUCTS).forEach(function(p){var o=document.createElement('option');o.value=p;o.textContent=PRODUCTS[p].name;fp.appendChild(o);});var fc=document.getElementById('fCust');fc.innerHTML='<option value="">All tenants</option>';var seen={};REQUESTS.forEach(function(r){if(!seen[r.tid]){seen[r.tid]=1;var o=document.createElement('option');o.value=r.tid;o.textContent=r.tenant;fc.appendChild(o);}});}
 function prTag(p){return '<span class="priceref">'+p.label+' <span class="src '+(p.src==='cust'?'cust':'cat')+'">'+(p.src==='cust'?'custom':'catalogue')+'</span></span>';}
 function renderReq(){
   var q=(document.getElementById('reqSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
@@ -350,6 +370,7 @@ function doApprove(id){
   if(!DRAFT.pkgs||!DRAFT.pkgs.length){toast('Select at least one package to approve');return;}
   if(!DRAFT.fields.some(function(f){return f.on;})){toast('At least one outbound field must remain enabled');return;}
   var r=REQUESTS.filter(function(x){return x.id===id;})[0];REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});
+  if(r&&r.live)markLive(r.id,'approved');   // flip the tenant's catalogue button to green "Subscribe"
   var enabled=DRAFT.fields.filter(function(f){return f.on;}).length;
   var sub={id:'sub_'+Math.floor(Math.random()*900+100),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,pkgs:DRAFT.pkgs.slice(),status:'Provisioning',approvedAt:new Date().toISOString(),approvedBy:ME,fields:DRAFT.fields.map(function(f){return {id:f.id,name:f.name,k:f.k,mand:f.mand,on:f.on};}),audit:[{t:new Date().toISOString(),by:ME,txt:'Approved · '+DRAFT.pkgs.length+' package(s): '+DRAFT.pkgs.join(', ')+' · '+enabled+'/'+DRAFT.fields.length+' fields · provisioning started'}]};
   SUBS.push(sub);closeDrawer();renderReq();fillLifeTenant();
@@ -359,7 +380,7 @@ function doApprove(id){
 function doReject(id){
   openModal('Reject request','The tenant is notified with the reason. No provisioning is triggered.',
     '<select id="rc"><option value="">Reason category…</option><option>Ineligible product for tenant</option><option>Incomplete / failed onboarding data</option><option>Commercial terms not agreed</option><option>Compliance / risk hold</option><option>Other</option></select><textarea id="rt" rows="3" maxlength="120" placeholder="Reason (required)…"></textarea>',
-    function(){var cat=document.getElementById('rc').value,txt=document.getElementById('rt').value.trim();if(!txt){document.getElementById('rt').style.borderColor='var(--off)';return false;}REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});closeDrawer();renderReq();toast('Request rejected · tenant notified'+(cat?' ('+cat+')':''));return true;},'Reject',true);
+    function(){var cat=document.getElementById('rc').value,txt=document.getElementById('rt').value.trim();if(!txt){document.getElementById('rt').style.borderColor='var(--off)';return false;}var _r=REQUESTS.filter(function(x){return x.id===id;})[0];if(_r&&_r.live)markLive(id,'rejected');REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});closeDrawer();renderReq();toast('Request rejected · tenant notified'+(cat?' ('+cat+')':''));return true;},'Reject',true);
 }
 
 /* ---- LIFECYCLE ---- */
@@ -419,7 +440,9 @@ document.getElementById('mOk').onclick=function(){if(MOK){var r=MOK();if(r!==fal
 function closeModal(){document.getElementById('mscrim').classList.remove('on');MOK=null;}
 var TT;function toast(m){var t=document.getElementById('toast');t.innerHTML=m;t.classList.add('on');clearTimeout(TT);TT=setTimeout(function(){t.classList.remove('on');},2600);}
 
+REQUESTS=loadLiveRequests().concat(REQUESTS);
 fillFilters();renderReq();fillLifeTenant();
+window.addEventListener('storage',function(e){if(!e||e.key===LIVE_KEY||e.key===null)refreshLive();});
 </script>
 </body>
 </html>
