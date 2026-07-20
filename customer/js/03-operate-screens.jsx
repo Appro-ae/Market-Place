@@ -593,7 +593,156 @@ function AccessRequests() {
   );
 }
 
+/* ---------- Tenant User Role Management (roles + permission matrix) ---------- */
+const TEN_MATRIX = [
+  { group: 'Build', icon: 'product', subs: [
+    { menu: 'Environments', perms: ['View environments', 'Manage environments'] },
+    { menu: 'Product Catalogue', perms: ['Browse catalogue', 'Request for price', 'Subscribe to product'] },
+    { menu: 'API Keys', perms: ['View keys', 'Create key', 'Roll key', 'Revoke key'] },
+    { menu: 'API Credentials', perms: ['View credentials', 'Manage credentials'] },
+    { menu: 'IP Allowlists', perms: ['View allowlist', 'Edit allowlist'] },
+  ]},
+  { group: 'Operate', icon: 'usage', subs: [
+    { menu: 'Usage & Analytics', perms: ['View usage & analytics'] },
+    { menu: 'Request Logs', perms: ['View request logs', 'Export request logs'] },
+    { menu: 'Consent', perms: ['View consent', 'Manage consent'] },
+    { menu: 'Subscriptions & Billing', perms: ['View billing', 'Manage subscription', 'Manage payment method'] },
+  ]},
+  { group: 'Organization', icon: 'settings', subs: [
+    { menu: 'Verification', perms: ['View verification', 'Submit verification (KYB)'] },
+    { menu: 'Access Requests', perms: ['View access requests', 'Raise access request'] },
+    { menu: 'Team', perms: ['View team', 'Invite member', 'Edit member role', 'Remove member'] },
+    { menu: 'Settings', perms: ['View settings', 'Edit organization', 'Manage security'] },
+  ]},
+];
+const TEN_ROLES = [
+  { name: 'Admin', color: 'var(--appro-blue)', members: 1, desc: 'Full control of the organization, its subscriptions, keys and team.' },
+  { name: 'Developer', color: 'var(--success)', members: 2, desc: 'Build and operate integrations; view-only on billing, team and settings.' },
+  { name: 'Billing', color: '#7C3AED', members: 1, desc: 'Manage subscriptions, invoices and payment methods.' },
+  { name: 'Viewer', color: 'var(--ink-500)', members: 1, desc: 'Read-only access across the workspace.' },
+];
+const TEN_KEY = (menu, perm) => menu + ' :: ' + perm;
+const TEN_ALL = TEN_MATRIX.flatMap(g => g.subs.flatMap(s => s.perms.map(p => TEN_KEY(s.menu, p))));
+function tenView(p) { return p.startsWith('View') || p.startsWith('Browse'); }
+function tenPreset(role, menu, perm) {
+  const view = tenView(perm);
+  if (role === 'Admin') return true;
+  if (role === 'Developer') {
+    if (menu === 'Subscriptions & Billing' || menu === 'Team' || menu === 'Settings' || menu === 'Verification') return view;
+    return true; // Build all, Operate all, raise access requests
+  }
+  if (role === 'Billing') return menu === 'Subscriptions & Billing' || view;
+  if (role === 'Viewer') return view;
+  return false;
+}
+function tenBuild(role) { const g = {}; TEN_MATRIX.forEach(gr => gr.subs.forEach(s => s.perms.forEach(p => { g[TEN_KEY(s.menu, p)] = tenPreset(role, s.menu, p); }))); return g; }
+
+function TenantRolePermissions({ onClose }) {
+  const { useState } = React;
+  const [byRole, setByRole] = useState(() => { const o = {}; TEN_ROLES.forEach(r => o[r.name] = tenBuild(r.name)); return o; });
+  const [sel, setSel] = useState('Developer');
+  const [edit, setEdit] = useState(false);
+  const [draft, setDraft] = useState(null);
+  const [collapsed, setCollapsed] = useState({});
+  const grants = edit ? draft : byRole[sel];
+  const start = () => { setDraft({ ...byRole[sel] }); setEdit(true); };
+  const cancel = () => { setEdit(false); setDraft(null); };
+  const toggle = (menu, perm) => { if (!edit) return; const k = TEN_KEY(menu, perm); setDraft(d => ({ ...d, [k]: !d[k] })); };
+  const groupAll = (gr, on) => setDraft(d => { const n = { ...d }; gr.subs.forEach(s => s.perms.forEach(p => n[TEN_KEY(s.menu, p)] = on)); return n; });
+  const subAll = (s, on) => setDraft(d => { const n = { ...d }; s.perms.forEach(p => n[TEN_KEY(s.menu, p)] = on); return n; });
+  const save = () => { setByRole(b => ({ ...b, [sel]: draft })); setEdit(false); setDraft(null); window.toast && window.toast.success('Permissions saved', 'The “' + sel + '” role has been updated for your organization.'); };
+  const grantedCount = TEN_ALL.filter(k => byRole[sel][k]).length;
+
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(8,18,30,.45)', zIndex: 90, display: 'flex', justifyContent: 'flex-end' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 'min(720px,96vw)', height: '100%', background: 'var(--ink-50)', boxShadow: '-8px 0 30px rgba(0,0,0,.16)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '18px 24px', background: '#fff', borderBottom: '1px solid var(--ink-200)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>Team · roles &amp; permissions</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#0C1931', marginTop: 3 }}>Role permissions</div>
+          </div>
+          <button onClick={onClose} style={{ background: 'var(--ink-100)', border: 0, borderRadius: 8, width: 32, height: 32, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Icon name="x" size={16} /></button>
+        </div>
+
+        <div style={{ padding: '16px 24px 0' }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {TEN_ROLES.map(r => {
+              const active = r.name === sel; const cnt = TEN_ALL.filter(k => byRole[r.name][k]).length;
+              return (
+                <button key={r.name} onClick={() => { setSel(r.name); cancel(); }} style={{
+                  textAlign: 'left', cursor: 'pointer', background: active ? '#fff' : 'transparent',
+                  border: '1.5px solid ' + (active ? 'var(--appro-blue)' : 'var(--ink-200)'), borderRadius: 12, padding: '10px 14px', minWidth: 150, display: 'flex', flexDirection: 'column', gap: 3,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ width: 9, height: 9, borderRadius: '50%', background: r.color }} />
+                    <span style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>{r.name}</span>
+                  </div>
+                  <span style={{ fontSize: 11.5, color: 'var(--ink-500)', fontWeight: 600 }}>{r.members} {r.members === 1 ? 'member' : 'members'} · {cnt}/{TEN_ALL.length} perms</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ padding: '16px 24px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ fontSize: 13, color: 'var(--ink-500)' }}>{TEN_ROLES.find(r => r.name === sel).desc}<div style={{ marginTop: 2 }}>{grantedCount} of {TEN_ALL.length} permissions granted</div></div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {edit ? <>
+              <Btn variant="secondary" size="sm" onClick={cancel}>Cancel</Btn>
+              <Btn variant="primary" size="sm" icon="check" onClick={save}>Save changes</Btn>
+            </> : <Btn variant="secondary" size="sm" icon="lock" onClick={start}>Edit permissions</Btn>}
+          </div>
+        </div>
+
+        <div style={{ padding: '4px 20px 24px', overflowY: 'auto', flex: 1 }}>
+          {TEN_MATRIX.map(gr => {
+            const col = collapsed[gr.group];
+            const gTotal = gr.subs.reduce((a, s) => a + s.perms.length, 0);
+            const gOn = gr.subs.reduce((a, s) => a + s.perms.filter(p => grants[TEN_KEY(s.menu, p)]).length, 0);
+            return (
+              <div key={gr.group} style={{ marginTop: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, background: '#0C1931', color: '#fff', borderRadius: col ? 12 : '12px 12px 0 0', padding: '12px 16px' }}>
+                  <button onClick={() => setCollapsed(c => ({ ...c, [gr.group]: !c[gr.group] }))} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'transparent', border: 0, color: '#fff', cursor: 'pointer', fontSize: 15, fontWeight: 700, fontFamily: 'var(--font-ui)' }}>
+                    <Icon name={gr.icon} size={16} />{gr.group}<span style={{ fontSize: 12, fontWeight: 600, opacity: .8 }}>{gOn}/{gTotal}</span>
+                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    {edit ? <label style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}><input type="checkbox" checked={gOn === gTotal} onChange={e => groupAll(gr, e.target.checked)} style={{ width: 15, height: 15, accentColor: 'var(--appro-blue)' }} /> Select all</label> : null}
+                    <button onClick={() => setCollapsed(c => ({ ...c, [gr.group]: !c[gr.group] }))} style={{ background: 'transparent', border: 0, color: '#fff', cursor: 'pointer', transform: col ? 'rotate(0)' : 'rotate(180deg)', display: 'flex' }}><Icon name="chevron" size={16} /></button>
+                  </div>
+                </div>
+                {!col && (
+                  <div style={{ background: '#fff', border: '1px solid var(--ink-200)', borderTop: 0, borderRadius: '0 0 12px 12px', padding: '4px 0' }}>
+                    {gr.subs.map((s, si) => (
+                      <div key={s.menu} style={{ padding: '12px 16px', borderTop: si ? '1px solid var(--ink-100)' : 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 10 }}>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>{s.menu}</span>
+                          {edit ? <button onClick={() => { const allOn = s.perms.every(p => grants[TEN_KEY(s.menu, p)]); subAll(s, !allOn); }} style={{ marginLeft: 'auto', background: 'transparent', border: 0, color: 'var(--appro-blue)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>{s.perms.every(p => grants[TEN_KEY(s.menu, p)]) ? 'Clear' : 'Select all'}</button> : null}
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(220px,1fr))', gap: '8px 16px' }}>
+                          {s.perms.map(p => {
+                            const on = !!grants[TEN_KEY(s.menu, p)];
+                            return (
+                              <label key={p} onClick={() => toggle(s.menu, p)} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: edit ? 'pointer' : 'default', fontSize: 13, color: on ? 'var(--ink-800)' : 'var(--ink-400)', fontWeight: on ? 600 : 500 }}>
+                                <span style={{ width: 18, height: 18, borderRadius: 6, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: on ? 'var(--appro-blue)' : '#fff', border: '1.5px solid ' + (on ? 'var(--appro-blue)' : 'var(--ink-300)') }}>{on ? <Icon name="check" size={12} /> : null}</span>{p}
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Team() {
+  const [rolesOpen, setRolesOpen] = React.useState(false);
   const users = [
     { n: 'Amira Saleh',        e: 'amira@nuqud.ae',    r: 'Admin',        last: '2 min ago',  c: 'var(--appro-blue)' },
     { n: 'Yusuf Al Hammadi',   e: 'yusuf@nuqud.ae',    r: 'Developer',    last: '24 min ago', c: 'var(--success)' },
@@ -611,7 +760,7 @@ function Team() {
             <div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{users.length} members · 4 roles · SSO via Nuqud Pay AD</div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <Btn variant="secondary" size="sm" icon="lock" onClick={() => window.toast && window.toast.info('Role permissions', 'Opening the role &amp; permissions matrix…')}>Role permissions</Btn>
+            <Btn variant="secondary" size="sm" icon="lock" onClick={() => setRolesOpen(true)}>Role permissions</Btn>
             <Btn variant="primary" icon="plus" onClick={() => window.toast && window.toast.success('Invitation sent', 'Your teammate will receive an email to join.')}>Invite teammate</Btn>
           </div>
         </div>
@@ -652,6 +801,7 @@ function Team() {
           </tbody>
         </table>
       </Card>
+      {rolesOpen && <TenantRolePermissions onClose={() => setRolesOpen(false)} />}
     </div>
   );
 }
