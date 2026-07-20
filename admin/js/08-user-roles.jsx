@@ -504,8 +504,9 @@ function UserRoleManagement() {
   const tabs = [
     { id: 'roles', label: 'Role Management', icon: 'lock' },
     { id: 'users', label: 'User Management', icon: 'users' },
-    { id: 'checkers', label: 'Checker Management', icon: 'requests' },
-    { id: 'queue', label: 'Review Queue', icon: 'refresh', badge: pendingCount || null },
+    // Temporarily hidden for later review — re-enable to restore the tabs.
+    // { id: 'checkers', label: 'Checker Management', icon: 'requests' },
+    // { id: 'queue', label: 'Review Queue', icon: 'refresh', badge: pendingCount || null },
   ];
 
   return (
