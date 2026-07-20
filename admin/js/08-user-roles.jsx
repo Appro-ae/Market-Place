@@ -280,19 +280,83 @@ function URRoleForm({ existing, roleDef, initialGrants, initialEnv, takenNames, 
 }
 
 /* ============================================================ USER MANAGEMENT — LIST */
+const URFunnel = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>;
+function ur_dmy(s) { const p = (s || '').split('/'); return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : ''; }
+const UR_FILTER0 = { env: 'All', status: 'All', date: '' };
+
+function URUserFilterDrawer({ initial, onClose, onApply, onClear }) {
+  const [f, setF] = useURState(initial);
+  const set = (k, v) => setF(s => ({ ...s, [k]: v }));
+  const selStyle = { width: '100%', boxSizing: 'border-box', padding: '12px 14px', borderRadius: 10, border: '1px solid var(--ink-300)', fontSize: 14, fontFamily: 'var(--font-ui)', background: '#fff', color: 'var(--ink-800)' };
+  const fieldLabel = { fontSize: 13.5, fontWeight: 700, color: 'var(--ink-700)', display: 'block', marginBottom: 9 };
+  const card = { background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 12, padding: '16px 18px', marginBottom: 14 };
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(8,18,30,.45)', zIndex: 85, display: 'flex', justifyContent: 'flex-end' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 'min(440px,94vw)', height: '100%', background: 'var(--ink-50)', boxShadow: '-8px 0 30px rgba(0,0,0,.16)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ padding: '20px 24px', background: '#fff', borderBottom: '1px solid var(--ink-200)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: '#0C1931' }}>Apply Filter</div>
+          <button onClick={onClose} style={{ background: 'var(--ink-100)', border: 0, borderRadius: 999, width: 34, height: 34, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Icon name="x" size={16} /></button>
+        </div>
+        <div style={{ padding: '18px 20px', overflowY: 'auto', flex: 1 }}>
+          <div style={card}>
+            <label style={fieldLabel}>Environment</label>
+            <select value={f.env} onChange={e => set('env', e.target.value)} style={selStyle}><option value="All">All Environments</option><option value="Sandbox">Sandbox</option><option value="Production">Production</option></select>
+          </div>
+          <div style={card}>
+            <label style={fieldLabel}>Status</label>
+            <select value={f.status} onChange={e => set('status', e.target.value)} style={selStyle}><option value="All">All</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
+          </div>
+          <div style={card}>
+            <label style={fieldLabel}>Last Updated Date</label>
+            <input type="date" value={f.date} onChange={e => set('date', e.target.value)} style={selStyle} />
+            <div style={{ fontSize: 12, color: 'var(--ink-500)', marginTop: 7 }}>Shows users updated on or after the selected date.</div>
+          </div>
+        </div>
+        <div style={{ padding: '16px 20px', borderTop: '1px solid var(--ink-200)', background: '#fff', display: 'flex', gap: 10 }}>
+          <Btn variant="secondary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => { setF(UR_FILTER0); onClear(); }}>Clear All</Btn>
+          <Btn variant="primary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => onApply(f)}>Apply</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function URUserList({ users, roles, onToggle, onAdd }) {
   const [q, setQ] = useURState('');
+  const [filterOpen, setFilterOpen] = useURState(false);
+  const [filter, setFilter] = useURState(UR_FILTER0);
   const th = { textAlign: 'left', padding: '14px 20px', fontSize: 11, fontWeight: 700, color: 'var(--ink-600)', textTransform: 'uppercase', letterSpacing: '.05em', whiteSpace: 'nowrap' };
-  const list = users.filter(u => (u.name + u.email).toLowerCase().indexOf(q.toLowerCase()) > -1);
+  const activeCount = (filter.env !== 'All' ? 1 : 0) + (filter.status !== 'All' ? 1 : 0) + (filter.date ? 1 : 0);
+  const list = users.filter(u => {
+    if ((u.name + u.email).toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
+    if (filter.env !== 'All' && (Array.isArray(u.env) ? u.env.indexOf(filter.env) < 0 : u.env !== filter.env)) return false;
+    if (filter.status === 'Active' && !u.status) return false;
+    if (filter.status === 'Inactive' && u.status) return false;
+    if (filter.date && ur_dmy(u.updated) && ur_dmy(u.updated) < filter.date) return false;
+    return true;
+  });
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, gap: 12, flexWrap: 'wrap' }}>
         <URSearch value={q} onChange={setQ} ph="Search name or email" />
         <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={() => setFilterOpen(true)} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 14px', fontSize: 13, fontWeight: 600, borderRadius: 8, cursor: 'pointer', background: '#fff', color: 'var(--ink-800)', border: '1px solid ' + (activeCount ? 'var(--appro-blue)' : '#D1DBDF'), fontFamily: 'var(--font-ui)' }}>
+            <URFunnel />Filter{activeCount ? <span style={{ background: 'var(--appro-blue)', color: '#fff', fontSize: 11, fontWeight: 700, borderRadius: 999, padding: '1px 7px' }}>{activeCount}</span> : null}
+          </button>
           <Btn variant="secondary" icon="external" onClick={() => UR_toast('Export', 'Exporting the user list (demo).', 'info')}>Export</Btn>
           <Btn variant="primary" icon="plus" onClick={onAdd}>Add User</Btn>
         </div>
       </div>
+      {activeCount ? (
+        <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ fontSize: 12.5, color: 'var(--ink-500)', fontWeight: 600 }}>Showing {list.length} of {users.length} ·</span>
+          {filter.env !== 'All' ? <URChip tone="blue">Environment: {filter.env}</URChip> : null}
+          {filter.status !== 'All' ? <URChip tone="blue">Status: {filter.status}</URChip> : null}
+          {filter.date ? <URChip tone="blue">Updated ≥ {filter.date}</URChip> : null}
+          <button onClick={() => setFilter(UR_FILTER0)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue-700)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Clear all</button>
+        </div>
+      ) : null}
+      {filterOpen ? <URUserFilterDrawer initial={filter} onClose={() => setFilterOpen(false)} onApply={f => { setFilter(f); setFilterOpen(false); }} onClear={() => { setFilter(UR_FILTER0); setFilterOpen(false); }} /> : null}
       <Card padding={0} style={{ overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 900 }}>
