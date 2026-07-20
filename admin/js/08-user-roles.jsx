@@ -13,7 +13,6 @@ const UR_GROUPS = [
   { g: 'Product Setup', icon: 'product', perms: ['View product', 'Onboard product', 'Edit product', 'Publish product', 'Deprecate product', 'Manage admission checklist'] },
   { g: 'Billing Management', icon: 'billing', perms: ['View billing & plans', 'Manage packages & pricing', 'Edit per-tenant pricing', 'Export invoices'] },
   { g: 'Subscription Management', icon: 'product', perms: ['View subscription requests', 'Approve subscription', 'Reject subscription', 'Configure outbound fields', 'Cancel subscription'] },
-  { g: 'Access Requests', icon: 'requests', perms: ['View access requests', 'Approve access request', 'Reject access request'] },
   { g: 'User Role Management', icon: 'users', subs: [
     { s: 'Role Management', perms: ['View role', 'Create role', 'Edit role', 'Activate / Deactivate role', 'Delete role'] },
     { s: 'User Management', perms: ['View user', 'Create user', 'Edit user', 'Activate / Deactivate user', 'Delete user'] },

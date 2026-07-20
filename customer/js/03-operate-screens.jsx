@@ -610,7 +610,6 @@ const TEN_MATRIX = [
   ]},
   { group: 'Organization', icon: 'settings', subs: [
     { menu: 'Verification', perms: ['View verification', 'Submit verification (KYB)'] },
-    { menu: 'Access Requests', perms: ['View access requests', 'Raise access request'] },
     { menu: 'Team', perms: ['View team', 'Invite member', 'Edit member role', 'Remove member'] },
     { menu: 'Settings', perms: ['View settings', 'Edit organization', 'Manage security'] },
   ]},

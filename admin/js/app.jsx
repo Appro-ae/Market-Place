@@ -17,7 +17,7 @@ function loadLiveRequests() { try { return JSON.parse(localStorage.getItem(REQ_K
 function loadRequests() { return [...loadLiveRequests(), ...SEED_REQUESTS]; }        // tenant requests first, then seed
 function persistLiveRequests(all) { localStorage.setItem(REQ_KEY, JSON.stringify(all.filter(r => !SEED_REQ_IDS.has(r.id)))); }
 
-const ADMIN_SCREENS = ['tenant-management','product-setup','billing','subscriptions','requests','user-roles'];
+const ADMIN_SCREENS = ['tenant-management','product-setup','billing','subscriptions','user-roles'];
 function AdminApp({ onLogout }) {
   const [screen, setScreen] = useState(() => { const s = localStorage.getItem('admin.screen') || 'tenant-management'; return ADMIN_SCREENS.includes(s) ? s : 'tenant-management'; });
   const [published, setPublished] = useState(loadPublished);
