@@ -113,7 +113,7 @@ function App({ onLogout }) {
     consent: 'Consent',
     billing: 'Subscriptions & Billing',
     requests: 'Access Requests',
-    users: 'Team',
+    users: 'User Role Management',
     settings: 'Settings',
     verification: 'Verification',
     environments: 'Environments',
@@ -190,7 +190,7 @@ function App({ onLogout }) {
   else if (screen === 'consent') body = <ConsentManagement env={env}/>;
   else if (screen === 'billing') body = <CustomerBilling/>;
   else if (screen === 'requests') body = <AccessRequests/>;
-  else if (screen === 'users') body = <Team/>;
+  else if (screen === 'users') body = <TenantUserRoleManagement/>;
   else if (screen === 'settings') body = <Settings/>;
   else if (screen === 'verification') body = <Verification status={verification} setStatus={setVerification}/>;
   else if (screen === 'environments') body = <Environments env={env}/>;

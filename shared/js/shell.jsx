@@ -77,7 +77,7 @@ function Sidebar({ screen, onNav, env, onLogout }) {
   },
   { label: 'Organization', items: [
     { id: 'verification', label: 'Verification', icon: 'lock' },
-    { id: 'users', label: 'Team', icon: 'users' },
+    { id: 'users', label: 'User Role Management', icon: 'users' },
     { id: 'settings', label: 'Settings', icon: 'settings' }]
   }];
 
