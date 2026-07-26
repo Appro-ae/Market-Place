@@ -23,22 +23,25 @@ Built with [Playwright](https://playwright.dev/) driving real Chromium.
 
 Output lands in `reports/<timestamp>.md` (+ `.json`) and `screenshots/`.
 
-## Setup
+## Credentials — ask-every-time
 
-```bash
-cd portal-test-agent
-cp .env.example .env
-# edit .env — set PORTAL_PASSWORD (and anything else you want to override)
-```
+The agent **never stores your portal password**. It resolves credentials in this
+order, for one run only:
 
-Credentials are read from the environment (or `.env`). They are **never**
-hard-coded and **never** written into a report — the username is masked.
+1. `PORTAL_USERNAME` / `PORTAL_PASSWORD` env vars if set (used, not persisted).
+2. Otherwise it **prompts you interactively** (password input is masked).
+
+So there's nothing to put in `.env` for the password. You can still copy
+`.env.example` to `.env` to override the URL/behavior — `.env` is gitignored.
 
 ## Run
 
 ```bash
-./run.sh                 # headless
+./run.sh                 # headless — prompts for credentials if not in env
 HEADLESS=false ./run.sh  # watch the browser drive
+
+# Or provide credentials for a single run without prompting:
+PORTAL_USERNAME='admin@appro.ae' PORTAL_PASSWORD='***' ./run.sh
 ```
 
 Exit code is `0` on PASS, `1` on FAIL.

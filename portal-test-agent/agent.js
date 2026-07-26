@@ -20,8 +20,12 @@
 
 const path = require('path');
 const fs = require('fs');
+const readline = require('readline');
 const { chromium } = require('playwright');
 const { config } = require('./config');
+
+// Resolved at runtime by resolveCredentials(); never persisted to disk.
+const creds = { username: '', password: '' };
 
 const SHOTS_DIR = path.join(__dirname, 'screenshots');
 const REPORTS_DIR = path.join(__dirname, 'reports');
@@ -72,6 +76,51 @@ async function firstVisible(page, selectors) {
   return null;
 }
 
+/**
+ * "Ask every time": resolve credentials from env if provided, otherwise prompt
+ * interactively. The password prompt masks input. Nothing is written to disk.
+ */
+async function resolveCredentials() {
+  creds.username = config.usernameFromEnv;
+  creds.password = config.passwordFromEnv;
+
+  if (creds.username && creds.password) return; // provided via env for this run
+
+  if (!process.stdin.isTTY) {
+    throw new Error(
+      'No credentials provided and no interactive terminal available. ' +
+        'Set PORTAL_USERNAME / PORTAL_PASSWORD for this run, or run in a terminal so I can prompt you.'
+    );
+  }
+
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const ask = (q) => new Promise((res) => rl.question(q, res));
+
+  if (!creds.username) creds.username = (await ask('Portal username: ')).trim();
+
+  if (!creds.password) {
+    // Mask the password as it is typed.
+    const stdout = process.stdout;
+    const onData = (char) => {
+      const s = char.toString();
+      if (s === '\n' || s === '\r' || s === '') return;
+      readline.clearLine(stdout, 0);
+      readline.cursorTo(stdout, 0);
+      stdout.write('Portal password: ' + '*'.repeat(rl.line.length));
+    };
+    process.stdin.on('data', onData);
+    creds.password = (await ask('Portal password: ')).trim();
+    process.stdin.removeListener('data', onData);
+    stdout.write('\n');
+  }
+
+  rl.close();
+
+  if (!creds.username || !creds.password) {
+    throw new Error('Username and password are both required.');
+  }
+}
+
 async function fillLogin(page) {
   // Username / email field — try common variants.
   const userLoc = await firstVisible(page, [
@@ -87,7 +136,7 @@ async function fillLogin(page) {
     '#email',
   ]);
   if (!userLoc) throw new Error('Could not locate a username/email input on the login page.');
-  await userLoc.fill(config.username);
+  await userLoc.fill(creds.username);
 
   const passLoc = await firstVisible(page, [
     'input[formcontrolname="password"]',
@@ -98,7 +147,7 @@ async function fillLogin(page) {
     '#password',
   ]);
   if (!passLoc) throw new Error('Could not locate a password input on the login page.');
-  await passLoc.fill(config.password);
+  await passLoc.fill(creds.password);
 
   const submitLoc = await firstVisible(page, [
     'button[type="submit"]',
@@ -143,6 +192,8 @@ async function run() {
   fs.mkdirSync(SHOTS_DIR, { recursive: true });
   fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
+  await resolveCredentials(); // ask-every-time (or use env for this run)
+
   const loginUrl = config.baseUrl.replace(/\/+$/, '') + config.loginPath;
   log(`Launching Chromium (headless=${config.headless}) …`);
 
@@ -186,7 +237,7 @@ async function run() {
 
     // ── Step 2: fill + submit ──────────────────────────────────────────────
     const submit = await fillLogin(page);
-    recordStep('fill-credentials', 'pass', `user=${maskUser(config.username)}`);
+    recordStep('fill-credentials', 'pass', `user=${maskUser(creds.username)}`);
     recordStep('pre-submit-screenshot', 'info', await shot(page, '02-filled'));
 
     const beforeUrl = page.url();

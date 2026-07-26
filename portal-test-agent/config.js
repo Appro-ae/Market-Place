@@ -21,19 +21,7 @@
 })();
 
 // Central configuration for the portal test agent.
-// Secrets come from environment variables — never hard-code credentials here.
-// Copy .env.example to .env and fill it in, or export the vars in your shell.
-
-function required(name, fallback) {
-  const v = process.env[name] ?? fallback;
-  if (v === undefined || v === '') {
-    throw new Error(
-      `Missing required env var ${name}. Copy .env.example to .env and fill it in, ` +
-        `or export ${name} before running.`
-    );
-  }
-  return v;
-}
+// Credentials come from env OR an interactive runtime prompt — never hard-coded.
 
 const config = {
   // Base URL of the portal (no trailing hash route).
@@ -42,13 +30,11 @@ const config = {
   // Full login route (hash-based Angular route).
   loginPath: process.env.PORTAL_LOGIN_PATH || '/index.html#/authenticate/login',
 
-  // Credentials — required, no defaults so they can't leak into git.
-  get username() {
-    return required('PORTAL_USERNAME');
-  },
-  get password() {
-    return required('PORTAL_PASSWORD');
-  },
+  // Credentials — read from env if present, otherwise the agent prompts for
+  // them interactively at runtime (see resolveCredentials in agent.js).
+  // They are never defaulted and never written to disk.
+  usernameFromEnv: process.env.PORTAL_USERNAME || '',
+  passwordFromEnv: process.env.PORTAL_PASSWORD || '',
 
   // A URL fragment that indicates a successful login (i.e. we navigated away
   // from the login route). Adjust once you know the real post-login route.
