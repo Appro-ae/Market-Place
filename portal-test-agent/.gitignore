@@ -1,0 +1,10 @@
+# Secrets — never commit real credentials
+.env
+
+# Run artifacts
+screenshots/*.png
+reports/*.json
+reports/*.md
+
+# Node
+node_modules/
