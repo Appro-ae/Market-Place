@@ -5,6 +5,13 @@ One row per feature/epic the agent has studied. Newest understanding wins.
 | Feature | Note | Jira key(s) | Last synced | Status in Jira |
 |---|---|---|---|---|
 | Co-borrower — Offer Flow | [coborrower-offer-flow.md](./coborrower-offer-flow.md) | AMP-2495 | 2026-07-26 | Tested with Bugs |
+| Product Setup — Personal Loan | [personal-loan-product-setup.md](./personal-loan-product-setup.md) | AMP-1786 (+ AITEST-5350…5368) | 2026-07-26 | UAT TESTING |
+
+## Test runs
+
+| Story | Sheet | Test cases | Status |
+|---|---|---|---|
+| AMP-1786 | [test-runs/AMP-1786/test-plan.md](../test-runs/AMP-1786/test-plan.md) | 10 (TC_01–TC_10) | ⛔ Blocked — live portal unreachable (egress 403) |
 
 ## Related AMP stories seen (not yet distilled)
 
