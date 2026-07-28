@@ -60,14 +60,17 @@ function ur_buildGrants(role) {
 }
 
 /* ---------- Seed users, checker groups, requests ---------- */
+// state: 'invited' | 'active' | 'inactive'. status boolean kept in sync (active === status true) for the enable/disable toggle.
 const UR_USERS0 = [
-  { name: 'Amira Saleh', email: 'amira.saleh@appro.ae', roles: ['Super Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Omar Haddad', email: 'omar.haddad@appro.ae', roles: ['Platform Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Lina Faris', email: 'lina.faris@appro.ae', roles: ['Product Manager'], env: ['Sandbox', 'Production'], dept: 'Product', status: true, updated: '18/07/2026', by: 'omar.haddad@appro.ae' },
-  { name: 'Yousef Karim', email: 'yousef.karim@appro.ae', roles: ['Billing Manager'], env: ['Production'], dept: 'Finance', status: true, updated: '16/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
+  { name: 'Amira Saleh', email: 'amira.saleh@appro.ae', roles: ['Super Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', state: 'active', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Omar Haddad', email: 'omar.haddad@appro.ae', roles: ['Platform Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', state: 'active', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Lina Faris', email: 'lina.faris@appro.ae', roles: ['Product Manager'], env: ['Sandbox', 'Production'], dept: 'Product', state: 'active', status: true, updated: '18/07/2026', by: 'omar.haddad@appro.ae' },
+  { name: 'Yousef Karim', email: 'yousef.karim@appro.ae', roles: ['Billing Manager'], env: ['Production'], dept: 'Finance', state: 'active', status: true, updated: '16/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Sara Idris', email: 'sara.idris@appro.ae', roles: ['Product Manager'], env: ['Sandbox'], dept: 'Product', state: 'invited', status: false, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', state: 'inactive', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', state: 'active', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
 ];
+const UR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes) — BRD v1.4 NFR-6
 const UR_DEPTS = ['Platform', 'Product', 'Finance', 'Compliance', 'Operations'];
 const UR_GROUPS0 = [
   { name: 'Product & Pricing Checkers', authority: ['Product Setup', 'Billing Management'], checkers: 3, status: 'active', by: 'Amira Saleh', updated: '2 days ago' },
@@ -133,6 +136,21 @@ function envChip(env) {
   const e = Array.isArray(env) ? env[0] : env;
   return <URChip tone={e === 'Production' ? 'green' : 'blue'}>{e}</URChip>;
 }
+/* three-state user status pill (Invited / Active / Inactive) — BRD v1.4 2.7 */
+function URUserStatus({ state }) {
+  const map = { invited: ['#FEF3C7', '#92400E', 'Invited'], active: ['#E6F9F2', '#00875A', 'Active'], inactive: ['var(--ink-100)', 'var(--ink-500)', 'Inactive'] };
+  const [b, c, l] = map[state] || map.inactive;
+  return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: b, color: c, fontSize: 12, fontWeight: 700, padding: '4px 11px', borderRadius: 999, whiteSpace: 'nowrap' }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: c }} />{l}</span>;
+}
+/* password policy for the Activate Account screen — BRD v1.4 2.8.2 / IEM017 */
+function ur_pwChecks(pw) { return [
+  { k: 'len', ok: pw.length >= 8, label: 'At least 8 characters' },
+  { k: 'upper', ok: /[A-Z]/.test(pw), label: 'An uppercase letter' },
+  { k: 'lower', ok: /[a-z]/.test(pw), label: 'A lowercase letter' },
+  { k: 'num', ok: /[0-9]/.test(pw), label: 'A number' },
+]; }
+function ur_pwOk(pw) { return ur_pwChecks(pw).every(c => c.ok); }
+function ur_token() { return 'eyJ' + Math.random().toString(36).slice(2, 12) + Math.random().toString(36).slice(2, 10) + '.9631'; }
 
 /* ============================================================ ROLE MANAGEMENT — LIST */
 function URRoleList({ roles, grantsByRole, onToggleStatus, onAdd, onEdit, statusByRole }) {
@@ -304,7 +322,7 @@ function URUserFilterDrawer({ initial, onClose, onApply, onClear }) {
           </div>
           <div style={card}>
             <label style={fieldLabel}>Status</label>
-            <select value={f.status} onChange={e => set('status', e.target.value)} style={selStyle}><option value="All">All</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
+            <select value={f.status} onChange={e => set('status', e.target.value)} style={selStyle}><option value="All">All</option><option value="Invited">Invited</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
           </div>
           <div style={card}>
             <label style={fieldLabel}>Last Updated Date</label>
@@ -321,7 +339,7 @@ function URUserFilterDrawer({ initial, onClose, onApply, onClear }) {
   );
 }
 
-function URUserList({ users, roles, onToggle, onAdd }) {
+function URUserList({ users, roles, onToggle, onAdd, onOpenInvite, onResend }) {
   const [q, setQ] = useURState('');
   const [filterOpen, setFilterOpen] = useURState(false);
   const [filter, setFilter] = useURState(UR_FILTER0);
@@ -330,8 +348,7 @@ function URUserList({ users, roles, onToggle, onAdd }) {
   const list = users.filter(u => {
     if ((u.name + u.email).toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
     if (filter.env !== 'All' && (Array.isArray(u.env) ? u.env.indexOf(filter.env) < 0 : u.env !== filter.env)) return false;
-    if (filter.status === 'Active' && !u.status) return false;
-    if (filter.status === 'Inactive' && u.status) return false;
+    if (filter.status !== 'All' && (u.state || (u.status ? 'active' : 'inactive')) !== filter.status.toLowerCase()) return false;
     if (filter.date && ur_dmy(u.updated) && ur_dmy(u.updated) < filter.date) return false;
     return true;
   });
@@ -367,7 +384,15 @@ function URUserList({ users, roles, onToggle, onAdd }) {
                   <td style={{ padding: '15px 20px' }}><div style={{ fontSize: 14.5, fontWeight: 700, color: '#0C1931' }}>{u.name}</div><div style={{ fontSize: 12.5, color: 'var(--ink-500)', fontFamily: 'var(--font-mono)' }}>{u.email}</div></td>
                   <td style={{ padding: '15px 20px' }}><div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{u.roles.map(r => <span key={r} style={{ fontSize: 12, fontWeight: 700, padding: '4px 11px', borderRadius: 8, border: '1px solid var(--ink-200)', color: 'var(--ink-700)', background: '#fff' }}>{r}</span>)}</div></td>
                   <td style={{ padding: '15px 20px' }}>{envChip(u.env)}</td>
-                  <td style={{ padding: '15px 20px' }}><URToggle on={u.status} onChange={() => onToggle(u.email)} /></td>
+                  <td style={{ padding: '15px 20px' }}>
+                    {u.state === 'invited'
+                      ? <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                          <URUserStatus state="invited" />
+                          <button onClick={() => onOpenInvite(u.email)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue-700)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Open link</button>
+                          <button onClick={() => onResend(u.email)} style={{ background: 'transparent', border: 0, color: 'var(--ink-500)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Resend</button>
+                        </div>
+                      : <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}><URUserStatus state={u.state || (u.status ? 'active' : 'inactive')} /><URToggle on={u.status} onChange={() => onToggle(u.email)} /></label>}
+                  </td>
                   <td style={{ padding: '15px 20px', fontSize: 13.5, color: 'var(--ink-600)' }}>{u.updated}</td>
                   <td style={{ padding: '15px 20px', fontSize: 13.5, color: 'var(--ink-500)', fontFamily: 'var(--font-mono)' }}>{u.by}</td>
                 </tr>
@@ -419,10 +444,124 @@ function URUserForm({ roles, onCancel, onSave }) {
           </div>
         </div>
         {err ? <div style={{ color: '#DC2626', fontSize: 13, marginTop: 16 }}>{err}</div> : null}
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9, marginTop: 20, padding: '11px 14px', background: 'var(--appro-blue-100)', borderRadius: 10, fontSize: 12.5, color: 'var(--appro-blue-700)' }}>
+          <Icon name="info" size={15} /><span>No password is set here. On save, the user is created as <b>Invited</b> and an activation email with a single-use set-password link (valid {UR_LINK_EXPIRY_MIN} minutes) is sent. The account becomes <b>Active</b> once they activate it.</span>
+        </div>
       </Card>
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
         <Btn variant="secondary" onClick={onCancel}>Cancel</Btn>
-        <Btn variant="primary" icon="check" onClick={save}>Add user</Btn>
+        <Btn variant="primary" icon="check" onClick={save}>Create user &amp; send invite</Btn>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================ INVITATION EMAIL PREVIEW (after Add User) — BRD v1.4 AT01 */
+function URInvitePreview({ user, onOpen, onResend, onDone }) {
+  if (!user) return null;
+  const roleTxt = (user.roles || []).join(', ');
+  const envTxt = Array.isArray(user.env) ? user.env.join(' + ') : user.env;
+  const link = 'https://uat.smbp-v2.aladdinweb.dev/activate?token=' + (user.token || ur_token());
+  const box = { background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 14, overflow: 'hidden' };
+  return (
+    <div>
+      <URBreadcrumb parts={['Users', 'User Management', 'Invitation sent']} />
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, background: '#E6F9F2', border: '1px solid #A7E8CF', borderRadius: 12, padding: '14px 18px', marginBottom: 18 }}>
+        <span style={{ width: 30, height: 30, borderRadius: '50%', background: '#00875A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon name="check" size={16} stroke={3} /></span>
+        <div><div style={{ fontSize: 15, fontWeight: 700, color: '#065F46' }}>User created — invitation email sent</div><div style={{ fontSize: 13, color: '#047857', marginTop: 2 }}>{user.name} was created with status <b>Invited</b>. An activation email was sent to {user.email}. The account becomes <b>Active</b> once they set a password.</div></div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr)', gap: 16, maxWidth: 640 }}>
+        <div style={box}>
+          <div style={{ padding: '12px 18px', borderBottom: '1px solid var(--ink-100)', background: 'var(--ink-50)', display: 'flex', alignItems: 'center', gap: 10 }}>
+            <Icon name="bell" size={16} /><div style={{ fontSize: 12.5, color: 'var(--ink-500)' }}>To: <b style={{ color: 'var(--ink-800)', fontFamily: 'var(--font-mono)' }}>{user.email}</b></div>
+          </div>
+          <div style={{ padding: '22px 26px' }}>
+            <div style={{ fontSize: 12, color: 'var(--ink-400)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em' }}>Subject</div>
+            <div style={{ fontSize: 17, fontWeight: 700, color: '#0C1931', margin: '3px 0 18px' }}>Appro API Marketplace — Set up your account</div>
+            <div style={{ fontSize: 14, color: 'var(--ink-700)', lineHeight: 1.65 }}>
+              <p style={{ margin: '0 0 12px' }}>Dear {user.name},</p>
+              <p style={{ margin: '0 0 12px' }}>You have been invited to the Appro API Marketplace Super Admin Portal as <b>{roleTxt}</b> ({envTxt}).</p>
+              <p style={{ margin: '0 0 18px' }}>To activate your account, please set your password using the link below.</p>
+              <div style={{ textAlign: 'center', margin: '4px 0 16px' }}>
+                <button onClick={onOpen} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--appro-blue)', color: '#fff', border: 0, borderRadius: 10, padding: '13px 26px', fontSize: 14.5, fontWeight: 700, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}><Icon name="lock" size={15} />Activate your account</button>
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--ink-400)', wordBreak: 'break-all', fontFamily: 'var(--font-mono)', background: 'var(--ink-50)', borderRadius: 8, padding: '8px 10px', marginBottom: 14 }}>{link}</div>
+              <p style={{ margin: '0 0 6px', fontSize: 13, color: 'var(--ink-500)' }}>This link is valid for <b>{UR_LINK_EXPIRY_MIN} minutes</b> and can be used once. If it expires, ask your administrator to resend the invitation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+        <Btn variant="primary" icon="external" onClick={onOpen}>Open activation link</Btn>
+        <Btn variant="secondary" icon="refresh" onClick={onResend}>Resend invitation</Btn>
+        <Btn variant="secondary" onClick={onDone}>Back to users</Btn>
+      </div>
+      <div style={{ fontSize: 12.5, color: 'var(--ink-400)', marginTop: 12, maxWidth: 640 }}>Demo: “Open activation link” takes you to the Activate Account screen the invited user would reach from the email — so you can see the whole flow end-to-end. The {UR_LINK_EXPIRY_MIN}-minute expiry is configurable (BRD v1.4 · NFR-6).</div>
+    </div>
+  );
+}
+
+/* ============================================================ ACTIVATE ACCOUNT SCREEN — BRD v1.4 2.8.2 */
+function URActivateAccount({ user, expired, onCancel, onActivated }) {
+  const [pw, setPw] = useURState('');
+  const [cpw, setCpw] = useURState('');
+  const [terms, setTerms] = useURState(false);
+  const [show, setShow] = useURState(false);
+  const [err, setErr] = useURState('');
+  const checks = ur_pwChecks(pw);
+  const pwOk = ur_pwOk(pw);
+  const match = pw.length > 0 && pw === cpw;
+  const canActivate = pwOk && match && terms && !expired;
+  const link = 'https://uat.smbp-v2.aladdinweb.dev/activate?token=' + (user && user.token ? user.token : '••••••');
+  const inp = { width: '100%', boxSizing: 'border-box', padding: '12px 44px 12px 14px', borderRadius: 10, border: '1px solid var(--ink-300)', fontSize: 14, fontFamily: 'var(--font-ui)' };
+  const activate = () => {
+    if (!pwOk) { setErr('IEM017'); return; }        // password below policy
+    if (!match) { setErr('IEM018'); return; }        // mismatch
+    if (!terms) { setErr('IEM019'); return; }        // terms not accepted
+    onActivated(user);
+  };
+  return (
+    <div style={{ minHeight: 'calc(100vh - 140px)', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '10px 0 40px' }}>
+      <div style={{ width: 'min(460px, 94vw)' }}>
+        <div style={{ textAlign: 'center', marginBottom: 18 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, marginBottom: 10 }}><ApproWordmark height={26} /></div>
+          <h2 style={{ margin: '6px 0 4px', fontSize: 23, fontWeight: 700, color: '#0C1931' }}>Activate your account</h2>
+          <div style={{ fontSize: 13.5, color: 'var(--ink-500)' }}>{user ? user.email : ''}</div>
+        </div>
+        <Card>
+          <div style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--ink-400)', wordBreak: 'break-all', background: 'var(--ink-50)', borderRadius: 8, padding: '7px 10px', marginBottom: 14 }}>{link}</div>
+          {expired ? (
+            <div style={{ display: 'flex', gap: 10, background: '#FEE2E2', border: '1px solid #FCA5A5', borderRadius: 10, padding: '14px 16px', color: '#B91C1C', fontSize: 13.5 }}>
+              <Icon name="alert" size={16} /><div><b>This activation link is invalid or has expired.</b> Ask your administrator to resend the invitation. <span style={{ opacity: .8 }}>(IEM020)</span></div>
+            </div>
+          ) : (
+          <div>
+            <label style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-700)', display: 'block', marginBottom: 7 }}>New Password <span style={{ color: '#DC2626' }}>*</span></label>
+            <div style={{ position: 'relative', marginBottom: 12 }}>
+              <input type={show ? 'text' : 'password'} value={pw} onChange={e => { setPw(e.target.value); setErr(''); }} placeholder="Enter a password" style={{ ...inp, border: '1px solid ' + (err === 'IEM017' ? '#DC2626' : 'var(--ink-300)') }} />
+              <button onClick={() => setShow(s => !s)} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 0, cursor: 'pointer', color: 'var(--ink-500)', fontSize: 12, fontWeight: 700 }}>{show ? 'Hide' : 'Show'}</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 14px', marginBottom: 16 }}>
+              {checks.map(c => <div key={c.k} style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12.5, color: c.ok ? '#00875A' : 'var(--ink-400)' }}><span style={{ width: 15, height: 15, borderRadius: '50%', flexShrink: 0, background: c.ok ? '#00875A' : 'var(--ink-200)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{c.ok ? <Icon name="check" size={10} stroke={3} /> : null}</span>{c.label}</div>)}
+            </div>
+            <label style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink-700)', display: 'block', marginBottom: 7 }}>Confirm Password <span style={{ color: '#DC2626' }}>*</span></label>
+            <div style={{ position: 'relative', marginBottom: cpw && !match ? 6 : 16 }}>
+              <input type={show ? 'text' : 'password'} value={cpw} onChange={e => { setCpw(e.target.value); setErr(''); }} placeholder="Re-enter the password" style={{ ...inp, border: '1px solid ' + ((err === 'IEM018' || (cpw && !match)) ? '#DC2626' : 'var(--ink-300)') }} />
+            </div>
+            {cpw && !match ? <div style={{ color: '#DC2626', fontSize: 12.5, marginBottom: 14 }}>Passwords do not match.</div> : null}
+            <label onClick={() => { setTerms(t => !t); setErr(''); }} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', marginBottom: 4 }}>
+              <span style={{ width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: terms ? '#3B7EF6' : '#fff', border: '1.5px solid ' + (err === 'IEM019' ? '#DC2626' : terms ? '#3B7EF6' : 'var(--ink-300)') }}>{terms ? <Icon name="check" size={13} /> : null}</span>
+              <span style={{ fontSize: 13.5, color: 'var(--ink-700)', lineHeight: 1.5 }}>I agree to the <a href="#" onClick={e => e.preventDefault()} style={{ color: 'var(--appro-blue-700)', fontWeight: 700 }}>Terms of Use</a> <span style={{ color: '#DC2626' }}>*</span></span>
+            </label>
+            {err === 'IEM019' ? <div style={{ color: '#DC2626', fontSize: 12.5, margin: '2px 0 0 30px' }}>You must accept the Terms of Use to activate your account.</div> : null}
+            <Btn variant="primary" icon="check" onClick={activate} disabled={!canActivate} style={{ width: '100%', justifyContent: 'center', marginTop: 18, ...(canActivate ? {} : { opacity: .5, cursor: 'not-allowed' }) }}>Activate account</Btn>
+            <div style={{ fontSize: 12, color: 'var(--ink-400)', textAlign: 'center', marginTop: 12 }}>This link is valid for {UR_LINK_EXPIRY_MIN} minutes and can be used once.</div>
+          </div>
+          )}
+        </Card>
+        <div style={{ textAlign: 'center', marginTop: 14 }}><button onClick={onCancel} style={{ background: 'transparent', border: 0, color: 'var(--ink-500)', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>← Back to User Management (demo)</button></div>
       </div>
     </div>
   );
@@ -559,8 +698,16 @@ function UserRoleManagement() {
     }
     setRoleView({ mode: 'list' });
   };
-  const toggleUser = email => setUsers(us => us.map(u => u.email === email ? { ...u, status: !u.status, updated: today } : u));
-  const saveUser = f => { setUsers(us => [{ name: f.name, email: f.email, roles: f.roles, env: f.env, dept: f.dept, status: true, updated: today, by: 'amira.saleh@appro.ae' }, ...us]); UR_toast('User created', '“' + f.name + '” has been added and sent for checker review.', 'success'); setUserView({ mode: 'list' }); };
+  const toggleUser = email => setUsers(us => us.map(u => u.email === email ? { ...u, status: !u.status, state: !u.status ? 'active' : 'inactive', updated: today } : u));
+  // Create → Invited + invitation email (BRD v1.4 2.8.1). Active only after the user activates (2.8.2).
+  const saveUser = f => {
+    const token = ur_token();
+    setUsers(us => [{ name: f.name, email: f.email, roles: f.roles, env: f.env, dept: f.dept, state: 'invited', status: false, token, updated: today, by: 'amira.saleh@appro.ae' }, ...us]);
+    UR_toast('Invitation sent', '“' + f.name + '” was created with status Invited. An activation email was sent to ' + f.email + '.', 'success');
+    setUserView({ mode: 'invited', email: f.email });
+  };
+  const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: ur_token(), updated: today } : u)); UR_toast('Invitation resent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
+  const activateUser = user => { setUsers(us => us.map(u => u.email === user.email ? { ...u, state: 'active', status: true, updated: today } : u)); UR_toast('Account activated', '“' + user.name + '” set a password and accepted the Terms of Use — the account is now Active.', 'success'); setUserView({ mode: 'list' }); };
   const decide = (id, decision, reason) => { setRequests(rs => rs.map(r => r.id === id ? { ...r, status: decision, expiry: '—', reason: reason || r.reason } : r)); UR_toast('Request ' + decision.toLowerCase(), decision === 'Approved' ? 'The change has been applied to the live configuration.' : 'The change was discarded. The maker has been notified.', decision === 'Approved' ? 'success' : 'info'); };
 
   const pendingCount = requests.filter(r => r.status === 'Pending Review').length;
@@ -584,9 +731,14 @@ function UserRoleManagement() {
         ? <URRoleList roles={roles} grantsByRole={grantsByRole} statusByRole={{}} onToggleStatus={toggleRoleStatus} onAdd={() => setRoleView({ mode: 'form', role: null })} onEdit={name => setRoleView({ mode: 'form', role: name })} />
         : <URRoleForm existing={roleView.role} roleDef={roles.find(r => r.name === roleView.role)} initialGrants={roleView.role ? { ...grantsByRole[roleView.role] } : null} initialEnv={roleView.role ? roles.find(r => r.name === roleView.role).env : 'Both'} takenNames={roles.map(r => r.name)} onCancel={() => setRoleView({ mode: 'list' })} onSave={data => saveRole(data, roleView.role)} />)}
 
-      {tab === 'users' && (userView.mode === 'list'
-        ? <URUserList users={users} roles={roles} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} />
-        : <URUserForm roles={roles} onCancel={() => setUserView({ mode: 'list' })} onSave={saveUser} />)}
+      {tab === 'users' && (
+        userView.mode === 'list'
+          ? <URUserList users={users} roles={roles} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} onOpenInvite={email => setUserView({ mode: 'activate', email })} onResend={resendInvite} />
+        : userView.mode === 'form'
+          ? <URUserForm roles={roles} onCancel={() => setUserView({ mode: 'list' })} onSave={saveUser} />
+        : userView.mode === 'invited'
+          ? <URInvitePreview user={users.find(u => u.email === userView.email)} onOpen={() => setUserView({ mode: 'activate', email: userView.email })} onResend={() => resendInvite(userView.email)} onDone={() => setUserView({ mode: 'list' })} />
+          : <URActivateAccount user={users.find(u => u.email === userView.email)} onCancel={() => setUserView({ mode: 'list' })} onActivated={activateUser} />)}
 
       {tab === 'checkers' && <URCheckers groups={checkerGroups} setGroups={setCheckerGroups} />}
       {tab === 'queue' && <URQueue requests={requests} onDecision={decide} />}
