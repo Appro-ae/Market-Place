@@ -25,6 +25,28 @@ mapping the eKYC step to the EFR passport commands.
 - **Manual upload.** The duplicate *Emirates ID — Front / Back* upload rows are
   removed; the existing single **Passport** upload row is kept.
 
+## ML AIP Resume Journey (passport)
+
+`Appro-ML-AIP-Passport-Journey.html` is the main Citi Home Finance mortgage
+(AIP) prototype with **face-resume** sign-in, converted to the passport flow.
+It is a single, self-contained file (open directly) that carries this project's
+own brand: the Citi logo and the full Lato / Inter / Tajawal font families are
+embedded, so no external assets are needed.
+
+- Single passport capture screen (`kyc → Passport ready → Scan passport → selfie`).
+- All EID wording → Passport across the whole journey: landing, KYC chooser,
+  ready screen, camera, and the face-resume hub ("Identity verified — Face +
+  Passport", "Passport scanned").
+- The "Passport ready" Do/Don't sample grid and the in-camera document are
+  redrawn as a UAE passport data page (photo + fields + MRZ, EN/AR).
+- Fixes to make the prototype render standalone: the appro/Citi logo and the
+  landing brand-orb are inlined (the offline export had left the logo pointing
+  at a missing `assets/citi-logo.png`), and the now-unused raster EID sample is
+  dropped from the bundle.
+
+`Appro-ML-AIP-Resume-Journey-Canvas.html` is the design Canvas with this
+passport journey embedded.
+
 ## EFR command mapping
 
 The passport journey uses the EFR passport commands in place of the EID ones:
