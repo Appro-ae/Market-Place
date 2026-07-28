@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appro · Prototypes</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{color-scheme:dark}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:#0C1931;color:#CBDCF6;min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:32px}
+  .wrap{width:100%;max-width:640px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7EB0FF}
+  h1{color:#fff;font-size:30px;line-height:1.15;letter-spacing:-.02em;margin:10px 0 6px}
+  .sub{font-size:14px;line-height:1.6;color:#9DB6DA;margin-bottom:26px}
+  .list{display:flex;flex-direction:column;gap:12px}
+  a.card{display:flex;align-items:center;gap:14px;text-decoration:none;
+    background:#16264a;border:1px solid rgba(126,176,255,.22);border-radius:16px;
+    padding:18px 18px;color:#EAF1FC;transition:border-color .15s,transform .15s,background .15s}
+  a.card:hover{border-color:#7EB0FF;background:#1b2d55;transform:translateY(-1px)}
+  .ic{flex:0 0 auto;width:40px;height:40px;border-radius:11px;background:rgba(126,176,255,.16);
+    display:grid;place-items:center;color:#7EB0FF}
+  .ic svg{width:20px;height:20px}
+  .tx{flex:1}
+  .nm{font-size:15px;font-weight:700;color:#fff}
+  .nm .badge{font-size:10px;font-weight:700;letter-spacing:.08em;color:#7EB0FF;
+    border:1px solid rgba(126,176,255,.4);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .ds{font-size:12.5px;line-height:1.5;color:#9DB6DA;margin-top:3px}
+  .chev{flex:0 0 auto;color:#5f7bb0}
+  .foot{margin-top:26px;font-size:11.5px;line-height:1.6;color:#5f7bb0}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="kicker">Appro · Market-Place</div>
+    <h1>Passport onboarding prototypes</h1>
+    <p class="sub">Interactive, self-contained prototypes. Tap a card to open the flow.</p>
+    <div class="list">
+      <a class="card" href="efr-passport-flow/Appro-ML-AIP-Passport-Journey.html">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><circle cx="12" cy="10" r="3"></circle><path d="M8 18h8"></path></svg></span>
+        <span class="tx">
+          <span class="nm">ML AIP — Passport Journey <span class="badge">MAIN</span></span>
+          <span class="ds">Mortgage Approval-in-Principle with face-resume sign-in · single passport capture</span>
+        </span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 6l6 6-6 6"></path></svg></span>
+      </a>
+      <a class="card" href="efr-passport-flow/Appro-Passport-Onboarding.html">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>
+        <span class="tx">
+          <span class="nm">Customer Journey — Passport</span>
+          <span class="ds">B2C onboarding prototype · single passport capture</span>
+        </span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M9 6l6 6-6 6"></path></svg></span>
+      </a>
+    </div>
+    <p class="foot">Design prototypes for demonstration. EID capture replaced with passport (single data-page scan); passport journey maps to EFR 1.16 / 1.18.</p>
+  </div>
+</body>
+</html>
