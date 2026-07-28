@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Passport Onboarding — Prototype</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home Finance — Passport Onboarding</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}</style>
+<style id="app-mode">
+/* Run as a real app: drop the prototype stepper (arrows), the screen counter, and the device frame */
+.navbtn{display:none!important;}
+#caption,.caption{display:none!important;}
+.stage{gap:0!important;min-height:100vh;min-height:100dvh;background:#0b1020;margin:0;}
+.device{box-shadow:none!important;margin:0!important;}
+.screen{width:100vw!important;height:100vh!important;height:100dvh!important;max-width:100%!important;border-radius:0!important;}
+@media(min-width:520px){
+  .stage{background:radial-gradient(120% 120% at 50% 0%,#132043,#0b1020);}
+  .screen{width:400px!important;height:min(884px,96vh)!important;border-radius:30px!important;box-shadow:0 26px 80px rgba(0,0,0,.5)!important;}
+}
+</style>
 </head>
 <body>
 <script>window.__APPRO_LOGO="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzIgNDAiPjxyZWN0IHg9IjAiIHk9IjciIHdpZHRoPSIyNiIgaGVpZ2h0PSIyNiIgcng9IjgiIGZpbGw9IiMxRTNBOEEiPjwvcmVjdD48cGF0aCBkPSJNNyAyN1YxM2wxMiAxNFYxMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48L3BhdGg+PHRleHQgeD0iMzQiIHk9IjI3IiBmb250LWZhbWlseT0iSW50ZXIsQXJpYWwsc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOSIgZm9udC13ZWlnaHQ9IjgwMCIgbGV0dGVyLXNwYWNpbmc9Ii0uMyIgZmlsbD0iIzFFM0E4QSI+Tm9ydGh3aW5kPC90ZXh0Pjwvc3ZnPg==";</script>
