@@ -291,6 +291,9 @@ function Root() {
     if (window.approApi && window.approApi.enabled()) return flag && !!window.approApi.token();
     return flag;
   });
+  // Account-activation link (.../activate?token=) opens the set-password screen regardless of any existing session.
+  const activating = (() => { try { const p = new URLSearchParams(window.location.search); return p.has('activate') || p.has('token'); } catch (e) { return false; } })();
+  if (activating) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
   if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
   return <App onLogout={() => { localStorage.removeItem('portal.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
