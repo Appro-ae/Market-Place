@@ -6,16 +6,14 @@
 <title>Home Finance — Passport Onboarding</title>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}</style>
 <style id="app-mode">
-/* Run as a real app: drop the prototype stepper (arrows), the screen counter, and the device frame */
+/* Real app: no stepper arrows, no counter, no device frame, no dark stage — fills the window */
 .navbtn{display:none!important;}
 #caption,.caption{display:none!important;}
-.stage{gap:0!important;min-height:100vh;min-height:100dvh;background:#0b1020;margin:0;}
-.device{box-shadow:none!important;margin:0!important;}
-.screen{width:100vw!important;height:100vh!important;height:100dvh!important;max-width:100%!important;border-radius:0!important;}
-@media(min-width:520px){
-  .stage{background:radial-gradient(120% 120% at 50% 0%,#132043,#0b1020);}
-  .screen{width:400px!important;height:min(884px,96vh)!important;border-radius:30px!important;box-shadow:0 26px 80px rgba(0,0,0,.5)!important;}
-}
+html,body{height:100%!important;margin:0!important;background:#EEF3FB!important;}
+.stage,.device{background:#EEF3FB!important;margin:0!important;box-shadow:none!important;}
+.stage{display:block!important;gap:0!important;min-height:100vh;min-height:100dvh;width:100%!important;}
+.device{width:100%!important;}
+.screen{width:100vw!important;max-width:100vw!important;height:100vh!important;height:100dvh!important;border-radius:0!important;margin:0!important;}
 </style>
 </head>
 <body>
