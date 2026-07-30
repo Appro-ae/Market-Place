@@ -324,7 +324,7 @@ var DRAFT=null, DCUR=null;
 function customizeRedirect(tid,tenant,pid){
   try{ localStorage.setItem('appro.billingFocus', JSON.stringify({tid:tid,tenant:tenant,pid:pid,ts:Date.now()})); }catch(e){}
   try{ window.parent.postMessage({type:'appro:navigate',to:'billing'},'*'); }catch(e){}
-  toast('Opening Billing · Tenant Billing…');
+  toast('Opening Billing · Tenant pricing…');
 }
 /* Read-only outbound field list. */
 function roFields(fieldArr){
@@ -342,7 +342,7 @@ function priceBlock(pid,priceRef,tid,tenant){
     +'<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizeRedirect(\''+tid+'\',\''+String(tenant).replace(/\x27/g,"")+'\',\''+pid+'\')">Customized ↗</button></div>'
     +'<div class="pricebox"><div class="row"><div class="big">'+priceRef.label+'</div><span class="src cat" style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px">catalogue</span></div>'
     +'<div class="pdetail" style="margin-top:6px">'+pkgDetail(pid,priceRef.label)+'</div>'
-    +'<div class="hint">Catalogue package configured under Billing ▸ Pricing &amp; Catalogue. Shown read-only. Use “Customized” to set a tenant-specific price in Billing ▸ Tenant Billing.</div></div>';
+    +'<div class="hint">Catalogue package configured under Billing ▸ Catalogue pricing. Shown read-only. Use “Customized” to set a tenant-specific price in Billing ▸ Tenant pricing.</div></div>';
 }
 function openDetail(kind,id){ if(kind==='req')detailReq(id); else detailSub(id); }
 function detailReq(id){
