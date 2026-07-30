@@ -387,7 +387,6 @@ td .pname{font-weight:700}
       <div class="page-head">
         <div>
           <h1>Billing Management</h1>
-          <p>Configure, meter and report tenant service consumption.</p>
         </div>
       </div>
 
@@ -525,7 +524,6 @@ td .pname{font-weight:700}
                 <select class="control" disabled><option>Hourly</option><option selected>Every 6 hours</option><option>Daily</option></select>
               </div>
             </div>
-            <div class="form-foot"><span class="subname">Read-only view. Alert rules are managed centrally and shown here for reference.</span></div>
           </div>
         </div>
         <div class="card">
@@ -980,14 +978,13 @@ function renderProdList(){
     <td class="svc"><span class="pname">${p.name}</span></td>
     <td>${p.descriptor||'—'}</td>
     <td class="num">${p.packages.length}</td>
-    <td>${pricingSummary(p)}</td>
     <td><span class="pill ${p.active?'ok':'off'}"><span class="dot"></span>${p.active?'Active':'Inactive'}</span></td>
     <td class="num"><button class="btn ghost sm" onclick="event.stopPropagation();openProd('${p.id}')">Edit</button></td></tr>`).join('');
   $('catalogBody').innerHTML=`<div class="card">
     <div class="card-head"><div><h3>Product catalog</h3></div>
       <div style="display:flex;align-items:center;gap:14px"><span class="sub"><b>${prods.filter(x=>x.active).length}</b> active · <b>${state.services.length}</b> providers</span>
       <button class="btn primary sm" onclick="newProductCat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>New product</button></div></div>
-    <div class="table-wrap"><table><thead><tr><th>Product</th><th>Description</th><th class="num">Packages</th><th>Pricing</th><th>Status</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="6" class="subname" style="text-align:center;padding:30px">No products yet — create one with &ldquo;New product&rdquo;.</td></tr>'}</tbody></table></div></div>`;
+    <div class="table-wrap"><table><thead><tr><th>Product</th><th>Description</th><th class="num">Packages</th><th>Status</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="5" class="subname" style="text-align:center;padding:30px">No products yet — create one with &ldquo;New product&rdquo;.</td></tr>'}</tbody></table></div></div>`;
 }
 function openProd(id){catView='detail';editProdId=id;curProdId=id;renderProdCatalog();}
 function backToList(){catView='list';renderProdCatalog();}
@@ -1160,7 +1157,7 @@ function renderSubs(){
   if(ab){ab.disabled=false;ab.title='';}
   const subs=tenantSubs(tid);
   if(!subs.length && editingSubId!=='__new__'){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 7v10l8 4 8-4V7"/></svg><h4>No subscriptions for this tenant</h4><div>This tenant’s subscriptions will appear here.</div></div>';return;}
-  let h='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan</th><th>Committed volume</th><th>Unit price</th><th>Projected charge</th><th>Activation</th><th>Status</th><th></th></tr></thead><tbody>';
+  let h='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan</th><th>Committed volume</th><th>Unit price</th><th>Activation</th><th>Status</th><th></th></tr></thead><tbody>';
   if(editingSubId==='__new__')h+=assignFormHtml();
   subs.forEach((sb,i)=>{const ref=pkgById(sb.packageId);if(!ref)return;const d=deriveSub(sb,i);
     const scls=d.statusCls, slabel=d.dispStatus;
@@ -1169,7 +1166,6 @@ function renderSubs(){
       <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
       <td class="num">${d.committed?fmtInt(d.committed)+' /yr':'—'}</td>
       <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
-      <td class="num">${d.awaitingQuote?'<span class="subname">awaiting quote</span>':fmtUSD0(d.charge)}</td>
       <td>${sb.activation||'—'}${termLine(sb.activation,ref.pkg.billing)}</td>
       <td><span class="pill ${scls}"><span class="dot"></span>${slabel}</span></td>
       <td><div class="rowact">
@@ -1182,7 +1178,7 @@ function renderSubs(){
   h+='</tbody></table></div>';area.innerHTML=h;
   if(editingSubId)hydrateAssignForm();
 }
-function assignFormHtml(){return `<tr class="frow"><td colspan="8" style="background:#F2F6FF;padding:0">
+function assignFormHtml(){return `<tr class="frow"><td colspan="7" style="background:#F2F6FF;padding:0">
   <div class="subform open" style="margin:14px 18px">
     <div class="formttl" style="font-weight:800;font-size:13px;margin-bottom:12px">Edit subscription</div>
     <div class="fg4">
@@ -1259,14 +1255,13 @@ function renderMatrix(area){
         <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
         <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
         <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
-        <td class="num">${d.awaitingQuote?'<span class="subname">awaiting quote</span>':fmtUSD0(d.charge)}</td>
         <td><span class="pill ${d.statusCls}"><span class="dot"></span>${d.dispStatus}</span></td>
         <td class="rowact"><button class="btn ghost sm" onclick="editFromOverview('${t.id}','${sb.id}')">Edit</button></td>
       </tr>`;
     });
     h+=`<div class="ovtenant">
-      <div class="ovtenant-h">${t.name}<span class="gmeta" style="margin-left:auto;font-weight:600">${subs.length} product${subs.length===1?'':'s'} · ${fmtUSD0(total)} / period</span></div>
-      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan / Package</th><th>Unit price</th><th>Projected charge</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="ovtenant-h">${t.name}</div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan / Package</th><th>Unit price</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
     </div>`;
   });
   h+='</div>';area.innerHTML=h;
