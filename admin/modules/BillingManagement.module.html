@@ -396,7 +396,7 @@ td .pname{font-weight:700}
         <button class="tab active" data-tab="report">Overview</button>
         
         <button class="tab" data-tab="config">Pricing &amp; Catalog</button>
-        <button class="tab" data-tab="subs">Subscriptions</button><button class="tab" data-tab="alerts">Alerts</button>
+        <button class="tab" data-tab="alerts">Alerts</button>
       </div>
 
       <!-- ===================== REPORT ===================== -->
@@ -1331,8 +1331,8 @@ renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
       var f=JSON.parse(localStorage.getItem("appro.billingFocus")||"null");
       if(!f||(Date.now()-f.ts>60000))return;
       localStorage.removeItem("appro.billingFocus");
-      // 1) Open the Subscriptions tab.
-      var subsTab=document.querySelector('[data-tab="subs"]');
+      // 1) Subscriptions moved to Subscription Management; land on Pricing & Catalog for price edits.
+      var subsTab=document.querySelector('[data-tab="config"]');
       if(subsTab)subsTab.click();
       // 2) Pick a real tenant (never "All tenants", or the edit form can't open):
       //    match the focus tenant by name if possible, else the first tenant that
