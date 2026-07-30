@@ -396,7 +396,7 @@ td .pname{font-weight:700}
         <button class="tab active" data-tab="report">Overview</button>
         
         <button class="tab" data-tab="config">Pricing &amp; Catalog</button>
-        <button class="tab" data-tab="subs">Subscriptions</button><button class="tab" data-tab="alerts">Alerts</button>
+        <button class="tab" data-tab="subs">Tenant Billing</button><button class="tab" data-tab="alerts">Alerts</button>
       </div>
 
       <!-- ===================== REPORT ===================== -->
@@ -497,7 +497,7 @@ td .pname{font-weight:700}
       <section class="panel" id="subs">
         <div class="card">
           <div class="card-head">
-            <div><h3>Tenant subscriptions</h3></div>
+            <div><h3>Tenant Billing</h3></div>
             <div style="display:flex;gap:12px;align-items:flex-end">
               <div class="field" style="min-width:220px"><label>Tenant</label><select class="control" id="subTenant" onchange="renderSubs()"></select></div>
             </div>
@@ -1243,22 +1243,33 @@ function ovrSummary(k,o){
   return head||'catalog';
 }
 function drillTenant(tid){$('subTenant').value=tid;renderSubs();}
+/* Overview "Edit" → select that tenant and open the same per-tenant Edit subscription form. */
+function editFromOverview(tid,subId){$('subTenant').value=tid;openAssign(subId);}
 function renderMatrix(area){
-  const prods=[...new Set(state.subs.map(x=>x.productId))].map(prodById).filter(Boolean);
-  if(!prods.length){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><h4>No subscriptions yet</h4><div>Subscriptions will appear here once tenants are onboarded.</div></div>';return;}
-  let h='<div class="table-wrap"><table><thead><tr><th>Tenant</th>'+prods.map(p=>`<th>${p.name}</th>`).join('')+'<th>Products</th></tr></thead><tbody>';
-  state.tenants.forEach(t=>{
+  const tenantsWithSubs=state.tenants.filter(t=>tenantSubs(t.id).length);
+  if(!tenantsWithSubs.length){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><h4>No subscriptions yet</h4><div>Subscriptions will appear here once tenants are onboarded.</div></div>';return;}
+  let h='<div style="padding:18px 20px 8px">';
+  tenantsWithSubs.forEach(t=>{
     const subs=tenantSubs(t.id);
-    h+=`<tr><td><span class="tlink" onclick="drillTenant('${t.id}')">${t.name}</span></td>`;
-    prods.forEach(p=>{
-      const sb=subs.find(x=>x.productId===p.id), ref=sb?pkgById(sb.packageId):null;
-      const tag=(sb&&sb.status!=='Active')?`<span class="stag ${statusInfo(sb.status).cls}">${sb.status}</span>`:'';
-      h+= (sb&&ref) ? `<td><span class="cat-chip" style="cursor:pointer" onclick="drillTenant('${t.id}')">${ref.pkg.name}</span>${tag}</td>`
-                    : '<td><span class="subname">—</span></td>';
+    let total=0, rows='';
+    subs.forEach((sb,i)=>{
+      const ref=pkgById(sb.packageId);if(!ref)return;
+      const d=deriveSub(sb,i);total+=d.charge;
+      rows+=`<tr>
+        <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
+        <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
+        <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
+        <td class="num">${d.awaitingQuote?'<span class="subname">awaiting quote</span>':fmtUSD0(d.charge)}</td>
+        <td><span class="pill ${d.statusCls}"><span class="dot"></span>${d.dispStatus}</span></td>
+        <td class="rowact"><button class="btn ghost sm" onclick="editFromOverview('${t.id}','${sb.id}')">Edit</button></td>
+      </tr>`;
     });
-    h+=`<td class="num">${subs.length}</td></tr>`;
+    h+=`<div class="ovtenant">
+      <div class="ovtenant-h">${t.name}<span class="gmeta" style="margin-left:auto;font-weight:600">${subs.length} product${subs.length===1?'':'s'} · ${fmtUSD0(total)} / period</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan / Package</th><th>Unit price</th><th>Projected charge</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
   });
-  h+='</tbody></table></div>';area.innerHTML=h;
+  h+='</div>';area.innerHTML=h;
 }
 function openAssign(subId){editingSubId=subId||'__new__';renderSubs();}
 function closeAssign(){editingSubId=null;renderSubs();}
