@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Billing Management</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THEME TOKENS — override these to match Customer Portal.html
+   ============================================================ */
+:root{
+  --font: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --navy:#0F1E3D;        /* sidebar background        */
+  --navy-2:#16294d;      /* sidebar hover / active     */
+  --brand:#2E5BFF;       /* primary action            */
+  --brand-600:#1E47E0;   /* primary hover             */
+  --accent:#FFC107;      /* yellow accent (sparingly) */
+
+  --bg:#F4F7FC;          /* page background           */
+  --surface:#FFFFFF;     /* cards                     */
+  --text:#1B2A4A;        /* primary text              */
+  --muted:#6B7A99;       /* secondary text            */
+  --line:#E4E9F2;        /* borders / dividers        */
+  --line-2:#EEF2F8;      /* subtle row divider        */
+
+  --ok:#0F9D58; --ok-bg:#E6F6EE;
+  --off:#E0484D; --off-bg:#FBE9EA;
+  --warn:#B7791F; --warn-bg:#FBF1DC;
+
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 1px 2px rgba(16,30,61,.06), 0 8px 24px rgba(16,30,61,.06);
+  --sidebar-w:248px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none}
+::selection{background:var(--brand);color:#fff}
+
+.app{display:flex;min-height:100vh}
+
+/* ---------------- Sidebar ---------------- */
+.sidebar{width:var(--sidebar-w);background:var(--navy);color:#C7D2E8;display:flex;flex-direction:column;position:fixed;inset:0 auto 0 0;z-index:40}
+.brand{padding:24px 22px 20px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{height:26px;display:block}
+.nav{padding:14px 12px;flex:1;overflow:auto}
+.nav .lbl{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#5E72A0;padding:14px 12px 6px}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--radius-sm);color:#AFBEDC;font-weight:600;font-size:13.5px;margin:2px 0;transition:background .15s,color .15s}
+.nav a svg{width:18px;height:18px;flex:none;stroke-width:1.9}
+.nav a:hover{background:var(--navy-2);color:#fff}
+.nav a.active{background:linear-gradient(90deg,var(--brand),#3f6bff);color:#fff;box-shadow:0 6px 16px rgba(46,91,255,.35)}
+.nav a.active svg{stroke:#fff}
+.side-foot{padding:12px;border-top:1px solid rgba(255,255,255,.08)}
+
+/* ---------------- Main ---------------- */
+.main{flex:1;margin-left:var(--sidebar-w);display:flex;flex-direction:column;min-width:0}
+.topbar{height:64px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:30}
+.crumb{font-size:13px;color:var(--muted)}
+.crumb b{color:var(--text)}
+.top-right{display:flex;align-items:center;gap:18px}
+.icon-btn{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.icon-btn:hover{background:var(--bg);color:var(--text)}
+.user{display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#7a4dff);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.user .nm{font-weight:700;font-size:13px;line-height:1.1}
+.user .rl{font-size:11px;color:var(--muted)}
+
+.content{padding:26px 28px 48px;max-width:1400px;width:100%}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.page-head h1{font-size:26px;font-weight:800;letter-spacing:-.3px}
+.page-head p{color:var(--muted);font-size:13.5px;margin-top:3px}
+
+/* tabs */
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:5px;border-radius:12px;box-shadow:var(--shadow);width:fit-content;margin-bottom:22px;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:8px;font-weight:700;font-size:13.5px;color:var(--muted);white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.active{background:var(--brand);color:#fff}
+
+.panel{display:none;animation:fade .25s ease}
+.panel.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card + .card{margin-top:20px}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.card-head h3{font-size:15.5px;font-weight:800}
+.card-head .sub{font-size:12px;color:var(--muted);font-weight:600}
+.card-body{padding:20px}
+
+/* form controls */
+.filters{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:16px;align-items:end}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field label{font-size:12px;font-weight:700;color:var(--muted)}
+.field label .req{color:var(--off)}
+.control{height:44px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--surface);padding:0 12px;font-size:14px;color:var(--text);width:100%;display:flex;align-items:center;gap:8px}
+select.control,input.control{appearance:none;-webkit-appearance:none}
+select.control{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A99' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.control:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(46,91,255,.15)}
+.btn{height:44px;padding:0 20px;border-radius:var(--radius-sm);font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-600)}
+.btn.ghost{background:var(--bg);color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--brand);color:var(--brand)}
+.btn svg{width:17px;height:17px;stroke-width:2}
+
+/* multiselect */
+.ms{position:relative}
+.ms-box{cursor:pointer;flex-wrap:wrap;min-height:44px;height:auto;padding:6px 34px 6px 10px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A99' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.chip{background:#EAF0FF;color:var(--brand);font-weight:700;font-size:12px;padding:3px 9px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+.chip b{cursor:pointer}
+.ms-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:6px;z-index:20;display:none}
+.ms-menu.open{display:block}
+.ms-menu label{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;font-weight:600;cursor:pointer}
+.ms-menu label:hover{background:var(--bg)}
+.ms-menu input{accent-color:var(--brand);width:16px;height:16px}
+
+/* dropdown (export, time custom) */
+.dd{position:relative}
+.dd-menu{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);padding:6px;min-width:190px;z-index:20;display:none}
+.dd-menu.open{display:block}
+.dd-menu button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px;border-radius:6px;font-weight:600;font-size:13.5px;color:var(--text)}
+.dd-menu button:hover{background:var(--bg)}
+.dd-menu button svg{width:16px;height:16px;color:var(--brand)}
+
+/* table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+thead th{background:#F7F9FD;text-align:left;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:800;padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+tbody tr:hover{background:#FAFBFE}
+td .svc{font-weight:700}
+.pill{font-weight:800;font-size:11.5px;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:6px}
+.pill .dot{width:6px;height:6px;border-radius:50%}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.ok .dot{background:var(--ok)}
+.pill.off{background:var(--off-bg);color:var(--off)}.pill.off .dot{background:var(--off)}
+.tag{font-weight:700;font-size:12px;color:var(--text);background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:6px}
+.num{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* table footer / pagination */
+.tfoot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;flex-wrap:wrap}
+.per{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;font-weight:600}
+.per select{height:34px;border:1px solid var(--line);border-radius:7px;padding:0 8px;font-family:inherit}
+.pager{display:flex;gap:4px}
+.pager button{min-width:34px;height:34px;border-radius:7px;border:1px solid var(--line);font-weight:700;color:var(--muted);padding:0 8px}
+.pager button:hover{border-color:var(--brand);color:var(--brand)}
+.pager button.active{background:var(--brand);border-color:var(--brand);color:#fff}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+
+/* empty state */
+.empty{text-align:center;padding:54px 20px;color:var(--muted)}
+.empty svg{width:42px;height:42px;color:#C2CCE0;margin-bottom:10px}
+.empty h4{color:var(--text);font-size:15px;margin-bottom:4px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px}
+.kpi .k-top{display:flex;align-items:center;justify-content:space-between}
+.kpi .k-ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.kpi .k-ico svg{width:19px;height:19px}
+.kpi .v{font-size:28px;font-weight:800;margin-top:12px;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-size:12.5px;font-weight:600;margin-top:2px}
+.kpi .d{font-size:12px;font-weight:700;margin-top:6px}
+.up{color:var(--ok)} .down{color:var(--off)}
+
+/* chart */
+.chart{display:flex;align-items:flex-end;gap:18px;height:240px;padding:10px 6px 0}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%}
+.bar-track{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.bar{width:60%;max-width:46px;background:linear-gradient(180deg,#5b82ff,var(--brand));border-radius:6px 6px 0 0;position:relative;transition:height .6s cubic-bezier(.2,.7,.3,1)}
+.bar:hover{filter:brightness(1.08)}
+.bar .val{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:800;color:var(--text)}
+.bar-x{font-size:11.5px;color:var(--muted);font-weight:700}
+
+/* utilization list */
+.util{display:flex;flex-direction:column;gap:14px}
+.util-row{display:grid;grid-template-columns:150px 1fr 56px;align-items:center;gap:14px}
+.util-row .n{font-weight:700;font-size:13px}
+.track{height:9px;background:var(--bg);border-radius:20px;overflow:hidden}
+.fill{height:100%;border-radius:20px;background:var(--brand)}
+.fill.warn{background:var(--accent)}
+.fill.full{background:var(--off)}
+.util-row .p{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* two col */
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:20px}
+
+/* config form */
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.help{font-size:11.5px;color:var(--muted)}
+.toggle{display:inline-flex;align-items:center;gap:10px;font-weight:700}
+.switch{width:44px;height:24px;border-radius:20px;background:var(--line);position:relative;transition:background .2s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.switch.on{background:var(--ok)}
+.switch.on::after{left:23px}
+.form-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;padding-top:18px;border-top:1px solid var(--line)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{padding:8px 14px;border:1px solid var(--line);border-radius:8px;font-weight:700;font-size:13px;color:var(--muted);background:var(--surface)}
+.seg button.on{border-color:var(--brand);color:var(--brand);background:#EEF3FF}
+
+/* note banner */
+.note{display:flex;gap:12px;align-items:center;background:#FFF8E6;border:1px solid #F2DFA8;color:#8a6d1f;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;font-weight:600}
+.note svg{width:18px;height:18px;flex:none}
+.note b{color:#6b540f}
+
+/* toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120%);background:var(--text);color:#fff;padding:13px 20px;border-radius:10px;font-weight:700;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:60;transition:transform .3s;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast svg{width:18px;height:18px;color:#69f0ae}
+
+/* responsive */
+.hamburger{display:none}
+@media(max-width:1050px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .sidebar{transform:translateX(-100%);transition:transform .25s}
+  .sidebar.open{transform:none}
+  .main{margin-left:0}
+  .hamburger{display:grid}
+  .filters{grid-template-columns:1fr}
+  .util-row{grid-template-columns:110px 1fr 48px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---- pricing & catalog additions ---- */
+.svcrow{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.btn.sm{height:36px;padding:0 14px;font-size:13px;border-radius:7px}
+.btn.soft{background:#EAF0FF;color:var(--brand)}.btn.soft:hover{background:#dbe6ff}
+.fg2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.fg3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fg4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fg-prod{display:grid;grid-template-columns:1.9fr 1.2fr 1.2fr auto auto;gap:16px;align-items:end}
+@media(max-width:1050px){.fg4{grid-template-columns:repeat(2,1fr)}.fg3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:980px){.fg-prod{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.fg4,.fg3,.fg2{grid-template-columns:1fr}}
+@media(max-width:600px){.fg-prod{grid-template-columns:1fr}}
+.subform{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:18px;margin-top:14px;display:none}
+.subform.open{display:block}
+.ferr{color:var(--off);font-weight:700;font-size:12.5px;margin-right:auto;align-self:center;display:none}
+.ferr.show{display:block}
+.chips{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.cat-chip{display:inline-flex;align-items:center;gap:8px;background:#EAF0FF;color:var(--brand);font-weight:700;font-size:13px;padding:5px 6px 5px 13px;border-radius:20px}
+.cat-chip .x{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:var(--brand);font-size:15px;line-height:1;cursor:pointer;background:rgba(46,91,255,.12)}
+.cat-chip .x:hover{background:var(--brand);color:#fff}
+.cat-chip.dim{opacity:.5}
+.iconbtn{width:32px;height:32px;border-radius:7px;display:grid;place-items:center;color:var(--muted);border:1px solid var(--line);background:#fff}
+.iconbtn:hover{color:var(--brand);border-color:var(--brand)}
+.iconbtn.danger:hover{color:var(--off);border-color:var(--off)}
+.iconbtn svg{width:15px;height:15px}
+.rowact{display:flex;gap:6px;justify-content:flex-end}
+.pkgwrap{background:#F7F9FD;border-top:1px solid var(--line)}
+.pkghd{padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.pkghd .t{font-weight:800;font-size:14px}.pkghd .t small{color:var(--muted);font-weight:600}
+.subname{font-size:12px;color:var(--muted);font-weight:600}
+.hintline{display:flex;gap:8px;align-items:flex-start;color:var(--muted);font-size:12.5px;margin-top:14px}
+.hintline svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--brand)}
+td .pname{font-weight:700}
+.flag{font-size:10.5px;font-weight:800;padding:2px 6px;border-radius:5px;margin-left:4px;white-space:nowrap}
+.flag.warn{background:var(--warn-bg);color:var(--warn)}
+.flag.off{background:var(--off-bg);color:var(--off)}
+.flag.blue{background:#EAF0FF;color:var(--brand)}
+.svc-settings{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.tlink{color:var(--brand);font-weight:800;text-decoration:none;cursor:pointer}.tlink:hover{text-decoration:underline}
+.grp{background:var(--bg);cursor:pointer}
+.grp:hover{background:#eef2fb}
+.grp td{color:var(--text);font-size:14px}
+.grp .chev{display:inline-block;margin-right:10px;color:var(--muted);transition:transform .15s;font-weight:800}
+.grp.open .chev{transform:rotate(90deg)}
+.grp .gmeta{color:var(--muted);font-weight:600;font-size:12.5px;margin-left:12px}
+.bandrow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.bandrow .bw{max-width:140px}
+.bandrow .bl{font-size:12.5px;color:var(--muted);font-weight:600}
+.bandrow.rem{background:#EAF0FF;border-radius:8px;padding:8px 12px}
+
+
+.ovgrid{display:grid;grid-template-columns:1.9fr 1fr;gap:18px;margin-bottom:18px}
+.ovcol{display:flex;flex-direction:column;gap:18px;min-width:0}
+@media(max-width:1000px){.ovgrid{grid-template-columns:1fr}}
+.cardc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px}
+.ovhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.ovtitle{font-weight:800;font-size:16px;color:var(--text)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:20px}
+@media(max-width:620px){.metrics{grid-template-columns:1fr}}
+.metric .k{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.bigtotal{font-size:32px;font-weight:800;color:#0F1E3D;letter-spacing:-.5px;margin-top:6px;line-height:1.1}
+.delta{font-size:13px;font-weight:800;margin-top:4px}.delta.dn{color:#16a34a}.delta.up{color:#dc2626}
+.metric .mv{font-size:18px;font-weight:800;color:var(--text);margin-top:8px}
+.metric .ms{font-size:12px;color:var(--muted);margin-top:2px}
+.qbar{height:8px;border-radius:6px;background:#E8EDF6;margin-top:12px;overflow:hidden}
+.qwrap{position:relative;margin-top:12px}
+.qbar2{position:relative;height:8px;border-radius:6px;background:#E8EDF6;display:flex;overflow:hidden}
+.qbar2 .qseg{height:100%}
+.qbar2 .qseg.base{background:#2E5BFF}
+.qbar2 .qseg.over{background:#E8A93B}
+.qlim{position:absolute;top:-2px;height:12px;width:2px;background:#0F1E3D;opacity:.42;border-radius:2px}
+.qlim small{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;color:#8A95A8;white-space:nowrap}
+.ovr{color:#B7791F;font-weight:800}
+.qbar>div{height:100%;background:var(--brand);border-radius:6px;transition:width .4s}
+.qsub{font-size:11.5px;color:#B7791F;font-weight:600;margin-top:7px}
+.qterm{font-size:11px;color:var(--muted);margin-top:7px}
+.creditcard{background:linear-gradient(135deg,#0F1E3D 0%,#2E5BFF 100%);border-radius:14px;padding:22px 20px;color:#fff;margin-top:8px}
+.cc-t{font-size:10.5px;letter-spacing:.18em;opacity:.85;font-weight:700}
+.cc-n{font-family:ui-monospace,Menlo,monospace;font-size:19px;letter-spacing:3px;margin-top:26px}
+.cc-f{display:flex;justify-content:space-between;font-family:ui-monospace,Menlo,monospace;font-size:11px;margin-top:18px;opacity:.9}
+.invrow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line)}
+.invrow:first-child{border-top:0}
+.invrow .im{font-weight:700;font-size:13.5px}.invrow .ia{font-family:ui-monospace,Menlo,monospace;color:var(--muted);font-size:12.5px;margin-top:2px}
+.paid{background:#E7F6EC;color:#16a34a;font-weight:700;font-size:12px;padding:3px 11px;border-radius:20px;white-space:nowrap}
+.trendbars{display:flex;align-items:flex-end;gap:10px;height:130px;margin-top:16px}
+.trendbars .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}
+.trendbars .tb i{width:100%;max-width:40px;background:var(--brand);border-radius:6px 6px 0 0;display:block;min-height:3px}
+.trendbars .tb.cur i{background:#0F1E3D}
+.trendbars .tb span{font-size:11px;color:var(--muted);font-weight:600}
+.lineitems .li-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.lineitems .subtotrow td{font-weight:800;background:#F5F8FF}
+.pill.trial{background:#EAF0FF;color:#2E5BFF}.pill.trial .dot{background:#2E5BFF}
+.pill.pending{background:#FFF4DE;color:#B7791F}.pill.pending .dot{background:#E0A82E}
+.pill.cancelled{background:#FDECEC;color:#C0392B}.pill.cancelled .dot{background:#C0392B}
+.stag{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;margin-left:8px;display:inline-block;vertical-align:middle;text-transform:capitalize}
+.stag.trial{background:#EAF0FF;color:#2E5BFF}
+.stag.pending{background:#FFF4DE;color:#B7791F}
+.stag.off{background:#EEF1F6;color:#5B6577}
+.stag.cancelled{background:#FDECEC;color:#C0392B}
+.statussel{height:34px;padding:4px 24px 4px 10px;font-size:12.5px;font-weight:700;border-radius:8px;max-width:150px}
+.pendpill{background:#FFF4DE;color:#B7791F;font-weight:700;font-size:12px;padding:3px 11px;border-radius:20px;white-space:nowrap}
+.envtog{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:24px;padding:3px;gap:2px}
+.envtog .env{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);padding:6px 14px;border-radius:20px;cursor:pointer}
+.envtog .env .ed{width:7px;height:7px;border-radius:50%;background:#9AA3B2}
+.envtog .env[data-env="production"] .ed{background:#16a34a}
+.envtog .env.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(15,30,61,.14)}
+@media(max-width:760px){.envtog .env{padding:6px 10px;font-size:12px}}
+.ovtenant{margin-bottom:26px}
+.ovtenant+.ovtenant{border-top:1px dashed var(--line);padding-top:24px}
+.ovtenant-h{font-weight:800;font-size:16px;color:#0F1E3D;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+.ovtenant-h::before{content:'';width:4px;height:18px;background:var(--brand);border-radius:3px}
+.opt{font-weight:700;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;background:#EEF1F6;padding:2px 7px;border-radius:10px;margin-left:4px}
+.reqnote{background:#FFF8E8;border:1px solid #F3E2B3;border-left:4px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:13px;color:#6B5A2E;line-height:1.5}
+.reqnote b{color:#0F1E3D}
+
+#alerts .seg{pointer-events:none;opacity:.92}#alerts .control[readonly],#alerts .control[disabled]{background:#F4F6FB;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="appro" />
+    </div>
+    <nav class="nav">
+      <div class="lbl">Operations</div>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>Monitoring</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Tenant Management</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg>Tenant Provisioning</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 16 0v1"/></svg>User Management</a>
+      <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg>Role Management</a>
+      <div class="lbl">Billing</div>
+      <a href="#" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg>Billing Management</a>
+    </nav>
+    <div class="side-foot">
+      <a href="#" class="nav-link" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:#AFBEDC;font-weight:600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Change Password</a>
+      <a href="#" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;color:#AFBEDC;font-weight:600"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="icon-btn hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div class="crumb">Billing &nbsp;/&nbsp; <b id="crumbTab">Report</b></div>
+      </div>
+      <div class="top-right"><div class="envtog" id="envTog"><button class="env" data-env="sandbox" onclick="setEnv('sandbox')"><span class="ed"></span>Sandbox</button><button class="env active" data-env="production" onclick="setEnv('production')"><span class="ed"></span>Production</button></div>
+        <button class="icon-btn"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+        <button class="icon-btn"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <div class="user"><div class="avatar">AD</div><div><div class="nm">Admin User</div><div class="rl">Super Admin Portal</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Billing Management</h1>
+          <p>Configure, meter and report tenant service consumption.</p>
+        </div>
+      </div>
+
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="report">Overview</button>
+        
+        <button class="tab" data-tab="config">Pricing &amp; Catalog</button>
+        <button class="tab" data-tab="alerts">Alerts</button>
+      </div>
+
+      <!-- ===================== REPORT ===================== -->
+      <section class="panel show" id="report">
+        <div class="card">
+          <div class="card-body">
+            <div class="filters">
+              <div class="field">
+                <label>Tenant Name <span class="req">*</span></label>
+                <select class="control" id="fTenant">
+                  <option value="">Select tenant</option>
+                  <option>Tenant 1</option><option selected>Tenant 2</option>
+                  <option>Tenant 3</option><option>Tenant 4</option>
+                  <option value="__all">All tenants</option>
+                </select>
+              </div>
+              <div class="field ms" id="msSvc">
+                <label>Product Name</label>
+                <div class="control ms-box" id="msBox"><span style="color:var(--muted)">All products</span></div>
+                <div class="ms-menu" id="msMenu">
+                  <label><input type="checkbox" value="Service Name 1">Service Name 1</label>
+                  <label><input type="checkbox" value="Service Name 2" checked>Service Name 2</label>
+                  <label><input type="checkbox" value="Service Name 3">Service Name 3</label>
+                  <label><input type="checkbox" value="Service Name 4">Service Name 4</label>
+                  <label><input type="checkbox" value="Service Name 5">Service Name 5</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Time Range <span class="req">*</span></label>
+                <select class="control" id="fRange" onchange="toggleCustom()">
+                  <option>Today</option>
+                  <option selected>Last 1 week</option>
+                  <option>Last 1 month</option>
+                  <option>Last 3 month</option>
+                  <option>Last 6 month</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <button class="btn primary" onclick="runSearch()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search
+              </button>
+            </div>
+            <div class="filters" id="customRow" style="margin-top:16px;display:none">
+              <div class="field"><label>Start date</label><input type="date" class="control" value="2026-05-01"></div>
+              <div class="field"><label>End date</label><input type="date" class="control" value="2026-06-10"></div>
+              <div></div><div></div>
+            </div>
+          </div>
+        </div>
+
+                <div id="ovContainer"></div>
+<div class="card">
+          <div class="card-head">
+            <div><h3>Usage &amp; subscription detail</h3><span class="sub" id="resultCount">10 services &middot; Tenant 2 &middot; Last 1 week</span></div>
+            <div class="dd" id="exportDD">
+              <button class="btn ghost" onclick="toggleExport()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                Export <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="dd-menu" id="exportMenu">
+                <button onclick="doExport('Summary')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Summary Report</button>
+                <button onclick="doExport('Detail')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>Detail Report</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="billTable">
+              <thead><tr>
+                <th>#</th><th>Product Name</th><th>Status</th><th>Billing type</th>
+                <th>Time range</th><th>Request range</th><th>Billing activation date</th>
+                <th>Success request count</th><th>Failed request count</th><th>Period charge</th>
+              </tr></thead>
+              <tbody id="billBody"></tbody>
+            </table>
+          </div>
+          <div class="tfoot" id="tfoot">
+            <div class="per">Rows per page
+              <select id="perPage" onchange="renderReport()"><option>10</option><option>20</option><option>30</option></select>
+            </div>
+            <div class="pager">
+              <button onclick="gotoPage(cur-1)" id="prev">‹</button>
+              <span id="pages" style="display:flex;gap:4px"></span>
+              <button onclick="gotoPage(cur+1)" id="next">›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== DASHBOARD ===================== -->
+      
+
+      <!-- ===================== CONFIG ===================== -->
+      <section class="panel" id="config">
+        <div id="catalogBody"></div>
+      </section>
+
+      <!-- ===================== ALERTS ===================== -->
+      <section class="panel" id="subs">
+        <div class="card">
+          <div class="card-head">
+            <div><h3>Tenant subscriptions</h3></div>
+            <div style="display:flex;gap:12px;align-items:flex-end">
+              <div class="field" style="min-width:220px"><label>Tenant</label><select class="control" id="subTenant" onchange="renderSubs()"></select></div>
+            </div>
+          </div>
+          <div id="subArea"></div>
+        </div>
+      </section>
+      <section class="panel" id="alerts">
+        <div class="card">
+          <div class="card-head"><h3>Usage alert schedule</h3><span class="sub">View only &mdash; configured by the platform owner</span></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="field"><label>Alert thresholds (% of quota)</label>
+                <div class="seg" id="thr">
+                  <button class="on">80%</button><button class="on">90%</button><button class="on">100%</button><button>50%</button>
+                </div>
+              </div>
+              <div class="field"><label>Channels</label>
+                <div class="seg">
+                  <button class="on">Email</button><button class="on">In-app</button><button>Webhook</button>
+                </div>
+              </div>
+              <div class="field"><label>Recipients</label><input class="control" value="billing-ops@tenant2.com" readonly></div>
+              <div class="field"><label>Evaluation schedule</label>
+                <select class="control" disabled><option>Hourly</option><option selected>Every 6 hours</option><option>Daily</option></select>
+              </div>
+            </div>
+            <div class="form-foot"><span class="subname">Read-only view. Alert rules are managed centrally and shown here for reference.</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Recent alerts</h3></div>
+          <div class="table-wrap">
+            <table><thead><tr><th>Service</th><th>Type</th><th>Detail</th><th>When</th><th>Status</th></tr></thead><tbody id="alertBody"></tbody></table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg><span id="toastMsg"></span></div>
+
+<script>
+const ROLE='admin';const MYTENANT='';
+
+/* ===== catalog model: Service > Category > Product > Package (single price) ===== */
+let SID=0,CID=0,PID=0,KID=0,tT;
+function nid(k){if(k==='s')return 'SVC'+(++SID);if(k==='c')return 'CAT'+(++CID);if(k==='p')return 'PRD'+(++PID);return 'PKG'+(++KID);}
+const PRICING_TYPES=['Committed volume','Usage band','On request'];
+const PERIODS=['Per year','Per month'];
+const BILLING=['Annual','Monthly','Per usage'];
+const BILLMASTER=[
+  ['Credit Score (Company)','AECB'],['Credit Full Report (Company)','AECB'],['Credit Score (Individual)','AECB'],
+  ['Credit Full Report (Individual)','AECB'],['Credit Analytics Report (Individual)','AECB'],['Credit Analytics Report (Company)','AECB'],
+  ['ID Document Data Extraction','OCR (MRZ reader)'],['Identity Verification','EFR'],['Biographic Verification','EFR'],
+  ['Business Verification','Business Verification Engine'],['Email Risk Assessment','Email Risk Assessment'],
+  ['Government Digital Identity','UAE Pass'],['Government Digital Signing','UAE Pass'],['Location Intelligence','Geolocator'],
+  ['Employment Income Verification','MOHRE Income Verification'],['Text Analytics (Name Indexer)','Text Analytics (Name Indexer)'],
+  ['AML & Sanctions Screening','Sanctions Screening (draft)'],['Financial Statement Analyzer','Statement Analyzer']];
+const BILLNAMES=BILLMASTER.map(m=>m[0]);const BILLSVC=Object.fromEntries(BILLMASTER);
+const OVERFLOW=[['payg','Pay-as-you-go overage'],['renew','Auto-renew block'],['upgrade','Upgrade / change plan'],['block','Block at limit (hard cap)']];
+function ovfLabel(c){return ({payg:'Pay-as-you-go overage',renew:'Auto-renew block',upgrade:'Upgrade / change plan',block:'Block at limit (hard cap)'})[c]||'—';}
+function quotaMetric(used,comm,term){
+  const tl=term?('<div class="qterm">'+term+'</div>'):'';
+  if(!comm) return '<div class="mv">'+fmtInt(used)+' used</div>'+tl;
+  const over=Math.max(0,used-comm), pct=Math.round(used/comm*100), fill=Math.min(100,pct);
+  const mv='<div class="mv">'+fmtInt(used)+' / '+fmtInt(comm)+'</div>';
+  const bar='<div class="qbar"><div style="width:'+fill+'%"></div></div>';
+  const sub=over>0?('<div class="qsub">+'+fmtInt(over)+' over · '+pct+'%</div>'):'';
+  return mv+bar+sub+tl;
+}
+const SUB_STATUS=['Pending','Active','Cancelled','Rejected'];
+function statusInfo(st){return ({Active:{bill:true,meter:true,cls:'ok'},Pending:{bill:false,meter:false,cls:'pending'},Cancelled:{bill:false,meter:false,cls:'cancelled'},Rejected:{bill:false,meter:false,cls:'off'}})[st]||{bill:false,meter:false,cls:'off'};}
+function setEnv(e){document.querySelectorAll('.envtog .env').forEach(b=>b.classList.toggle('active',b.dataset.env===e));toast((e==='production'?'Production':'Sandbox')+' environment');}
+function mkPkg(o){return Object.assign({id:nid('k'),name:'',pricingType:'Committed volume',txns:0,volFrom:0,volTo:0,bands:[],period:'Per year',unitPrice:0,overflow:'payg',overageRate:0,overageCap:0,maxRenewals:0,upgradeTo:'tenant',graceBuffer:0,blockBehaviour:'Reject requests',setup:0,billing:'Annual',licenseFee:0,active:true},o);}
+function mkProd(o){return Object.assign({id:nid('p'),name:'',descriptor:'',uom:'Transaction',billable:true,active:true,minCharge:0,setupCost:0,activation:'2026-06-15',packages:[]},o);}
+function mkSvc(o){return Object.assign({id:nid('s'),name:'',code:'',active:true,minCharge:0,activation:'2026-06-15',products:[]},o);}
+const state={services:[],tenants:[],subs:[],audit:[]};
+function nowStamp(){const d=new Date();const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());}
+function logAudit(entity,field,from,to){state.audit.unshift({ts:nowStamp(),user:'Amira Saleh',entity:entity,field:field,from:String(from),to:String(to)});if(state.audit.length>120)state.audit.pop();/* captured for backend; not rendered in UI */}
+
+(function seed(){
+  const pkPayg=(price)=>mkPkg({name:'Per-unit rate',pricingType:'On request',unitPrice:price});
+  const pkReq=(price)=>mkPkg({name:'Per transaction',pricingType:'On request',unitPrice:price||0});
+  const pkComm=(txns,price,over)=>mkPkg({name:'Committed volume',pricingType:'Committed volume',txns,unitPrice:price,overflow:'payg',overageRate:over});
+
+  const aecb=mkSvc({name:'AECB',code:'AECB',active:true,minCharge:25000,activation:'2026-06-15'});
+  const csi=mkProd({name:'Credit Score (Individual)',descriptor:'AECB',uom:'Report'});
+  csi.packages=[mkPkg({name:'Package 1',pricingType:'On request',unitPrice:6.60}),
+    mkPkg({name:'Package 2',pricingType:'Committed volume',txns:50000,unitPrice:4.18,overflow:'payg',overageRate:5.00}),
+    mkPkg({name:'Package 3',pricingType:'Committed volume',txns:100000,unitPrice:3.52,overflow:'renew',maxRenewals:2})];
+  const csc=mkProd({name:'Credit Score (Company)',descriptor:'AECB',uom:'Report'});csc.packages=[pkComm(5000,48.00,50.00)];
+  const cfi=mkProd({name:'Credit Full Report (Individual)',descriptor:'AECB',uom:'Report'});cfi.packages=[pkComm(50000,4.18,5.00)];
+  const cfc=mkProd({name:'Credit Full Report (Company)',descriptor:'AECB',uom:'Report'});cfc.packages=[pkComm(5000,48.00,50.00)];
+  const cai=mkProd({name:'Credit Analytics Report (Individual)',descriptor:'AECB',uom:'Report'});cai.packages=[pkPayg(10.00)];
+  const cac=mkProd({name:'Credit Analytics Report (Company)',descriptor:'AECB',uom:'Report'});cac.packages=[pkPayg(20.00)];
+  aecb.products=[csi,csc,cfi,cfc,cai,cac];state.services.push(aecb);
+
+  const mohre=mkSvc({name:'MOHRE Income Verification',code:'MOHRE',active:true,minCharge:10000,activation:'2026-06-15'});
+  const eiv=mkProd({name:'Employment Income Verification',descriptor:'MOHRE',uom:'Check'});
+  eiv.packages=[mkPkg({name:'Package 2',pricingType:'Committed volume',txns:50000,unitPrice:6.15,overflow:'payg',overageRate:7.00})];
+  mohre.products=[eiv];state.services.push(mohre);
+
+  const mk1=(svcName,code,prodName,pkg,active)=>{const s=mkSvc({name:svcName,code,active:active!==false});const p=mkProd({name:prodName,descriptor:svcName,uom:'Transaction',active:active!==false});p.packages=[pkg];s.products=[p];state.services.push(s);return s;};
+  mk1('Statement Analyzer','STMT','Financial Statement Analyzer',pkPayg(5.50));
+  const efr=mkSvc({name:'EFR',code:'EFR',active:true});
+  const idv=mkProd({name:'Identity Verification',descriptor:'EFR',uom:'Check'});idv.packages=[pkPayg(1.36)];
+  const bgv=mkProd({name:'Biographic Verification',descriptor:'EFR',uom:'Check'});bgv.packages=[pkPayg(1.36)];
+  efr.products=[idv,bgv];state.services.push(efr);
+  mk1('Business Verification Engine','BVE','Business Verification',pkPayg(6.80));
+  mk1('Geolocator','GEO','Location Intelligence',pkPayg(0.11));
+  mk1('Text Analytics (Name Indexer)','TXT','Text Analytics (Name Indexer)',pkPayg(0.55));
+  mk1('Email Risk Assessment','EMAIL','Email Risk Assessment',pkPayg(0.55));
+  mk1('OCR (MRZ reader)','OCR','ID Document Data Extraction',pkPayg(0.55));
+  const uaep=mkSvc({name:'UAE Pass',code:'UAEP',active:true});
+  const gdi=mkProd({name:'Government Digital Identity',descriptor:'UAE Pass',uom:'Hit'});gdi.packages=[pkReq(12.50)];
+  const gds=mkProd({name:'Government Digital Signing',descriptor:'UAE Pass',uom:'Hit'});gds.packages=[pkReq(14.00)];
+  uaep.products=[gdi,gds];state.services.push(uaep);
+  mk1('Sanctions Screening (draft)','SANC','AML & Sanctions Screening',pkPayg(0.55),false);
+
+  aecb.products.forEach(p=>p.minCharge=25000);
+  eiv.minCharge=10000;
+  idv.setupCost=54348; bgv.setupCost=54348;
+  state.tenants=[{id:'T1',name:'Tenant 1'},{id:'T2',name:'Tenant 2'},{id:'T3',name:'Tenant 3'}];
+  let sq=0;const sub=o=>Object.assign({id:'SUB'+(++sq),activation:'2026-06-15',status:'Active',quoteRate:0,override:{}},o);
+  eiv.packages[0].licenseFee=90000;eiv.packages[0].billing='Annual';
+  state.subs=[
+    sub({tenantId:'T2',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[1].id,override:{unit:3.95}}),
+    sub({tenantId:'T2',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id}),
+    sub({tenantId:'T1',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[2].id}),
+    sub({tenantId:'T1',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id,status:'Active'}),
+    sub({tenantId:'T3',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[1].id,status:'Pending',override:{unit:4.50}}),
+    sub({tenantId:'T3',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id,status:'Active',override:{license:72000}}),
+    sub({tenantId:'T2',serviceId:uaep.id,productId:gdi.id,packageId:gdi.packages[0].id}),
+    sub({tenantId:'T1',serviceId:uaep.id,productId:gds.id,packageId:gds.packages[0].id})
+  ];
+})();
+
+const $=id=>document.getElementById(id);
+const fmtUSD=n=>n==null?'—':'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtUSD0=n=>n==null?'—':'$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:0});
+const fmtInt=n=>Number(n).toLocaleString('en-US');
+const svc=()=>state.services.find(s=>s.id===curSvcId);
+const prodById=(id)=>{for(const s of state.services)for(const p of s.products)if(p.id===id)return p;return null;};
+const allProducts=()=>{const o=[];state.services.forEach(s=>s.products.forEach(p=>o.push(p)));return o;};
+const prodSvc=(p)=>state.services.find(s=>s.products.includes(p));
+function catalogProducts(){return allProducts();}
+let curProdId=null;
+function prod(){const l=catalogProducts();return l.find(p=>p.id===curProdId)||l[0]||null;}
+const on=el=>el.classList.contains('on');
+function tgl(el){el.classList.toggle('on');}
+function commaFmt(el){const v=el.value.replace(/[^0-9]/g,'');el.value=v?Number(v).toLocaleString('en-US'):'';}
+function parseNum(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
+function unitOf(p,k){return +k.unitPrice;}
+function totalOf(p,k){if(k.pricingType==='On request'||k.pricingType==='Usage band')return null;return k.unitPrice*k.txns;}
+
+/* ===== derived billing view (single source = catalog) ===== */
+const USAGE_F=[1.08,0.72,1.25,0.55,0.95,1.4,0.83,0.6,1.12,0.9,0.78,1.05];
+const FAILS=[10,15,20,5,0,8,40,2,12,5,7,3];
+function primaryPkg(s){for(const p of s.products){if(p.active&&p.packages.length){return p.packages.find(k=>k.pricingType==='Committed volume')||p.packages[0];}}return null;}
+function findPkg(s,id){for(const p of s.products){const k=p.packages.find(x=>x.id===id);if(k)return k;}return null;}
+function pkgById(id){for(const s of state.services)for(const p of s.products){const k=p.packages.find(x=>x.id===id);if(k)return {svc:s,prod:p,pkg:k};}return null;}
+function svcById(id){return state.services.find(s=>s.id===id);}
+function tenantSubs(tid){return state.subs.filter(x=>tid==='all'||x.tenantId===tid);}
+function computeBilling(s,k,usage){
+  const committed=k.pricingType==='Committed volume'?k.txns:0;
+  const unit=k.unitPrice,ovf=k.overflow;
+  let blocked=false,blockedTxns=0,overflowTxns=0,overflowCharge=0,rebuyBlocks=0,served=usage,detail='';
+  let base;
+  if(k.pricingType==='Usage band'){
+    base=0;(k.bands||[]).forEach(b=>{const to=b.to==null?Infinity:b.to;base+=Math.max(0,Math.min(usage,to)-b.from)*b.rate;});
+    detail='graduated · '+(k.bands||[]).length+' tier'+((k.bands||[]).length===1?'':'s')+' (open top)';
+  } else base=committed?unit*committed:unit*usage;
+  if(committed&&usage>committed){
+    if(ovf==='payg'){
+      let extra=usage-committed;
+      if(k.overageCap>0){const bb=Math.min(extra,k.overageCap);blockedTxns=extra-bb;extra=bb;served=committed+bb;}
+      overflowTxns=extra; overflowCharge=extra*(k.overageRate||0);
+      detail='+'+fmtInt(overflowTxns)+' @ '+fmtUSD(k.overageRate)+'/unit';
+    }else if(ovf==='renew'){
+      const need=Math.ceil(usage/committed);
+      const blocks=k.maxRenewals>0?Math.min(need,1+k.maxRenewals):need;
+      rebuyBlocks=blocks-1; served=Math.min(usage,blocks*committed); blockedTxns=usage-served;
+      overflowCharge=rebuyBlocks*unit*committed;
+      detail='auto-renewed '+rebuyBlocks+' block'+(rebuyBlocks===1?'':'s');
+    }else if(ovf==='upgrade'){
+      overflowTxns=usage-committed;
+      let tu=unit,tn='tenant choice';
+      if(k.upgradeTo&&k.upgradeTo!=='tenant'){const tp=findPkg(s,k.upgradeTo);if(tp){tu=tp.unitPrice;tn=tp.name;}}
+      overflowCharge=overflowTxns*tu;
+      detail='upgraded → '+tn+' (+'+fmtInt(overflowTxns)+' @ '+fmtUSD(tu)+')';
+    }else if(ovf==='block'){
+      const grace=k.graceBuffer||0; served=Math.min(usage,committed+grace); blockedTxns=usage-served; blocked=blockedTxns>0;
+      detail=blocked?fmtInt(blockedTxns)+' rejected at cap':'within grace';
+    }
+  }
+  const license=k.licenseFee||0;
+  const subtotal=base+overflowCharge+(s.setupCost||0)+license;
+  const charge=Math.max(s.minCharge||0,subtotal);
+  const minApplied=charge>subtotal+0.001;
+  const ovfActive=overflowTxns>0||rebuyBlocks>0||blockedTxns>0;
+  return {committed,unit,ovf,usage,success:served,base,overflowTxns,overflowCharge,rebuyBlocks,blockedTxns,blocked,detail,subtotal,charge,minApplied,ovfActive,setup:s.setupCost||0,license};
+}
+function deriveSub(sub,idx){
+  const ref=pkgById(sub.packageId);if(!ref)return null;
+  const p=ref.prod,k=ref.pkg,si=statusInfo(sub.status);
+  const onReq=k.pricingType==='On request';
+  const ov=sub.override||{};
+  let kEff=k, overridden=false;
+  if(k.pricingType==='Committed volume'){
+    const t=(+ov.txns>0)?+ov.txns:k.txns, u=(+ov.unit>0)?+ov.unit:k.unitPrice, o=(+ov.over>0)?+ov.over:k.overageRate;
+    overridden=(t!==k.txns)||(u!==k.unitPrice)||(o!==k.overageRate);
+    kEff=Object.assign({},k,{txns:t,unitPrice:u,overageRate:o});
+  }else if(k.pricingType==='Usage band'){
+    const obb=ov.bands||[];
+    const bands=(k.bands||[]).map((b,i)=>Object.assign({},b,{rate:(+obb[i]>0)?+obb[i]:b.rate}));
+    overridden=bands.some((b,i)=>b.rate!==((k.bands[i]||{}).rate));
+    kEff=Object.assign({},k,{bands:bands,unitPrice:bands[0]?bands[0].rate:k.unitPrice});
+  }else{
+    const u=(+ov.unit>0)?+ov.unit:k.unitPrice;
+    overridden=u!==k.unitPrice;
+    kEff=Object.assign({},k,{unitPrice:u});
+  }
+  const listUnit=k.unitPrice||0;
+  const effUnit=kEff.unitPrice||0;
+  const awaitingQuote=false;
+  const effLicense=(+ov.license>0)?+ov.license:(k.licenseFee||0);
+  if(effLicense!==(k.licenseFee||0))overridden=true;
+  kEff=Object.assign({},kEff,{licenseFee:effLicense});
+  const committed=k.pricingType==='Committed volume'?kEff.txns:0;
+  const f=USAGE_F[idx%USAGE_F.length];
+  let usage=0;
+  if(si.meter&&p.active){
+    if(k.pricingType==='Usage band'){const tops=(k.bands||[]).map(b=>b.to).filter(x=>x!=null);const topT=tops.length?Math.max(...tops):0;usage=Math.round((topT?topT*1.3:20000)*f);}
+    else usage=committed?Math.round(committed*f):Math.round(20000*f);
+  }
+  const b=computeBilling(p,kEff,usage);
+  const billable=p.active&&si.bill;
+  if(!billable||awaitingQuote){b.base=0;b.overflowCharge=0;b.charge=0;b.minApplied=false;b.overflowTxns=0;b.rebuyBlocks=0;b.blockedTxns=0;b.blocked=false;b.ovfActive=false;}
+  const upgradeRec=billable&&k.overflow==='upgrade'&&b.overflowTxns>0;
+  const upgradeToName=(k.upgradeTo&&k.upgradeTo!=='tenant')?((findPkg(p,k.upgradeTo)||{}).name||'a larger plan'):'a plan the tenant chooses';
+  const dispStatus=!p.active?'Product off':(awaitingQuote?'Awaiting quote':sub.status);
+  const statusCls=!p.active?'off':(awaitingQuote?'pending':si.cls);
+  return Object.assign({subId:sub.id,tenant:state.tenants.find(t=>t.id===sub.tenantId),svc:ref.svc,provider:p.descriptor||(ref.svc&&ref.svc.name)||'',name:p.name,prod:p,pkg:k,
+    btype:k.pricingType,period:k.period,activation:sub.activation,status:sub.status,dispStatus,statusCls,active:billable,hasPkg:true,
+    awaitingQuote,overridden,listUnit,license:effLicense,listLicense:(k.licenseFee||0),effCommitted:committed,effOver:kEff.overageRate,upgradeRec,upgradeToName,
+    failed:FAILS[idx%FAILS.length],minCharge:p.minCharge||0},b);
+}
+function deriveTenant(tid){return tenantSubs(tid).map((x,i)=>deriveSub(x,i)).filter(Boolean);}
+
+/* ===== tabs ===== */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('show'));
+  t.classList.add('active');
+  const id=t.dataset.tab;
+  $(id).classList.add('show');
+  $('crumbTab').textContent=t.textContent;
+  if(id==='report')renderReport();
+  if(id==='subs')renderSubs();
+  if(id==='alerts')renderAlerts();
+  if(id==='config')renderAll();
+});
+
+/* ===== toast ===== */
+function toast(msg,err){const el=$('toast');$('toastMsg').textContent=msg;el.querySelector('svg').style.color=err?'#ff8a80':'#69f0ae';el.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('show'),2400);}
+
+/* ===== REPORT ===== */
+let cur=1, expandedGroups={};
+function selectedServices(){return [...document.querySelectorAll('#msMenu input:checked')].map(c=>c.value);}
+function currentReportTenant(){if(typeof ROLE!=='undefined'&&ROLE==='tenant')return MYTENANT;const v=$('fTenant').value;return v==='__all'?'all':(v||'all');}
+function reportRows(){let r=deriveTenant(currentReportTenant());const sel=selectedServices();if(sel.length)r=r.filter(x=>sel.includes(x.name));return r;}
+function rowFlag(r){return r.blocked?'<span class="flag off">capped</span>':r.rebuyBlocks>0?('<span class="flag warn">+'+r.rebuyBlocks+' block</span>'):r.overflowTxns>0?('<span class="flag warn">+'+fmtInt(r.overflowTxns)+' over</span>'):r.minApplied?'<span class="flag blue">min</span>':'';}
+function rowHtml(r,n){
+  const rng=r.committed?'0 – '+fmtInt(r.committed):(r.btype==='—'?'—':r.btype);
+  return `<tr>
+    <td class="num">${n}</td>
+    <td class="svc">${r.name}<div class="subname">${r.prod.name} · ${r.pkg.name}</div></td>
+    <td><span class="pill ${r.statusCls}"><span class="dot"></span>${r.dispStatus}</span></td>
+    <td><span class="tag">${r.btype}</span></td>
+    <td>${r.period}</td>
+    <td>${rng}</td>
+    <td>${r.activation||'—'}${termLine(r.activation,r.pkg.billing)}</td>
+    <td class="num">${fmtInt(r.success)}</td>
+    <td class="num" style="color:${r.failed?'var(--off)':'var(--muted)'}">${r.failed}</td>
+    <td class="num">${fmtUSD0(r.charge)}${rowFlag(r)}</td>
+  </tr>`;
+}
+function emptyRow(){return '<tr><td colspan="10"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><h4>No records found</h4><div>Adjust the filters and search again.</div></div></td></tr>';}
+function toggleGrp(tid){expandedGroups[tid]=expandedGroups[tid]===false;renderReport();}
+function ovData(tid){
+  const subs=deriveTenant(tid).filter(x=>x.active);
+  const lines=[]; let usedSum=0,commSum=0; const svcSet=new Set();
+  subs.forEach(r=>{
+    svcSet.add(r.svc.id); usedSum+=r.usage; if(r.committed)commSum+=r.committed;
+    lines.push({item:r.name,sub:r.provider+' · '+r.pkg.name,
+      usage:r.committed?(fmtInt(r.committed)+' incl.'):(fmtInt(r.usage)+' used'),
+      unit:(r.btype==='Usage band'?'tiered':r.btype==='On request'?(r.awaitingQuote?'awaiting quote':fmtUSD(r.unit)+'/unit'):fmtUSD(r.unit)+'/unit')+(r.overridden?' · negotiated':''),amt:r.base});
+    if(r.overflowCharge>0){
+      const u=r.rebuyBlocks>0?(r.rebuyBlocks+' block'+(r.rebuyBlocks>1?'s':'')):('+'+fmtInt(r.overflowTxns)+' req');
+      const un=r.rebuyBlocks>0?'block price':(r.ovf==='upgrade'?'tier price':fmtUSD(r.pkg.overageRate)+'/req');
+      lines.push({item:r.name+' — '+ovfLabel(r.ovf),sub:'overflow',usage:u,unit:un,amt:r.overflowCharge});
+    }
+    if(r.setup>0)lines.push({item:r.name+' — setup',sub:'one-time',usage:'one-time',unit:'—',amt:r.setup});
+    if(r.license>0)lines.push({item:r.name+' — platform / licence fee',sub:r.pkg.billing+(r.overridden&&r.license!==r.listLicense?' · negotiated':''),usage:'—',unit:fmtUSD0(r.license)+'/'+r.pkg.billing.toLowerCase(),amt:r.license});
+    const raw=r.base+r.overflowCharge+r.setup+(r.license||0);
+    if(r.charge>raw+0.01)lines.push({item:r.name+' — minimum charge',sub:'floor '+fmtUSD0(r.minCharge),usage:'—',unit:'min',amt:r.charge-raw});
+  });
+  let _tset=new Set();subs.forEach(r=>{if(r.committed){const e=termEnd(r.activation,r.pkg.billing);if(e)_tset.add(r.pkg.billing+' term · ends '+e);}});
+  const termStr=_tset.size===1?[..._tset][0]:(_tset.size>1?'Multiple package terms':'');
+  const subtotal=subs.reduce((a,r)=>a+r.charge,0), vat=subtotal*0.05, total=subtotal+vat;
+  const TF=[0.82,0.90,1.12,0.95,1.04,1.00];
+  const vals=TF.map(f=>Math.round(subtotal*f));
+  const prev=vals[4]||1, dp=prev?Math.round((subtotal-prev)/prev*100):0;
+  return {subs,lines,usedSum,commSum,svcCount:svcSet.size,count:subs.length,subtotal,vat,total,vals,dp,termStr};
+}
+function ovBlockHtml(tid){
+  const t=state.tenants.find(x=>x.id===tid)||{name:'Tenant'};
+  const D=ovData(tid), M=['Jan','Feb','Mar','Apr','May','Jun'], mx=Math.max(1,...D.vals);
+  const lineRows=D.lines.length?(D.lines.map(l=>`<tr><td><div class="pname">${l.item}</div><div class="li-sub">${l.sub}</div></td><td>${l.usage}</td><td>${l.unit}</td><td class="num"><b>${fmtUSD0(l.amt)}</b></td></tr>`).join('')
+    +`<tr class="subtotrow"><td colspan="3">Subtotal (before 5% VAT)</td><td class="num">${fmtUSD0(D.subtotal)}</td></tr>`
+    +`<tr><td colspan="3" class="subname">VAT (5%)</td><td class="num">${fmtUSD0(D.vat)}</td></tr>`
+    +`<tr class="subtotrow"><td colspan="3">Total due</td><td class="num">${fmtUSD0(D.total)}</td></tr>`)
+    :'<tr><td colspan="4"><div class="empty" style="padding:26px"><h4>No active plans this cycle</h4><div>Assign a plan on the Subscriptions tab.</div></div></td></tr>';
+  const trend=D.vals.map((v,i)=>`<div class="tb ${i===5?'cur':''}"><i style="height:${Math.round(v/mx*100)}%" title="${fmtUSD0(v)}"></i><span>${M[i]}</span></div>`).join('');
+  const invoices=`<div class="invrow"><div><div class="im">Jun 2026</div><div class="ia">${fmtUSD0(D.subtotal)}</div></div><span class="pendpill">○ Pending</span></div>`
+    +[4,3,2,1,0].map(i=>`<div class="invrow"><div><div class="im">${M[i]} 2026</div><div class="ia">${fmtUSD0(D.vals[i])}</div></div><span class="paid">● Paid</span></div>`).join('');
+  return `<div class="ovgrid">
+    <div class="ovcol">
+      <div class="cardc">
+        <div class="ovhead">
+          <div><div class="ovtitle">June 2026 · current cycle</div><div class="subname">${t.name} · closes Jun 30 · invoice Jul 3</div></div>
+          <button class="btn ghost sm" onclick="toast('Invoice downloaded (PDF)')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Download invoice</button>
+        </div>
+        <div class="metrics">
+          <div class="metric"><div class="k">Running total</div><div class="bigtotal">${fmtUSD0(D.subtotal)}</div><div class="delta ${D.dp<=0?'dn':'up'}">${D.dp<=0?'↓ ':'↑ '}${Math.abs(D.dp)}% vs ${M[4]}</div></div>
+          <div class="metric"><div class="k">Plan</div><div class="mv">${D.count}</div><div class="ms">active plan${D.count===1?'':'s'} · ${D.svcCount} service${D.svcCount===1?'':'s'}</div></div>
+          <div class="metric"><div class="k">Quota used</div>${quotaMetric(D.usedSum,D.commSum,D.termStr)}</div>
+        </div>
+      </div>
+      <div class="cardc"><div class="ovtitle" style="font-size:15px">Billing trend</div><div class="subname">Last 6 cycles · projected period charge</div><div class="trendbars">${trend}</div></div>
+      <div class="card" style="margin:0"><div class="card-head"><div><h3>Line items</h3><span class="sub">${t.name} · June 2026</span></div></div><div class="table-wrap"><table class="lineitems"><thead><tr><th>Item</th><th>Usage</th><th>Unit</th><th class="num">Amount</th></tr></thead><tbody>${lineRows}</tbody></table></div></div>
+    </div>
+    <div class="ovcol">
+      <div class="cardc"><div class="ovtitle" style="font-size:15px">Payment method</div><div class="creditcard"><div class="cc-t">CORPORATE CARD</div><div class="cc-n">•••• •••• •••• 4821</div><div class="cc-f"><span>VALID THRU 07/28</span><span>MARBLE BANK</span></div></div><div style="text-align:center;margin-top:14px"><span class="tlink" onclick="toast('Update billing details')">Update billing details</span></div></div>
+      <div class="cardc"><div class="ovtitle" style="font-size:15px;margin-bottom:6px">Invoices</div><div>${invoices}</div></div>
+    </div>
+  </div>`;
+}
+function renderOverview(){
+  const cont=$('ovContainer'); if(!cont)return;
+  const tid=currentReportTenant();
+  if(tid==='all'){
+    cont.innerHTML=state.tenants.map(t=>`<div class="ovtenant"><div class="ovtenant-h">${t.name}</div>${ovBlockHtml(t.id)}</div>`).join('');
+  } else {
+    cont.innerHTML=ovBlockHtml(tid);
+  }
+}
+
+function renderReport(){
+  renderOverview();
+  const all=reportRows(), body=$('billBody'), foot=$('tfoot'); body.innerHTML='';
+  const grouped=currentReportTenant()==='all';
+  if(grouped){
+    if(foot)foot.style.display='none';
+    if(!all.length){body.innerHTML=emptyRow();}
+    else state.tenants.forEach(t=>{
+      const rows=all.filter(r=>r.tenant&&r.tenant.id===t.id);
+      if(!rows.length)return;
+      const open=expandedGroups[t.id]!==false;
+      const total=rows.reduce((a,r)=>a+r.charge,0);
+      body.insertAdjacentHTML('beforeend',`<tr class="grp ${open?'open':''}" onclick="toggleGrp('${t.id}')"><td colspan="10"><span class="chev">›</span><b>${t.name}</b><span class="gmeta">${rows.length} service${rows.length===1?'':'s'} · ${fmtUSD0(total)} / period</span></td></tr>`);
+      if(open)rows.forEach((r,i)=>body.insertAdjacentHTML('beforeend',rowHtml(r,i+1)));
+    });
+  }else{
+    if(foot)foot.style.display='';
+    const per=+$('perPage').value, tp=Math.max(1,Math.ceil(all.length/per)); if(cur>tp)cur=tp;
+    const slice=all.slice((cur-1)*per,(cur-1)*per+per);
+    if(!slice.length)body.innerHTML=emptyRow();
+    else slice.forEach((r,i)=>body.insertAdjacentHTML('beforeend',rowHtml(r,(cur-1)*per+i+1)));
+    const pg=$('pages'); pg.innerHTML='';
+    for(let i=1;i<=tp;i++){const b=document.createElement('button');b.textContent=i;if(i===cur)b.className='active';b.onclick=()=>{cur=i;renderReport();};pg.appendChild(b);}
+    $('prev').disabled=cur===1; $('next').disabled=cur===tp;
+  }
+  const t=$('fTenant'), rg=$('fRange');
+  const tn=t.value==='__all'?'All tenants':((state.tenants.find(x=>x.id===t.value)||{}).name||'Tenant');
+  const tc=grouped?state.tenants.filter(tt=>all.some(r=>r.tenant&&r.tenant.id===tt.id)).length:0;
+  $('resultCount').textContent=`${all.length} subscription${all.length===1?'':'s'}${grouped?(' across '+tc+' tenant'+(tc===1?'':'s')):''} · ${tn} · ${rg.options[rg.selectedIndex].text}`;
+}
+function gotoPage(p){const per=+$('perPage').value;const tp=Math.ceil(reportRows().length/per);if(p<1||p>tp)return;cur=p;renderReport();}
+function runSearch(){const t=$('fTenant').value;if(!t){toast('Tenant Name is required',true);return;}cur=1;renderReport();toast('Showing '+reportRows().length+' services');}
+function toggleCustom(){$('customRow').style.display=$('fRange').value==='custom'?'grid':'none';}
+
+/* service multiselect (built from catalog) */
+function buildMsMenu(){
+  const prev=selectedServices();
+  const menu=$('msMenu');
+  const names=[];state.services.forEach(s=>s.products.forEach(p=>{if(!names.includes(p.name))names.push(p.name);}));
+  menu.innerHTML=names.map(n=>`<label><input type="checkbox" value="${n}" ${prev.includes(n)?'checked':''}>${n}</label>`).join('');
+  menu.querySelectorAll('input').forEach(c=>c.onchange=updateChips);
+  updateChips();
+}
+function updateChips(){
+  const box=$('msBox'), sel=[...$('msMenu').querySelectorAll('input:checked')];
+  if(!sel.length){box.innerHTML='<span style="color:var(--muted)">All products</span>';}
+  else box.innerHTML=sel.map(c=>`<span class="chip">${c.value}<b data-v="${c.value}">×</b></span>`).join('');
+  box.querySelectorAll('b').forEach(b=>b.onclick=ev=>{ev.stopPropagation();$('msMenu').querySelector(`input[value="${b.dataset.v}"]`).checked=false;updateChips();renderReport();});
+}
+$('msBox').onclick=e=>{e.stopPropagation();$('msMenu').classList.toggle('open');};
+function toggleExport(){$('exportMenu').classList.toggle('open');}
+function doExport(kind){$('exportMenu').classList.remove('open');toast(kind+' Report downloaded (.xlsx)');}
+document.addEventListener('click',e=>{if(!$('msSvc').contains(e.target))$('msMenu').classList.remove('open');if(!$('exportDD').contains(e.target))$('exportMenu').classList.remove('open');});
+
+/* ===== DASHBOARD ===== */
+function currentDashTenant(){const v=($('dashTenant')||{}).value;return v==='__all'||!v?'all':v;}
+function drawDash(){
+  const tid=currentDashTenant(), d=deriveTenant(tid);
+  const activeSubs=d.filter(x=>x.active), paused=d.filter(x=>!x.active);
+  $('kSucc').textContent=fmtInt(activeSubs.reduce((a,x)=>a+x.success,0));
+  $('kActive').textContent=activeSubs.length; $('kDisabled').textContent=paused.length;
+  const cap=activeSubs.filter(x=>x.committed>0);
+  const util=cap.length?Math.round(cap.reduce((a,x)=>a+Math.min(100,x.usage/x.committed*100),0)/cap.length):0;
+  $('kUtil').textContent=util+'%';
+  $('kSuccSub').textContent='across '+activeSubs.length+' active plan'+(activeSubs.length===1?'':'s');
+  $('kActiveSub').textContent=(tid==='all'?state.tenants.length+' tenants':'this tenant')+' · '+d.length+' plans';
+  $('kDisabledSub').textContent=paused.length?'paused or service off':'all live';
+  $('kUtilSub').textContent=util>=90?'near capacity':util>=80?'watch closely':'within healthy range';
+  const rev=activeSubs.reduce((a,x)=>a+x.charge,0);
+  $('dashRev').textContent='Projected period revenue · '+fmtUSD0(rev);
+  const chart=$('chart'); chart.innerHTML='';
+  const top=activeSubs.filter(x=>x.success>0).sort((a,b)=>b.success-a.success).slice(0,7);
+  const max=Math.max(1,...top.map(x=>x.success));
+  if(!top.length)chart.innerHTML='<div class="subname" style="margin:auto">No active subscriptions in this view.</div>';
+  top.forEach(x=>{const h=Math.round(x.success/max*100);chart.insertAdjacentHTML('beforeend',`<div class="bar-col"><div class="bar-track"><div class="bar" style="height:0" data-h="${h}"><span class="val">${(x.success/1000).toFixed(1)}k</span></div></div><div class="bar-x">${x.svc.code||x.name.slice(0,4)}</div></div>`);});
+  requestAnimationFrame(()=>chart.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'%'));
+  const u=$('util'); u.innerHTML='';
+  const rows=d.filter(x=>x.committed>0&&x.active).slice(0,6);
+  if(!rows.length)u.innerHTML='<div class="subname">No committed-volume packages yet.</div>';
+  rows.forEach(x=>{const pct=Math.min(100,Math.round(x.usage/x.committed*100));const cls=pct>=100?'full':pct>=80?'warn':'';u.insertAdjacentHTML('beforeend',`<div class="util-row"><div class="n">${x.name}</div><div class="track"><div class="fill ${cls}" style="width:${pct}%"></div></div><div class="p">${pct}%</div></div>`);});
+}
+
+/* ===== ALERTS ===== */
+function renderAlerts(){
+  const d=deriveTenant('all'),out=[],dt=['09 Jun 2026, 14:20','08 Jun 2026, 03:05','07 Jun 2026, 11:48','06 Jun 2026, 22:10','05 Jun 2026, 09:33','04 Jun 2026, 16:45','03 Jun 2026, 08:12','02 Jun 2026, 19:40'];
+  d.forEach(x=>{
+    const who=x.tenant?(' · '+x.tenant.name):'';
+    if(!x.active){out.push({n:x.name,t:x.status==='Paused'?'Paused':'Disabled',det:(x.status==='Paused'?'Subscription paused':'Service inactive')+who,cls:'off',lbl:x.status==='Paused'?'Paused':'Disabled'});return;}
+    if(x.blocked){out.push({n:x.name,t:'Hard cap',det:fmtInt(x.blockedTxns)+' txns rejected at the limit'+who,cls:'off',lbl:'Capped'});return;}
+    if(x.awaitingQuote){out.push({n:x.name,t:'On request',det:'Awaiting agreed price — quote pending'+who,cls:'off',lbl:'Awaiting quote'});return;}
+    if(x.upgradeRec){out.push({n:x.name,t:'Upgrade',det:'Committed volume exceeded — notify tenant to move up to '+x.upgradeToName+who,cls:'ok',lbl:'Action: upgrade'});return;}
+    if(x.ovfActive){out.push({n:x.name,t:ovfLabel(x.ovf),det:x.detail+who,cls:'ok',lbl:'Charged'});return;}
+    if(x.minApplied){out.push({n:x.name,t:'Minimum',det:'Below minimum — floor of '+fmtUSD0(x.minCharge)+' applied'+who,cls:'ok',lbl:'Min applied'});return;}
+    const pct=x.committed?Math.round(x.usage/x.committed*100):0;
+    if(pct>=80)out.push({n:x.name,t:pct+'%',det:'Approaching committed limit'+who,cls:'ok',lbl:'Notified'});
+  });
+  const body=$('alertBody');
+  if(!out.length){body.innerHTML='<tr><td colspan="5"><div class="empty" style="padding:30px"><h4>No alerts</h4><div>All services within limits.</div></div></td></tr>';return;}
+  body.innerHTML=out.slice(0,8).map((a,i)=>`<tr><td class="svc">${a.n}</td><td><span class="tag">${a.t}</span></td><td>${a.det}</td><td>${dt[i%dt.length]}</td><td><span class="pill ${a.cls==='off'?'off':'ok'}"><span class="dot"></span>${a.lbl}</span></td></tr>`).join('');
+}
+
+/* ===== PRICING & CATALOG ===== */
+let curSvcId=null,openProdId=null;
+function openForm(id){document.querySelectorAll('.subform.open').forEach(f=>{if(f.id!==id)f.classList.remove('open')});$(id).classList.add('open');}
+function closeForm(id){$(id).classList.remove('open');}
+let catView='list', editProdId=null;
+function pricingSummary(p){
+  const k=p.packages[0]; if(!k) return '<span class="subname">no packages</span>';
+  if(k.pricingType==='Committed volume') return fmtUSD(k.unitPrice)+'/unit · '+fmtInt(k.txns)+'/yr';
+  if(k.pricingType==='Usage band') return 'tiered · '+(k.bands||[]).length+' tiers';
+  return fmtUSD(k.unitPrice)+'/txn';
+}
+function renderProdCatalog(){
+  const cb=$('catalogBody'); if(!cb) return;
+  if(catView==='detail' && prodById(editProdId)) renderProdDetail(); else renderProdList();
+}
+function renderProdList(){
+  const prods=allProducts();
+  const rows=prods.map(p=>`<tr onclick="openProd('${p.id}')" style="cursor:pointer">
+    <td class="svc"><span class="pname">${p.name}</span></td>
+    <td>${p.descriptor||'—'}</td>
+    <td class="num">${p.packages.length}</td>
+    <td>${pricingSummary(p)}</td>
+    <td><span class="pill ${p.active?'ok':'off'}"><span class="dot"></span>${p.active?'Active':'Inactive'}</span></td>
+    <td class="num"><button class="btn ghost sm" onclick="event.stopPropagation();openProd('${p.id}')">Edit</button></td></tr>`).join('');
+  $('catalogBody').innerHTML=`<div class="card">
+    <div class="card-head"><div><h3>Product catalog</h3></div>
+      <div style="display:flex;align-items:center;gap:14px"><span class="sub"><b>${prods.filter(x=>x.active).length}</b> active · <b>${state.services.length}</b> providers</span>
+      <button class="btn primary sm" onclick="newProductCat()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg>New product</button></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Product</th><th>Description</th><th class="num">Packages</th><th>Pricing</th><th>Status</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="6" class="subname" style="text-align:center;padding:30px">No products yet — create one with &ldquo;New product&rdquo;.</td></tr>'}</tbody></table></div></div>`;
+}
+function openProd(id){catView='detail';editProdId=id;curProdId=id;renderProdCatalog();}
+function backToList(){catView='list';renderProdCatalog();}
+function newProductCat(){let sv=state.services.find(x=>x.code==='CUSTOM');if(!sv){sv=mkSvc({name:'Custom',code:'CUSTOM',active:true});state.services.push(sv);}const p=mkProd({name:'',descriptor:'',uom:'Transaction',active:true});sv.products.push(p);logAudit('Product','Created','—','new product');if(typeof buildMsMenu==='function')buildMsMenu();openProd(p.id);}
+function setProdName(v){const p=prodById(editProdId);if(!p)return;const old=p.name||'';if(old!==v){p.name=v;logAudit('Product · '+(v||'product'),'Name',old||'—',v||'—');}renderProdDetail();toast('Saved');}
+function setProdText(field,val){const p=prodById(editProdId);if(!p)return;const old=p[field]||'';if(old!==(val||'')){p[field]=val;logAudit('Product · '+(p.name||'product'),field==='name'?'Name':'Provider',old||'—',val||'—');}if(field==='name')renderProdDetail();}
+function renderProdDetail(){
+  const p=prodById(editProdId); if(!p){backToList();return;}
+  curProdId=p.id;
+  const UOM=['Transaction','Report','Check','Hit','Indicator'];
+  $('catalogBody').innerHTML=`
+   <div style="margin-bottom:14px"><button class="btn ghost sm" onclick="backToList()">&lsaquo; Back to catalog</button></div>
+   <div class="card">
+     <div class="card-head">
+       <div><h3>${p.name||'New product'}</h3><span class="sub">${p.descriptor||'—'} · ${p.packages.length} package${p.packages.length===1?'':'s'}</span></div>
+       <div class="toggle" style="height:44px"><div class="switch ${p.active?'on':''}" onclick="toggleProdActiveCur()"></div></div>
+     </div>
+     <div class="card-body">
+       <div class="fg3">
+         <div class="field"><label>Product name <span class="req">*</span></label><select class="control" id="pName" onchange="setProdName(this.value)"><option value="" ${!p.name?'selected':''} disabled>Select a product…</option>${BILLNAMES.map(n=>`<option value="${n}" ${p.name===n?'selected':''}>${n}</option>`).join('')}${p.name && !BILLNAMES.includes(p.name)?`<option value="${p.name}" selected>${p.name} (custom)</option>`:''}</select></div>
+         <div class="field"><label>Description</label><input class="control" id="pProv" value="${p.descriptor||''}" onchange="setProdText('descriptor',this.value)"></div>
+         <div class="field"><label>Unit of measure <span class="req">*</span></label><select class="control" id="pUom" onchange="setProdUom(this.value)">${UOM.map(u=>`<option ${u===p.uom?'selected':''}>${u}</option>`).join('')}</select></div>
+       </div>
+       <div class="fg3" style="margin-top:14px">
+         <div class="field"><label>Setup cost (AED) <span class="req">*</span></label><input class="control" type="text" inputmode="numeric" id="pSetup" oninput="commaFmt(this)" onchange="setProdNum('setupCost',this.value)" value="${Number(p.setupCost||0).toLocaleString('en-US')}" placeholder="0"></div>
+         <div class="field"><label>Minimum charge / period (AED) <span class="req">*</span></label><input class="control" type="text" inputmode="numeric" id="pMin" oninput="commaFmt(this)" onchange="setProdNum('minCharge',this.value)" value="${Number(p.minCharge||0).toLocaleString('en-US')}" placeholder="0"></div>
+         <div class="field"></div>
+       </div>
+     </div>
+   </div>
+   <div id="pkgArea" style="margin-top:18px"></div>`;
+  $('pkgArea').innerHTML=renderPkgs(p);
+}
+function setProdNum(field,val){const p=prod();if(!p)return;const old=+(p[field]||0);const nv=(String(val).trim()==='')?0:parseNum(val);if(old!==nv){p[field]=nv;logAudit('Product · '+p.name,field==='minCharge'?'Minimum charge':'Setup cost','AED '+fmtInt(old),'AED '+fmtInt(nv));}p[field]=nv;const el=field==='setupCost'?$('pSetup'):$('pMin');if(el)el.value=Number(nv).toLocaleString('en-US');toast('Saved');}
+function setProdUom(v){const p=prod();if(p)p.uom=v;}
+function toggleProdActiveCur(){const p=prod();if(!p)return;p.active=!p.active;logAudit('Product · '+p.name,'Status',p.active?'Inactive':'Active',p.active?'Active':'Inactive');renderProdCatalog();buildMsMenu();toast(p.active?'Product set active':'Product set inactive');}
+function renderPkgs(p){
+  let rows='';
+  if(!p.packages.length){rows=`<tr><td colspan="8"><div class="empty" style="padding:26px"><h4>No packages yet</h4><div>Add a volume tier — e.g. Package 2 at 50,000 transactions/year.</div></div></td></tr>`;}
+  else p.packages.forEach(k=>{
+    const isBand=k.pricingType==='Usage band';
+    const u=k.unitPrice,t=totalOf(p,k);
+    const b0=(k.bands&&k.bands[0])||{rate:0};
+    const vol=k.pricingType==='Committed volume'?fmtInt(k.txns)+' /yr':isBand?((k.bands||[]).length+' tiers · open top'):k.pricingType==='On request'?'on request':'pay-as-you-go';
+    const priceCell=isBand?('from '+fmtUSD(b0.rate)):fmtUSD(u);
+    let ovTop='—',ovSub='';
+    if(k.pricingType==='Committed volume'){
+      ovTop=ovfLabel(k.overflow);
+      ovSub=k.overflow==='payg'?(fmtUSD(k.overageRate)+'/unit'+(k.overageCap>0?(' · cap '+fmtInt(k.overageCap)):'')):
+            k.overflow==='renew'?(k.maxRenewals>0?('max '+k.maxRenewals+' renewals'):'unlimited renewals'):
+            k.overflow==='upgrade'?('→ '+(k.upgradeTo==='tenant'?'tenant choice':(findPkg(p,k.upgradeTo)?findPkg(p,k.upgradeTo).name:'—'))):
+            (k.graceBuffer>0?('+'+fmtInt(k.graceBuffer)+' grace, then reject'):'reject at limit');
+    }else if(isBand){ovTop='Graduated tiers';ovSub='open-ended top tier · no overflow';}
+    rows+=`<tr>
+      <td><div class="pname">${k.name||'—'}</div><div class="subname">${k.billing}${k.licenseFee>0?` · licence ${fmtUSD0(k.licenseFee)}`:''}</div></td>
+      <td><span class="subname">${k.pricingType}</span></td>
+      <td class="num">${vol}</td>
+      <td class="num">${priceCell}</td>
+      <td class="num">${t==null?'—':fmtUSD0(t)}</td>
+      <td><div class="pname" style="font-size:12.5px">${ovTop}</div><div class="subname">${ovSub}</div></td>
+      <td><div class="rowact"><button class="iconbtn danger" title="Delete" onclick="delPkg('${p.id}','${k.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button></div></td></tr>`;
+  });
+  return `<div class="pkgwrap">
+    <div class="pkghd"><div class="t">Packages <small>· ${p.name}</small></div>
+      <button class="btn primary sm" onclick="openForm('pkgForm_${p.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Add package</button></div>
+    <div class="table-wrap" style="padding:0 20px"><table><thead><tr><th>Package</th><th>Pricing type</th><th>Volume</th><th>Unit price</th><th>Package total</th><th>Overflow handling</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="subform" id="pkgForm_${p.id}" style="margin:14px 20px 18px">
+      <div class="fg4">
+        <div class="field"><label>Package name <span class="req">*</span></label><input class="control" type="text" id="kName_${p.id}" placeholder="e.g. Package 2"></div>
+        <div class="field"><label>Pricing type <span class="req">*</span></label><select class="control" id="kType_${p.id}" onchange="pkgType('${p.id}')">${PRICING_TYPES.map(t=>`<option>${t}</option>`).join('')}</select></div>
+        <div class="field" id="kTxnW_${p.id}"><label>Transactions / package <span class="req">*</span></label><input class="control" type="text" inputmode="decimal" id="kTxns_${p.id}" min="0" step="1000" placeholder="50000"></div>
+        <div class="field" id="kBandsW_${p.id}" style="display:none;grid-column:1/-1"><label>Usage tiers <span class="req">*</span> &mdash; graduated, top tier open-ended</label><div id="kBands_${p.id}"></div><button class="btn ghost sm" onclick="addBandRow('${p.id}')" style="margin-top:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Add tier</button></div>
+        <div class="field"><label>Period <span class="req">*</span></label><select class="control" id="kPeriod_${p.id}">${PERIODS.map(t=>`<option>${t}</option>`).join('')}</select></div>
+        <div class="field" id="kPriceW_${p.id}"><label>Unit price (AED) <span class="req">*</span></label><input class="control" type="text" inputmode="decimal" id="kPrice_${p.id}" step="0.01" min="0" placeholder="0.00"></div>
+        <div class="field" id="kReqNote_${p.id}" style="display:none;grid-column:1/-1"><div class="reqnote"><b>Per-transaction pricing.</b> Billed at the unit price above for every transaction — no committed volume or overflow. A rate is required.</div></div>
+        <div class="field" id="kOvfW_${p.id}"><label>Overflow handling <span class="req">*</span></label><select class="control" id="kOvf_${p.id}" onchange="pkgOvf('${p.id}')">${OVERFLOW.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select></div>
+        <div class="field" id="kPaygW_${p.id}"><label>Overage rate / unit (AED) <span class="req">*</span></label><input class="control" type="text" inputmode="decimal" id="kRate_${p.id}" step="0.01" min="0" value="3.00"></div>
+        <div class="field" id="kCapW_${p.id}" style="display:none"><label>Overage cap (units)</label><input class="control" type="text" inputmode="decimal" id="kCap_${p.id}" min="0" placeholder="blank = no cap"></div>
+        <div class="field" id="kRenewW_${p.id}" style="display:none"><label>Max auto-renewals / period</label><input class="control" type="text" inputmode="decimal" id="kRen_${p.id}" min="0" placeholder="blank = unlimited"></div>
+        <div class="field" id="kUpgW_${p.id}" style="display:none"><label>Upgrade to package</label><select class="control" id="kUpg_${p.id}">${p.packages.map(x=>`<option value="${x.id}">${x.name}</option>`).join('')}<option value="tenant">Let tenant choose at limit</option></select></div>
+        <div class="field" id="kGraceW_${p.id}" style="display:none"><label>Grace buffer (units)</label><input class="control" type="text" inputmode="decimal" id="kGrace_${p.id}" min="0" value="0"></div>
+        <div class="field" id="kBehW_${p.id}" style="display:none"><label>Block behaviour</label><select class="control" id="kBeh_${p.id}"><option>Reject requests</option><option>Notify, then reject</option></select></div>
+        <div class="field"><label>Billing frequency <span class="req">*</span></label><select class="control" id="kBill_${p.id}">${BILLING.map(t=>`<option>${t}</option>`).join('')}</select></div>
+        <div class="field"><label>Platform / licence fee (AED per period) <span class="req">*</span></label><input class="control" type="text" inputmode="decimal" id="kLicense_${p.id}" step="0.01" min="0" placeholder="0"></div>
+      </div>
+      <div class="form-foot">
+        <span class="ferr" id="kErr_${p.id}">Package name and unit price are required.</span>
+        <button class="btn ghost sm" onclick="closeForm('pkgForm_${p.id}')">Cancel</button>
+        <button class="btn primary sm" onclick="savePkg('${p.id}')">Save package</button>
+      </div>
+    </div></div>`;
+}
+function renderAll(){renderProdCatalog();}
+
+const bandDraft={};
+function initBands(pid){bandDraft[pid]=[{upto:'',rate:''},{upto:null,rate:''}];renderBands(pid);}
+function renderBands(pid){const arr=bandDraft[pid]||[{upto:null,rate:''}];
+  $('kBands_'+pid).innerHTML=arr.map((b,i)=>{const last=i===arr.length-1;
+    return last
+      ? `<div class="bandrow rem"><span class="bl">Everything above the last tier @</span><input class="control bw" data-i="${i}" data-k="rate" type="text" inputmode="decimal" step="0.01" min="0" placeholder="rate" value="${b.rate}"><span class="bl">/ unit · open-ended</span></div>`
+      : `<div class="bandrow"><span class="bl">Up to</span><input class="control bw" data-i="${i}" data-k="upto" type="text" inputmode="decimal" min="0" placeholder="units" value="${b.upto}"><span class="bl">units @</span><input class="control bw" data-i="${i}" data-k="rate" type="text" inputmode="decimal" step="0.01" min="0" placeholder="rate" value="${b.rate}"><span class="bl">/ unit</span><button class="iconbtn danger" title="Remove tier" onclick="removeBandRow('${pid}',${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button></div>`;
+  }).join('');}
+function readBands(pid){const arr=bandDraft[pid];if(!arr)return;$('kBands_'+pid).querySelectorAll('input').forEach(inp=>{const i=+inp.dataset.i,k=inp.dataset.k;if(arr[i])arr[i][k]=inp.value;});}
+function addBandRow(pid){readBands(pid);bandDraft[pid].splice(bandDraft[pid].length-1,0,{upto:'',rate:''});renderBands(pid);}
+function removeBandRow(pid,i){readBands(pid);bandDraft[pid].splice(i,1);if(!bandDraft[pid].length)bandDraft[pid]=[{upto:null,rate:''}];renderBands(pid);}
+function pkgType(pid){const t=$('kType_'+pid).value,c=t==='Committed volume',b=t==='Usage band',r=t==='On request';
+  $('kTxnW_'+pid).style.display=c?'':'none';
+  $('kBandsW_'+pid).style.display=b?'':'none';
+  $('kPriceW_'+pid).style.display=b?'none':'';
+  $('kOvfW_'+pid).style.display=c?'':'none';
+  if($('kReqNote_'+pid))$('kReqNote_'+pid).style.display=r?'':'none';
+  if(c)pkgOvf(pid); else ['kPaygW','kCapW','kRenewW','kUpgW','kGraceW','kBehW'].forEach(w=>$(w+'_'+pid).style.display='none');
+  if(b&&!bandDraft[pid])initBands(pid);}
+function pkgOvf(pid){const m=$('kOvf_'+pid).value;
+  $('kPaygW_'+pid).style.display=m==='payg'?'':'none';
+  $('kCapW_'+pid).style.display=m==='payg'?'':'none';
+  $('kRenewW_'+pid).style.display=m==='renew'?'':'none';
+  $('kUpgW_'+pid).style.display=m==='upgrade'?'':'none';
+  $('kGraceW_'+pid).style.display=m==='block'?'':'none';
+  $('kBehW_'+pid).style.display=m==='block'?'':'none';}
+function savePkg(pid){const p=prodById(pid);const name=$('kName_'+pid).value.trim();
+  const ptype=$('kType_'+pid).value, isC=ptype==='Committed volume', isB=ptype==='Usage band', isR=ptype==='On request';
+  let price=parseNum($('kPrice_'+pid).value), bands=[];
+  if(isB){
+    readBands(pid); let from=0; const draft=bandDraft[pid]||[];
+    draft.forEach((bb,i)=>{const last=i===draft.length-1;const to=last?null:(parseNum(bb.upto)||0);bands.push({from,to,rate:parseNum(bb.rate)});from=to||from;});
+    price=bands[0]?bands[0].rate:0;
+    const ok=name && bands.length && bands[bands.length-1].rate>0;
+    if(!ok){$('kErr_'+pid).textContent='Name and the open-ended top tier rate are required.';$('kErr_'+pid).classList.add('show');return;}
+  }else if(isR){
+    if(!name){$('kErr_'+pid).textContent='Package name is required.';$('kErr_'+pid).classList.add('show');return;}
+    /* On request: unit price is the per-transaction rate (required) */
+  }else{
+    if(!name||price<=0){$('kErr_'+pid).textContent='Package name and unit price are required.';$('kErr_'+pid).classList.add('show');return;}
+  }
+  $('kErr_'+pid).classList.remove('show');
+  const m=isC?$('kOvf_'+pid).value:'payg';
+  p.packages.push(mkPkg({name,pricingType:ptype,txns:parseNum($('kTxns_'+pid).value),bands,period:$('kPeriod_'+pid).value,unitPrice:price,
+    overflow:m,
+    overageRate:m==='payg'?parseNum($('kRate_'+pid).value):0,
+    overageCap:m==='payg'?parseNum($('kCap_'+pid).value):0,
+    maxRenewals:m==='renew'?parseNum($('kRen_'+pid).value):0,
+    upgradeTo:m==='upgrade'?$('kUpg_'+pid).value:'tenant',
+    graceBuffer:m==='block'?parseNum($('kGrace_'+pid).value):0,
+    blockBehaviour:m==='block'?$('kBeh_'+pid).value:'Reject requests',
+    billing:$('kBill_'+pid).value,licenseFee:parseNum($('kLicense_'+pid).value),active:true}));
+  delete bandDraft[pid];
+  logAudit('Package · '+p.name,'Unit price ('+name+')','—','AED '+(+price).toFixed(2));
+  const _lf=parseNum($('kLicense_'+pid).value);if(_lf>0)logAudit('Package · '+p.name,'Licence fee ('+name+')','—','AED '+_lf.toFixed(2));
+  closeForm('pkgForm_'+pid);renderProdCatalog();toast('Package added');}
+function delPkg(pid,kid){const p=prodById(pid);const k=p.packages.find(x=>x.id===kid);if(k)logAudit('Package · '+p.name,'Removed ('+k.name+')','AED '+(+k.unitPrice).toFixed(2),'—');p.packages=p.packages.filter(k=>k.id!==kid);renderProdCatalog();}
+
+/* ===== SUBSCRIPTIONS (tenant picks a package) ===== */
+let editingSubId=null;
+function fmtDate(d){if(!d)return '—';const x=new Date(d);return isNaN(x)?d:x.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function termEnd(activation,billing){
+  if(!activation)return '';const x=new Date(activation);if(isNaN(x))return '';
+  const b=(billing||'').toLowerCase();
+  if(b.indexOf('month')>-1)x.setMonth(x.getMonth()+1);
+  else if(b.indexOf('annual')>-1||b.indexOf('year')>-1)x.setFullYear(x.getFullYear()+1);
+  else return '';
+  x.setDate(x.getDate()-1);return x.toISOString().slice(0,10);
+}
+function termLine(activation,billing){const e=termEnd(activation,billing);if(e)return `<div class="subname">ends ${e}</div>`;if((billing||'')==='Per usage')return '<div class="subname">open · per usage</div>';return '';}
+function toggleQuoteField(){}
+function curSubTenant(){return $('subTenant').value;}
+function renderSubs(){
+  const tid=curSubTenant(), area=$('subArea'), ab=$('assignBtn');
+  if(tid==='__all'){ if(ab){ab.disabled=true;ab.title='Pick a tenant to assign a plan';} editingSubId=null; renderMatrix(area); return; }
+  if(ab){ab.disabled=false;ab.title='';}
+  const subs=tenantSubs(tid);
+  if(!subs.length && editingSubId!=='__new__'){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 7v10l8 4 8-4V7"/></svg><h4>No subscriptions for this tenant</h4><div>This tenant’s subscriptions will appear here.</div></div>';return;}
+  let h='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan</th><th>Committed volume</th><th>Unit price</th><th>Projected charge</th><th>Activation</th><th>Status</th><th></th></tr></thead><tbody>';
+  if(editingSubId==='__new__')h+=assignFormHtml();
+  subs.forEach((sb,i)=>{const ref=pkgById(sb.packageId);if(!ref)return;const d=deriveSub(sb,i);
+    const scls=d.statusCls, slabel=d.dispStatus;
+    h+=`<tr>
+      <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
+      <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
+      <td class="num">${d.committed?fmtInt(d.committed)+' /yr':'—'}</td>
+      <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
+      <td class="num">${d.awaitingQuote?'<span class="subname">awaiting quote</span>':fmtUSD0(d.charge)}</td>
+      <td>${sb.activation||'—'}${termLine(sb.activation,ref.pkg.billing)}</td>
+      <td><span class="pill ${scls}"><span class="dot"></span>${slabel}</span></td>
+      <td><div class="rowact">
+        ${sb.status==='Pending'?`<button class="btn primary sm" onclick="approveSub('${sb.id}')">Approve</button><button class="btn ghost sm" onclick="rejectSub('${sb.id}')">Reject</button>`:sb.status==='Active'?`<button class="btn ghost sm" onclick="cancelSub('${sb.id}')">Cancel</button>`:''}
+        <button class="btn ghost sm" onclick="openAssign('${sb.id}')">Edit</button>
+        <button class="iconbtn danger" title="Remove" onclick="removeSub('${sb.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+      </div></td></tr>`;
+    if(editingSubId===sb.id)h+=assignFormHtml();
+  });
+  h+='</tbody></table></div>';area.innerHTML=h;
+  if(editingSubId)hydrateAssignForm();
+}
+function assignFormHtml(){return `<tr class="frow"><td colspan="8" style="background:#F2F6FF;padding:0">
+  <div class="subform open" style="margin:14px 18px">
+    <div class="formttl" style="font-weight:800;font-size:13px;margin-bottom:12px">Edit subscription</div>
+    <div class="fg4">
+      <div class="field"><label>Product <span class="req">*</span></label><select class="control" id="asSvc" onchange="fillAsPkg()"></select></div>
+      <div class="field"><label>Package <span class="req">*</span></label><select class="control" id="asPkg" onchange="onAsPkgChange()"></select></div>
+      <div class="field"><label>Activation date <span class="req">*</span></label><input class="control" type="date" id="asAct" value="2026-06-15"></div>
+      <div class="field" id="asOverW" style="grid-column:1/-1"><label>Pricing for this tenant</label><div class="seg" id="ovrSeg" style="margin:4px 0 2px"><button type="button" id="ovrSegCat" class="on" onclick="setOvrMode(false)">Catalog price</button><button type="button" id="ovrSegCustom" onclick="setOvrMode(true)">Custom for this tenant</button></div><div id="ovrFields" style="display:none;margin-top:10px"></div></div>
+    </div>
+    <div class="form-foot"><span class="ferr" id="asErr">Pick a product and a package.</span>
+      <button class="btn ghost sm" onclick="closeAssign()">Cancel</button>
+      <button class="btn primary sm" onclick="saveAssign()">Save subscription</button></div>
+  </div></td></tr>`;}
+let ovrOn=false, ovrState={};
+function onAsPkgChange(){ toggleQuoteField(); renderOverrideFields(); }
+function setOvrMode(on){ ovrOn=!!on; if($('ovrSegCat'))$('ovrSegCat').classList.toggle('on',!ovrOn); if($('ovrSegCustom'))$('ovrSegCustom').classList.toggle('on',ovrOn); renderOverrideFields(); }
+function renderOverrideFields(){
+  const w=$('ovrFields'); if(!w)return;
+  const ref=pkgById($('asPkg').value);
+  if(!ref||!ovrOn){ w.style.display='none'; w.innerHTML=''; return; }
+  w.style.display='';
+  const k=ref.pkg, v=ovrState||{};
+  let h='';
+  if(k.pricingType==='Committed volume'){
+    h='<div class="fg3">'
+     +'<div class="field"><label>Committed volume (txns) <span class="req">*</span></label><input class="control" inputmode="decimal" id="ovrTxns" value="'+fmtInt(v.txns||k.txns)+'"></div>'
+     +'<div class="field"><label>Unit price (AED) <span class="req">*</span></label><input class="control" inputmode="decimal" id="ovrUnit" value="'+(v.unit||k.unitPrice)+'"></div>'
+     +'<div class="field"><label>Overage rate / unit (AED) <span class="req">*</span></label><input class="control" inputmode="decimal" id="ovrOver" value="'+(v.over||k.overageRate)+'"></div>'
+     +'</div>';
+  }else if(k.pricingType==='Usage band'){
+    h='<div class="field" style="margin-bottom:4px"><label>Per-tier rates <span class="req">*</span> &mdash; graduated, top tier open-ended</label></div>'+(k.bands||[]).map(function(b,i){var lbl=(b.to==null)?('Above '+fmtInt(b.from)):(fmtInt(b.from)+' &ndash; '+fmtInt(b.to));return '<div class="bandrow"><span class="bl" style="min-width:140px">'+lbl+' units @</span><input class="control bw" inputmode="decimal" id="ovrBand_'+i+'" value="'+((v.bands&&v.bands[i])||b.rate)+'"><span class="bl">/ unit</span></div>';}).join('');
+  }else{
+    h='<div class="field" style="max-width:280px"><label>Price per transaction (AED) <span class="req">*</span></label><input class="control" inputmode="decimal" id="ovrUnit" value="'+(v.unit||k.unitPrice)+'"></div>';
+  }
+  h+='<div class="field" style="max-width:340px;margin-top:8px"><label>Platform / licence fee (AED per '+((k.billing||'period').toLowerCase())+') <span class="req">*</span></label><input class="control" inputmode="decimal" id="ovrLicense" value="'+(v.license||k.licenseFee||0)+'"></div>';
+  w.innerHTML=h;
+}
+function readOverride(k){
+  const o={};
+  if(!ovrOn) return o;
+  if(k.pricingType==='Committed volume'){
+    const t=parseNum(($('ovrTxns')||{}).value), u=parseNum(($('ovrUnit')||{}).value), v=parseNum(($('ovrOver')||{}).value);
+    if(t>0&&t!==k.txns)o.txns=t; if(u>0&&u!==k.unitPrice)o.unit=u; if(v>0&&v!==k.overageRate)o.over=v;
+  }else if(k.pricingType==='Usage band'){
+    const arr=(k.bands||[]).map(function(b,i){var r=parseNum(($('ovrBand_'+i)||{}).value);return (r>0&&r!==b.rate)?r:0;});
+    if(arr.some(function(x){return x>0;}))o.bands=arr;
+  }else{
+    const u=parseNum(($('ovrUnit')||{}).value); if(u>0&&u!==k.unitPrice)o.unit=u;
+  }
+  const lf=parseNum(($('ovrLicense')||{}).value); if(lf>0&&lf!==(k.licenseFee||0))o.license=lf;
+  return o;
+}
+function ovrSummary(k,o){
+  if(!o||!Object.keys(o).length) return 'catalog';
+  if(k.pricingType==='Committed volume'){var a=[];if(o.txns)a.push(fmtInt(o.txns)+' txns');if(o.unit)a.push(fmtUSD(o.unit)+'/unit');if(o.over)a.push('over '+fmtUSD(o.over));if(o.license)a.push('licence '+fmtUSD0(o.license));return a.join(' · ')||'catalog';}
+  if(k.pricingType==='Usage band'){return 'tier rates '+(o.bands||[]).map(function(x){return x>0?fmtUSD(x):'—';}).join(' / ')+(o.license?' · licence '+fmtUSD0(o.license):'');}
+  let head=o.unit?fmtUSD(o.unit)+'/txn':'';
+  if(o.license)head=(head?head+' · ':'')+'licence '+fmtUSD0(o.license);
+  return head||'catalog';
+}
+function drillTenant(tid){$('subTenant').value=tid;renderSubs();}
+function renderMatrix(area){
+  const prods=[...new Set(state.subs.map(x=>x.productId))].map(prodById).filter(Boolean);
+  if(!prods.length){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><h4>No subscriptions yet</h4><div>Subscriptions will appear here once tenants are onboarded.</div></div>';return;}
+  let h='<div class="table-wrap"><table><thead><tr><th>Tenant</th>'+prods.map(p=>`<th>${p.name}</th>`).join('')+'<th>Products</th></tr></thead><tbody>';
+  state.tenants.forEach(t=>{
+    const subs=tenantSubs(t.id);
+    h+=`<tr><td><span class="tlink" onclick="drillTenant('${t.id}')">${t.name}</span></td>`;
+    prods.forEach(p=>{
+      const sb=subs.find(x=>x.productId===p.id), ref=sb?pkgById(sb.packageId):null;
+      const tag=(sb&&sb.status!=='Active')?`<span class="stag ${statusInfo(sb.status).cls}">${sb.status}</span>`:'';
+      h+= (sb&&ref) ? `<td><span class="cat-chip" style="cursor:pointer" onclick="drillTenant('${t.id}')">${ref.pkg.name}</span>${tag}</td>`
+                    : '<td><span class="subname">—</span></td>';
+    });
+    h+=`<td class="num">${subs.length}</td></tr>`;
+  });
+  h+='</tbody></table></div>';area.innerHTML=h;
+}
+function openAssign(subId){editingSubId=subId||'__new__';renderSubs();}
+function closeAssign(){editingSubId=null;renderSubs();}
+function hydrateAssignForm(){
+  const tid=curSubTenant(), isNew=editingSubId==='__new__';
+  const subbed=new Set(tenantSubs(tid).filter(x=>x.id!==editingSubId).map(x=>x.productId));
+  let prods=allProducts().filter(p=>p.active&&p.packages.length);
+  if(!isNew){const sb=state.subs.find(x=>x.id===editingSubId);prods=[prodById(sb.productId)].filter(Boolean);}
+  else prods=prods.filter(p=>!subbed.has(p.id));
+  const sel=$('asSvc');if(!sel)return;
+  sel.innerHTML=prods.length?prods.map(p=>`<option value="${p.id}">${p.name}</option>`).join(''):'<option value="">No eligible products</option>';
+  sel.disabled=!isNew;
+  if(!isNew){const sb=state.subs.find(x=>x.id===editingSubId);sel.value=sb.productId;}
+  fillAsPkg();
+  if(!isNew){const sb=state.subs.find(x=>x.id===editingSubId);$('asPkg').value=sb.packageId;$('asAct').value=sb.activation||'';if($('asQuote'))$('asQuote').value=sb.quoteRate?Number(sb.quoteRate).toLocaleString('en-US'):'';ovrState=Object.assign({},sb.override||{});setOvrMode(Object.keys(ovrState).length>0);}
+  else{$('asAct').value='2026-06-15';if($('asQuote'))$('asQuote').value='';ovrState={};setOvrMode(false);}
+  toggleQuoteField();
+}
+function fillAsPkg(){
+  const p=prodById($('asSvc').value),sel=$('asPkg');
+  if(!p){sel.innerHTML='<option value="">—</option>';return;}
+  const opts=p.packages.map(k=>{const vol=k.pricingType==='Committed volume'?fmtInt(k.txns)+'/yr':k.pricingType;return `<option value="${k.id}">${k.name} · ${vol} · ${fmtUSD(k.unitPrice)}</option>`;});
+  sel.innerHTML=opts.length?opts.join(''):'<option value="">No packages on this product</option>';
+}
+function saveAssign(){
+  const tid=curSubTenant(),pidProd=$('asSvc').value,pid=$('asPkg').value;
+  if(!pidProd||!pid){$('asErr').classList.add('show');return;}
+  const ref=pkgById(pid),sid=ref.svc?ref.svc.id:'',act=$('asAct').value;const _ex=state.subs.find(x=>x.id===editingSubId);const status=(_ex&&_ex.status)||'Pending';
+  const quoteRate=0;
+  const override=readOverride(ref.pkg);
+  const isNew=editingSubId==='__new__';
+  if(!isNew){const sb=state.subs.find(x=>x.id===editingSubId);const oldS=ovrSummary(ref.pkg,sb.override||{}),newS=ovrSummary(ref.pkg,override);if(oldS!==newS){const tn=(state.tenants.find(t=>t.id===sb.tenantId)||{}).name||sb.tenantId;logAudit('Tenant price · '+tn,ref.prod.name+' override',oldS,newS);}Object.assign(sb,{serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
+  else{const ex=state.subs.find(x=>x.tenantId===tid&&x.productId===ref.prod.id);
+    if(ex)Object.assign(ex,{serviceId:sid,packageId:pid,activation:act,status,quoteRate,override});
+    else state.subs.push({id:'SUB'+Date.now(),tenantId:tid,serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
+  editingSubId=null;renderSubs();toast('Subscription saved');
+}
+function subTenantName(sb){return (state.tenants.find(t=>t.id===sb.tenantId)||{}).name||sb.tenantId;}
+function setSubLifecycle(id,to,note){const sb=state.subs.find(x=>x.id===id);if(!sb)return;const from=sb.status;if(from===to)return;sb.status=to;if(to==='Active'&&!sb.activation)sb.activation=new Date().toISOString().slice(0,10);const ref=pkgById(sb.packageId);logAudit('Subscription · '+subTenantName(sb),(ref?ref.prod.name:'')+' status',from,to);renderSubs();toast(note);}
+function approveSub(id){setSubLifecycle(id,'Active','Subscription approved · now Active');}
+function rejectSub(id){setSubLifecycle(id,'Rejected','Subscription request rejected');}
+function cancelSub(id){setSubLifecycle(id,'Cancelled','Subscription cancelled');}
+function removeSub(id){state.subs=state.subs.filter(x=>x.id!==id);renderSubs();toast('Subscription removed');}
+function buildTenantSelects(){
+  const admin=(typeof ROLE==='undefined')||ROLE!=='tenant';
+  const ft=$('fTenant');
+  if(ft){
+    if(admin){ft.innerHTML='<option value="__all">All tenants</option>'+state.tenants.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');if(ft.value!=='__all'&&!state.tenants.some(t=>t.id===ft.value))ft.value='__all';if(!ft.value)ft.value='__all';}
+    else{const t=state.tenants.find(x=>x.id===MYTENANT)||state.tenants[0];ft.innerHTML=`<option value="${t.id}">${t.name}</option>`;ft.value=t.id;ft.disabled=true;}
+    ft.onchange=()=>{cur=1;renderReport();};
+  }
+  const st=$('subTenant');if(st){const prev=st.value;st.innerHTML='<option value="__all">All tenants · overview</option>'+state.tenants.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');st.value=admin?(prev&&prev!=='undefined'?prev:'__all'):MYTENANT;}
+  const dt=$('dashTenant');if(dt){const prev=dt.value;dt.innerHTML='<option value="__all">All tenants</option>'+state.tenants.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');dt.value=prev||'__all';}
+}
+function applyRole(){
+  if((typeof ROLE==='undefined')||ROLE!=='tenant')return;
+  ['config','subs','alerts'].forEach(id=>{const b=document.querySelector('[data-tab="'+id+'"]');if(b)b.style.display='none';});
+  const ft=$('fTenant'); if(ft){const fld=ft.closest('.field')||ft.parentElement; if(fld)fld.style.display='none';}
+}
+
+/* ===== init ===== */
+renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
+
+</script>
+<style>.side,.sidebar,.top,.topbar{display:none!important}.main{flex:1!important;width:100%!important;margin:0!important}html,body,.app{background:#F4F7FC!important;height:auto!important;min-height:100%!important}</style><style>.panel{animation:none!important}.panel.show{opacity:1!important;display:block!important}</style>
+<script>
+(function(){
+  function applyFocus(){
+    try{
+      var f=JSON.parse(localStorage.getItem("appro.billingFocus")||"null");
+      if(!f||(Date.now()-f.ts>60000))return;
+      localStorage.removeItem("appro.billingFocus");
+      // 1) Subscriptions moved to Subscription Management; land on Pricing & Catalog for price edits.
+      var subsTab=document.querySelector('[data-tab="config"]');
+      if(subsTab)subsTab.click();
+      // 2) Pick a real tenant (never "All tenants", or the edit form can't open):
+      //    match the focus tenant by name if possible, else the first tenant that
+      //    actually has a subscription — then open Edit on its existing subscription.
+      var targetTid=null, targetSubId=null;
+      try{
+        if(typeof state!=="undefined" && state.tenants && state.tenants.length){
+          var subsFor=function(id){return (state.subs||[]).filter(function(s){return s.tenantId===id;});};
+          var match=null;
+          if(f.tenant){ match=state.tenants.find(function(t){return t.name && String(t.name).toLowerCase()===String(f.tenant).toLowerCase();}); }
+          var pick=match || state.tenants.find(function(t){return subsFor(t.id).length;}) || state.tenants[0];
+          if(pick){ targetTid=pick.id; var ss=subsFor(pick.id); if(ss.length) targetSubId=ss[0].id; }
+        }
+      }catch(e){}
+      var st=document.getElementById("subTenant");
+      if(st && targetTid){ st.value=targetTid; }
+      // 3) Render for that tenant, open the Edit form, switch to "Custom for this tenant".
+      setTimeout(function(){
+        try{ if(typeof openAssign==="function") openAssign(targetSubId||"__new__"); }catch(e){}
+        setTimeout(function(){
+          try{ if(typeof setOvrMode==="function") setOvrMode(true); }catch(e){}
+          // 4) Bring the Edit form into view so the user lands right on it.
+          try{ var frm=document.querySelector(".subform.open"); if(frm) frm.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
+        },90);
+      },160);
+    }catch(e){}
+  }
+  if(document.readyState!=="loading")setTimeout(applyFocus,350);
+  else document.addEventListener("DOMContentLoaded",function(){setTimeout(applyFocus,350);});
+})();
+</script>
+</body>
+</html>

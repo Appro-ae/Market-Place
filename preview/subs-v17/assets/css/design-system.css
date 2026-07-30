@@ -1,0 +1,530 @@
+/* =========================================================================
+   Appro Design System
+   Color, type, spacing, radii, shadows for the Appro API Marketplace portals.
+   Reconstructed from the Appro Admin Console reference into editable source.
+
+   Fonts: Appro ships Gotham + Satoshi (commercial). Until licensed files land,
+   we fall back to Montserrat / Manrope / Lato / Inter / IBM Plex Mono, loaded
+   from Google Fonts via the <link> tags in each portal index.html.
+   ========================================================================= */
+
+:root {
+  /* ---------- Color: brand ------------------------------------------ */
+  --appro-blue:        #3B7EF6;   /* primary brand blue — CTAs, links, wordmark */
+  --appro-blue-600:    #2563EB;   /* hover */
+  --appro-blue-700:    #1D4ED8;   /* pressed */
+  --appro-blue-400:    #6196FA;
+  --appro-blue-300:    #C4D8FC;   /* tint — chip fill */
+  --appro-blue-100:    #E6F1F8;   /* panel tint */
+  --appro-blue-50:     #F6FCFF;   /* very pale panel */
+
+  --banking-blue:      #0072BC;   /* bank portal primary */
+  --banking-blue-dark: #005BAA;
+
+  --navy-900:          #0C1931;   /* hero background */
+  --navy-800:          #002444;
+  --navy-700:          #183262;
+  --navy-600:          #1A2D52;   /* mobile splash */
+  --navy-500:          #243046;
+  --navy-400:          #3D475A;
+
+  /* ---------- Color: neutral ---------------------------------------- */
+  --ink-900:           #0D0D0E;
+  --ink-800:           #1E1E1E;
+  --ink-700:           #262829;   /* primary body text */
+  --ink-600:           #404345;
+  --ink-500:           #73787B;   /* secondary text */
+  --ink-400:           #A6AAAC;
+  --ink-300:           #D9DADC;   /* divider / input border */
+  --ink-200:           #E7E8EA;
+  --ink-100:           #F1F2F4;   /* surface */
+  --ink-50:            #F2F3F3;
+  --white:             #FFFFFF;
+  --black:             #000000;
+
+  /* ---------- Color: semantic --------------------------------------- */
+  --success:           #00B27A;
+  --success-tint:      #E6F9F2;
+  --warning:           #EBBE00;
+  --warning-tint:      #FFF7D6;
+  --danger:            #E5484D;
+  --danger-tint:       #FDECEC;
+  --info:              #00AEEF;
+  --info-tint:         #E0F5FE;
+  --accent-lime:       #B3FF4C; /* card art only */
+
+  /* ---------- Status chips (admin portals) -------------------------- */
+  --status-success:    #00B27A;
+  --status-hold:       #EBBE00;
+  --status-error:      #E5484D;
+  --status-inprogress: #3B7EF6;
+  --status-processing: #7C3AED;
+
+  /* ---------- Typography -------------------------------------------- */
+  --font-display:  'Montserrat', 'Gotham', 'Helvetica Neue', Arial, sans-serif;  /* = Gotham */
+  --font-body:     'Montserrat', 'Gotham', 'Helvetica Neue', Arial, sans-serif;
+  --font-accent:   'Manrope', 'Satoshi', 'Montserrat', sans-serif;                /* = Satoshi */
+  --font-ui:       'Lato', 'Inter', system-ui, sans-serif;                        /* admin portals */
+  --font-mono:     'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+  --fw-bold:       700;
+
+  /* Type scale (fluid-ish, px) */
+  --fs-hero:       32px;
+  --fs-display:    28px;
+  --fs-h1:         24px;
+  --fs-h2:         20px;
+  --fs-h3:         18px;
+  --fs-h4:         16px;
+  --fs-body:       14px;
+  --fs-sm:         12px;
+  --fs-xs:         10px;
+
+  --lh-tight:      1.1;
+  --lh-snug:       1.25;
+  --lh-normal:     1.45;
+  --lh-loose:      1.6;
+
+  --tracking-hero: -0.02em;
+  --tracking-tight:-0.01em;
+  --tracking-normal:0;
+
+  /* ---------- Spacing ----------------------------------------------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+  --sp-6:  32px;
+  --sp-7:  40px;
+  --sp-8:  48px;
+  --sp-9:  64px;
+  --sp-10: 80px;
+  --sp-11: 120px;
+
+  /* ---------- Radii -------------------------------------------------- */
+  --r-1:   2px;   /* favicon */
+  --r-2:   4px;
+  --r-3:   8px;   /* input, chip */
+  --r-4:   12px;  /* card */
+  --r-5:   16px;  /* hero container */
+  --r-6:   24px;  /* mobile screen */
+  --r-pill:999px;
+
+  /* ---------- Shadows / elevation ----------------------------------- */
+  --sh-xs:     0 1px 2px rgba(0,0,0,0.04);
+  --sh-sm:     0 2px 6px rgba(0,0,0,0.06);
+  --sh-md:     0 8px 24px rgba(26,45,82,0.12);
+  --sh-lg:     0 16px 40px rgba(12,25,49,0.18);
+  --sh-focus:  0 0 0 3px rgba(59,126,246,0.25);
+  --sh-card-emboss: 0 1.779px 3.558px rgba(0,0,0,0.25); /* credit-card art */
+
+  /* ---------- Borders ------------------------------------------------ */
+  --bd-hairline:   1px solid var(--ink-100);
+  --bd-subtle:     1px solid var(--ink-200);
+  --bd-input:      1px solid var(--ink-300);
+  --bd-focus:      1.5px solid var(--appro-blue);
+
+  /* ---------- Motion ------------------------------------------------- */
+  --ease-out-cubic: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:   120ms;
+  --dur-base:   200ms;
+  --dur-slow:   400ms;
+}
+
+/* ==========================================================================
+   Base / element reset
+   ========================================================================== */
+html, body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  color: var(--ink-700);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+
+/* ==========================================================================
+   Semantic type
+   ========================================================================== */
+.appro-hero, h1.hero {
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-hero);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-hero);
+  color: var(--ink-900);
+}
+.appro-hero em { font-style: italic; font-weight: var(--fw-bold); }
+
+h1, .h1 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink-900);
+}
+h2, .h2 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  color: var(--ink-900);
+}
+h3, .h3 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h3);
+  color: var(--ink-800);
+}
+h4, .h4 {
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-h4);
+  color: var(--ink-800);
+}
+p, .body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--ink-700);
+}
+.small, small {
+  font-size: var(--fs-sm);
+  color: var(--ink-500);
+}
+.mono { font-family: var(--font-mono); letter-spacing: 0.02em; }
+.ui   { font-family: var(--font-ui); }
+.accent { font-family: var(--font-accent); }
+a {
+  color: var(--appro-blue);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out-cubic);
+}
+a:hover { color: var(--appro-blue-600); text-decoration: underline; }
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-body);
+  line-height: 1;
+  border-radius: var(--r-pill);
+  border: 0;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out-cubic),
+              transform var(--dur-fast) var(--ease-out-cubic),
+              box-shadow var(--dur-fast) var(--ease-out-cubic);
+}
+.btn-primary   { background: var(--appro-blue); color: var(--white); }
+.btn-primary:hover   { background: var(--appro-blue-600); box-shadow: var(--sh-md); }
+.btn-primary:active  { background: var(--appro-blue-700); transform: scale(0.98); }
+.btn-primary:disabled{ background: var(--ink-200); color: var(--ink-500); cursor: not-allowed; }
+
+.btn-secondary { background: var(--white); color: var(--appro-blue); border: var(--bd-focus); }
+.btn-secondary:hover { background: var(--appro-blue-50); }
+
+.btn-ghost     { background: transparent; color: var(--ink-700); }
+.btn-ghost:hover { background: var(--ink-100); }
+
+.btn-sm { padding: 8px 14px; font-size: var(--fs-sm); }
+.btn-lg { padding: 16px 28px; font-size: var(--fs-h4); }
+
+/* ==========================================================================
+   Cards / surfaces
+   ========================================================================== */
+.card {
+  background: var(--white);
+  border: var(--bd-hairline);
+  border-radius: var(--r-4);
+  box-shadow: var(--sh-sm);
+  padding: var(--sp-5);
+}
+.card-elevated { box-shadow: var(--sh-md); }
+
+/* ==========================================================================
+   Form inputs
+   ========================================================================== */
+.input {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--ink-700);
+  background: var(--white);
+  border: var(--bd-input);
+  border-radius: var(--r-3);
+  transition: border-color var(--dur-fast) var(--ease-out-cubic),
+              box-shadow var(--dur-fast) var(--ease-out-cubic);
+}
+.input:focus { outline: none; border-color: var(--appro-blue); box-shadow: var(--sh-focus); }
+.input::placeholder { color: var(--ink-500); }
+
+/* ==========================================================================
+   Chips / pills
+   ========================================================================== */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  background: var(--appro-blue-100);
+  color: var(--appro-blue);
+}
+.chip-neutral { background: var(--ink-100); color: var(--ink-700); }
+.chip-success { background: var(--success-tint); color: var(--success); }
+.chip-warning { background: var(--warning-tint); color: #8a6d00; }
+.chip-danger  { background: var(--danger-tint);  color: var(--danger); }
+.chip-info    { background: var(--info-tint);    color: var(--info); }
+
+/* ==========================================================================
+   Status badges (admin portals) — small pill w/ leading dot
+   Extracted from Super-Admin / Intelligence-hub frames.
+   ========================================================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+.badge::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor;
+}
+.badge-success    { background: var(--success-tint); color: var(--success); }
+.badge-hold       { background: var(--warning-tint); color: #8a6d00; }
+.badge-error      { background: var(--danger-tint);  color: var(--danger); }
+.badge-inprogress { background: var(--info-tint);    color: var(--info); }
+.badge-processing { background: #F5EBFF;            color: var(--status-processing); }
+.badge-neutral    { background: var(--ink-100);      color: var(--ink-600); }
+
+/* ==========================================================================
+   Form field — label + input + helper / error
+   ========================================================================== */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--navy-500);
+}
+.field-label .req { color: var(--danger); margin-left: 2px; }
+.field-helper { font-family: var(--font-ui); font-size: var(--fs-sm); color: var(--ink-500); }
+.field-error  { font-family: var(--font-ui); font-size: var(--fs-sm); color: var(--danger); }
+.input-error { border-color: var(--danger); }
+.input-error:focus { box-shadow: 0 0 0 3px rgba(229,72,77,0.2); }
+.input-disabled,
+.input:disabled { background: var(--ink-100); color: var(--ink-500); cursor: not-allowed; }
+
+/* ==========================================================================
+   Selection controls — checkbox, radio, toggle (visual only; JS toggles .is-checked)
+   ========================================================================== */
+.check, .radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--ink-300);
+  background: var(--white);
+  cursor: pointer;
+  display: inline-grid; place-content: center;
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.check { border-radius: 4px; }
+.radio { border-radius: 50%; }
+.check:checked, .radio:checked { border-color: var(--appro-blue); background: var(--appro-blue); }
+.check:checked::after {
+  content: ""; width: 10px; height: 6px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px,-1px);
+}
+.radio:checked::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+.toggle {
+  appearance: none; -webkit-appearance: none;
+  width: 36px; height: 20px; border-radius: 999px;
+  background: var(--ink-300); position: relative; cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.toggle::after {
+  content: ""; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; box-shadow: var(--sh-xs);
+  transition: transform var(--dur-fast) var(--ease-out-cubic);
+}
+.toggle:checked { background: var(--appro-blue); }
+.toggle:checked::after { transform: translateX(16px); }
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  background: var(--white);
+}
+.table thead th {
+  text-align: left;
+  padding: 12px 16px;
+  background: var(--appro-blue-50);
+  color: var(--navy-500);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--ink-200);
+}
+.table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ink-100);
+  color: var(--ink-700);
+  vertical-align: middle;
+}
+.table tbody tr:hover { background: var(--appro-blue-50); }
+.table tbody tr:last-child td { border-bottom: 0; }
+
+/* ==========================================================================
+   Tabs
+   ========================================================================== */
+.tabs {
+  display: inline-flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--ink-200);
+}
+.tab {
+  padding: 12px 18px;
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--ink-500);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+.tab:hover { color: var(--ink-700); }
+.tab.is-active { color: var(--appro-blue); border-bottom-color: var(--appro-blue); }
+
+/* Pill tabs (card-style container) */
+.tabs-pill {
+  display: inline-flex;
+  gap: 4px;
+  background: var(--ink-100);
+  padding: 4px;
+  border-radius: var(--r-3);
+}
+.tabs-pill .tab {
+  border-radius: var(--r-2);
+  border-bottom: 0;
+  margin: 0;
+  padding: 8px 14px;
+  font-size: var(--fs-sm);
+}
+.tabs-pill .tab.is-active {
+  background: var(--white); color: var(--ink-900); box-shadow: var(--sh-xs);
+}
+
+/* ==========================================================================
+   Toasts / alerts
+   ========================================================================== */
+.alert {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--r-3);
+  border: 1px solid transparent;
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+}
+.alert .alert-icon { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 1px; }
+.alert .alert-title { font-weight: var(--fw-semibold); color: var(--ink-900); }
+.alert .alert-body  { color: var(--ink-600); font-size: var(--fs-sm); }
+.alert-success { background: var(--success-tint); border-color: rgba(0,178,122,0.25); }
+.alert-warning { background: var(--warning-tint); border-color: rgba(235,190,0,0.3); }
+.alert-danger  { background: var(--danger-tint);  border-color: rgba(229,72,77,0.25); }
+.alert-info    { background: var(--info-tint);    border-color: rgba(0,174,239,0.25); }
+
+/* ==========================================================================
+   Skeleton loader
+   ========================================================================== */
+@keyframes skeleton-shimmer { 0%{background-position:-200px 0} 100%{background-position:200px 0} }
+.skeleton {
+  background: linear-gradient(90deg, var(--ink-100) 0%, var(--ink-200) 50%, var(--ink-100) 100%);
+  background-size: 400px 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+  border-radius: var(--r-2);
+  display: inline-block;
+}
+.skeleton-line { height: 12px; border-radius: 6px; width: 100%; }
+.skeleton-line-sm { height: 10px; }
+.skeleton-circle { border-radius: 50%; }
+
+/* ==========================================================================
+   Avatar
+   ========================================================================== */
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--appro-blue-100);
+  color: var(--appro-blue);
+  font-family: var(--font-ui);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  flex-shrink: 0;
+}
+.avatar-sm { width: 28px; height: 28px; font-size: 11px; }
+.avatar-lg { width: 48px; height: 48px; font-size: var(--fs-h4); }
+
+/* ==========================================================================
+   Empty state
+   ========================================================================== */
+.empty {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 48px 24px; gap: 12px;
+  color: var(--ink-500);
+}
+.empty-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--ink-100);
+  display: grid; place-content: center;
+  color: var(--ink-400);
+}
+.empty-title { font-family: var(--font-body); font-size: var(--fs-h4); font-weight: var(--fw-semibold); color: var(--ink-800); }
+.empty-body  { font-size: var(--fs-sm); max-width: 320px; }
+
+/* ===== App layout / global element styles ===== */
+  body { margin: 0; background: var(--ink-100); font-family: var(--font-ui); color: var(--ink-700); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4 { font-family: var(--font-display); letter-spacing: -0.01em; font-weight: 600; color: var(--ink-800); }
+  .layout { display: flex; min-height: 100vh; }
+  main { flex: 1; min-width: 0; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+  @keyframes spin { to { transform: rotate(360deg) } }
+  .toggle { -webkit-appearance:none; appearance:none; width:38px; height:22px; border-radius:999px; background:var(--ink-300); position:relative; cursor:pointer; transition:.2s; flex-shrink:0; }
+  .toggle:checked { background: var(--appro-blue); }
+  .toggle::after { content:''; position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:.2s; }
+  .toggle:checked::after { transform: translateX(16px); }
+  ::-webkit-scrollbar { width:8px; height:8px; } ::-webkit-scrollbar-thumb { background:var(--ink-300); border-radius:4px; }
