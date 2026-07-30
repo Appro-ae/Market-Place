@@ -67,9 +67,14 @@
 
   .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;padding:3px 10px 3px 8px;border-radius:999px}
   .pill .dt{width:6px;height:6px;border-radius:50%}
-  /* Status pills — monochrome (no colour); one neutral treatment for every status. */
-  .pill{background:#EEF1F6;color:var(--navy);border:1px solid var(--line)}
-  .pill .dt{display:none}
+  .pill.Pending{background:var(--amber-bg);color:var(--amber-tx)}.pill.Pending .dt{background:var(--amber)}
+  .pill.Active{background:var(--ok-bg);color:var(--ok-tx)}.pill.Active .dt{background:var(--ok)}
+  .pill.Provisioning{background:var(--soft);color:var(--brand)}.pill.Provisioning .dt{background:var(--brand)}
+  .pill.Failed{background:var(--off-bg);color:var(--off-tx)}.pill.Failed .dt{background:var(--off)}
+  .pill.Rejected{background:var(--off-bg);color:var(--off-tx)}.pill.Rejected .dt{background:var(--off)}
+  .pill.Cancelled{background:var(--grey-bg);color:var(--grey-tx)}.pill.Cancelled .dt{background:var(--grey)}
+  .pill.Scheduled{background:var(--amber-bg);color:var(--amber-tx)}.pill.Scheduled .dt{background:var(--amber)}
+  .pill.Cancelling{background:var(--grey-bg);color:var(--grey-tx)}.pill.Cancelling .dt{background:var(--grey)}
   .spin{width:10px;height:10px;border:2px solid #C9D6FF;border-top-color:var(--brand);border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
   @keyframes sp{to{transform:rotate(360deg)}}
 
@@ -156,7 +161,7 @@
   <div class="lh">
     <div>
       <div class="ti">Subscription Management</div>
-      <div class="sub">Govern the subscription lifecycle — review and approve requests, control outbound data exposure, and manage active subscriptions. A separate module from Billing.</div>
+      <div class="sub">Govern the subscription lifecycle — review and approve requests, control outbound data exposure, and manage provisioning. A separate module from Billing.</div>
     </div>
     <span class="rolechip">Role · Subscriptions (excl. billing)</span>
   </div>
@@ -169,7 +174,7 @@
 
   <div class="seg">
     <button class="chip on" data-tab="req" onclick="switchTab('req')">Requests</button>
-    <button class="chip" data-tab="life" onclick="switchTab('life')">Subscriptions</button>
+    <button class="chip" data-tab="life" onclick="switchTab('life')">Active subscriptions</button>
   </div>
 
   <!-- REQUESTS -->
@@ -212,7 +217,7 @@ function dt(s){return new Date(s);}
 function fmtDate(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function fmtTime(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function daysAgo(d){return Math.floor((Date.now()-d.getTime())/864e5);}
-function statusLabel(st){return {Scheduled:'Grace period',Cancelling:'Grace period',Provisioning:'Pending',Failed:'Pending'}[st]||st;}
+function statusLabel(st){return {Scheduled:'Scheduled to cancel',Cancelling:'Cancelling'}[st]||st;}
 
 /* products: outbound fields are THIS module's concern. Pricing is NOT here — only a priceRef label resolved from Billing. */
 var PRODUCTS={
@@ -286,11 +291,11 @@ function refreshLive(){var base=REQUESTS.filter(function(r){return !r.live;});RE
 var SUBS=[
   {id:"sub_900",tid:"tnt_8f3a2c",tenant:"CITI NA UAE",pid:"eiv",priceRef:pref('cust','Package 2'),status:"Active",approvedAt:"2026-03-02T10:00:00",approvedBy:"k.menon@appro.ae",fields:flds("eiv",{}),audit:[{t:"2026-03-02T10:00:00",by:"k.menon@appro.ae",txt:"Approved · provisioned · 4/4 fields enabled"}]},
   {id:"sub_812",tid:"tnt_3b91de",tenant:"Reem Finance",pid:"gdi",priceRef:pref('cat','Per transaction'),status:"Scheduled",approvedAt:"2026-01-15T13:20:00",approvedBy:"k.menon@appro.ae",scheduledAt:"2026-06-20T11:00:00",scheduledBy:"k.menon@appro.ae",effectiveCancelAt:"2026-09-30T00:00:00",cancelReason:"Tenant consolidating to a single identity provider at quarter-end.",fields:flds("gdi",{nat:false}),audit:[{t:"2026-01-15T13:20:00",by:"k.menon@appro.ae",txt:"Approved · 3/4 fields enabled (Nationality off)"},{t:"2026-06-20T11:00:00",by:"k.menon@appro.ae",txt:"Cancellation scheduled for 30 Sep 2026 — remains active and billable until then; settlement as of that date."}]},
-  {id:"sub_840",tid:"tnt_a7c40f",tenant:"Mashreq NEO",pid:"cs",priceRef:pref('cat','Package 2'),status:"Pending",approvedAt:"2026-06-27T16:10:00",approvedBy:ME,fields:flds("cs",{}),audit:[{t:"2026-06-27T16:10:00",by:ME,txt:"Approved · awaiting tenant confirmation"}]},
+  {id:"sub_840",tid:"tnt_a7c40f",tenant:"Mashreq NEO",pid:"cs",priceRef:pref('cat','Package 2'),status:"Failed",approvedAt:"2026-06-27T16:10:00",approvedBy:ME,fields:flds("cs",{}),audit:[{t:"2026-06-27T16:10:00",by:ME,txt:"Approved · provisioning started"},{t:"2026-06-27T16:12:00",by:"system",txt:"Provisioning failed — service account ACL error"}]},
   {id:"sub_777",tid:"tnt_a7c40f",tenant:"Mashreq NEO",pid:"gds",priceRef:pref('cat','Per transaction'),status:"Cancelled",approvedAt:"2025-11-01T09:00:00",approvedBy:"k.menon@appro.ae",cancelledAt:"2026-05-10T16:30:00",cancelledBy:"k.menon@appro.ae",cancelReason:"Customer migrated to in-house signing.",fields:flds("gds",{}),audit:[{t:"2025-11-01T09:00:00",by:"k.menon@appro.ae",txt:"Approved"},{t:"2026-05-10T16:30:00",by:"k.menon@appro.ae",txt:"Cancelled — Customer migrated to in-house signing."}]}
 ];
 
-function switchTab(t){document.querySelectorAll('.seg .chip').forEach(function(c){c.classList.toggle('on',c.dataset.tab===t);});document.getElementById('tab-req').style.display=t==='req'?'block':'none';document.getElementById('tab-life').style.display=t==='life'?'block':'none';if(t==='life'){fillLifeTenant();renderLife();}}
+function switchTab(t){document.querySelectorAll('.seg .chip').forEach(function(c){c.classList.toggle('on',c.dataset.tab===t);});document.getElementById('tab-req').style.display=t==='req'?'block':'none';document.getElementById('tab-life').style.display=t==='life'?'block':'none';if(t==='life')renderLife();}
 
 /* ---- REQUESTS ---- */
 function fillFilters(){var fp=document.getElementById('fProd');fp.innerHTML='<option value="">All products</option>';Object.keys(PRODUCTS).forEach(function(p){var o=document.createElement('option');o.value=p;o.textContent=PRODUCTS[p].name;fp.appendChild(o);});var fc=document.getElementById('fCust');fc.innerHTML='<option value="">All tenants</option>';var seen={};REQUESTS.forEach(function(r){if(!seen[r.tid]){seen[r.tid]=1;var o=document.createElement('option');o.value=r.tid;o.textContent=r.tenant;fc.appendChild(o);}});}
@@ -302,8 +307,8 @@ function renderReq(){
   document.getElementById('reqKpis').innerHTML=[
     ['Pending review',REQUESTS.length,'awaiting action'],
     ['Oldest in queue',oldest+'d','SLA target 2d'],
-    ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live'],
-    ['Grace period',SUBS.filter(function(s){return s.status==='Scheduled'||s.status==='Cancelling';}).length,'ending soon']
+    ['Provisioning',SUBS.filter(function(s){return s.status==='Provisioning';}).length,'in flight'],
+    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'need retry']
   ].map(function(k){return '<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
   document.getElementById('reqCount').textContent=rows.length+' shown';
   var tb=document.getElementById('reqBody');
@@ -367,10 +372,10 @@ function doApprove(id){
   var r=REQUESTS.filter(function(x){return x.id===id;})[0];REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});
   if(r&&r.live)markLive(r.id,'approved');   // flip the tenant's catalogue button to green "Subscribe"
   var enabled=DRAFT.fields.filter(function(f){return f.on;}).length;
-  var sub={id:'sub_'+Math.floor(Math.random()*900+100),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,pkgs:DRAFT.pkgs.slice(),status:'Active',approvedAt:new Date().toISOString(),approvedBy:ME,fields:DRAFT.fields.map(function(f){return {id:f.id,name:f.name,k:f.k,mand:f.mand,on:f.on};}),audit:[{t:new Date().toISOString(),by:ME,txt:'Approved · '+DRAFT.pkgs.length+' package(s): '+DRAFT.pkgs.join(', ')+' · '+enabled+'/'+DRAFT.fields.length+' fields · now Active'}]};
+  var sub={id:'sub_'+Math.floor(Math.random()*900+100),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,pkgs:DRAFT.pkgs.slice(),status:'Provisioning',approvedAt:new Date().toISOString(),approvedBy:ME,fields:DRAFT.fields.map(function(f){return {id:f.id,name:f.name,k:f.k,mand:f.mand,on:f.on};}),audit:[{t:new Date().toISOString(),by:ME,txt:'Approved · '+DRAFT.pkgs.length+' package(s): '+DRAFT.pkgs.join(', ')+' · '+enabled+'/'+DRAFT.fields.length+' fields · provisioning started'}]};
   SUBS.push(sub);closeDrawer();renderReq();fillLifeTenant();
-  toast('Approved · subscription is now Active');
-  if(document.getElementById('tab-life').style.display!=='none')renderLife();
+  toast('Approved · provisioning pipeline triggered (async)');
+  setTimeout(function(){sub.status='Active';sub.audit.push({t:new Date().toISOString(),by:'system',txt:'Provisioning complete · now Active'});renderReq();if(document.getElementById('tab-life').style.display!=='none')renderLife();toast(r.tenant+' · '+PRODUCTS[r.pid].name+' is now Active');},1600);
 }
 function doReject(id){
   openModal('Reject request','The tenant is notified with the reason. No provisioning is triggered.',
@@ -379,17 +384,17 @@ function doReject(id){
 }
 
 /* ---- LIFECYCLE ---- */
-function fillLifeTenant(){var sel=document.getElementById('lifeTenant'),cur=sel.value,seen={},opts='<option value="">All tenants · overview</option>';SUBS.forEach(function(s){if(!seen[s.tid]){seen[s.tid]=1;opts+='<option value="'+s.tid+'">'+s.tenant+' ('+s.tid+')</option>';}});sel.innerHTML=opts;if(cur)sel.value=cur;}
+function fillLifeTenant(){var sel=document.getElementById('lifeTenant'),cur=sel.value,seen={},opts='';SUBS.forEach(function(s){if(!seen[s.tid]){seen[s.tid]=1;opts+='<option value="'+s.tid+'">'+s.tenant+' ('+s.tid+')</option>';}});sel.innerHTML=opts;if(cur)sel.value=cur;}
 function renderLife(){
-  var tid=document.getElementById('lifeTenant').value,list=tid?SUBS.filter(function(s){return s.tid===tid;}):SUBS.slice();
-  var act=list.filter(function(s){return s.status==='Active'||s.status==='Scheduled';}).length,sch=list.filter(function(s){return s.status==='Scheduled'||s.status==='Cancelling';}).length;
-  document.getElementById('lifeMeta').textContent=act+' active'+(sch?' ('+sch+' in grace period)':'')+' · '+list.length+' total';
+  var tid=document.getElementById('lifeTenant').value,list=SUBS.filter(function(s){return s.tid===tid;});
+  var act=list.filter(function(s){return s.status==='Active'||s.status==='Scheduled';}).length,sch=list.filter(function(s){return s.status==='Scheduled';}).length;
+  document.getElementById('lifeMeta').textContent=act+' active'+(sch?' ('+sch+' scheduled to cancel)':'')+' · '+list.length+' total';
   var box=document.getElementById('lifeBody');
   if(!list.length){box.innerHTML='<div class="card"><div class="empty">No subscriptions for this tenant.</div></div>';return;}
   box.innerHTML=list.map(function(s){var p=PRODUCTS[s.pid],en=s.fields.filter(function(f){return f.on;}).length;
     return '<div class="subcard"><div class="subhead" onclick="toggleSub(\''+s.id+'\')">'
-      +'<div><div class="pn">'+p.name+(tid?'':' <span class="tid" style="font-weight:600">· '+s.tenant+'</span>')+'</div><div class="meta">'+prTag(s.priceRef)+' · '+en+'/'+s.fields.length+' fields</div></div>'
-      +'<div class="pr"><span class="pill '+s.status+'"><span class="dt"></span>'+statusLabel(s.status)+'</span></div>'
+      +'<div><div class="pn">'+p.name+'</div><div class="meta">'+prTag(s.priceRef)+' · '+en+'/'+s.fields.length+' fields</div></div>'
+      +'<div class="pr"><span class="pill '+s.status+'"><span class="dt"></span>'+((s.status==='Provisioning'||s.status==='Cancelling')?'<span class="spin"></span>':'')+statusLabel(s.status)+'</span></div>'
       +'<span class="caret" id="car_'+s.id+'">&#9656;</span></div>'
       +'<div class="subbody" id="body_'+s.id+'">'+subBody(s)+'</div></div>';}).join('');
 }
@@ -402,10 +407,10 @@ function subBody(s){
     fields+='<label class="fchk'+(ed?'':' lk')+'"'+(ed?' onclick="lifeTf(\''+s.id+'\','+i+')"':'')+'><span class="cbx'+(f.on?' on':'')+(ed?'':' lock')+'"></span><span class="fn">'+f.name+'</span><span class="fk">'+f.k+'</span></label>';
   });
   var audit=s.audit.slice().reverse().map(function(a){return '<div class="ev"><span class="ed"></span><div><b>'+a.by+'</b> — '+a.txt+'</div><time>'+fmtTime(dt(a.t))+'</time></div>';}).join('');
-  var fail='';
+  var fail=s.status==='Failed'?'<div class="failnote">Provisioning failed — service account / ACL error.<button class="btn primary sm" onclick="retry(\''+s.id+'\')">Retry provisioning</button></div>':'';
   var cancelNote=s.status==='Cancelled'?'<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancelled '+fmtDate(dt(s.cancelledAt))+' — '+s.cancelReason+' · Settled to '+fmtDate(dt(s.effectiveCancelAt||s.cancelledAt))+' · A new request is required to re-subscribe.</div>':'';
-  var schedNote=s.status==='Scheduled'?'<div class="schednote"><b>Grace period</b> — scheduled for cancellation on <b>'+fmtDate(dt(s.effectiveCancelAt))+'</b> — remains active &amp; billable until then. Settlement is calculated as of that date; committed / licence terms follow the contract.<div class="snbtns"><button class="btn ghost sm" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger sm" onclick="cancelNow(\''+s.id+'\')">Cancel now instead</button><button class="btn primary sm" onclick="runScheduled(\''+s.id+'\')">&#9654; Run on date (demo)</button></div></div>':'';
-  var cancelling=s.status==='Cancelling'?'<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)"><b>Grace period</b> — cancellation in progress; access is retained until '+fmtDate(dt(s.effectiveCancelAt))+', then the subscription is cancelled.</div>':'';
+  var schedNote=s.status==='Scheduled'?'<div class="schednote">Scheduled for cancellation on <b>'+fmtDate(dt(s.effectiveCancelAt))+'</b> — remains active &amp; billable until then. Settlement is calculated as of that date; committed / licence terms follow the contract.<div class="snbtns"><button class="btn ghost sm" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger sm" onclick="cancelNow(\''+s.id+'\')">Cancel now instead</button><button class="btn primary sm" onclick="runScheduled(\''+s.id+'\')">&#9654; Run on date (demo)</button></div></div>':'';
+  var cancelling=s.status==='Cancelling'?'<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancellation in progress — deprovision within 24h. Billing settled to '+fmtDate(dt(s.effectiveCancelAt))+'. <span class="spin"></span></div>':'';
   return '<div class="gridcfg">'
     +'<div><div class="seclbl">Pricing</div>'+pkgOptions(s.pid,s.priceRef.label)+'<div class="vhint" style="margin-top:2px">All configured packages · current in highlight. View only · owned by Billing.</div></div>'
     +'<div><div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+fields+'</div></div></div>'
