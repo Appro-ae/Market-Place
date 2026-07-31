@@ -300,11 +300,20 @@ function listTabMatch(it){
   if(listTab==='active')return it.kind==='sub'&&(it.status==='Active'||it.status==='Scheduled');
   return true;
 }
+/* Status filter options adapt to the active tab */
+var STATUS_OPTS={all:['Pending','Active','Scheduled','Failed','Cancelled','Rejected'],pending:['Pending'],active:['Active','Scheduled']};
+function fillStatusFilter(){
+  var sel=document.getElementById('fStatus'); if(!sel)return;
+  var prev=sel.value, opts=STATUS_OPTS[listTab]||STATUS_OPTS.all;
+  sel.innerHTML='<option value="">All statuses</option>'+opts.map(function(s){return '<option value="'+s+'">'+statusLabel(s)+'</option>';}).join('');
+  sel.value=(opts.indexOf(prev)>=0)?prev:'';
+}
 function setListTab(t){
   listTab=t;
   document.querySelectorAll('.seg .chip[data-ltab]').forEach(function(c){c.classList.toggle('on',c.dataset.ltab===t);});
   var el=document.getElementById('listTitle');
   if(el)el.firstChild.textContent=(LTAB_TITLE[t]||'All requests & subscriptions')+' ';
+  fillStatusFilter();
   renderList();
 }
 function renderList(){
@@ -474,7 +483,7 @@ function closeModal(){document.getElementById('mscrim').classList.remove('on');M
 var TT;function toast(m){var t=document.getElementById('toast');t.innerHTML=m;t.classList.add('on');clearTimeout(TT);TT=setTimeout(function(){t.classList.remove('on');},2600);}
 
 REQUESTS=loadLiveRequests().concat(REQUESTS);
-fillFilters();renderReq();fillLifeTenant();
+fillFilters();fillStatusFilter();renderReq();fillLifeTenant();
 window.addEventListener('storage',function(e){if(!e||e.key===LIVE_KEY||e.key===null)refreshLive();});
 </script>
 </body>

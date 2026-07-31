@@ -807,7 +807,7 @@ function pricingChip(d){
   if(!d.prod.active)return {cls:'off',label:'Product off',ended:false};
   if(d.status==='Active')return {cls:'ok',label:'In effect',ended:false};
   if(d.status==='Pending')return {cls:'pending',label:'Pending',ended:false};
-  return {cls:'off',label:'Ended',ended:true}; /* Cancelled / Rejected */
+  return {cls:'off',label:'Closed',ended:true}; /* Cancelled / Rejected */
 }
 function pricingRank(d){
   if(!d.prod.active)return 1;
