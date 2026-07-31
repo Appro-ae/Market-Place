@@ -70,7 +70,6 @@
   .pill.Pending{background:var(--amber-bg);color:var(--amber-tx)}.pill.Pending .dt{background:var(--amber)}
   .pill.Active{background:var(--ok-bg);color:var(--ok-tx)}.pill.Active .dt{background:var(--ok)}
   .pill.Provisioning{background:var(--soft);color:var(--brand)}.pill.Provisioning .dt{background:var(--brand)}
-  .pill.Failed{background:var(--off-bg);color:var(--off-tx)}.pill.Failed .dt{background:var(--off)}
   .pill.Rejected{background:var(--off-bg);color:var(--off-tx)}.pill.Rejected .dt{background:var(--off)}
   .pill.Cancelled{background:var(--grey-bg);color:var(--grey-tx)}.pill.Cancelled .dt{background:var(--grey)}
   .pill.Scheduled{background:var(--amber-bg);color:var(--amber-tx)}.pill.Scheduled .dt{background:var(--amber)}
@@ -174,7 +173,7 @@
       <button class="chip" data-ltab="active" onclick="setListTab('active')">Active requests</button>
     </div>
     <div class="toolbar">
-      <select class="sel" id="fStatus" onchange="renderList()"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Active">Active</option><option value="Scheduled">Scheduled to cancel</option><option value="Failed">Failed</option><option value="Cancelled">Cancelled</option><option value="Rejected">Rejected</option></select>
+      <select class="sel" id="fStatus" onchange="renderList()"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Active">Active</option><option value="Scheduled">Scheduled to cancel</option><option value="Cancelled">Cancelled</option><option value="Rejected">Rejected</option></select>
       <select class="sel" id="fProd" onchange="renderList()"><option value="">All products</option></select>
       <select class="sel" id="fCust" onchange="renderList()"><option value="">All tenants</option></select>
     </div>
@@ -275,7 +274,6 @@ function refreshLive(){var base=REQUESTS.filter(function(r){return !r.live;});RE
 var SUBS=[
   {id:"sub_900",tid:"tnt_8f3a2c",tenant:"CITI NA UAE",pid:"eiv",priceRef:pref('cust','Package 2'),status:"Active",approvedAt:"2026-03-02T10:00:00",approvedBy:"k.menon@appro.ae",fields:flds("eiv",{}),audit:[{t:"2026-03-02T10:00:00",by:"k.menon@appro.ae",txt:"Approved · provisioned · 4/4 fields enabled"}]},
   {id:"sub_812",tid:"tnt_3b91de",tenant:"Reem Finance",pid:"gdi",priceRef:pref('cat','Per transaction'),status:"Scheduled",approvedAt:"2026-01-15T13:20:00",approvedBy:"k.menon@appro.ae",scheduledAt:"2026-06-20T11:00:00",scheduledBy:"k.menon@appro.ae",effectiveCancelAt:"2026-09-30T00:00:00",cancelReason:"Tenant consolidating to a single identity provider at quarter-end.",fields:flds("gdi",{nat:false}),audit:[{t:"2026-01-15T13:20:00",by:"k.menon@appro.ae",txt:"Approved · 3/4 fields enabled (Nationality off)"},{t:"2026-06-20T11:00:00",by:"k.menon@appro.ae",txt:"Cancellation scheduled for 30 Sep 2026 — remains active and billable until then; settlement as of that date."}]},
-  {id:"sub_840",tid:"tnt_a7c40f",tenant:"Mashreq NEO",pid:"cs",priceRef:pref('cat','Package 2'),status:"Failed",approvedAt:"2026-06-27T16:10:00",approvedBy:ME,fields:flds("cs",{}),audit:[{t:"2026-06-27T16:10:00",by:ME,txt:"Approved · provisioning started"},{t:"2026-06-27T16:12:00",by:"system",txt:"Provisioning failed — service account ACL error"}]},
   {id:"sub_777",tid:"tnt_a7c40f",tenant:"Mashreq NEO",pid:"gds",priceRef:pref('cat','Per transaction'),status:"Cancelled",approvedAt:"2025-11-01T09:00:00",approvedBy:"k.menon@appro.ae",cancelledAt:"2026-05-10T16:30:00",cancelledBy:"k.menon@appro.ae",cancelReason:"Customer migrated to in-house signing.",fields:flds("gds",{}),audit:[{t:"2025-11-01T09:00:00",by:"k.menon@appro.ae",txt:"Approved"},{t:"2026-05-10T16:30:00",by:"k.menon@appro.ae",txt:"Cancelled — Customer migrated to in-house signing."}]}
 ];
 
@@ -291,7 +289,7 @@ function listItems(){
   SUBS.forEach(function(s){out.push({kind:'sub',id:s.id,tid:s.tid,tenant:s.tenant,pid:s.pid,priceRef:s.priceRef,status:s.status,date:s.approvedAt});});
   return out;
 }
-var STATUS_ORDER={Pending:0,Failed:1,Provisioning:2,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
+var STATUS_ORDER={Pending:0,Provisioning:2,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
 /* Sub-tabs: All / Pending request / Active requests */
 var listTab='all';
 var LTAB_TITLE={all:'All requests & subscriptions',pending:'Pending requests',active:'Active requests'};
@@ -301,7 +299,7 @@ function listTabMatch(it){
   return true;
 }
 /* Status filter options adapt to the active tab */
-var STATUS_OPTS={all:['Pending','Active','Scheduled','Failed','Cancelled','Rejected'],pending:['Pending'],active:['Active','Scheduled']};
+var STATUS_OPTS={all:['Pending','Active','Scheduled','Cancelled','Rejected'],pending:['Pending'],active:['Active','Scheduled']};
 function fillStatusFilter(){
   var sel=document.getElementById('fStatus'); if(!sel)return;
   var prev=sel.value, opts=STATUS_OPTS[listTab]||STATUS_OPTS.all;
@@ -323,8 +321,7 @@ function renderList(){
   document.getElementById('listKpis').innerHTML=[
     ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action','amber-tx','amber'],
     ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions','ok-tx','ok'],
-    ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon','amber-tx','amber'],
-    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'provisioning failed','off-tx','off']
+    ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon','amber-tx','amber']
   ].map(function(k){return '<div class="kpi" style="border-top:3px solid var(--'+k[4]+')"><div class="l">'+k[0]+'</div><div class="v" style="color:var(--'+k[3]+')">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
   document.getElementById('listCount').textContent=rows.length+' shown';
   var tb=document.getElementById('listBody');
@@ -383,7 +380,7 @@ function customPriceFor(tid,pid){
     if(c&&c.summary&&c.summary!=='catalog'&&(Date.now()-c.ts<86400000))return c; }catch(e){}
   return null;
 }
-function priceBlock(pid,priceRef,tid,tenant){
+function priceBlock(pid,priceRef,tid,tenant,locked){
   var custom=customPriceFor(tid,pid);
   var isCust=!!custom||priceRef.src==='cust';
   var tag=isCust
@@ -392,8 +389,13 @@ function priceBlock(pid,priceRef,tid,tenant){
   var detail=custom
     ? 'Custom for this tenant · '+custom.summary
     : pkgDetail(pid,priceRef.label);
+  /* Customize is available only while the price is still being decided (a Pending request).
+     Once the subscription is live/closed the price is locked — no Customize / Edit. */
+  var action=locked
+    ? '<span class="pricelock" style="margin-left:auto;font-size:11px;font-weight:700;color:var(--muted,#7a8aa0);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:0 0 auto">🔒 Locked while active</span>'
+    : '<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizeRedirect(\''+tid+'\',\''+String(tenant).replace(/\x27/g,"")+'\',\''+pid+'\')">Customized ↗</button>';
   return '<div class="seclbl" style="align-items:center">Pricing <span class="owned">BILLING</span>'
-    +'<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizeRedirect(\''+tid+'\',\''+String(tenant).replace(/\x27/g,"")+'\',\''+pid+'\')">Customized ↗</button></div>'
+    +action+'</div>'
     +'<div class="pricebox"><div class="row"><div class="big">'+priceRef.label+'</div>'+tag+'</div>'
     +'<div class="pdetail" style="margin-top:6px">'+detail+'</div></div>';
 }
@@ -414,7 +416,7 @@ function detailReq(id){
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
       +'<div class="kv"><span>Status</span><b>'+(r.status||'Pending')+'</b></div>'
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
-    +priceBlock(r.pid,r.priceRef,r.tid,r.tenant)
+    +priceBlock(r.pid,r.priceRef,r.tid,r.tenant,false)
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(flds(r.pid,{}))+'</div>'
     +((r.status||'Pending')==='Rejected'?'<div class="failnote" style="background:var(--off-bg);border-color:var(--line);color:var(--off-tx)">Rejected '+fmtDate(dt(r.rejectedAt))+' — '+(r.rejectReason||'')+'</div>':'');
   document.getElementById('dFoot').innerHTML=((r.status||'Pending')==='Pending')
@@ -425,7 +427,7 @@ function detailReq(id){
 function detailSub(id){
   var s=SUBS.filter(function(x){return x.id===id;})[0];if(!s)return;var p=PRODUCTS[s.pid];
   DCUR=id;
-  document.getElementById('dIc').textContent=(s.status==='Failed'?'!':'✓');
+  document.getElementById('dIc').textContent='✓';
   document.getElementById('dName').textContent=s.tenant+' · '+p.name;
   document.getElementById('dSub').textContent='Subscription · '+statusLabel(s.status);
   var box='<div class="seclbl">Subscription</div><div class="box">'
@@ -440,18 +442,16 @@ function detailSub(id){
       +'</div>';
   var note='';
   if(s.status==='Scheduled')note='<div class="schednote">Scheduled for cancellation on <b>'+fmtDate(dt(s.effectiveCancelAt))+'</b> — remains active &amp; billable until then.</div>';
-  else if(s.status==='Failed')note='<div class="failnote">Provisioning failed — service account / ACL error.</div>';
   else if(s.status==='Cancelled')note='<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancelled '+fmtDate(dt(s.cancelledAt))+' — '+(s.cancelReason||'')+'</div>';
   var audit=s.audit.slice().reverse().map(function(a){return '<div class="ev"><span class="ed"></span><div><b>'+a.by+'</b> — '+a.txt+'</div><time>'+fmtTime(dt(a.t))+'</time></div>';}).join('');
   document.getElementById('dBody').innerHTML=box
-    +priceBlock(s.pid,s.priceRef,s.tid,s.tenant)
+    +priceBlock(s.pid,s.priceRef,s.tid,s.tenant,(s.status==='Active'||s.status==='Scheduled'))
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(s.fields)+'</div>'
     +note
     +'<div class="seclbl">Audit trail</div><div class="box audit">'+audit+'</div>';
   var acts='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
   if(s.status==='Active')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
   else if(s.status==='Scheduled')acts+='<button class="btn ghost" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger" onclick="cancelNow(\''+s.id+'\')">Cancel now</button>';
-  else if(s.status==='Failed')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
   document.getElementById('dFoot').innerHTML=acts;
   openDrawer();
 }
@@ -495,7 +495,6 @@ function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+
 function cmode(){document.getElementById('cdate').style.display=document.querySelector('input[name=cmode]:checked').value==='sched'?'block':'none';}
 /* No transient "Cancelling" state — a cancel goes straight to Cancelled (per the agreed lifecycle). */
 function fireCancel(s,effAt,txt){s.status='Cancelled';s.effectiveCancelAt=effAt;s.cancelledAt=new Date().toISOString();s.cancelledBy=ME;s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:'system',txt:'Deprovisioned · access revoked · final invoice issued (settled to '+fmtDate(dt(effAt))+').'});toast('Subscription cancelled');}
-function retrySub(id){var s=byId(id);if(!s)return;openModal('Retry provisioning','Re-attempt provisioning for '+s.tenant+'.','',function(){s.status='Active';s.approvedAt=s.approvedAt||new Date().toISOString();s.audit.push({t:new Date().toISOString(),by:ME,txt:'Provisioning retried · subscription Active'});renderList();openBody(id);toast('Provisioning retried · Active');return true;},'Retry',false);}
 function cancelSub(id){var s=byId(id);var tmin=ymd(new Date(Date.now()+864e5)),tmax=ymd(term(s));var body='<div class="optrow"><label class="opt"><input type="radio" name="cmode" value="now" checked onchange="cmode()"> <span><b>Cancel now</b> — deprovision within 24h</span></label><label class="opt"><input type="radio" name="cmode" value="sched" onchange="cmode()"> <span><b>Schedule a date</b> — stays active &amp; billable until then</span></label></div><div id="cdate" style="display:none;margin-bottom:9px"><label class="flbl">Effective cancellation date</label><input type="date" id="cdt" min="'+tmin+'" max="'+tmax+'" value="'+tmin+'"></div><textarea id="ct" rows="3" placeholder="Cancellation reason (required)…"></textarea>';openModal('Cancel subscription','Billing settles to the effective date; committed / licence terms follow the contract.',body,function(){var txt=document.getElementById('ct').value.trim();if(!txt){document.getElementById('ct').style.borderColor='var(--off)';return false;}var mode=document.querySelector('input[name=cmode]:checked').value;if(mode==='sched'){var d=document.getElementById('cdt').value;if(!d){document.getElementById('cdt').style.borderColor='var(--off)';return false;}s.status='Scheduled';s.scheduledAt=new Date().toISOString();s.scheduledBy=ME;s.effectiveCancelAt=d+'T00:00:00';s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt))+' — remains active and billable until then; settlement as of that date.'});renderLife();openBody(id);toast('Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt)));return true;}fireCancel(s,new Date().toISOString(),txt);renderLife();openBody(id);return true;},'Confirm',true);}
 function unschedule(id){var s=byId(id);openModal('Un-schedule cancellation','Revert to active and remove the scheduled cancellation for '+fmtDate(dt(s.effectiveCancelAt))+'.','',function(){s.status='Active';s.audit.push({t:new Date().toISOString(),by:ME,txt:'Scheduled cancellation removed — subscription remains active.'});delete s.effectiveCancelAt;delete s.scheduledAt;renderLife();openBody(id);toast('Cancellation un-scheduled · subscription active');return true;},'Un-schedule',false);}
 function cancelNow(id){var s=byId(id);openModal('Cancel now instead','Override the scheduled date and deprovision within 24h. Billing settles to today.','',function(){fireCancel(s,new Date().toISOString(),s.cancelReason||'Immediate cancellation (override of scheduled date).');renderLife();openBody(id);return true;},'Cancel now',true);}
