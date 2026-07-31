@@ -648,12 +648,15 @@ function logAudit(entity,field,from,to){state.audit.unshift({ts:nowStamp(),user:
   state.subs=[
     sub({tenantId:'T2',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[1].id,override:{unit:3.95}}),
     sub({tenantId:'T2',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id}),
-    sub({tenantId:'T1',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[2].id}),
-    sub({tenantId:'T1',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id,status:'Active'}),
+    /* Tenant 1 — mix of pricing states: In effect (override), Pending (customized), In effect, and history (Ended) */
+    sub({tenantId:'T1',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[2].id,override:{unit:4.00}}),
+    sub({tenantId:'T1',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id,status:'Pending',override:{unit:6.50}}),
+    sub({tenantId:'T1',serviceId:uaep.id,productId:gds.id,packageId:gds.packages[0].id}),
+    sub({tenantId:'T1',serviceId:aecb.id,productId:cfi.id,packageId:cfi.packages[0].id,status:'Cancelled'}),
+    sub({tenantId:'T1',serviceId:aecb.id,productId:cac.id,packageId:cac.packages[0].id,status:'Rejected'}),
     sub({tenantId:'T3',serviceId:aecb.id,productId:csi.id,packageId:csi.packages[1].id,status:'Pending',override:{unit:4.50}}),
     sub({tenantId:'T3',serviceId:mohre.id,productId:eiv.id,packageId:eiv.packages[0].id,status:'Active',override:{license:72000}}),
-    sub({tenantId:'T2',serviceId:uaep.id,productId:gdi.id,packageId:gdi.packages[0].id}),
-    sub({tenantId:'T1',serviceId:uaep.id,productId:gds.id,packageId:gds.packages[0].id})
+    sub({tenantId:'T2',serviceId:uaep.id,productId:gdi.id,packageId:gdi.packages[0].id})
   ];
 })();
 
@@ -1347,9 +1350,12 @@ function fillAsPkg(){
 function saveAssign(){
   const tid=curSubTenant(),pidProd=$('asSvc').value,pid=$('asPkg').value;
   if(!pidProd||!pid){$('asErr').classList.add('show');return;}
-  const ref=pkgById(pid),sid=ref.svc?ref.svc.id:'',act=$('asAct').value;const _ex=state.subs.find(x=>x.id===editingSubId);const status=(_ex&&_ex.status)||'Pending';
+  const ref=pkgById(pid),sid=ref.svc?ref.svc.id:'',act=$('asAct').value;const _ex=state.subs.find(x=>x.id===editingSubId);
   const quoteRate=0;
   const override=readOverride(ref.pkg);
+  const hasOverride=override&&Object.keys(override).length>0;
+  /* A custom (overridden) tenant price is Pending until activated; catalog price keeps the current status. */
+  const status=hasOverride?'Pending':((_ex&&_ex.status)||'Pending');
   const isNew=editingSubId==='__new__';
   if(!isNew){const sb=state.subs.find(x=>x.id===editingSubId);const oldS=ovrSummary(ref.pkg,sb.override||{}),newS=ovrSummary(ref.pkg,override);if(oldS!==newS){const tn=(state.tenants.find(t=>t.id===sb.tenantId)||{}).name||sb.tenantId;logAudit('Tenant price · '+tn,ref.prod.name+' override',oldS,newS);}Object.assign(sb,{serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
   else{const ex=state.subs.find(x=>x.tenantId===tid&&x.productId===ref.prod.id);
