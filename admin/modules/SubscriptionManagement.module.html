@@ -375,12 +375,27 @@ function roFields(fieldArr){
   });
   return h;
 }
-/* Read-only pricing block: default = the catalogue package (priceRef label), plus Customized ↗. */
+/* Read-only pricing block: default = the catalogue package (priceRef label), plus Customized ↗.
+   If a customized price was published by Billing for this tenant × product, show that value
+   (with a "custom" tag) — the value set during Customize → Approval carries back here. */
+function customPriceFor(tid,pid){
+  try{ var m=JSON.parse(localStorage.getItem('appro.customPrice')||'{}'); var c=m[tid+'::'+pid];
+    if(c&&c.summary&&c.summary!=='catalog'&&(Date.now()-c.ts<86400000))return c; }catch(e){}
+  return null;
+}
 function priceBlock(pid,priceRef,tid,tenant){
+  var custom=customPriceFor(tid,pid);
+  var isCust=!!custom||priceRef.src==='cust';
+  var tag=isCust
+    ? '<span class="src" style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;background:#F3E7FB;color:#7A1FA2">custom</span>'
+    : '<span class="src cat" style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px">catalogue</span>';
+  var detail=custom
+    ? 'Custom for this tenant · '+custom.summary
+    : pkgDetail(pid,priceRef.label);
   return '<div class="seclbl" style="align-items:center">Pricing <span class="owned">BILLING</span>'
     +'<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizeRedirect(\''+tid+'\',\''+String(tenant).replace(/\x27/g,"")+'\',\''+pid+'\')">Customized ↗</button></div>'
-    +'<div class="pricebox"><div class="row"><div class="big">'+priceRef.label+'</div><span class="src cat" style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px">catalogue</span></div>'
-    +'<div class="pdetail" style="margin-top:6px">'+pkgDetail(pid,priceRef.label)+'</div></div>';
+    +'<div class="pricebox"><div class="row"><div class="big">'+priceRef.label+'</div>'+tag+'</div>'
+    +'<div class="pdetail" style="margin-top:6px">'+detail+'</div></div>';
 }
 function openDetail(kind,id){ if(kind==='req')detailReq(id); else detailSub(id); }
 function detailReq(id){
