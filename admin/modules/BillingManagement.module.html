@@ -140,6 +140,14 @@ td .svc{font-weight:700}
 .pill .dot{width:6px;height:6px;border-radius:50%}
 .pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.ok .dot{background:var(--ok)}
 .pill.off{background:var(--off-bg);color:var(--off)}.pill.off .dot{background:var(--off)}
+.histtoggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;font-size:12.5px;color:var(--text);user-select:none}
+.histtoggle input{position:absolute;opacity:0;pointer-events:none}
+.htrack{width:36px;height:20px;border-radius:999px;background:#CBD5E1;position:relative;transition:.15s;flex:0 0 auto;display:inline-block}
+.hknob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:.15s}
+.histtoggle input:checked + .htrack{background:var(--brand)}
+.histtoggle input:checked + .htrack .hknob{transform:translateX(16px)}
+#pricing tr.hist{display:none}
+#pricing.showhist tr.hist{display:table-row}
 .tag{font-weight:700;font-size:12px;color:var(--text);background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:6px}
 .num{font-variant-numeric:tabular-nums;font-weight:700}
 
@@ -393,9 +401,8 @@ td .pname{font-weight:700}
 
       <div class="tabs" role="tablist">
         <button class="tab active" data-tab="report">Overview</button>
-        
-        <button class="tab" data-tab="config">Catalogue pricing</button>
-        <button class="tab" data-tab="subs">Tenant pricing</button><button class="tab" data-tab="alerts">Alerts</button>
+        <button class="tab" data-tab="pricing">Pricing</button>
+        <button class="tab" data-tab="alerts">Alerts</button>
       </div>
 
       <!-- ===================== REPORT ===================== -->
@@ -488,20 +495,28 @@ td .pname{font-weight:700}
       
 
       <!-- ===================== CONFIG ===================== -->
-      <section class="panel" id="config">
-        <div id="catalogBody"></div>
-      </section>
-
-      <!-- ===================== ALERTS ===================== -->
-      <section class="panel" id="subs">
-        <div class="card">
-          <div class="card-head">
-            <div><h3>Tenant pricing</h3></div>
-            <div style="display:flex;gap:12px;align-items:flex-end">
-              <div class="field" style="min-width:220px"><label>Tenant</label><select class="control" id="subTenant" onchange="renderSubs()"></select></div>
+      <!-- ===================== PRICING (Catalogue + By tenant) ===================== -->
+      <section class="panel" id="pricing">
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body" style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap">
+            <div class="field">
+              <label>Scope</label>
+              <div class="seg" id="priceScope">
+                <button type="button" class="on" id="scCat" onclick="setPriceScope('cat')">Catalogue</button>
+                <button type="button" id="scTen" onclick="setPriceScope('ten')">By tenant</button>
+              </div>
             </div>
+            <div class="field" id="tenPick" style="min-width:220px;display:none"><label>Tenant</label><select class="control" id="subTenant" onchange="renderSubs()"></select></div>
+            <div style="flex:1 1 auto"></div>
+            <label class="histtoggle" id="histWrap" style="display:none">
+              <input type="checkbox" id="histToggle" onchange="document.getElementById('pricing').classList.toggle('showhist',this.checked)">
+              <span class="htrack"><span class="hknob"></span></span> Show history
+            </label>
           </div>
-          <div id="subArea"></div>
+        </div>
+        <div id="catalogScope"><div id="catalogBody"></div></div>
+        <div id="tenantScope" style="display:none">
+          <div class="card"><div id="subArea"></div></div>
         </div>
       </section>
       <section class="panel" id="alerts">
@@ -756,10 +771,40 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   $(id).classList.add('show');
   $('crumbTab').textContent=t.textContent;
   if(id==='report')renderReport();
-  if(id==='subs')renderSubs();
+  if(id==='pricing')renderPricing();
   if(id==='alerts')renderAlerts();
-  if(id==='config')renderAll();
 });
+
+/* ===== pricing scope (Catalogue <-> By tenant) ===== */
+let priceScope='cat';
+function renderPricing(){ if(priceScope==='ten')renderSubs(); else renderAll(); }
+function setPriceScope(s){
+  priceScope=s;
+  const cat=s==='cat';
+  const el=id=>document.getElementById(id);
+  el('scCat').classList.toggle('on',cat);
+  el('scTen').classList.toggle('on',!cat);
+  el('catalogScope').style.display=cat?'':'none';
+  el('tenantScope').style.display=cat?'none':'';
+  el('tenPick').style.display=cat?'none':'';
+  el('histWrap').style.display=cat?'none':'inline-flex';
+  el('crumbTab').textContent=cat?'Pricing · Catalogue':'Pricing · By tenant';
+  if(cat)renderAll(); else renderSubs();
+}
+/* Pricing chip: reads the subscription status; never sets a second one. */
+function pricingChip(d){
+  if(d.awaitingQuote)return {cls:'pending',label:'Pending',ended:false};
+  if(!d.prod.active)return {cls:'off',label:'Product off',ended:false};
+  if(d.status==='Active')return {cls:'ok',label:'In effect',ended:false};
+  if(d.status==='Pending')return {cls:'pending',label:'Pending',ended:false};
+  return {cls:'off',label:'Ended',ended:true}; /* Cancelled / Rejected */
+}
+function pricingRank(d){
+  if(!d.prod.active)return 1;
+  if(d.status==='Active')return 0;
+  if(d.status==='Pending')return 1;
+  return 2; /* Ended */
+}
 
 /* ===== toast ===== */
 function toast(msg,err){const el=$('toast');$('toastMsg').textContent=msg;el.querySelector('svg').style.color=err?'#ff8a80':'#69f0ae';el.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('show'),2400);}
@@ -1157,21 +1202,21 @@ function renderSubs(){
   if(ab){ab.disabled=false;ab.title='';}
   const subs=tenantSubs(tid);
   if(!subs.length && editingSubId!=='__new__'){area.innerHTML='<div class="empty" style="padding:40px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 7v10l8 4 8-4V7"/></svg><h4>No subscriptions for this tenant</h4><div>This tenant’s subscriptions will appear here.</div></div>';return;}
-  let h='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan</th><th>Committed volume</th><th>Unit price</th><th>Activation</th><th>Status</th><th></th></tr></thead><tbody>';
+  let h='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan</th><th>Committed volume</th><th>Unit price</th><th>Activation</th><th>Pricing</th><th></th></tr></thead><tbody>';
   if(editingSubId==='__new__')h+=assignFormHtml();
-  subs.forEach((sb,i)=>{const ref=pkgById(sb.packageId);if(!ref)return;const d=deriveSub(sb,i);
-    const scls=d.statusCls, slabel=d.dispStatus;
-    h+=`<tr>
+  const items=subs.map((sb,i)=>({sb,d:deriveSub(sb,i)})).filter(x=>x.d);
+  items.sort((a,b)=>pricingRank(a.d)-pricingRank(b.d));
+  items.forEach(({sb,d})=>{const ref=pkgById(sb.packageId);if(!ref)return;
+    const ch=pricingChip(d);
+    h+=`<tr${ch.ended?' class="hist"':''}>
       <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
       <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
       <td class="num">${d.committed?fmtInt(d.committed)+' /yr':'—'}</td>
       <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
       <td>${sb.activation||'—'}${termLine(sb.activation,ref.pkg.billing)}</td>
-      <td><span class="pill ${scls}"><span class="dot"></span>${slabel}</span></td>
+      <td><span class="pill ${ch.cls}"><span class="dot"></span>${ch.label}</span></td>
       <td><div class="rowact">
-        ${sb.status==='Pending'?`<button class="btn primary sm" onclick="approveSub('${sb.id}')">Approve</button><button class="btn ghost sm" onclick="rejectSub('${sb.id}')">Reject</button>`:sb.status==='Active'?`<button class="btn ghost sm" onclick="cancelSub('${sb.id}')">Cancel</button>`:''}
         <button class="btn ghost sm" onclick="openAssign('${sb.id}')">Edit</button>
-        <button class="iconbtn danger" title="Remove" onclick="removeSub('${sb.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
       </div></td></tr>`;
     if(editingSubId===sb.id)h+=assignFormHtml();
   });
@@ -1248,20 +1293,23 @@ function renderMatrix(area){
   tenantsWithSubs.forEach(t=>{
     const subs=tenantSubs(t.id);
     let total=0, rows='';
-    subs.forEach((sb,i)=>{
+    const items=subs.map((sb,i)=>({sb,d:deriveSub(sb,i)})).filter(x=>x.d);
+    items.sort((a,b)=>pricingRank(a.d)-pricingRank(b.d));
+    items.forEach(({sb,d})=>{
       const ref=pkgById(sb.packageId);if(!ref)return;
-      const d=deriveSub(sb,i);total+=d.charge;
-      rows+=`<tr>
+      total+=d.charge;
+      const ch=pricingChip(d);
+      rows+=`<tr${ch.ended?' class="hist"':''}>
         <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
         <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
         <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
-        <td><span class="pill ${d.statusCls}"><span class="dot"></span>${d.dispStatus}</span></td>
+        <td><span class="pill ${ch.cls}"><span class="dot"></span>${ch.label}</span></td>
         <td class="rowact"><button class="btn ghost sm" onclick="editFromOverview('${t.id}','${sb.id}')">Edit</button></td>
       </tr>`;
     });
     h+=`<div class="ovtenant">
       <div class="ovtenant-h">${t.name}</div>
-      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan / Package</th><th>Unit price</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Plan / Package</th><th>Unit price</th><th>Pricing</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
     </div>`;
   });
   h+='</div>';area.innerHTML=h;
@@ -1321,7 +1369,7 @@ function buildTenantSelects(){
 }
 function applyRole(){
   if((typeof ROLE==='undefined')||ROLE!=='tenant')return;
-  ['config','subs','alerts'].forEach(id=>{const b=document.querySelector('[data-tab="'+id+'"]');if(b)b.style.display='none';});
+  ['pricing','alerts'].forEach(id=>{const b=document.querySelector('[data-tab="'+id+'"]');if(b)b.style.display='none';});
   const ft=$('fTenant'); if(ft){const fld=ft.closest('.field')||ft.parentElement; if(fld)fld.style.display='none';}
 }
 
@@ -1337,9 +1385,10 @@ renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
       var f=JSON.parse(localStorage.getItem("appro.billingFocus")||"null");
       if(!f||(Date.now()-f.ts>60000))return;
       localStorage.removeItem("appro.billingFocus");
-      // 1) Open the Subscriptions tab.
-      var subsTab=document.querySelector('[data-tab="subs"]');
+      // 1) Open the Pricing tab and switch to the By-tenant scope.
+      var subsTab=document.querySelector('[data-tab="pricing"]');
       if(subsTab)subsTab.click();
+      try{ if(typeof setPriceScope==="function") setPriceScope('ten'); }catch(e){}
       // 2) Pick a real tenant (never "All tenants", or the edit form can't open):
       //    match the focus tenant by name if possible, else the first tenant that
       //    actually has a subscription — then open Edit on its existing subscription.
