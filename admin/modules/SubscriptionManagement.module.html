@@ -145,6 +145,7 @@
   .cbx.on{background:var(--brand);border-color:var(--brand)}
   .cbx.on::after{content:"";width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
   .cbx.lock:not(.on){background:var(--grey-bg)}.cbx.lock.on{background:#9AA6BE;border-color:#9AA6BE}
+  .fchk .cbx{margin-left:0}
   .pdetail{font-size:12px;color:var(--navy);font-weight:700;margin-top:6px}
   .vhint{font-size:11px;color:var(--faint);margin-top:6px}
   .optrow{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
@@ -161,43 +162,22 @@
   <div class="lh">
     <div>
       <div class="ti">Subscription Management</div>
-      <div class="sub">Govern the subscription lifecycle — review and approve requests, control outbound data exposure, and manage provisioning. A separate module from Billing.</div>
     </div>
     <span class="rolechip">Role · Subscriptions (excl. billing)</span>
   </div>
 
-  <div class="boundary">
-    <div class="bi">i</div>
-    <div><b>Pricing is owned by Billing.</b> <span>This module references the tenant's price (<code>priceRef</code>) and never edits the number. To change a price, open Billing.</span></div>
-    <button class="lk" onclick="toast('Deep-link → Billing · Pricing &amp; Catalog · tenant price book')">Adjust pricing in Billing ↗</button>
-  </div>
-
-  <div class="seg">
-    <button class="chip on" data-tab="req" onclick="switchTab('req')">Requests</button>
-    <button class="chip" data-tab="life" onclick="switchTab('life')">Active subscriptions</button>
-  </div>
-
-  <!-- REQUESTS -->
-  <div id="tab-req">
-    <div class="kpis" id="reqKpis"></div>
+  <!-- SINGLE SCREEN — all requests + subscriptions -->
+  <div id="tab-list">
+    <div class="kpis" id="listKpis"></div>
     <div class="toolbar">
-      <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="reqSearch" placeholder="Search tenant or tenant ID…" oninput="renderReq()"></div>
-      <select class="sel" id="fProd" onchange="renderReq()"><option value="">All products</option></select>
-      <select class="sel" id="fCust" onchange="renderReq()"><option value="">All tenants</option></select>
+      <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="listSearch" placeholder="Search tenant or tenant ID…" oninput="renderList()"></div>
+      <select class="sel" id="fProd" onchange="renderList()"><option value="">All products</option></select>
+      <select class="sel" id="fCust" onchange="renderList()"><option value="">All tenants</option></select>
     </div>
     <div class="card">
-      <h3>Pending review <span class="cnt" id="reqCount"></span></h3>
-      <table><thead><tr><th>Tenant</th><th>Product</th><th>Requested package</th><th>Submitted</th><th>Age</th><th>Status</th></tr></thead><tbody id="reqBody"></tbody></table>
+      <h3>Requests &amp; subscriptions <span class="cnt" id="listCount"></span></h3>
+      <table><thead><tr><th>Tenant</th><th>Product</th><th>Package</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="listBody"></tbody></table>
     </div>
-  </div>
-
-  <!-- LIFECYCLE -->
-  <div id="tab-life" style="display:none">
-    <div class="toolbar">
-      <select class="sel" id="lifeTenant" onchange="renderLife()" style="min-width:260px"></select>
-      <span class="tid" id="lifeMeta" style="margin-left:auto"></span>
-    </div>
-    <div id="lifeBody"></div>
   </div>
 </div>
 
@@ -217,7 +197,7 @@ function dt(s){return new Date(s);}
 function fmtDate(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function fmtTime(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function daysAgo(d){return Math.floor((Date.now()-d.getTime())/864e5);}
-function statusLabel(st){return {Scheduled:'Scheduled to cancel',Cancelling:'Cancelling'}[st]||st;}
+function statusLabel(st){return {Scheduled:'Scheduled to cancel'}[st]||st;}
 
 /* products: outbound fields are THIS module's concern. Pricing is NOT here — only a priceRef label resolved from Billing. */
 var PRODUCTS={
@@ -254,11 +234,11 @@ function aed(n){return 'AED '+Number(n).toLocaleString('en-US',{minimumFractionD
 function intc(n){return Number(n).toLocaleString('en-US');}
 function pkgDetail(pid,label){var c=CATALOGUE[pid];if(!c||!c.pkgs[label])return 'Defined in Billing catalogue';var p=c.pkgs[label],a=[];if(p.type==='On request'&&!p.unit)return 'Priced on request';if(p.type==='Committed volume'){a.push('Committed volume');if(p.txns)a.push(intc(p.txns)+' txns/yr');if(p.unit)a.push(aed(p.unit)+'/unit');if(p.over)a.push('overage '+aed(p.over));if(p.renew)a.push('auto-renew \u00d7'+p.renew);if(p.licence)a.push('licence '+aed(p.licence)+'/yr');}else{a.push('Per transaction');if(p.unit)a.push(aed(p.unit)+'/txn');}return a.join(' \u00b7 ');}
 /* All packages configured for a product in Billing → Pricing & Catalog. selLabel = the one this subscription references. */
-function pkgOptions(pid,selLabel){var c=CATALOGUE[pid];var names=c&&c.pkgs?Object.keys(c.pkgs):[];if(!names.length){return '<div class="pricebox" style="background:var(--amber-bg);border-color:#F2DDB0"><div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#8A6A1E;font-weight:900">!</span><div><b style="color:#8A6A1E">No pricing configured</b><div class="pdetail" style="color:#8A6A1E;margin-top:3px">This product has no packages in Billing yet. Configure pricing for it before this subscription can be provisioned.</div><button class="lk" style="margin-top:9px" onclick="toast(\'Deep-link \u2192 Billing \u00b7 Pricing &amp; Catalog\')">Configure pricing in Billing \u2197</button></div></div></div>';}
+function pkgOptions(pid,selLabel){var c=CATALOGUE[pid];var names=c&&c.pkgs?Object.keys(c.pkgs):[];if(!names.length){return '<div class="pricebox" style="background:var(--amber-bg);border-color:#F2DDB0"><div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#8A6A1E;font-weight:900">!</span><div><b style="color:#8A6A1E">No pricing configured</b><button class="lk" style="margin-top:9px" onclick="toast(\'Deep-link \u2192 Billing \u00b7 Pricing &amp; Catalog\')">Configure pricing in Billing \u2197</button></div></div></div>';}
   return '<div class="pkgopts">'+names.map(function(nm){var on=nm===selLabel;return '<div class="pricebox'+(on?' sel':'')+'" style="'+(on?'border-color:var(--brand);background:var(--soft)':'')+';margin-bottom:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><div class="big">'+nm+'</div>'+(on?'<span class="pill ok" style="font-size:11px">Requested</span>':'')+'</div><div class="pdetail">'+pkgDetail(pid,nm)+'</div></div>';}).join('')+'</div>';}
 
 /* Selectable package list for approval (multi-select). preSel = pre-checked package labels. */
-function pkgSelect(pid,preSel){var c=CATALOGUE[pid];var names=c&&c.pkgs?Object.keys(c.pkgs):[];if(!names.length){return '<div class="pricebox" style="background:var(--amber-bg);border-color:#F2DDB0"><div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#8A6A1E;font-weight:900">!</span><div><b style="color:#8A6A1E">No pricing configured</b><div class="pdetail" style="color:#8A6A1E;margin-top:3px">This product has no packages in Billing yet. Configure pricing for it before this subscription can be approved.</div><button class="lk" style="margin-top:9px" onclick="toast(\'Deep-link \u2192 Billing \u00b7 Pricing &amp; Catalog\')">Configure pricing in Billing \u2197</button></div></div></div>';}
+function pkgSelect(pid,preSel){var c=CATALOGUE[pid];var names=c&&c.pkgs?Object.keys(c.pkgs):[];if(!names.length){return '<div class="pricebox" style="background:var(--amber-bg);border-color:#F2DDB0"><div style="display:flex;gap:10px;align-items:flex-start"><span style="color:#8A6A1E;font-weight:900">!</span><div><b style="color:#8A6A1E">No pricing configured</b><button class="lk" style="margin-top:9px" onclick="toast(\'Deep-link \u2192 Billing \u00b7 Pricing &amp; Catalog\')">Configure pricing in Billing \u2197</button></div></div></div>';}
   return '<div class="pkgopts">'+names.map(function(nm){var on=(preSel||[]).indexOf(nm)>-1;return '<label class="pricebox pkgsel'+(on?' sel':'')+'" data-pk="'+nm+'" style="display:block;margin-bottom:8px;cursor:pointer;'+(on?'border-color:var(--brand);background:var(--soft)':'')+'"><div style="display:flex;align-items:flex-start;gap:10px"><input type="checkbox" class="pkgck" '+(on?'checked':'')+' onchange="togglePkg(this)" style="margin-top:3px;width:16px;height:16px;accent-color:var(--brand)"><div style="flex:1"><div class="big">'+nm+'</div><div class="pdetail">'+pkgDetail(pid,nm)+'</div></div></div></label>';}).join('')+'</div>';}
 function togglePkg(cb){var lab=cb.closest('.pkgsel');if(!lab)return;var nm=lab.getAttribute('data-pk');var on=cb.checked;lab.classList.toggle('sel',on);lab.style.borderColor=on?'var(--brand)':'';lab.style.background=on?'var(--soft)':'';if(!DRAFT)return;DRAFT.pkgs=DRAFT.pkgs||[];if(on){if(DRAFT.pkgs.indexOf(nm)<0)DRAFT.pkgs.push(nm);}else{DRAFT.pkgs=DRAFT.pkgs.filter(function(x){return x!==nm;});}}
 
@@ -298,36 +278,76 @@ var SUBS=[
 function switchTab(t){document.querySelectorAll('.seg .chip').forEach(function(c){c.classList.toggle('on',c.dataset.tab===t);});document.getElementById('tab-req').style.display=t==='req'?'block':'none';document.getElementById('tab-life').style.display=t==='life'?'block':'none';if(t==='life')renderLife();}
 
 /* ---- REQUESTS ---- */
-function fillFilters(){var fp=document.getElementById('fProd');fp.innerHTML='<option value="">All products</option>';Object.keys(PRODUCTS).forEach(function(p){var o=document.createElement('option');o.value=p;o.textContent=PRODUCTS[p].name;fp.appendChild(o);});var fc=document.getElementById('fCust');fc.innerHTML='<option value="">All tenants</option>';var seen={};REQUESTS.forEach(function(r){if(!seen[r.tid]){seen[r.tid]=1;var o=document.createElement('option');o.value=r.tid;o.textContent=r.tenant;fc.appendChild(o);}});}
+function fillFilters(){var fp=document.getElementById('fProd');var fpPrev=fp.value;fp.innerHTML='<option value="">All products</option>';var pids={};REQUESTS.forEach(function(r){pids[r.pid]=1;});SUBS.forEach(function(s){pids[s.pid]=1;});Object.keys(pids).forEach(function(p){if(!PRODUCTS[p])return;var o=document.createElement('option');o.value=p;o.textContent=PRODUCTS[p].name;fp.appendChild(o);});fp.value=fpPrev;var fc=document.getElementById('fCust');var fcPrev=fc.value;fc.innerHTML='<option value="">All tenants</option>';var seen={};REQUESTS.concat(SUBS).forEach(function(r){if(!seen[r.tid]){seen[r.tid]=1;var o=document.createElement('option');o.value=r.tid;o.textContent=r.tenant;fc.appendChild(o);}});fc.value=fcPrev;}
 function prTag(p){return '<span class="priceref">'+p.label+' <span class="src '+(p.src==='cust'?'cust':'cat')+'">'+(p.src==='cust'?'custom':'catalogue')+'</span></span>';}
-function renderReq(){
-  var q=(document.getElementById('reqSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
-  var rows=REQUESTS.filter(function(r){return (!fp||r.pid===fp)&&(!fc||r.tid===fc)&&(r.tenant.toLowerCase().indexOf(q)>=0||r.tid.toLowerCase().indexOf(q)>=0);}).sort(function(a,b){return dt(a.submittedAt)-dt(b.submittedAt);});
-  var oldest=REQUESTS.length?Math.max.apply(null,REQUESTS.map(function(r){return daysAgo(dt(r.submittedAt));})):0;
-  document.getElementById('reqKpis').innerHTML=[
-    ['Pending review',REQUESTS.length,'awaiting action'],
-    ['Oldest in queue',oldest+'d','SLA target 2d'],
-    ['Provisioning',SUBS.filter(function(s){return s.status==='Provisioning';}).length,'in flight'],
+/* Unified list — every pending request + every subscription in one screen. */
+function listItems(){
+  var out=[];
+  REQUESTS.forEach(function(r){out.push({kind:'req',id:r.id,tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,status:(r.status||'Pending'),date:r.submittedAt});});
+  SUBS.forEach(function(s){out.push({kind:'sub',id:s.id,tid:s.tid,tenant:s.tenant,pid:s.pid,priceRef:s.priceRef,status:s.status,date:s.approvedAt});});
+  return out;
+}
+var STATUS_ORDER={Pending:0,Failed:1,Provisioning:2,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
+function renderList(){
+  var q=(document.getElementById('listSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
+  var rows=listItems().filter(function(it){return (!fp||it.pid===fp)&&(!fc||it.tid===fc)&&((it.tenant||'').toLowerCase().indexOf(q)>=0||String(it.tid||'').toLowerCase().indexOf(q)>=0);})
+    .sort(function(a,b){var so=(STATUS_ORDER[a.status]||9)-(STATUS_ORDER[b.status]||9);return so||(dt(a.date)-dt(b.date));});
+  document.getElementById('listKpis').innerHTML=[
+    ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action'],
+    ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions'],
+    ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon'],
     ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'need retry']
   ].map(function(k){return '<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
-  document.getElementById('reqCount').textContent=rows.length+' shown';
-  var tb=document.getElementById('reqBody');
-  if(!rows.length){tb.innerHTML='<tr><td colspan="6"><div class="empty">No pending requests.</div></td></tr>';return;}
-  tb.innerHTML=rows.map(function(r){var age=daysAgo(dt(r.submittedAt));return '<tr class="clk" onclick="review(\''+r.id+'\')">'+
-    '<td><b style="color:var(--navy)">'+r.tenant+'</b><div class="tid">'+r.tid+'</div></td>'+
-    '<td>'+PRODUCTS[r.pid].name+(r.ptype==='change'?' <span class="tid">· change</span>':'')+'</td>'+
-    '<td>'+prTag(r.priceRef)+'</td>'+
-    '<td class="tid">'+fmtDate(dt(r.submittedAt))+'</td>'+
-    '<td><span class="age'+(age<=2?' fresh':'')+'">'+age+'d</span></td>'+
-    '<td><span class="pill Pending"><span class="dt"></span>Pending</span></td></tr>';}).join('');
+  document.getElementById('listCount').textContent=rows.length+' shown';
+  var tb=document.getElementById('listBody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="6"><div class="empty">No requests or subscriptions match.</div></td></tr>';return;}
+  tb.innerHTML=rows.map(function(it){var p=PRODUCTS[it.pid]||{name:it.pid};
+    var spin=(it.status==='Provisioning')?'<span class="spin"></span>':'';
+    var cancel=(it.kind==='sub'&&it.status==='Active')?'<button class="btn danger sm" onclick="event.stopPropagation();cancelSub(\''+it.id+'\')">Cancel</button>':'';
+    return '<tr class="clk" onclick="openDetail(\''+it.kind+'\',\''+it.id+'\')">'+
+      '<td><b style="color:var(--navy)">'+it.tenant+'</b><div class="tid">'+it.tid+'</div></td>'+
+      '<td>'+p.name+'</td>'+
+      '<td>'+prTag(it.priceRef)+'</td>'+
+      '<td class="tid">'+fmtDate(dt(it.date))+'</td>'+
+      '<td><span class="pill '+it.status+'"><span class="dt"></span>'+spin+statusLabel(it.status)+'</span></td>'+
+      '<td style="text-align:right">'+cancel+'</td></tr>';}).join('');
 }
+/* back-compat aliases — other flows call these after mutating data */
+function renderReq(){renderList();}
+function renderLife(){renderList();}
+/* Refresh the open drawer after a lifecycle mutation (approve/cancel/etc.). */
+function openBody(id){if(id&&document.getElementById('drawer').classList.contains('on')&&byId(id))detailSub(id);}
 
-/* ---- REVIEW DRAWER ---- */
+/* ---- DETAIL DRAWER (view-only) ---- */
 var DRAFT=null, DCUR=null;
-function review(id){
+/* Cross-navigate to Billing ▸ Tenant Billing (per-tenant edit) for tenant-specific pricing.
+   Same mechanism the admin shell already listens for: localStorage focus + parent postMessage. */
+function customizeRedirect(tid,tenant,pid){
+  try{ localStorage.setItem('appro.billingFocus', JSON.stringify({tid:tid,tenant:tenant,pid:pid,ts:Date.now()})); }catch(e){}
+  try{ window.parent.postMessage({type:'appro:navigate',to:'billing'},'*'); }catch(e){}
+  toast('Opening Billing · Tenant pricing…');
+}
+/* Read-only outbound field list. */
+function roFields(fieldArr){
+  var on=fieldArr.filter(function(f){return f.on;}).length;
+  var h='<div class="fhead">'+on+' of '+fieldArr.length+' data points enabled</div>',last=null;
+  fieldArr.forEach(function(f){
+    if(f.group!==last){last=f.group;h+='<div class="fgrp"><span>'+f.group+'</span></div>';}
+    h+='<label class="fchk lk"><span class="cbx'+(f.on?' on':'')+' lock"></span><span class="fn">'+f.name+(f.mand?' <span class="req">required</span>':'')+'</span><span class="fk">'+f.k+'</span></label>';
+  });
+  return h;
+}
+/* Read-only pricing block: default = the catalogue package (priceRef label), plus Customized ↗. */
+function priceBlock(pid,priceRef,tid,tenant){
+  return '<div class="seclbl" style="align-items:center">Pricing <span class="owned">BILLING</span>'
+    +'<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizeRedirect(\''+tid+'\',\''+String(tenant).replace(/\x27/g,"")+'\',\''+pid+'\')">Customized ↗</button></div>'
+    +'<div class="pricebox"><div class="row"><div class="big">'+priceRef.label+'</div><span class="src cat" style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px">catalogue</span></div>'
+    +'<div class="pdetail" style="margin-top:6px">'+pkgDetail(pid,priceRef.label)+'</div></div>';
+}
+function openDetail(kind,id){ if(kind==='req')detailReq(id); else detailSub(id); }
+function detailReq(id){
   var r=REQUESTS.filter(function(x){return x.id===id;})[0];if(!r)return;var p=PRODUCTS[r.pid];
   DCUR=id;
-  DRAFT={id:id,fields:flds(r.pid,{}),pkgs:(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[]};
   document.getElementById('dIc').textContent='!';
   document.getElementById('dName').textContent=r.tenant+' · '+p.name;
   document.getElementById('dSub').textContent='Pending request · '+(r.ptype==='change'?'Package change':'New subscription');
@@ -339,21 +359,48 @@ function review(id){
       +'<div class="kv"><span>Contact</span><b>'+r.contact+'</b></div>'
       +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
+      +'<div class="kv"><span>Status</span><b>'+(r.status||'Pending')+'</b></div>'
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
-    +'<div class="seclbl" style="align-items:center">Pricing — select package(s)<button class="lk2" style="margin-left:auto;text-transform:none;letter-spacing:0;padding:5px 10px;font-size:11.5px;white-space:nowrap;flex:0 0 auto" onclick="customizePricing(\''+id+'\')">Customize ↗</button></div>'
-    +pkgSelect(r.pid,(CATALOGUE[r.pid]&&CATALOGUE[r.pid].pkgs&&CATALOGUE[r.pid].pkgs[r.priceRef.label])?[r.priceRef.label]:[])
-    +'<div class="vhint" style="margin:2px 0 10px">Tenant requested <b>'+r.priceRef.label+'</b>. Tick the package(s) to approve for this product. Prices are owned by Billing.</div>'
-    +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box" id="dFlds"></div>'
-    +'<div class="failnote" style="background:var(--amber-bg);border-color:#F2DDB0;color:#8A6A1E"><span>Mandatory fields are locked on; at least one field must remain enabled.</span></div>';
-  renderDFields();
-  document.getElementById('dFoot').innerHTML='<button class="btn danger" onclick="doReject(\''+id+'\')">Reject</button><button class="btn primary" onclick="doApprove(\''+id+'\')">Approve &amp; provision</button>';
+    +priceBlock(r.pid,r.priceRef,r.tid,r.tenant)
+    +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(flds(r.pid,{}))+'</div>'
+    +((r.status||'Pending')==='Rejected'?'<div class="failnote" style="background:var(--off-bg);border-color:var(--line);color:var(--off-tx)">Rejected '+fmtDate(dt(r.rejectedAt))+' — '+(r.rejectReason||'')+'</div>':'');
+  document.getElementById('dFoot').innerHTML=((r.status||'Pending')==='Pending')
+    ? '<button class="btn ghost" onclick="closeDrawer()">Close</button><button class="btn danger" onclick="doReject(\''+r.id+'\')">Reject</button><button class="btn primary" onclick="doApprove(\''+r.id+'\')">Approve</button>'
+    : '<button class="btn ghost" onclick="closeDrawer()">Close</button>';
   openDrawer();
 }
-// "Customize" -> jump to Billing Management > Subscriptions > Edit > Custom for this tenant.
-function customizePricing(id){
-  var r=(typeof REQUESTS!=='undefined'?REQUESTS:[]).find(function(x){return x.id===id;})||{};
-  try{ localStorage.setItem('appro.billingFocus', JSON.stringify({tid:r.tid,tenant:r.tenant,pid:r.pid,ts:Date.now()})); }catch(e){}
-  try{ window.parent.postMessage({type:'appro:navigate',to:'billing'},'*'); }catch(e){}
+function detailSub(id){
+  var s=SUBS.filter(function(x){return x.id===id;})[0];if(!s)return;var p=PRODUCTS[s.pid];
+  DCUR=id;
+  document.getElementById('dIc').textContent=(s.status==='Failed'?'!':'✓');
+  document.getElementById('dName').textContent=s.tenant+' · '+p.name;
+  document.getElementById('dSub').textContent='Subscription · '+statusLabel(s.status);
+  var box='<div class="seclbl">Subscription</div><div class="box">'
+      +'<div class="kv"><span>Tenant</span><b>'+s.tenant+'</b></div>'
+      +'<div class="kv"><span>Tenant ID</span><b>'+s.tid+'</b></div>'
+      +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
+      +'<div class="kv"><span>Status</span><b>'+statusLabel(s.status)+'</b></div>'
+      +'<div class="kv"><span>Approved</span><b>'+fmtTime(dt(s.approvedAt))+'</b></div>'
+      +'<div class="kv"><span>Approved by</span><b>'+s.approvedBy+'</b></div>'
+      +(s.effectiveCancelAt?'<div class="kv"><span>Effective cancel</span><b>'+fmtDate(dt(s.effectiveCancelAt))+'</b></div>':'')
+      +(s.cancelReason?'<div class="kv"><span>Reason</span><b>'+s.cancelReason+'</b></div>':'')
+      +'</div>';
+  var note='';
+  if(s.status==='Scheduled')note='<div class="schednote">Scheduled for cancellation on <b>'+fmtDate(dt(s.effectiveCancelAt))+'</b> — remains active &amp; billable until then.</div>';
+  else if(s.status==='Failed')note='<div class="failnote">Provisioning failed — service account / ACL error.</div>';
+  else if(s.status==='Cancelled')note='<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancelled '+fmtDate(dt(s.cancelledAt))+' — '+(s.cancelReason||'')+'</div>';
+  var audit=s.audit.slice().reverse().map(function(a){return '<div class="ev"><span class="ed"></span><div><b>'+a.by+'</b> — '+a.txt+'</div><time>'+fmtTime(dt(a.t))+'</time></div>';}).join('');
+  document.getElementById('dBody').innerHTML=box
+    +priceBlock(s.pid,s.priceRef,s.tid,s.tenant)
+    +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(s.fields)+'</div>'
+    +note
+    +'<div class="seclbl">Audit trail</div><div class="box audit">'+audit+'</div>';
+  var acts='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
+  if(s.status==='Active')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
+  else if(s.status==='Scheduled')acts+='<button class="btn ghost" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger" onclick="cancelNow(\''+s.id+'\')">Cancel now</button>';
+  else if(s.status==='Failed')acts+='<button class="btn primary" onclick="retrySub(\''+s.id+'\')">Retry</button><button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
+  document.getElementById('dFoot').innerHTML=acts;
+  openDrawer();
 }
 function renderDFields(){
   var on=DRAFT.fields.filter(function(f){return f.on;}).length;
@@ -366,68 +413,37 @@ function renderDFields(){
 }
 function dtf(i){DRAFT.fields[i].on=!DRAFT.fields[i].on;renderDFields();}
 function grpAll(i,on){var g=DRAFT.fields[i].group;DRAFT.fields.forEach(function(f){if(f.group===g&&!f.mand)f.on=on;});renderDFields();}
+/* Approve / Reject — request lifecycle is governed in THIS module. Pricing stays read-only (priceRef). */
+function nextSubId(){var n=900;SUBS.forEach(function(s){var m=/sub_(\d+)/.exec(s.id||'');if(m)n=Math.max(n,+m[1]);});return 'sub_'+(n+1);}
 function doApprove(id){
-  if(!DRAFT.pkgs||!DRAFT.pkgs.length){toast('Select at least one package to approve');return;}
-  if(!DRAFT.fields.some(function(f){return f.on;})){toast('At least one outbound field must remain enabled');return;}
-  var r=REQUESTS.filter(function(x){return x.id===id;})[0];REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});
-  if(r&&r.live)markLive(r.id,'approved');   // flip the tenant's catalogue button to green "Subscribe"
-  var enabled=DRAFT.fields.filter(function(f){return f.on;}).length;
-  var sub={id:'sub_'+Math.floor(Math.random()*900+100),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,pkgs:DRAFT.pkgs.slice(),status:'Provisioning',approvedAt:new Date().toISOString(),approvedBy:ME,fields:DRAFT.fields.map(function(f){return {id:f.id,name:f.name,k:f.k,mand:f.mand,on:f.on};}),audit:[{t:new Date().toISOString(),by:ME,txt:'Approved · '+DRAFT.pkgs.length+' package(s): '+DRAFT.pkgs.join(', ')+' · '+enabled+'/'+DRAFT.fields.length+' fields · provisioning started'}]};
-  SUBS.push(sub);closeDrawer();renderReq();fillLifeTenant();
-  toast('Approved · provisioning pipeline triggered (async)');
-  setTimeout(function(){sub.status='Active';sub.audit.push({t:new Date().toISOString(),by:'system',txt:'Provisioning complete · now Active'});renderReq();if(document.getElementById('tab-life').style.display!=='none')renderLife();toast(r.tenant+' · '+PRODUCTS[r.pid].name+' is now Active');},1600);
+  var idx=-1;REQUESTS.forEach(function(r,i){if(r.id===id)idx=i;});
+  if(idx<0)return;var r=REQUESTS[idx];var p=PRODUCTS[r.pid]||{name:r.pid};
+  openModal('Approve request','Provision '+p.name+' for '+r.tenant+' at the '+r.priceRef.label+' price. The subscription becomes Active.','',function(){
+    var now=new Date().toISOString();
+    var sub={id:nextSubId(),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,status:'Active',approvedAt:now,approvedBy:ME,fields:flds(r.pid,{}),audit:[{t:now,by:ME,txt:'Request approved · subscription provisioned'}]};
+    SUBS.unshift(sub);REQUESTS.splice(idx,1);
+    closeDrawer();renderList();toast('Approved · '+r.tenant+' now Active');return true;
+  },'Approve',false);
 }
 function doReject(id){
-  openModal('Reject request','The tenant is notified with the reason. No provisioning is triggered.',
-    '<select id="rc"><option value="">Reason category…</option><option>Ineligible product for tenant</option><option>Incomplete / failed onboarding data</option><option>Commercial terms not agreed</option><option>Compliance / risk hold</option><option>Other</option></select><textarea id="rt" rows="3" maxlength="120" placeholder="Reason (required)…"></textarea>',
-    function(){var cat=document.getElementById('rc').value,txt=document.getElementById('rt').value.trim();if(!txt){document.getElementById('rt').style.borderColor='var(--off)';return false;}var _r=REQUESTS.filter(function(x){return x.id===id;})[0];if(_r&&_r.live)markLive(id,'rejected');REQUESTS=REQUESTS.filter(function(x){return x.id!==id;});closeDrawer();renderReq();toast('Request rejected · tenant notified'+(cat?' ('+cat+')':''));return true;},'Reject',true);
+  var r=REQUESTS.filter(function(x){return x.id===id;})[0];if(!r)return;var p=PRODUCTS[r.pid]||{name:r.pid};
+  openModal('Reject request','Decline '+r.tenant+'’s request for '+p.name+'.','<textarea id="rjt" rows="3" placeholder="Reason (required)…"></textarea>',function(){
+    var t=(document.getElementById('rjt').value||'').trim();if(!t){document.getElementById('rjt').style.borderColor='var(--off)';return false;}
+    r.status='Rejected';r.rejectedAt=new Date().toISOString();r.rejectedBy=ME;r.rejectReason=t;
+    closeDrawer();renderList();toast('Request rejected');return true;
+  },'Reject',true);
 }
 
-/* ---- LIFECYCLE ---- */
-function fillLifeTenant(){var sel=document.getElementById('lifeTenant'),cur=sel.value,seen={},opts='';SUBS.forEach(function(s){if(!seen[s.tid]){seen[s.tid]=1;opts+='<option value="'+s.tid+'">'+s.tenant+' ('+s.tid+')</option>';}});sel.innerHTML=opts;if(cur)sel.value=cur;}
-function renderLife(){
-  var tid=document.getElementById('lifeTenant').value,list=SUBS.filter(function(s){return s.tid===tid;});
-  var act=list.filter(function(s){return s.status==='Active'||s.status==='Scheduled';}).length,sch=list.filter(function(s){return s.status==='Scheduled';}).length;
-  document.getElementById('lifeMeta').textContent=act+' active'+(sch?' ('+sch+' scheduled to cancel)':'')+' · '+list.length+' total';
-  var box=document.getElementById('lifeBody');
-  if(!list.length){box.innerHTML='<div class="card"><div class="empty">No subscriptions for this tenant.</div></div>';return;}
-  box.innerHTML=list.map(function(s){var p=PRODUCTS[s.pid],en=s.fields.filter(function(f){return f.on;}).length;
-    return '<div class="subcard"><div class="subhead" onclick="toggleSub(\''+s.id+'\')">'
-      +'<div><div class="pn">'+p.name+'</div><div class="meta">'+prTag(s.priceRef)+' · '+en+'/'+s.fields.length+' fields</div></div>'
-      +'<div class="pr"><span class="pill '+s.status+'"><span class="dt"></span>'+((s.status==='Provisioning'||s.status==='Cancelling')?'<span class="spin"></span>':'')+statusLabel(s.status)+'</span></div>'
-      +'<span class="caret" id="car_'+s.id+'">&#9656;</span></div>'
-      +'<div class="subbody" id="body_'+s.id+'">'+subBody(s)+'</div></div>';}).join('');
-}
-function subBody(s){
-  var p=PRODUCTS[s.pid];
-  var fields='',lastg=null;
-  s.fields.forEach(function(f,i){
-    if(f.group!==lastg){lastg=f.group;fields+='<div class="fgrp"><span>'+f.group+'</span></div>';}
-    var ed=((s.status==='Active'||s.status==='Scheduled')&&!f.mand);
-    fields+='<label class="fchk'+(ed?'':' lk')+'"'+(ed?' onclick="lifeTf(\''+s.id+'\','+i+')"':'')+'><span class="cbx'+(f.on?' on':'')+(ed?'':' lock')+'"></span><span class="fn">'+f.name+'</span><span class="fk">'+f.k+'</span></label>';
-  });
-  var audit=s.audit.slice().reverse().map(function(a){return '<div class="ev"><span class="ed"></span><div><b>'+a.by+'</b> — '+a.txt+'</div><time>'+fmtTime(dt(a.t))+'</time></div>';}).join('');
-  var fail=s.status==='Failed'?'<div class="failnote">Provisioning failed — service account / ACL error.<button class="btn primary sm" onclick="retry(\''+s.id+'\')">Retry provisioning</button></div>':'';
-  var cancelNote=s.status==='Cancelled'?'<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancelled '+fmtDate(dt(s.cancelledAt))+' — '+s.cancelReason+' · Settled to '+fmtDate(dt(s.effectiveCancelAt||s.cancelledAt))+' · A new request is required to re-subscribe.</div>':'';
-  var schedNote=s.status==='Scheduled'?'<div class="schednote">Scheduled for cancellation on <b>'+fmtDate(dt(s.effectiveCancelAt))+'</b> — remains active &amp; billable until then. Settlement is calculated as of that date; committed / licence terms follow the contract.<div class="snbtns"><button class="btn ghost sm" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger sm" onclick="cancelNow(\''+s.id+'\')">Cancel now instead</button><button class="btn primary sm" onclick="runScheduled(\''+s.id+'\')">&#9654; Run on date (demo)</button></div></div>':'';
-  var cancelling=s.status==='Cancelling'?'<div class="failnote" style="background:var(--grey-bg);border-color:var(--line);color:var(--grey-tx)">Cancellation in progress — deprovision within 24h. Billing settled to '+fmtDate(dt(s.effectiveCancelAt))+'. <span class="spin"></span></div>':'';
-  return '<div class="gridcfg">'
-    +'<div><div class="seclbl">Pricing</div>'+pkgOptions(s.pid,s.priceRef.label)+'<div class="vhint" style="margin-top:2px">All configured packages · current in highlight. View only · owned by Billing.</div></div>'
-    +'<div><div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+fields+'</div></div></div>'
-    +fail+schedNote+cancelling+cancelNote
-    +'<div class="seclbl">Audit trail</div><div class="box audit">'+audit+'</div>'
-    +(s.status==='Active'?'<div style="margin-top:14px;text-align:right"><button class="btn danger sm" onclick="cancelSub(\''+s.id+'\')">Cancel subscription</button></div>':'');
-}
-function toggleSub(id){document.getElementById('body_'+id).classList.toggle('open');document.getElementById('car_'+id).classList.toggle('open');}
-function lifeTf(id,i){var s=SUBS.filter(function(x){return x.id===id;})[0],f=s.fields[i];if(f.on&&s.fields.filter(function(x){return x.on;}).length<=1){toast('At least one outbound field must remain enabled');return;}f.on=!f.on;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Outbound field "'+f.name+'" '+(f.on?'enabled':'disabled')+' (effective immediately)'});renderLife();document.getElementById('body_'+id).classList.add('open');document.getElementById('car_'+id).classList.add('open');toast('Field updated · effective immediately · tenant notified');}
-function retry(id){var s=SUBS.filter(function(x){return x.id===id;})[0];s.status='Provisioning';s.audit.push({t:new Date().toISOString(),by:ME,txt:'Provisioning retried'});renderLife();document.getElementById('body_'+id).classList.add('open');document.getElementById('car_'+id).classList.add('open');toast('Retrying provisioning…');setTimeout(function(){s.status='Active';s.audit.push({t:new Date().toISOString(),by:'system',txt:'Provisioning complete · now Active'});renderLife();document.getElementById('body_'+id).classList.add('open');document.getElementById('car_'+id).classList.add('open');toast('Provisioned · now Active');},1600);}
+/* ---- LIFECYCLE (single screen: cancel / schedule flows run through the modal; renderLife → renderList, openBody → no-op) ---- */
+function fillLifeTenant(){}
 function byId(id){return SUBS.filter(function(x){return x.id===id;})[0];}
-function openBody(id){var b=document.getElementById('body_'+id);if(b){b.classList.add('open');document.getElementById('car_'+id).classList.add('open');}}
 function term(s){var d=dt(s.approvedAt);d.setFullYear(d.getFullYear()+1);return d;}
 function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function cmode(){document.getElementById('cdate').style.display=document.querySelector('input[name=cmode]:checked').value==='sched'?'block':'none';}
-function fireCancel(s,effAt,txt){s.status='Cancelling';s.effectiveCancelAt=effAt;s.cancelledBy=ME;s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation requested — deprovision within 24h. Billing settled to '+fmtDate(dt(effAt))+'.'});toast('Cancelling · deprovision within 24h');setTimeout(function(){s.status='Cancelled';s.cancelledAt=new Date().toISOString();s.audit.push({t:new Date().toISOString(),by:'system',txt:'Deprovisioned · access revoked · final invoice issued (settled to '+fmtDate(dt(effAt))+').'});renderLife();openBody(s.id);},1500);}
-function cancelSub(id){var s=byId(id);var tmin=ymd(new Date(Date.now()+864e5)),tmax=ymd(term(s));var body='<div class="optrow"><label class="opt"><input type="radio" name="cmode" value="now" checked onchange="cmode()"> <span><b>Cancel now</b> — deprovision within 24h</span></label><label class="opt"><input type="radio" name="cmode" value="sched" onchange="cmode()"> <span><b>Schedule a date</b> — stays active &amp; billable until then</span></label></div><div id="cdate" style="display:none;margin-bottom:9px"><label class="flbl">Effective cancellation date</label><input type="date" id="cdt" min="'+tmin+'" max="'+tmax+'" value="'+tmin+'"><div class="vhint">Capped at contract term-end ('+fmtDate(term(s))+'). Settlement is calculated as of this date.</div></div><textarea id="ct" rows="3" placeholder="Cancellation reason (required)…"></textarea>';openModal('Cancel subscription','Billing settles to the effective date; committed / licence terms follow the contract.',body,function(){var txt=document.getElementById('ct').value.trim();if(!txt){document.getElementById('ct').style.borderColor='var(--off)';return false;}var mode=document.querySelector('input[name=cmode]:checked').value;if(mode==='sched'){var d=document.getElementById('cdt').value;if(!d){document.getElementById('cdt').style.borderColor='var(--off)';return false;}s.status='Scheduled';s.scheduledAt=new Date().toISOString();s.scheduledBy=ME;s.effectiveCancelAt=d+'T00:00:00';s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt))+' — remains active and billable until then; settlement as of that date.'});renderLife();openBody(id);toast('Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt)));return true;}fireCancel(s,new Date().toISOString(),txt);renderLife();openBody(id);return true;},'Confirm',true);}
+/* No transient "Cancelling" state — a cancel goes straight to Cancelled (per the agreed lifecycle). */
+function fireCancel(s,effAt,txt){s.status='Cancelled';s.effectiveCancelAt=effAt;s.cancelledAt=new Date().toISOString();s.cancelledBy=ME;s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:'system',txt:'Deprovisioned · access revoked · final invoice issued (settled to '+fmtDate(dt(effAt))+').'});toast('Subscription cancelled');}
+function retrySub(id){var s=byId(id);if(!s)return;openModal('Retry provisioning','Re-attempt provisioning for '+s.tenant+'.','',function(){s.status='Active';s.approvedAt=s.approvedAt||new Date().toISOString();s.audit.push({t:new Date().toISOString(),by:ME,txt:'Provisioning retried · subscription Active'});renderList();openBody(id);toast('Provisioning retried · Active');return true;},'Retry',false);}
+function cancelSub(id){var s=byId(id);var tmin=ymd(new Date(Date.now()+864e5)),tmax=ymd(term(s));var body='<div class="optrow"><label class="opt"><input type="radio" name="cmode" value="now" checked onchange="cmode()"> <span><b>Cancel now</b> — deprovision within 24h</span></label><label class="opt"><input type="radio" name="cmode" value="sched" onchange="cmode()"> <span><b>Schedule a date</b> — stays active &amp; billable until then</span></label></div><div id="cdate" style="display:none;margin-bottom:9px"><label class="flbl">Effective cancellation date</label><input type="date" id="cdt" min="'+tmin+'" max="'+tmax+'" value="'+tmin+'"></div><textarea id="ct" rows="3" placeholder="Cancellation reason (required)…"></textarea>';openModal('Cancel subscription','Billing settles to the effective date; committed / licence terms follow the contract.',body,function(){var txt=document.getElementById('ct').value.trim();if(!txt){document.getElementById('ct').style.borderColor='var(--off)';return false;}var mode=document.querySelector('input[name=cmode]:checked').value;if(mode==='sched'){var d=document.getElementById('cdt').value;if(!d){document.getElementById('cdt').style.borderColor='var(--off)';return false;}s.status='Scheduled';s.scheduledAt=new Date().toISOString();s.scheduledBy=ME;s.effectiveCancelAt=d+'T00:00:00';s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt))+' — remains active and billable until then; settlement as of that date.'});renderLife();openBody(id);toast('Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt)));return true;}fireCancel(s,new Date().toISOString(),txt);renderLife();openBody(id);return true;},'Confirm',true);}
 function unschedule(id){var s=byId(id);openModal('Un-schedule cancellation','Revert to active and remove the scheduled cancellation for '+fmtDate(dt(s.effectiveCancelAt))+'.','',function(){s.status='Active';s.audit.push({t:new Date().toISOString(),by:ME,txt:'Scheduled cancellation removed — subscription remains active.'});delete s.effectiveCancelAt;delete s.scheduledAt;renderLife();openBody(id);toast('Cancellation un-scheduled · subscription active');return true;},'Un-schedule',false);}
 function cancelNow(id){var s=byId(id);openModal('Cancel now instead','Override the scheduled date and deprovision within 24h. Billing settles to today.','',function(){fireCancel(s,new Date().toISOString(),s.cancelReason||'Immediate cancellation (override of scheduled date).');renderLife();openBody(id);return true;},'Cancel now',true);}
 function runScheduled(id){var s=byId(id);s.audit.push({t:new Date().toISOString(),by:'system',txt:'Scheduled date reached ('+fmtDate(dt(s.effectiveCancelAt))+') — executing cancellation.'});fireCancel(s,s.effectiveCancelAt,s.cancelReason);renderLife();openBody(id);}
