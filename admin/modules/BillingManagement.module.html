@@ -1384,6 +1384,19 @@ function saveAssign(){
     if(ex)Object.assign(ex,{serviceId:sid,packageId:pid,activation:act,status,quoteRate,override});
     else state.subs.push({id:'SUB'+Date.now(),tenantId:tid,serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
   editingSubId=null;renderSubs();toast('Subscription saved');
+  /* Publish the customized price to a shared store keyed by the originating request's
+     tenant × product, so Subscription Management shows the exact value on return.
+     (In production both screens read the same backend price; this mirrors that.) */
+  try{
+    var sf=window.__smFocus;
+    if(sf&&sf.tid&&sf.pid){
+      var map=JSON.parse(localStorage.getItem('appro.customPrice')||'{}');
+      var key=sf.tid+'::'+sf.pid;
+      if(hasOverride){ map[key]={summary:ovrSummary(ref.pkg,override),ts:Date.now()}; }
+      else { delete map[key]; }
+      localStorage.setItem('appro.customPrice',JSON.stringify(map));
+    }
+  }catch(e){}
   /* Keep the manual "Return to approval" bar visible so the admin can customize
      several packages before choosing to go back and finish the approval. */
   checkApprovalReturn();
@@ -1422,6 +1435,9 @@ renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
     try{
       var f=JSON.parse(localStorage.getItem("appro.billingFocus")||"null");
       if(!f||(Date.now()-f.ts>60000))return;
+      /* Remember the originating request's identifiers so a Save can publish the
+         customized price back to a shared store that Subscription Management reads. */
+      try{ window.__smFocus={tid:f.tid,pid:f.pid}; }catch(e){}
       localStorage.removeItem("appro.billingFocus");
       // 1) Open the Pricing tab and switch to the By-tenant scope.
       var subsTab=document.querySelector('[data-tab="pricing"]');
