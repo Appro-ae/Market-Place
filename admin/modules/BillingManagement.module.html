@@ -81,6 +81,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none}
 .tab{padding:9px 18px;border-radius:8px;font-weight:700;font-size:13.5px;color:var(--muted);white-space:nowrap}
 .tab:hover{color:var(--text)}
 .tab.active{background:var(--brand);color:#fff}
+.approvalbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:#EEF3FF;border:1px solid #C7D6FF;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--text)}
+.approvalbar b{color:var(--brand)}
+.approvalbar .btn{margin-left:auto;white-space:nowrap}
 
 .panel{display:none;animation:fade .25s ease}
 .panel.show{display:block}
@@ -398,6 +401,10 @@ td .pname{font-weight:700}
         </div>
       </div>
 
+      <div id="approvalReturn" class="approvalbar" style="display:none">
+        <span><b>Pricing requested from an approval.</b> Customize any packages for this tenant, then return to Subscription Management to finish the approval.</span>
+        <button class="btn primary" onclick="returnToApproval()">Return to approval&nbsp;&#8599;</button>
+      </div>
 
       <div class="tabs" role="tablist">
         <button class="tab active" data-tab="report">Overview</button>
@@ -1325,6 +1332,21 @@ function renderMatrix(area){
   h+='</div>';area.innerHTML=h;
 }
 function openAssign(subId){editingSubId=subId||'__new__';var ht=document.getElementById('histToggle');if(ht&&ht.checked)ht.checked=false;var pr=document.getElementById('pricing');if(pr)pr.classList.remove('showhist');renderSubs();}
+/* Manual return-to-approval bar: shown when the admin arrived from a Subscription Management approval.
+   Stays visible so several packages can be customized before returning. */
+function checkApprovalReturn(){
+  var bar=document.getElementById('approvalReturn'); if(!bar)return;
+  try{ var r=JSON.parse(localStorage.getItem('appro.pricingReturn')||'null'); bar.style.display=(r&&r.id&&(Date.now()-r.ts<600000))?'flex':'none'; }
+  catch(e){ bar.style.display='none'; }
+}
+function returnToApproval(){
+  try{ var r=JSON.parse(localStorage.getItem('appro.pricingReturn')||'null');
+    if(r&&r.id) localStorage.setItem('appro.subReopen',JSON.stringify({id:r.id,ts:Date.now()}));
+    localStorage.removeItem('appro.pricingReturn');
+  }catch(e){}
+  var bar=document.getElementById('approvalReturn'); if(bar)bar.style.display='none';
+  try{ window.parent.postMessage({type:'appro:navigate',to:'subscriptions'},'*'); }catch(e){}
+}
 function closeAssign(){editingSubId=null;renderSubs();}
 function hydrateAssignForm(){
   const tid=curSubTenant(), isNew=editingSubId==='__new__';
@@ -1361,20 +1383,10 @@ function saveAssign(){
   else{const ex=state.subs.find(x=>x.tenantId===tid&&x.productId===ref.prod.id);
     if(ex)Object.assign(ex,{serviceId:sid,packageId:pid,activation:act,status,quoteRate,override});
     else state.subs.push({id:'SUB'+Date.now(),tenantId:tid,serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
-  editingSubId=null;renderSubs();
-  /* If the admin arrived here from a Subscription Management approval ("Customized"),
-     hand them back to that request drawer to finish the approval. */
-  try{
-    var ret=JSON.parse(localStorage.getItem('appro.pricingReturn')||'null');
-    if(ret&&ret.id&&(Date.now()-ret.ts<300000)){
-      localStorage.removeItem('appro.pricingReturn');
-      localStorage.setItem('appro.subReopen',JSON.stringify({id:ret.id,ts:Date.now()}));
-      toast('Price saved · returning to approval');
-      setTimeout(function(){try{window.parent.postMessage({type:'appro:navigate',to:'subscriptions'},'*');}catch(e){}},650);
-      return;
-    }
-  }catch(e){}
-  toast('Subscription saved');
+  editingSubId=null;renderSubs();toast('Subscription saved');
+  /* Keep the manual "Return to approval" bar visible so the admin can customize
+     several packages before choosing to go back and finish the approval. */
+  checkApprovalReturn();
 }
 function subTenantName(sb){return (state.tenants.find(t=>t.id===sb.tenantId)||{}).name||sb.tenantId;}
 function setSubLifecycle(id,to,note){const sb=state.subs.find(x=>x.id===id);if(!sb)return;const from=sb.status;if(from===to)return;sb.status=to;if(to==='Active'&&!sb.activation)sb.activation=new Date().toISOString().slice(0,10);const ref=pkgById(sb.packageId);logAudit('Subscription · '+subTenantName(sb),(ref?ref.prod.name:'')+' status',from,to);renderSubs();toast(note);}
@@ -1441,8 +1453,9 @@ renderAll(); buildTenantSelects(); applyRole(); buildMsMenu(); renderReport();
       },160);
     }catch(e){}
   }
-  if(document.readyState!=="loading")setTimeout(applyFocus,350);
-  else document.addEventListener("DOMContentLoaded",function(){setTimeout(applyFocus,350);});
+  function _init(){ setTimeout(applyFocus,350); setTimeout(function(){try{checkApprovalReturn();}catch(e){}},500); }
+  if(document.readyState!=="loading")_init();
+  else document.addEventListener("DOMContentLoaded",_init);
 })();
 </script>
 </body>
