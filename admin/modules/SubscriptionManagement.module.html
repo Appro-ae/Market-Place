@@ -197,7 +197,7 @@ function dt(s){return new Date(s);}
 function fmtDate(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function fmtTime(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
 function daysAgo(d){return Math.floor((Date.now()-d.getTime())/864e5);}
-function statusLabel(st){return {Scheduled:'Scheduled to cancel',Cancelling:'Cancelling'}[st]||st;}
+function statusLabel(st){return {Scheduled:'Scheduled to cancel'}[st]||st;}
 
 /* products: outbound fields are THIS module's concern. Pricing is NOT here — only a priceRef label resolved from Billing. */
 var PRODUCTS={
@@ -283,17 +283,17 @@ function prTag(p){return '<span class="priceref">'+p.label+' <span class="src '+
 /* Unified list — every pending request + every subscription in one screen. */
 function listItems(){
   var out=[];
-  REQUESTS.forEach(function(r){out.push({kind:'req',id:r.id,tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,status:'Pending',date:r.submittedAt});});
+  REQUESTS.forEach(function(r){out.push({kind:'req',id:r.id,tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,status:(r.status||'Pending'),date:r.submittedAt});});
   SUBS.forEach(function(s){out.push({kind:'sub',id:s.id,tid:s.tid,tenant:s.tenant,pid:s.pid,priceRef:s.priceRef,status:s.status,date:s.approvedAt});});
   return out;
 }
-var STATUS_ORDER={Pending:0,Failed:1,Provisioning:2,Cancelling:3,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
+var STATUS_ORDER={Pending:0,Failed:1,Provisioning:2,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
 function renderList(){
   var q=(document.getElementById('listSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
   var rows=listItems().filter(function(it){return (!fp||it.pid===fp)&&(!fc||it.tid===fc)&&((it.tenant||'').toLowerCase().indexOf(q)>=0||String(it.tid||'').toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){var so=(STATUS_ORDER[a.status]||9)-(STATUS_ORDER[b.status]||9);return so||(dt(a.date)-dt(b.date));});
   document.getElementById('listKpis').innerHTML=[
-    ['Pending review',REQUESTS.length,'awaiting action'],
+    ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action'],
     ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions'],
     ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon'],
     ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'need retry']
@@ -302,7 +302,7 @@ function renderList(){
   var tb=document.getElementById('listBody');
   if(!rows.length){tb.innerHTML='<tr><td colspan="6"><div class="empty">No requests or subscriptions match.</div></td></tr>';return;}
   tb.innerHTML=rows.map(function(it){var p=PRODUCTS[it.pid]||{name:it.pid};
-    var spin=(it.status==='Provisioning'||it.status==='Cancelling')?'<span class="spin"></span>':'';
+    var spin=(it.status==='Provisioning')?'<span class="spin"></span>':'';
     var cancel=(it.kind==='sub'&&it.status==='Active')?'<button class="btn danger sm" onclick="event.stopPropagation();cancelSub(\''+it.id+'\')">Cancel</button>':'';
     return '<tr class="clk" onclick="openDetail(\''+it.kind+'\',\''+it.id+'\')">'+
       '<td><b style="color:var(--navy)">'+it.tenant+'</b><div class="tid">'+it.tid+'</div></td>'+
@@ -315,7 +315,8 @@ function renderList(){
 /* back-compat aliases — other flows call these after mutating data */
 function renderReq(){renderList();}
 function renderLife(){renderList();}
-function openBody(){}
+/* Refresh the open drawer after a lifecycle mutation (approve/cancel/etc.). */
+function openBody(id){if(id&&document.getElementById('drawer').classList.contains('on')&&byId(id))detailSub(id);}
 
 /* ---- DETAIL DRAWER (view-only) ---- */
 var DRAFT=null, DCUR=null;
@@ -358,11 +359,14 @@ function detailReq(id){
       +'<div class="kv"><span>Contact</span><b>'+r.contact+'</b></div>'
       +'<div class="kv"><span>Product</span><b>'+p.name+'</b></div>'
       +(r.ptype==='change'?'<div class="kv"><span>Current package</span><b>'+r.prevLabel+'</b></div>':'')
-      +'<div class="kv"><span>Status</span><b>Pending</b></div>'
+      +'<div class="kv"><span>Status</span><b>'+(r.status||'Pending')+'</b></div>'
       +'<div class="kv"><span>Submitted</span><b>'+fmtTime(dt(r.submittedAt))+'</b></div>'+provided+'</div>'
     +priceBlock(r.pid,r.priceRef,r.tid,r.tenant)
-    +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(flds(r.pid,{}))+'</div>';
-  document.getElementById('dFoot').innerHTML='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
+    +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(flds(r.pid,{}))+'</div>'
+    +((r.status||'Pending')==='Rejected'?'<div class="failnote" style="background:var(--off-bg);border-color:var(--line);color:var(--off-tx)">Rejected '+fmtDate(dt(r.rejectedAt))+' — '+(r.rejectReason||'')+'</div>':'');
+  document.getElementById('dFoot').innerHTML=((r.status||'Pending')==='Pending')
+    ? '<button class="btn ghost" onclick="closeDrawer()">Close</button><button class="btn danger" onclick="doReject(\''+r.id+'\')">Reject</button><button class="btn primary" onclick="doApprove(\''+r.id+'\')">Approve</button>'
+    : '<button class="btn ghost" onclick="closeDrawer()">Close</button>';
   openDrawer();
 }
 function detailSub(id){
@@ -391,7 +395,11 @@ function detailSub(id){
     +'<div class="seclbl">Outbound data fields <span class="owned">THIS MODULE</span></div><div class="box">'+roFields(s.fields)+'</div>'
     +note
     +'<div class="seclbl">Audit trail</div><div class="box audit">'+audit+'</div>';
-  document.getElementById('dFoot').innerHTML='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
+  var acts='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
+  if(s.status==='Active')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
+  else if(s.status==='Scheduled')acts+='<button class="btn ghost" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger" onclick="cancelNow(\''+s.id+'\')">Cancel now</button>';
+  else if(s.status==='Failed')acts+='<button class="btn primary" onclick="retrySub(\''+s.id+'\')">Retry</button><button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
+  document.getElementById('dFoot').innerHTML=acts;
   openDrawer();
 }
 function renderDFields(){
@@ -405,9 +413,26 @@ function renderDFields(){
 }
 function dtf(i){DRAFT.fields[i].on=!DRAFT.fields[i].on;renderDFields();}
 function grpAll(i,on){var g=DRAFT.fields[i].group;DRAFT.fields.forEach(function(f){if(f.group===g&&!f.mand)f.on=on;});renderDFields();}
-/* Approve / Reject are disabled — this module's drawer is view-only (governance moved elsewhere). */
-function doApprove(id){}
-function doReject(id){}
+/* Approve / Reject — request lifecycle is governed in THIS module. Pricing stays read-only (priceRef). */
+function nextSubId(){var n=900;SUBS.forEach(function(s){var m=/sub_(\d+)/.exec(s.id||'');if(m)n=Math.max(n,+m[1]);});return 'sub_'+(n+1);}
+function doApprove(id){
+  var idx=-1;REQUESTS.forEach(function(r,i){if(r.id===id)idx=i;});
+  if(idx<0)return;var r=REQUESTS[idx];var p=PRODUCTS[r.pid]||{name:r.pid};
+  openModal('Approve request','Provision '+p.name+' for '+r.tenant+' at the '+r.priceRef.label+' price. The subscription becomes Active.','',function(){
+    var now=new Date().toISOString();
+    var sub={id:nextSubId(),tid:r.tid,tenant:r.tenant,pid:r.pid,priceRef:r.priceRef,status:'Active',approvedAt:now,approvedBy:ME,fields:flds(r.pid,{}),audit:[{t:now,by:ME,txt:'Request approved · subscription provisioned'}]};
+    SUBS.unshift(sub);REQUESTS.splice(idx,1);
+    closeDrawer();renderList();toast('Approved · '+r.tenant+' now Active');return true;
+  },'Approve',false);
+}
+function doReject(id){
+  var r=REQUESTS.filter(function(x){return x.id===id;})[0];if(!r)return;var p=PRODUCTS[r.pid]||{name:r.pid};
+  openModal('Reject request','Decline '+r.tenant+'’s request for '+p.name+'.','<textarea id="rjt" rows="3" placeholder="Reason (required)…"></textarea>',function(){
+    var t=(document.getElementById('rjt').value||'').trim();if(!t){document.getElementById('rjt').style.borderColor='var(--off)';return false;}
+    r.status='Rejected';r.rejectedAt=new Date().toISOString();r.rejectedBy=ME;r.rejectReason=t;
+    closeDrawer();renderList();toast('Request rejected');return true;
+  },'Reject',true);
+}
 
 /* ---- LIFECYCLE (single screen: cancel / schedule flows run through the modal; renderLife → renderList, openBody → no-op) ---- */
 function fillLifeTenant(){}
@@ -415,7 +440,9 @@ function byId(id){return SUBS.filter(function(x){return x.id===id;})[0];}
 function term(s){var d=dt(s.approvedAt);d.setFullYear(d.getFullYear()+1);return d;}
 function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
 function cmode(){document.getElementById('cdate').style.display=document.querySelector('input[name=cmode]:checked').value==='sched'?'block':'none';}
-function fireCancel(s,effAt,txt){s.status='Cancelling';s.effectiveCancelAt=effAt;s.cancelledBy=ME;s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation requested — deprovision within 24h. Billing settled to '+fmtDate(dt(effAt))+'.'});toast('Cancelling · deprovision within 24h');setTimeout(function(){s.status='Cancelled';s.cancelledAt=new Date().toISOString();s.audit.push({t:new Date().toISOString(),by:'system',txt:'Deprovisioned · access revoked · final invoice issued (settled to '+fmtDate(dt(effAt))+').'});renderLife();openBody(s.id);},1500);}
+/* No transient "Cancelling" state — a cancel goes straight to Cancelled (per the agreed lifecycle). */
+function fireCancel(s,effAt,txt){s.status='Cancelled';s.effectiveCancelAt=effAt;s.cancelledAt=new Date().toISOString();s.cancelledBy=ME;s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:'system',txt:'Deprovisioned · access revoked · final invoice issued (settled to '+fmtDate(dt(effAt))+').'});toast('Subscription cancelled');}
+function retrySub(id){var s=byId(id);if(!s)return;openModal('Retry provisioning','Re-attempt provisioning for '+s.tenant+'.','',function(){s.status='Active';s.approvedAt=s.approvedAt||new Date().toISOString();s.audit.push({t:new Date().toISOString(),by:ME,txt:'Provisioning retried · subscription Active'});renderList();openBody(id);toast('Provisioning retried · Active');return true;},'Retry',false);}
 function cancelSub(id){var s=byId(id);var tmin=ymd(new Date(Date.now()+864e5)),tmax=ymd(term(s));var body='<div class="optrow"><label class="opt"><input type="radio" name="cmode" value="now" checked onchange="cmode()"> <span><b>Cancel now</b> — deprovision within 24h</span></label><label class="opt"><input type="radio" name="cmode" value="sched" onchange="cmode()"> <span><b>Schedule a date</b> — stays active &amp; billable until then</span></label></div><div id="cdate" style="display:none;margin-bottom:9px"><label class="flbl">Effective cancellation date</label><input type="date" id="cdt" min="'+tmin+'" max="'+tmax+'" value="'+tmin+'"></div><textarea id="ct" rows="3" placeholder="Cancellation reason (required)…"></textarea>';openModal('Cancel subscription','Billing settles to the effective date; committed / licence terms follow the contract.',body,function(){var txt=document.getElementById('ct').value.trim();if(!txt){document.getElementById('ct').style.borderColor='var(--off)';return false;}var mode=document.querySelector('input[name=cmode]:checked').value;if(mode==='sched'){var d=document.getElementById('cdt').value;if(!d){document.getElementById('cdt').style.borderColor='var(--off)';return false;}s.status='Scheduled';s.scheduledAt=new Date().toISOString();s.scheduledBy=ME;s.effectiveCancelAt=d+'T00:00:00';s.cancelReason=txt;s.audit.push({t:new Date().toISOString(),by:ME,txt:'Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt))+' — remains active and billable until then; settlement as of that date.'});renderLife();openBody(id);toast('Cancellation scheduled for '+fmtDate(dt(s.effectiveCancelAt)));return true;}fireCancel(s,new Date().toISOString(),txt);renderLife();openBody(id);return true;},'Confirm',true);}
 function unschedule(id){var s=byId(id);openModal('Un-schedule cancellation','Revert to active and remove the scheduled cancellation for '+fmtDate(dt(s.effectiveCancelAt))+'.','',function(){s.status='Active';s.audit.push({t:new Date().toISOString(),by:ME,txt:'Scheduled cancellation removed — subscription remains active.'});delete s.effectiveCancelAt;delete s.scheduledAt;renderLife();openBody(id);toast('Cancellation un-scheduled · subscription active');return true;},'Un-schedule',false);}
 function cancelNow(id){var s=byId(id);openModal('Cancel now instead','Override the scheduled date and deprovision within 24h. Billing settles to today.','',function(){fireCancel(s,new Date().toISOString(),s.cancelReason||'Immediate cancellation (override of scheduled date).');renderLife();openBody(id);return true;},'Cancel now',true);}
