@@ -822,6 +822,13 @@ function pricingRank(d){
   if(d.status==='Pending')return 1;
   return 2; /* Ended */
 }
+/* Edit / Customize is locked once the price is In effect (subscription Active) — pricing is
+   set during the request/approval stage, not changed underneath a live subscription. */
+function editControl(d,onclick){
+  if(d.status==='Active')
+    return '<span class="btn ghost sm lockbtn" title="Pricing is locked while the subscription is active" aria-disabled="true" style="opacity:.55;cursor:not-allowed;pointer-events:none;display:inline-flex;align-items:center;gap:5px">🔒 Locked</span>';
+  return '<button class="btn ghost sm" onclick="'+onclick+'">Edit</button>';
+}
 
 /* ===== toast ===== */
 function toast(msg,err){const el=$('toast');$('toastMsg').textContent=msg;el.querySelector('svg').style.color=err?'#ff8a80':'#69f0ae';el.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>el.classList.remove('show'),2400);}
@@ -1232,8 +1239,7 @@ function renderSubs(){
       <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
       <td>${sb.activation||'—'}${termLine(sb.activation,ref.pkg.billing)}</td>
       <td><span class="pill ${ch.cls}"><span class="dot"></span>${ch.label}</span></td>
-      <td><div class="rowact">
-        <button class="btn ghost sm" onclick="openAssign('${sb.id}')">Edit</button>
+      <td><div class="rowact">${editControl(d,`openAssign('${sb.id}')`)}
       </div></td></tr>`;
     if(editingSubId===sb.id)h+=assignFormHtml();
   });
@@ -1321,7 +1327,7 @@ function renderMatrix(area){
         <td><span class="pname">${ref.pkg.name}</span><div class="subname">${planSub(d.btype,ref.pkg)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
         <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
         <td><span class="pill ${ch.cls}"><span class="dot"></span>${ch.label}</span></td>
-        <td class="rowact"><button class="btn ghost sm" onclick="editFromOverview('${t.id}','${sb.id}')">Edit</button></td>
+        <td class="rowact">${editControl(d,`editFromOverview('${t.id}','${sb.id}')`)}</td>
       </tr>`;
     });
     h+=`<div class="ovtenant">
