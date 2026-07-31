@@ -574,6 +574,13 @@ const BILLMASTER=[
 const BILLNAMES=BILLMASTER.map(m=>m[0]);const BILLSVC=Object.fromEntries(BILLMASTER);
 const OVERFLOW=[['payg','Pay-as-you-go overage'],['renew','Auto-renew block'],['upgrade','Upgrade / change plan'],['block','Block at limit (hard cap)']];
 function ovfLabel(c){return ({payg:'Pay-as-you-go overage',renew:'Auto-renew block',upgrade:'Upgrade / change plan',block:'Block at limit (hard cap)'})[c]||'—';}
+/* Plan descriptor for the tenant-pricing tables — reflects the actual pricing type.
+   Overage handling is only shown for Committed volume (the only type where overage applies). */
+function planSub(btype,pkg){
+  if(btype==='Committed volume'){var ov=ovfLabel(pkg&&pkg.overflow);return 'Committed volume'+(ov&&ov!=='—'?' · '+ov:'');}
+  if(btype==='Usage band')return 'Tiered pricing';
+  return 'Pay-as-you-go';
+}
 function quotaMetric(used,comm,term){
   const tl=term?('<div class="qterm">'+term+'</div>'):'';
   if(!comm) return '<div class="mv">'+fmtInt(used)+' used</div>'+tl;
@@ -1210,7 +1217,7 @@ function renderSubs(){
     const ch=pricingChip(d);
     h+=`<tr${ch.ended?' class="hist"':''}>
       <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
-      <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
+      <td><span class="pname">${ref.pkg.name}</span><div class="subname">${planSub(d.btype,ref.pkg)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
       <td class="num">${d.committed?fmtInt(d.committed)+' /yr':'—'}</td>
       <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
       <td>${sb.activation||'—'}${termLine(sb.activation,ref.pkg.billing)}</td>
@@ -1301,7 +1308,7 @@ function renderMatrix(area){
       const ch=pricingChip(d);
       rows+=`<tr${ch.ended?' class="hist"':''}>
         <td class="svc"><span class="pname">${ref.prod.name}</span><div class="subname">${ref.prod.descriptor||''}${ref.prod.active?'':' · inactive'}</div></td>
-        <td><span class="pname">${ref.pkg.name}</span><div class="subname">${ovfLabel(ref.pkg.overflow)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
+        <td><span class="pname">${ref.pkg.name}</span><div class="subname">${planSub(d.btype,ref.pkg)}${d.upgradeRec?` · <span style="color:#B7791F;font-weight:700">upgrade → ${d.upgradeToName}</span>`:''}</div></td>
         <td class="num">${d.btype==='Usage band'?'<span class="subname">tiered</span>':fmtUSD(d.unit)}${d.overridden?`<div class="subname"><span style="color:#2E5BFF;font-weight:800">override</span>${d.btype==='Usage band'?'':' · list '+fmtUSD(d.listUnit)}</div>`:''}</td>
         <td><span class="pill ${ch.cls}"><span class="dot"></span>${ch.label}</span></td>
         <td class="rowact"><button class="btn ghost sm" onclick="editFromOverview('${t.id}','${sb.id}')">Edit</button></td>
