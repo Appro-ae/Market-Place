@@ -163,7 +163,6 @@
     <div>
       <div class="ti">Subscription Management</div>
     </div>
-    <span class="rolechip">Role · Subscriptions (excl. billing)</span>
   </div>
 
   <!-- SINGLE SCREEN — all requests + subscriptions -->
@@ -175,7 +174,7 @@
       <button class="chip" data-ltab="active" onclick="setListTab('active')">Active requests</button>
     </div>
     <div class="toolbar">
-      <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="listSearch" placeholder="Search tenant or tenant ID…" oninput="renderList()"></div>
+      <select class="sel" id="fStatus" onchange="renderList()"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Active">Active</option><option value="Scheduled">Scheduled to cancel</option><option value="Failed">Failed</option><option value="Cancelled">Cancelled</option><option value="Rejected">Rejected</option></select>
       <select class="sel" id="fProd" onchange="renderList()"><option value="">All products</option></select>
       <select class="sel" id="fCust" onchange="renderList()"><option value="">All tenants</option></select>
     </div>
@@ -309,15 +308,15 @@ function setListTab(t){
   renderList();
 }
 function renderList(){
-  var q=(document.getElementById('listSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
-  var rows=listItems().filter(function(it){return listTabMatch(it)&&(!fp||it.pid===fp)&&(!fc||it.tid===fc)&&((it.tenant||'').toLowerCase().indexOf(q)>=0||String(it.tid||'').toLowerCase().indexOf(q)>=0);})
+  var fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value,fs=(document.getElementById('fStatus')||{}).value||'';
+  var rows=listItems().filter(function(it){return listTabMatch(it)&&(!fp||it.pid===fp)&&(!fc||it.tid===fc)&&(!fs||it.status===fs);})
     .sort(function(a,b){var so=(STATUS_ORDER[a.status]||9)-(STATUS_ORDER[b.status]||9);return so||(dt(a.date)-dt(b.date));});
   document.getElementById('listKpis').innerHTML=[
-    ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action'],
-    ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions'],
-    ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon'],
-    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'provisioning failed']
-  ].map(function(k){return '<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
+    ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action','amber-tx','amber'],
+    ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions','ok-tx','ok'],
+    ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon','amber-tx','amber'],
+    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'provisioning failed','off-tx','off']
+  ].map(function(k){return '<div class="kpi" style="border-top:3px solid var(--'+k[4]+')"><div class="l">'+k[0]+'</div><div class="v" style="color:var(--'+k[3]+')">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
   document.getElementById('listCount').textContent=rows.length+' shown';
   var tb=document.getElementById('listBody');
   if(!rows.length){tb.innerHTML='<tr><td colspan="5"><div class="empty">No requests or subscriptions match.</div></td></tr>';return;}
