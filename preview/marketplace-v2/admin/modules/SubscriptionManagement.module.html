@@ -350,8 +350,20 @@ var DRAFT=null, DCUR=null;
    Same mechanism the admin shell already listens for: localStorage focus + parent postMessage. */
 function customizeRedirect(tid,tenant,pid){
   try{ localStorage.setItem('appro.billingFocus', JSON.stringify({tid:tid,tenant:tenant,pid:pid,ts:Date.now()})); }catch(e){}
+  /* Remember which request/subscription to return to so Billing can hand the user back to finish approval. */
+  try{ if(DCUR) localStorage.setItem('appro.pricingReturn', JSON.stringify({id:DCUR,ts:Date.now()})); }catch(e){}
   try{ window.parent.postMessage({type:'appro:navigate',to:'billing'},'*'); }catch(e){}
   toast('Opening Billing · Tenant pricing…');
+}
+/* On return from Billing, re-open the request/subscription drawer to finish approval. */
+function applyReturn(){
+  try{
+    var r=JSON.parse(localStorage.getItem('appro.subReopen')||'null');
+    if(!r||!r.id||(Date.now()-r.ts>300000))return;
+    localStorage.removeItem('appro.subReopen');
+    var isReq=REQUESTS.some(function(x){return x.id===r.id;});
+    setTimeout(function(){ try{ openDetail(isReq?'req':'sub', r.id); }catch(e){} }, 350);
+  }catch(e){}
 }
 /* Read-only outbound field list. */
 function roFields(fieldArr){
@@ -483,7 +495,7 @@ function closeModal(){document.getElementById('mscrim').classList.remove('on');M
 var TT;function toast(m){var t=document.getElementById('toast');t.innerHTML=m;t.classList.add('on');clearTimeout(TT);TT=setTimeout(function(){t.classList.remove('on');},2600);}
 
 REQUESTS=loadLiveRequests().concat(REQUESTS);
-fillFilters();fillStatusFilter();renderReq();fillLifeTenant();
+fillFilters();fillStatusFilter();renderReq();fillLifeTenant();applyReturn();
 window.addEventListener('storage',function(e){if(!e||e.key===LIVE_KEY||e.key===null)refreshLive();});
 </script>
 </body>

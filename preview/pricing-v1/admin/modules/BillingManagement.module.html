@@ -1324,7 +1324,7 @@ function renderMatrix(area){
   });
   h+='</div>';area.innerHTML=h;
 }
-function openAssign(subId){editingSubId=subId||'__new__';renderSubs();}
+function openAssign(subId){editingSubId=subId||'__new__';var ht=document.getElementById('histToggle');if(ht&&ht.checked)ht.checked=false;var pr=document.getElementById('pricing');if(pr)pr.classList.remove('showhist');renderSubs();}
 function closeAssign(){editingSubId=null;renderSubs();}
 function hydrateAssignForm(){
   const tid=curSubTenant(), isNew=editingSubId==='__new__';
@@ -1361,7 +1361,20 @@ function saveAssign(){
   else{const ex=state.subs.find(x=>x.tenantId===tid&&x.productId===ref.prod.id);
     if(ex)Object.assign(ex,{serviceId:sid,packageId:pid,activation:act,status,quoteRate,override});
     else state.subs.push({id:'SUB'+Date.now(),tenantId:tid,serviceId:sid,productId:ref.prod.id,packageId:pid,activation:act,status,quoteRate,override});}
-  editingSubId=null;renderSubs();toast('Subscription saved');
+  editingSubId=null;renderSubs();
+  /* If the admin arrived here from a Subscription Management approval ("Customized"),
+     hand them back to that request drawer to finish the approval. */
+  try{
+    var ret=JSON.parse(localStorage.getItem('appro.pricingReturn')||'null');
+    if(ret&&ret.id&&(Date.now()-ret.ts<300000)){
+      localStorage.removeItem('appro.pricingReturn');
+      localStorage.setItem('appro.subReopen',JSON.stringify({id:ret.id,ts:Date.now()}));
+      toast('Price saved · returning to approval');
+      setTimeout(function(){try{window.parent.postMessage({type:'appro:navigate',to:'subscriptions'},'*');}catch(e){}},650);
+      return;
+    }
+  }catch(e){}
+  toast('Subscription saved');
 }
 function subTenantName(sb){return (state.tenants.find(t=>t.id===sb.tenantId)||{}).name||sb.tenantId;}
 function setSubLifecycle(id,to,note){const sb=state.subs.find(x=>x.id===id);if(!sb)return;const from=sb.status;if(from===to)return;sb.status=to;if(to==='Active'&&!sb.activation)sb.activation=new Date().toISOString().slice(0,10);const ref=pkgById(sb.packageId);logAudit('Subscription · '+subTenantName(sb),(ref?ref.prod.name:'')+' status',from,to);renderSubs();toast(note);}
