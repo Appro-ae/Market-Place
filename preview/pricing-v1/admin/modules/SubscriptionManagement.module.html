@@ -169,14 +169,19 @@
   <!-- SINGLE SCREEN — all requests + subscriptions -->
   <div id="tab-list">
     <div class="kpis" id="listKpis"></div>
+    <div class="seg" role="tablist" aria-label="Subscription views">
+      <button class="chip on" data-ltab="all" onclick="setListTab('all')">All</button>
+      <button class="chip" data-ltab="pending" onclick="setListTab('pending')">Pending request</button>
+      <button class="chip" data-ltab="active" onclick="setListTab('active')">Active requests</button>
+    </div>
     <div class="toolbar">
       <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="listSearch" placeholder="Search tenant or tenant ID…" oninput="renderList()"></div>
       <select class="sel" id="fProd" onchange="renderList()"><option value="">All products</option></select>
       <select class="sel" id="fCust" onchange="renderList()"><option value="">All tenants</option></select>
     </div>
     <div class="card">
-      <h3>Requests &amp; subscriptions <span class="cnt" id="listCount"></span></h3>
-      <table><thead><tr><th>Tenant</th><th>Product</th><th>Package</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody id="listBody"></tbody></table>
+      <h3 id="listTitle">All requests &amp; subscriptions <span class="cnt" id="listCount"></span></h3>
+      <table><thead><tr><th>Tenant</th><th>Product</th><th>Package</th><th>Date</th><th>Status</th></tr></thead><tbody id="listBody"></tbody></table>
     </div>
   </div>
 </div>
@@ -288,29 +293,42 @@ function listItems(){
   return out;
 }
 var STATUS_ORDER={Pending:0,Failed:1,Provisioning:2,Scheduled:4,Active:5,Cancelled:6,Rejected:7};
+/* Sub-tabs: All / Pending request / Active requests */
+var listTab='all';
+var LTAB_TITLE={all:'All requests & subscriptions',pending:'Pending requests',active:'Active requests'};
+function listTabMatch(it){
+  if(listTab==='pending')return it.status==='Pending';
+  if(listTab==='active')return it.kind==='sub'&&(it.status==='Active'||it.status==='Scheduled');
+  return true;
+}
+function setListTab(t){
+  listTab=t;
+  document.querySelectorAll('.seg .chip[data-ltab]').forEach(function(c){c.classList.toggle('on',c.dataset.ltab===t);});
+  var el=document.getElementById('listTitle');
+  if(el)el.firstChild.textContent=(LTAB_TITLE[t]||'All requests & subscriptions')+' ';
+  renderList();
+}
 function renderList(){
   var q=(document.getElementById('listSearch').value||'').toLowerCase(),fp=document.getElementById('fProd').value,fc=document.getElementById('fCust').value;
-  var rows=listItems().filter(function(it){return (!fp||it.pid===fp)&&(!fc||it.tid===fc)&&((it.tenant||'').toLowerCase().indexOf(q)>=0||String(it.tid||'').toLowerCase().indexOf(q)>=0);})
+  var rows=listItems().filter(function(it){return listTabMatch(it)&&(!fp||it.pid===fp)&&(!fc||it.tid===fc)&&((it.tenant||'').toLowerCase().indexOf(q)>=0||String(it.tid||'').toLowerCase().indexOf(q)>=0);})
     .sort(function(a,b){var so=(STATUS_ORDER[a.status]||9)-(STATUS_ORDER[b.status]||9);return so||(dt(a.date)-dt(b.date));});
   document.getElementById('listKpis').innerHTML=[
     ['Pending review',REQUESTS.filter(function(r){return (r.status||'Pending')==='Pending';}).length,'awaiting action'],
     ['Active',SUBS.filter(function(s){return s.status==='Active';}).length,'live subscriptions'],
     ['Scheduled to cancel',SUBS.filter(function(s){return s.status==='Scheduled';}).length,'ending soon'],
-    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'need retry']
+    ['Failed',SUBS.filter(function(s){return s.status==='Failed';}).length,'provisioning failed']
   ].map(function(k){return '<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('');
   document.getElementById('listCount').textContent=rows.length+' shown';
   var tb=document.getElementById('listBody');
-  if(!rows.length){tb.innerHTML='<tr><td colspan="6"><div class="empty">No requests or subscriptions match.</div></td></tr>';return;}
+  if(!rows.length){tb.innerHTML='<tr><td colspan="5"><div class="empty">No requests or subscriptions match.</div></td></tr>';return;}
   tb.innerHTML=rows.map(function(it){var p=PRODUCTS[it.pid]||{name:it.pid};
     var spin=(it.status==='Provisioning')?'<span class="spin"></span>':'';
-    var cancel=(it.kind==='sub'&&it.status==='Active')?'<button class="btn danger sm" onclick="event.stopPropagation();cancelSub(\''+it.id+'\')">Cancel</button>':'';
     return '<tr class="clk" onclick="openDetail(\''+it.kind+'\',\''+it.id+'\')">'+
       '<td><b style="color:var(--navy)">'+it.tenant+'</b><div class="tid">'+it.tid+'</div></td>'+
       '<td>'+p.name+'</td>'+
       '<td>'+prTag(it.priceRef)+'</td>'+
       '<td class="tid">'+fmtDate(dt(it.date))+'</td>'+
-      '<td><span class="pill '+it.status+'"><span class="dt"></span>'+spin+statusLabel(it.status)+'</span></td>'+
-      '<td style="text-align:right">'+cancel+'</td></tr>';}).join('');
+      '<td><span class="pill '+it.status+'"><span class="dt"></span>'+spin+statusLabel(it.status)+'</span></td></tr>';}).join('');
 }
 /* back-compat aliases — other flows call these after mutating data */
 function renderReq(){renderList();}
@@ -398,7 +416,7 @@ function detailSub(id){
   var acts='<button class="btn ghost" onclick="closeDrawer()">Close</button>';
   if(s.status==='Active')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
   else if(s.status==='Scheduled')acts+='<button class="btn ghost" onclick="unschedule(\''+s.id+'\')">Un-schedule</button><button class="btn danger" onclick="cancelNow(\''+s.id+'\')">Cancel now</button>';
-  else if(s.status==='Failed')acts+='<button class="btn primary" onclick="retrySub(\''+s.id+'\')">Retry</button><button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
+  else if(s.status==='Failed')acts+='<button class="btn danger" onclick="cancelSub(\''+s.id+'\')">Cancel</button>';
   document.getElementById('dFoot').innerHTML=acts;
   openDrawer();
 }
