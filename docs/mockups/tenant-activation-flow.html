@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appro · Member activation flow (Tenant URM BRD v2.2)</title>
+<link rel="stylesheet" href="../../assets/css/design-system.css">
+<style>
+  body{margin:0;background:#EEF0F3;font-family:var(--font-ui);color:var(--ink-700);-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--font-display);letter-spacing:-.01em;font-weight:600;color:var(--ink-800);margin:0}
+  .wrap{padding:36px;display:flex;flex-direction:column;gap:34px;width:1180px}
+  .shot{background:var(--white);border-radius:14px;box-shadow:0 1px 3px rgba(13,25,49,.10),0 8px 26px rgba(13,25,49,.07);overflow:hidden}
+  .shot-hd{display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid var(--ink-200);background:#FAFBFC}
+  .step{width:22px;height:22px;border-radius:50%;background:var(--appro-blue);color:#fff;font-size:11.5px;font-weight:700;
+        display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-ui)}
+  .shot-hd h3{font-size:13.5px}
+  .shot-hd .ref{margin-left:auto;font-size:11px;color:var(--ink-500);font-family:var(--font-mono)}
+  .body{padding:26px}
+
+  /* ---------- portal chrome ---------- */
+  .portal{display:flex;min-height:430px}
+  .side{width:196px;background:var(--navy-900);padding:16px 0;flex-shrink:0}
+  .side .brand{color:#fff;font-family:var(--font-display);font-weight:700;font-size:14px;padding:0 18px 16px;letter-spacing:-.02em}
+  .side .grp{color:#7B8AA5;font-size:9.5px;letter-spacing:.10em;text-transform:uppercase;padding:12px 18px 5px;font-weight:700}
+  .side a{display:block;color:#C3CEE0;font-size:12.5px;padding:7px 18px;text-decoration:none}
+  .side a.on{background:rgba(59,126,246,.18);color:#fff;border-left:3px solid var(--appro-blue);padding-left:15px;font-weight:600}
+  .main{flex:1;padding:22px 26px;min-width:0}
+  .crumb{font-size:11px;color:var(--ink-500);margin-bottom:3px}
+  .ttl{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .ttl h2{font-size:19px}
+  .tabs{display:flex;gap:22px;border-bottom:1px solid var(--ink-200);margin-bottom:16px}
+  .tabs span{font-size:12.5px;padding-bottom:9px;color:var(--ink-500)}
+  .tabs span.on{color:var(--appro-blue);border-bottom:2px solid var(--appro-blue);font-weight:600}
+  .bar{display:flex;gap:9px;align-items:center;margin-bottom:14px}
+  .search{flex:1;max-width:250px;border:1px solid var(--ink-300);border-radius:8px;padding:7px 11px;font-size:12px;color:var(--ink-400);background:#fff}
+  .sel{border:1px solid var(--ink-300);border-radius:8px;padding:7px 11px;font-size:12px;background:#fff;color:var(--ink-700)}
+  .sel b{color:var(--appro-blue)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-500);
+     padding:9px 10px;border-bottom:1px solid var(--ink-200);font-weight:700}
+  td{padding:11px 10px;border-bottom:1px solid var(--ink-100);vertical-align:middle}
+  tr.hi td{background:#FFFBF2}
+  .nm{font-weight:600;color:var(--ink-800)}
+  .em{font-size:11px;color:var(--ink-500)}
+  .rc{display:inline-block;background:var(--ink-100);border-radius:5px;padding:2px 7px;font-size:10.5px;margin-right:3px;color:var(--ink-600)}
+  .pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 10px;font-size:10.5px;font-weight:700}
+  .pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+  .p-inv{background:#FFF4DE;color:#B45309}
+  .p-act{background:var(--success-tint);color:#00875E}
+  .p-ina{background:var(--ink-100);color:var(--ink-500)}
+  .lnk{color:var(--appro-blue);font-size:11.5px;font-weight:600;text-decoration:none}
+  .muted{color:var(--ink-400);font-size:11.5px}
+
+  .callout{margin-top:16px;background:#FFF9EC;border:1px solid #F5DFA8;border-left:3px solid #B45309;
+           border-radius:8px;padding:11px 14px;font-size:11.5px;color:#7A4E0B;line-height:1.55}
+  .callout b{color:#8A4F00}
+
+  /* ---------- email ---------- */
+  .mailwrap{background:#E8EBEF;padding:26px;display:flex;justify-content:center}
+  .mail{width:560px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.09)}
+  .mhd{padding:13px 20px;border-bottom:1px solid var(--ink-200);font-size:11.5px;color:var(--ink-500)}
+  .mhd .sub{font-size:14px;color:var(--ink-800);font-weight:700;font-family:var(--font-display);margin-bottom:4px}
+  .mbd{padding:28px 34px;text-align:center}
+  .mbd .logo{font-family:var(--font-display);font-weight:700;color:var(--appro-blue);font-size:17px;letter-spacing:-.02em;margin-bottom:20px}
+  .mbd h4{font-size:17px;margin-bottom:9px}
+  .mbd p{font-size:12.5px;line-height:1.65;color:var(--ink-600);margin:0 0 16px}
+  .cta{display:inline-block;background:var(--appro-blue);color:#fff;text-decoration:none;font-weight:700;
+       font-size:13px;padding:12px 30px;border-radius:8px}
+  .exp{margin-top:18px;background:#FFF4DE;border-radius:7px;padding:9px 13px;font-size:11px;color:#B45309;font-weight:600}
+  .mft{border-top:1px solid var(--ink-200);padding:13px 34px;font-size:10px;color:var(--ink-400);line-height:1.6;text-align:center}
+
+  /* ---------- activate screens ---------- */
+  .actwrap{background:linear-gradient(150deg,#0C1931 0%,#183262 100%);padding:34px;display:flex;justify-content:center}
+  .actcard{width:412px;background:#fff;border-radius:14px;padding:30px;box-shadow:0 14px 40px rgba(0,0,0,.28)}
+  .actcard .logo{font-family:var(--font-display);font-weight:700;color:var(--appro-blue);font-size:16px;margin-bottom:18px;letter-spacing:-.02em}
+  .actcard h3{font-size:19px;margin-bottom:5px}
+  .sub{font-size:12.5px;color:var(--ink-500);margin-bottom:18px;line-height:1.5}
+  .idcard{display:flex;gap:11px;align-items:center;background:var(--appro-blue-50);border:1px solid #D6E8F5;
+          border-radius:9px;padding:11px 13px;margin-bottom:18px}
+  .av{width:34px;height:34px;border-radius:50%;background:var(--appro-blue);color:#fff;display:flex;align-items:center;
+      justify-content:center;font-weight:700;font-size:12.5px;flex-shrink:0}
+  .idcard .e{font-size:12px;font-weight:700;color:var(--ink-800)}
+  .idcard .o{font-size:10.5px;color:var(--ink-500);margin-top:1px}
+  .lbl{font-size:11px;font-weight:700;color:var(--ink-700);margin-bottom:5px;display:block}
+  .inp{width:100%;box-sizing:border-box;border:1px solid var(--ink-300);border-radius:8px;padding:9px 11px;
+       font-size:12.5px;font-family:var(--font-mono);color:var(--ink-700);background:#fff;margin-bottom:4px}
+  .inp.ok{border-color:var(--success)}
+  .meter{display:flex;gap:4px;margin:7px 0 4px}
+  .meter i{height:4px;flex:1;border-radius:2px;background:var(--ink-200)}
+  .meter i.f{background:var(--success)}
+  .strength{font-size:10.5px;color:var(--success);font-weight:700;margin-bottom:12px}
+  .rules{list-style:none;padding:0;margin:0 0 15px;display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+  .rules li{font-size:10.5px;color:var(--ink-500);display:flex;align-items:center;gap:5px}
+  .rules li.y{color:var(--success)}
+  .rules li::before{content:'○';font-size:11px}
+  .rules li.y::before{content:'●'}
+  .match{font-size:10.5px;color:var(--success);font-weight:700;margin:-1px 0 14px}
+  .terms{display:flex;gap:8px;align-items:flex-start;margin-bottom:16px}
+  .cb{width:15px;height:15px;border-radius:4px;background:var(--appro-blue);color:#fff;font-size:10px;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .terms span{font-size:11px;color:var(--ink-600);line-height:1.45}
+  .terms a{color:var(--appro-blue);text-decoration:none}
+  .btnw{width:100%;border:0;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:var(--font-ui);cursor:pointer}
+  .b-on{background:var(--appro-blue);color:#fff}
+  .b-off{background:var(--ink-200);color:var(--ink-400)}
+  .b-out{background:#fff;color:var(--appro-blue);border:1px solid var(--appro-blue);margin-top:9px}
+  .note{margin-top:14px;background:#FFF4DE;border-radius:7px;padding:8px 11px;font-size:10.5px;color:#B45309;
+        font-weight:600;text-align:center}
+  .icon{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        font-size:26px;margin:0 auto 15px}
+  .i-ok{background:var(--success-tint);color:var(--success)}
+  .i-bad{background:#FFF4DE;color:#B45309}
+  .ctr{text-align:center}
+  .next{background:var(--ink-50);border-radius:9px;padding:13px 15px;margin:16px 0;text-align:left}
+  .next div{font-size:11.5px;color:var(--ink-600);display:flex;gap:7px;align-items:center;padding:3px 0}
+  .next div::before{content:'✓';color:var(--success);font-weight:700;font-size:11px}
+
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .legend em{font-style:normal;font-size:10.5px;background:var(--ink-100);border-radius:6px;padding:4px 9px;color:var(--ink-600)}
+
+  /* flow strip */
+  .flow{background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 1px 3px rgba(13,25,49,.10)}
+  .flow h3{font-size:13.5px;margin-bottom:14px}
+  .fl{display:flex;align-items:stretch;gap:0}
+  .fnode{flex:1;background:var(--ink-50);border-radius:9px;padding:11px 13px;position:relative}
+  .fnode .k{font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-400);font-weight:700;margin-bottom:4px}
+  .fnode .v{font-size:12px;font-weight:700;color:var(--ink-800);margin-bottom:3px}
+  .fnode .d{font-size:10.5px;color:var(--ink-500);line-height:1.45}
+  .arw{display:flex;align-items:center;padding:0 9px;color:var(--ink-300);font-size:17px;font-weight:700}
+  .fnode.amber{background:#FFF9EC;box-shadow:inset 0 0 0 1px #F5DFA8}
+  .fnode.green{background:var(--success-tint);box-shadow:inset 0 0 0 1px #A7E8CF}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ FLOW STRIP ============ -->
+  <div class="flow" id="flow">
+    <h3>Member activation — end-to-end (Tenant URM BRD v2.2 §2.8.1–2.8.2)</h3>
+    <div class="fl">
+      <div class="fnode"><div class="k">Step 1 · Admin</div><div class="v">Add user</div>
+        <div class="d">Tenant Admin fills name, email, roles, environment and saves.</div></div>
+      <div class="arw">›</div>
+      <div class="fnode amber"><div class="k">Step 2 · System</div><div class="v">Status = Invited</div>
+        <div class="d">Record created. <b>No password is set and the member cannot sign in.</b></div></div>
+      <div class="arw">›</div>
+      <div class="fnode amber"><div class="k">Step 3 · Email TT01</div><div class="v">Invitation sent</div>
+        <div class="d">Single-use <span style="font-family:var(--font-mono)">…/activate?token=</span> link, expires in 10 min (configurable).</div></div>
+      <div class="arw">›</div>
+      <div class="fnode"><div class="k">Step 4 · Member</div><div class="v">Activate Account</div>
+        <div class="d">Sets own password, accepts Terms of Use. Token consumed.</div></div>
+      <div class="arw">›</div>
+      <div class="fnode green"><div class="k">Step 5 · System</div><div class="v">Status = Active</div>
+        <div class="d">Member signs in with email + password. Roles take effect.</div></div>
+    </div>
+    <div class="callout"><b>What changed in v2.2.</b> v2.1 created members straight to <b>Active</b> with no credential step and no email —
+      steps 2–4 did not exist. The admin had to invent and hand over a password out-of-band. v2.2 makes the member set their own,
+      and the account is only usable once they have.</div>
+  </div>
+
+  <!-- ============ 1. USER LIST ============ -->
+  <div class="shot" id="s1">
+    <div class="shot-hd"><span class="step">1</span><h3>Customer Portal — User Management list, three-state status</h3>
+      <span class="ref">BRD §2.7 / §2.7.1</span></div>
+    <div class="portal">
+      <div class="side">
+        <div class="brand">appro</div>
+        <div class="grp">Build</div><a>Environments</a><a>Product Catalogue</a><a>API Keys</a>
+        <div class="grp">Operate</div><a>Usage &amp; Analytics</a><a>Request Logs</a>
+        <div class="grp">Organization</div><a>Verification</a><a class="on">User Role Management</a><a>Settings</a>
+      </div>
+      <div class="main">
+        <div class="crumb">Organization › User Role Management</div>
+        <div class="ttl"><h2>User Role Management</h2>
+          <span class="btn btn-primary btn-sm" style="font-size:12px">+ Add User</span></div>
+        <div class="tabs"><span>Role Management</span><span class="on">User Management</span></div>
+        <div class="bar">
+          <div class="search">Search members…</div>
+          <div class="sel">Environment: All</div>
+          <div class="sel">Status: <b>Invited</b> ▾</div>
+          <div class="sel">Filter <b>1</b></div>
+          <span class="muted" style="margin-left:auto">Export</span>
+        </div>
+        <table>
+          <thead><tr><th>Name</th><th>Role</th><th>Environment</th><th>Status</th><th>Last updated</th><th></th></tr></thead>
+          <tbody>
+            <tr class="hi">
+              <td><div class="nm">Layla Haddad</div><div class="em">layla.haddad@nuqudpay.ae</div></td>
+              <td><span class="rc">Developer</span></td><td>Sandbox</td>
+              <td><span class="pill p-inv">Invited</span></td>
+              <td>06 Aug 2026<div class="em">by Omar A.</div></td>
+              <td><a class="lnk">Resend invitation</a></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Omar Al Mansoori</div><div class="em">omar.a@nuqudpay.ae</div></td>
+              <td><span class="rc">Admin</span></td><td>Sandbox · Production</td>
+              <td><span class="pill p-act">Active</span></td>
+              <td>02 Aug 2026<div class="em">by Omar A.</div></td><td></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Sara Idrissi</div><div class="em">sara.i@nuqudpay.ae</div></td>
+              <td><span class="rc">Billing</span></td><td>Production</td>
+              <td><span class="pill p-act">Active</span></td>
+              <td>29 Jul 2026<div class="em">by Omar A.</div></td><td></td>
+            </tr>
+            <tr>
+              <td><div class="nm">Tariq Nouri</div><div class="em">tariq.n@nuqudpay.ae</div></td>
+              <td><span class="rc">Viewer</span></td><td>Sandbox</td>
+              <td><span class="pill p-ina">Inactive</span></td>
+              <td>21 Jul 2026<div class="em">by Omar A.</div></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout"><b>Invited (amber) is new in v2.2.</b> It is a system state — set on create, cleared on activation.
+          The enable/disable toggle still governs <b>Active ↔ Inactive</b> only. An invited member holds no effective permissions
+          even though roles are already assigned, and <b>Resend invitation</b> appears only on this state.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2. EMAIL ============ -->
+  <div class="shot" id="s2">
+    <div class="shot-hd"><span class="step">2</span><h3>Invitation email — template TT01 (the piece that did not exist before)</h3>
+      <span class="ref">BRD §2.12</span></div>
+    <div class="mailwrap">
+      <div class="mail">
+        <div class="mhd">
+          <div class="sub">Set your password for the Nuqud Pay workspace</div>
+          Appro API Marketplace &lt;no-reply@appro.ae&gt; → layla.haddad@nuqudpay.ae
+        </div>
+        <div class="mbd">
+          <div class="logo">appro</div>
+          <h4>You have been invited</h4>
+          <p><b>Omar Al Mansoori</b> has added you to the <b>Nuqud Pay</b> organization on the Appro API Marketplace
+             as a <b>Developer</b>.<br>Set a password to activate your account.</p>
+          <a class="cta">Set my password</a>
+          <div class="exp">⏱ This link expires in 10 minutes and can only be used once.</div>
+        </div>
+        <div class="mft">If you did not expect this invitation you can safely ignore this email.<br>
+          Appro · API Marketplace · This is an automated message.</div>
+      </div>
+    </div>
+    <div class="body" style="padding-top:0">
+      <div class="callout"><b>One email per creation.</b> A tenant on local passwords gets TT01 (above);
+        an SSO-enabled tenant gets TT02 “access granted” instead and never sets a password.
+        The expiry shown here is read from the server value — it must never be hardcoded, or the copy will
+        disagree with the real token lifetime.</div>
+      <div class="legend"><em>TT01 · invitation / set password</em><em>TT02 · access granted (SSO)</em>
+        <em>TT03 · resend invitation</em><em>TT04 · account activated</em><em>TT05 · account deactivated</em></div>
+    </div>
+  </div>
+
+  <!-- ============ 3. SET PASSWORD ============ -->
+  <div class="shot" id="s3">
+    <div class="shot-hd"><span class="step">3</span><h3>Activate Account — set-password mode (valid token)</h3>
+      <span class="ref">BRD §2.8.2 · AC1–AC3</span></div>
+    <div class="actwrap">
+      <div class="actcard">
+        <div class="logo">appro</div>
+        <h3>Set your password</h3>
+        <div class="sub">Welcome, Layla. Create a password to activate your account.</div>
+        <div class="idcard">
+          <div class="av">LH</div>
+          <div><div class="e">layla.haddad@nuqudpay.ae</div><div class="o">Nuqud Pay · invited by Appro</div></div>
+        </div>
+        <label class="lbl">Create password</label>
+        <input class="inp ok" type="text" value="••••••••••••" readonly>
+        <div class="meter"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div>
+        <div class="strength">Strong</div>
+        <ul class="rules">
+          <li class="y">At least 8 characters</li><li class="y">Upper &amp; lower case</li>
+          <li class="y">At least one number</li><li>At least one symbol</li>
+        </ul>
+        <label class="lbl">Confirm password</label>
+        <input class="inp ok" type="text" value="••••••••••••" readonly>
+        <div class="match">✓ Passwords match.</div>
+        <div class="terms"><span class="cb">✓</span>
+          <span>I agree to the <a>Terms of Use</a> and <a>Privacy Policy</a>.</span></div>
+        <button class="btnw b-on">Activate account</button>
+        <div class="note">This link is valid for 10 minutes.</div>
+      </div>
+    </div>
+    <div class="body" style="padding-top:0">
+      <div class="callout"><b>The identity card is server-resolved.</b> Email and organization come from the validated token,
+        never from URL parameters — otherwise anyone could craft a link showing any organization name and have a
+        ready-made phishing page on a trusted domain. <b>Activate account</b> stays disabled until password policy,
+        confirm-match and the Terms tick all pass, so the member is never refused after committing a password.</div>
+    </div>
+  </div>
+
+  <!-- ============ 4 + 5 SIDE BY SIDE ============ -->
+  <div class="shot" id="s4">
+    <div class="shot-hd"><span class="step">4</span><h3>Activate Account — the other two modes</h3>
+      <span class="ref">BRD §2.8.2 · AC2, AC4</span></div>
+    <div class="actwrap" style="gap:26px">
+      <div class="actcard ctr" style="width:352px">
+        <div class="icon i-ok">✓</div>
+        <h3>Account activated</h3>
+        <div class="sub">Your password is set for <b>layla.haddad@nuqudpay.ae</b>.<br>
+          You're all set to sign in to the Nuqud Pay workspace.</div>
+        <div class="next"><div>Browse the product catalogue</div><div>Provision a sandbox environment</div>
+          <div>Create your first API key</div></div>
+        <button class="btnw b-on">Continue to sign in</button>
+        <div class="note" style="background:var(--success-tint);color:#00875E">Status is now Active · email TT04 sent</div>
+      </div>
+      <div class="actcard ctr" style="width:352px">
+        <div class="icon i-bad">!</div>
+        <h3>This link has expired</h3>
+        <div class="sub">Activation links can only be used once and are valid for a limited time.
+          Request a fresh link and we'll email it to you.</div>
+        <button class="btnw b-on">Email me a new link</button>
+        <button class="btnw b-out">Back to sign in</button>
+        <div class="note">Shown for expired, already-used <i>and</i> unrecognised tokens.</div>
+      </div>
+    </div>
+    <div class="body" style="padding-top:0">
+      <div class="callout"><b>One message, three causes — deliberately.</b> Expired, already-used and not-found all show the
+        same screen so the page cannot be used to probe which email addresses exist. The trade-off: a member who has
+        <i>already</i> activated is told their link expired rather than simply being sent to sign in — flagged as an open
+        question in GAS-102 (OQ5) and worth a decision. <b>AC4</b> covers the case the old spec missed entirely: a token
+        that was valid at page load but expires while the member is still typing lands here on submit, with the resend
+        one click away.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
