@@ -73,7 +73,7 @@ const UR_USERS0 = [
   { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
   { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
 ];
-const UR_LINK_EXPIRY_HOURS = 72; // configurable activation-link expiry (default 72 hours)
+const UR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes)
 const UR_DEPTS = ['Platform', 'Product', 'Finance', 'Compliance', 'Operations'];
 const UR_GROUPS0 = [
   { name: 'Product & Pricing Checkers', authority: ['Product Setup', 'Billing Management'], checkers: 3, status: 'active', by: 'Amira Saleh', updated: '2 days ago' },
