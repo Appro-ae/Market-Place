@@ -73,7 +73,7 @@ const UR_USERS0 = [
   { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
   { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
 ];
-const UR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes)
+const UR_LINK_EXPIRY_HOURS = 72; // configurable activation-link expiry (default 72 hours)
 const UR_DEPTS = ['Platform', 'Product', 'Finance', 'Compliance', 'Operations'];
 const UR_GROUPS0 = [
   { name: 'Product & Pricing Checkers', authority: ['Product Setup', 'Billing Management'], checkers: 3, status: 'active', by: 'Amira Saleh', updated: '2 days ago' },
@@ -480,8 +480,7 @@ function URInviteSent({ user, onPreview, onResend, onDone }) {
         </Card>
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
           <Btn variant="secondary" icon="external" onClick={onPreview}>Preview the activation screen</Btn>
-          <Btn variant="secondary" icon="refresh" onClick={onResend}>Resend invitation</Btn>
-          <Btn variant="primary" onClick={onDone}>Back to users</Btn>
+            <Btn variant="primary" onClick={onDone}>Back to users</Btn>
         </div>
         <div style={{ fontSize: 12.5, color: 'var(--ink-400)', marginTop: 12 }}>Demo only: “Preview the activation screen” opens the page the user reaches from the email link (…/activate?token=) in a new tab — you would not normally see it inside the portal.</div>
       </div>

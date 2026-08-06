@@ -53,18 +53,18 @@ function tur_build(role) { const o = {}; TUR_GROUPS.forEach(g => TUR_GC[g.g].for
 // Status is TWO-state only: Active / Inactive, driven by the `status` boolean and the enable/disable toggle.
 // There is deliberately NO "Invited" status. Whether a member has set a password is NOT a status — it is
 // `activated`, and the activation link's own validity is DERIVED from when the link was generated
-// (linkSentMinAgo vs TUR_LINK_EXPIRY_MIN), never stored as a separate state.
+// (linkSentHoursAgo vs TUR_LINK_EXPIRY_HOURS), never stored as a separate state.
 const TUR_USERS0 = [
   { name: 'Amira Saleh', email: 'amira@nuqud.ae', roles: ['Admin'], env: ['Sandbox', 'Production'], dept: 'Engineering', status: true, activated: true, updated: '20/07/2026', by: 'amira@nuqud.ae' },
   { name: 'Yusuf Al Hammadi', email: 'yusuf@nuqud.ae', roles: ['Developer'], env: ['Sandbox', 'Production'], dept: 'Engineering', status: true, activated: true, updated: '20/07/2026', by: 'amira@nuqud.ae' },
   { name: 'Layla Mansoori', email: 'layla@nuqud.ae', roles: ['Developer'], env: ['Sandbox'], dept: 'Product', status: true, activated: true, updated: '18/07/2026', by: 'amira@nuqud.ae' },
-  { name: 'Hassan Qureshi', email: 'hassan@nuqud.ae', roles: ['Billing'], env: ['Production'], dept: 'Finance', status: true, activated: false, linkSentMinAgo: 2880, updated: '15/07/2026', by: 'amira@nuqud.ae' },
-  { name: 'Noura Salem', email: 'noura@nuqud.ae', roles: ['Developer'], env: ['Sandbox'], dept: 'Engineering', status: true, activated: false, linkSentMinAgo: 3, updated: '20/07/2026', by: 'amira@nuqud.ae' },
+  { name: 'Hassan Qureshi', email: 'hassan@nuqud.ae', roles: ['Billing'], env: ['Production'], dept: 'Finance', status: true, activated: false, linkSentHoursAgo: 120, updated: '15/07/2026', by: 'amira@nuqud.ae' },
+  { name: 'Noura Salem', email: 'noura@nuqud.ae', roles: ['Developer'], env: ['Sandbox'], dept: 'Engineering', status: true, activated: false, linkSentHoursAgo: 2, updated: '20/07/2026', by: 'amira@nuqud.ae' },
   { name: 'Lina Al Zarooni', email: 'lina@nuqud.ae', roles: ['Viewer'], env: ['Sandbox', 'Production'], dept: 'Operations', status: false, activated: true, updated: '09/07/2026', by: 'amira@nuqud.ae' },
   { name: 'Service account · CI', email: 'ci@nuqud.ae', roles: ['Developer'], env: ['Sandbox'], dept: 'Engineering', status: true, activated: true, updated: '20/07/2026', by: 'yusuf@nuqud.ae' },
 ];
 const TUR_DEPTS = ['Engineering', 'Product', 'Finance', 'Operations', 'Security'];
-const TUR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes)
+const TUR_LINK_EXPIRY_HOURS = 72; // configurable activation-link expiry (default 72 hours)
 
 const TUR_toast = (t, m, k) => window.toast && (window.toast[k || 'info'] ? window.toast[k || 'info'](t, m) : window.toast.info && window.toast.info(t, m));
 
@@ -423,8 +423,7 @@ function TURInviteSent({ user, onPreview, onResend, onDone }) {
         </Card>
         <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
           <Btn variant="secondary" icon="external" onClick={onPreview}>Preview the activation screen</Btn>
-          <Btn variant="secondary" icon="refresh" onClick={onResend}>Resend invitation</Btn>
-          <Btn variant="primary" onClick={onDone}>Back to users</Btn>
+            <Btn variant="primary" onClick={onDone}>Back to users</Btn>
         </div>
         <div style={{ fontSize: 12.5, color: 'var(--ink-400)', marginTop: 12 }}>Demo only: “Preview the activation screen” opens the page the user reaches from the email link (…/activate?token=) in a new tab — you would not normally see it inside the portal.</div>
       </div>
@@ -454,11 +453,11 @@ function TenantUserRoleManagement() {
   // that is `activated`, not a status. Link validity is derived from linkSentMinAgo.
   const saveUser = f => {
     const token = tur_token();
-    setUsers(us => [{ name: f.name.trim(), email: f.email.trim(), roles: f.roles.slice(), env: f.env.slice(), dept: f.dept, status: true, activated: false, linkSentMinAgo: 0, token, updated: today, by: 'amira@nuqud.ae' }, ...us]);
+    setUsers(us => [{ name: f.name.trim(), email: f.email.trim(), roles: f.roles.slice(), env: f.env.slice(), dept: f.dept, status: true, activated: false, linkSentHoursAgo: 0, token, updated: today, by: 'amira@nuqud.ae' }, ...us]);
     TUR_toast('Activation email sent', '“' + f.name + '” was created. A set-password link was sent to ' + f.email.trim() + '.', 'success');
     setUserView({ mode: 'sent', email: f.email.trim() });
   };
-  const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: tur_token(), linkSentMinAgo: 0, updated: today } : u)); TUR_toast('New link sent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
+  const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: tur_token(), linkSentHoursAgo: 0, updated: today } : u)); TUR_toast('New link sent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
   const openActivateFor = email => { const u = users.find(x => x.email === email); if (u) tur_openActivate(u); };
 
   const tabs = [{ id: 'roles', label: 'Role Management', icon: 'lock' }, { id: 'users', label: 'User Management', icon: 'users' }];
@@ -493,8 +492,8 @@ function TenantActivateAccount() {
   const email = q.get('email') || 'noura@nuqud.ae';
   const org = q.get('org') || 'Nuqud Pay';
   const name = (email.split('@')[0] || 'there').replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  const sentMinAgo = parseInt(q.get('sent') || '0', 10) || 0;
-  const linkDead = (TUR_LINK_EXPIRY_MIN - sentMinAgo) <= 0;
+  const sentHoursAgo = parseInt(q.get('sent') || '0', 10) || 0;
+  const linkDead = (TUR_LINK_EXPIRY_HOURS - sentHoursAgo) <= 0;
 
   const [mode, setMode] = useTURState(q.get('mode') || (linkDead ? 'expired' : 'set'));
   const [pw, setPw] = useTURState('');
@@ -513,7 +512,7 @@ function TenantActivateAccount() {
     if (!ready || busy) return;
     setBusy(true);
     // AC — a token valid at page load but expired by submit is rejected on submit.
-    setTimeout(() => { setBusy(false); setMode(TUR_LINK_EXPIRY_MIN - sentMinAgo <= 0 ? 'expired' : 'done'); }, 550);
+    setTimeout(() => { setBusy(false); setMode(TUR_LINK_EXPIRY_HOURS - sentHoursAgo <= 0 ? 'expired' : 'done'); }, 550);
   };
 
   const shell = inner => (
