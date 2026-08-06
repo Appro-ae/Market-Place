@@ -60,17 +60,20 @@ function ur_buildGrants(role) {
 }
 
 /* ---------- Seed users, checker groups, requests ---------- */
-// state: 'invited' | 'active' | 'inactive'. status boolean kept in sync (active === status true) for the enable/disable toggle.
+// Status is TWO-state only: Active / Inactive, driven by the `status` boolean and the enable/disable toggle.
+// There is deliberately NO "Invited" status. Whether a user has set a password is NOT a status — it is
+// `activated`, and the activation link's own validity is DERIVED from when the link was generated,
+// never stored as a separate state.
 const UR_USERS0 = [
-  { name: 'Amira Saleh', email: 'amira.saleh@appro.ae', roles: ['Super Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', state: 'active', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Omar Haddad', email: 'omar.haddad@appro.ae', roles: ['Platform Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', state: 'active', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Lina Faris', email: 'lina.faris@appro.ae', roles: ['Product Manager'], env: ['Sandbox', 'Production'], dept: 'Product', state: 'active', status: true, updated: '18/07/2026', by: 'omar.haddad@appro.ae' },
-  { name: 'Yousef Karim', email: 'yousef.karim@appro.ae', roles: ['Billing Manager'], env: ['Production'], dept: 'Finance', state: 'active', status: true, updated: '16/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Sara Idris', email: 'sara.idris@appro.ae', roles: ['Product Manager'], env: ['Sandbox'], dept: 'Product', state: 'invited', status: false, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', state: 'inactive', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
-  { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', state: 'active', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
+  { name: 'Amira Saleh', email: 'amira.saleh@appro.ae', roles: ['Super Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Omar Haddad', email: 'omar.haddad@appro.ae', roles: ['Platform Admin'], env: ['Sandbox', 'Production'], dept: 'Platform', status: true, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Lina Faris', email: 'lina.faris@appro.ae', roles: ['Product Manager'], env: ['Sandbox', 'Production'], dept: 'Product', status: true, updated: '18/07/2026', by: 'omar.haddad@appro.ae' },
+  { name: 'Yousef Karim', email: 'yousef.karim@appro.ae', roles: ['Billing Manager'], env: ['Production'], dept: 'Finance', status: true, updated: '16/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Sara Idris', email: 'sara.idris@appro.ae', roles: ['Product Manager'], env: ['Sandbox'], dept: 'Product', status: true, activated: false, updated: '20/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Dana Othman', email: 'dana.othman@appro.ae', roles: ['Read-only Auditor'], env: ['Sandbox', 'Production'], dept: 'Compliance', status: false, updated: '07/07/2026', by: 'amira.saleh@appro.ae' },
+  { name: 'Khaled Nasser', email: 'khaled.nasser@appro.ae', roles: ['Platform Admin', 'Billing Manager'], env: ['Production'], dept: 'Operations', status: true, updated: '01/07/2026', by: 'omar.haddad@appro.ae' },
 ];
-const UR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes) — BRD v1.4 NFR-6
+const UR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes)
 const UR_DEPTS = ['Platform', 'Product', 'Finance', 'Compliance', 'Operations'];
 const UR_GROUPS0 = [
   { name: 'Product & Pricing Checkers', authority: ['Product Setup', 'Billing Management'], checkers: 3, status: 'active', by: 'Amira Saleh', updated: '2 days ago' },
@@ -136,9 +139,9 @@ function envChip(env) {
   const e = Array.isArray(env) ? env[0] : env;
   return <URChip tone={e === 'Production' ? 'green' : 'blue'}>{e}</URChip>;
 }
-/* three-state user status pill (Invited / Active / Inactive) — BRD v1.4 2.7 */
+/* two-state user status pill (Active / Inactive) — there is no Invited status */
 function URUserStatus({ state }) {
-  const map = { invited: ['#FEF3C7', '#92400E', 'Invited'], active: ['#E6F9F2', '#00875A', 'Active'], inactive: ['var(--ink-100)', 'var(--ink-500)', 'Inactive'] };
+  const map = { active: ['#E6F9F2', '#00875A', 'Active'], inactive: ['var(--ink-100)', 'var(--ink-500)', 'Inactive'] };
   const [b, c, l] = map[state] || map.inactive;
   return <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: b, color: c, fontSize: 12, fontWeight: 700, padding: '4px 11px', borderRadius: 999, whiteSpace: 'nowrap' }}><span style={{ width: 6, height: 6, borderRadius: '50%', background: c }} />{l}</span>;
 }
@@ -325,7 +328,7 @@ function URUserFilterDrawer({ initial, onClose, onApply, onClear }) {
           </div>
           <div style={card}>
             <label style={fieldLabel}>Status</label>
-            <select value={f.status} onChange={e => set('status', e.target.value)} style={selStyle}><option value="All">All</option><option value="Invited">Invited</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
+            <select value={f.status} onChange={e => set('status', e.target.value)} style={selStyle}><option value="All">All</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
           </div>
           <div style={card}>
             <label style={fieldLabel}>Last Updated Date</label>
@@ -351,7 +354,7 @@ function URUserList({ users, roles, onToggle, onAdd, onOpenInvite, onResend }) {
   const list = users.filter(u => {
     if ((u.name + u.email).toLowerCase().indexOf(q.toLowerCase()) < 0) return false;
     if (filter.env !== 'All' && (Array.isArray(u.env) ? u.env.indexOf(filter.env) < 0 : u.env !== filter.env)) return false;
-    if (filter.status !== 'All' && (u.state || (u.status ? 'active' : 'inactive')) !== filter.status.toLowerCase()) return false;
+    if (filter.status !== 'All' && (u.status ? 'active' : 'inactive') !== filter.status.toLowerCase()) return false;
     if (filter.date && ur_dmy(u.updated) && ur_dmy(u.updated) < filter.date) return false;
     return true;
   });
@@ -388,13 +391,7 @@ function URUserList({ users, roles, onToggle, onAdd, onOpenInvite, onResend }) {
                   <td style={{ padding: '15px 20px' }}><div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{u.roles.map(r => <span key={r} style={{ fontSize: 12, fontWeight: 700, padding: '4px 11px', borderRadius: 8, border: '1px solid var(--ink-200)', color: 'var(--ink-700)', background: '#fff' }}>{r}</span>)}</div></td>
                   <td style={{ padding: '15px 20px' }}>{envChip(u.env)}</td>
                   <td style={{ padding: '15px 20px' }}>
-                    {u.state === 'invited'
-                      ? <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                          <URUserStatus state="invited" />
-                          <button onClick={() => onOpenInvite(u.email)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue-700)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Open link</button>
-                          <button onClick={() => onResend(u.email)} style={{ background: 'transparent', border: 0, color: 'var(--ink-500)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>Resend</button>
-                        </div>
-                      : <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}><URUserStatus state={u.state || (u.status ? 'active' : 'inactive')} /><URToggle on={u.status} onChange={() => onToggle(u.email)} /></label>}
+                    <label style={{ display: 'inline-flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}><URUserStatus state={u.status ? 'active' : 'inactive'} /><URToggle on={u.status} onChange={() => onToggle(u.email)} /></label>
                   </td>
                   <td style={{ padding: '15px 20px', fontSize: 13.5, color: 'var(--ink-600)' }}>{u.updated}</td>
                   <td style={{ padding: '15px 20px', fontSize: 13.5, color: 'var(--ink-500)', fontFamily: 'var(--font-mono)' }}>{u.by}</td>
@@ -448,7 +445,7 @@ function URUserForm({ roles, onCancel, onSave }) {
         </div>
         {err ? <div style={{ color: '#DC2626', fontSize: 13, marginTop: 16 }}>{err}</div> : null}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 9, marginTop: 20, padding: '11px 14px', background: 'var(--appro-blue-100)', borderRadius: 10, fontSize: 12.5, color: 'var(--appro-blue-700)' }}>
-          <Icon name="info" size={15} /><span>No password is set here. On save, the user is created as <b>Invited</b> and an activation email with a single-use set-password link (valid {UR_LINK_EXPIRY_MIN} minutes) is sent. The account becomes <b>Active</b> once they activate it.</span>
+          <Icon name="info" size={15} /><span>No password is set here. On save, the user is created with status <b>Active</b> and an activation email with a single-use set-password link is sent. They cannot sign in until they set a password — access is governed by the credential, not by a separate status. If the link lapses, a new one can be sent.</span>
         </div>
       </Card>
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
@@ -470,14 +467,14 @@ function URInviteSent({ user, onPreview, onResend, onDone }) {
           <span style={{ width: 34, height: 34, borderRadius: '50%', background: '#00875A', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon name="check" size={17} stroke={3} /></span>
           <div>
             <div style={{ fontSize: 15.5, fontWeight: 700, color: '#065F46' }}>User created — invitation email sent</div>
-            <div style={{ fontSize: 13.5, color: '#047857', marginTop: 3, lineHeight: 1.55 }}>{user.name} was created with status <b>Invited</b>. An activation email has been sent to <b style={{ fontFamily: 'var(--font-mono)' }}>{user.email}</b>.</div>
+            <div style={{ fontSize: 13.5, color: '#047857', marginTop: 3, lineHeight: 1.55 }}>{user.name} was created with status <b>Active</b> and cannot sign in until they set a password. An activation email has been sent to <b style={{ fontFamily: 'var(--font-mono)' }}>{user.email}</b>.</div>
           </div>
         </div>
         <Card>
           <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
             <span style={{ width: 30, height: 30, borderRadius: 9, background: 'var(--appro-blue-100)', color: 'var(--appro-blue-700)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon name="bell" size={16} /></span>
             <div style={{ fontSize: 13.5, color: 'var(--ink-700)', lineHeight: 1.6 }}>
-              The user receives an email from the Appro API Marketplace with a secure link to <b>set their password and activate the account</b>. The link is single-use and valid for <b>{UR_LINK_EXPIRY_MIN} minutes</b> (configurable — BRD v1.4 · NFR-6). Opening it takes them to the Activate Account screen; once they set a password the account becomes <b>Active</b> and they can sign in with their email and password.
+              The user receives an email from the Appro API Marketplace with a secure link to <b>set their password and activate the account</b>. The link is <b>single-use</b>. Whether it is still usable is <b>derived from the date it was generated</b> — there is no separate invitation status to maintain. Opening it takes them to the Activate Account screen; once they set a password they can sign in with their email and password.
             </div>
           </div>
         </Card>
@@ -623,13 +620,14 @@ function UserRoleManagement() {
     }
     setRoleView({ mode: 'list' });
   };
-  const toggleUser = email => setUsers(us => us.map(u => u.email === email ? { ...u, status: !u.status, state: !u.status ? 'active' : 'inactive', updated: today } : u));
-  // Create → Invited + invitation email (BRD v1.4 2.8.1). Active only after the user activates (2.8.2).
+  const toggleUser = email => setUsers(us => us.map(u => u.email === email ? { ...u, status: !u.status, updated: today } : u));
+  // Create → status Active + activation email. The user still cannot sign in until they set a password;
+  // that is `activated`, not a status. Link validity is derived from the generated-link date.
   const saveUser = f => {
     const token = ur_token();
-    setUsers(us => [{ name: f.name, email: f.email, roles: f.roles, env: f.env, dept: f.dept, state: 'invited', status: false, token, updated: today, by: 'amira.saleh@appro.ae' }, ...us]);
-    UR_toast('Invitation sent', '“' + f.name + '” was created with status Invited. An activation email was sent to ' + f.email + '.', 'success');
-    setUserView({ mode: 'invited', email: f.email });
+    setUsers(us => [{ name: f.name, email: f.email, roles: f.roles, env: f.env, dept: f.dept, status: true, activated: false, token, updated: today, by: 'amira.saleh@appro.ae' }, ...us]);
+    UR_toast('Activation email sent', '“' + f.name + '” was created. A set-password link was sent to ' + f.email + '.', 'success');
+    setUserView({ mode: 'sent', email: f.email });
   };
   const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: ur_token(), updated: today } : u)); UR_toast('Invitation resent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
   const openActivateFor = email => { const u = users.find(x => x.email === email); if (u) ur_openActivate(u); };
