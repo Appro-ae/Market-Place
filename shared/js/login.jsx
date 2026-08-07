@@ -13,9 +13,15 @@ function LoginScreen({ variant = 'customer', onLogin }) {
   const LOCK_KEY = 'appro.lock.' + variant;
   const ATTEMPT_KEY = 'appro.attempts.' + variant;
 
-  const [mode, setMode] = useState('signin'); // 'signin' | 'forgot' | 'sent' | 'reset' | 'done'
-  const [email, setEmail] = useState(isAdmin ? DEMO_VALID.admin.email : DEMO_VALID.customer.email);
-  const [pw, setPw] = useState('appro1234');
+  // Activation link support: .../activate?token=  →  ?activate=1&email=&token= on the portal.
+  const actParams = (() => { try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); } })();
+  const isActivate = actParams.has('activate') || actParams.has('token');
+  const activateEmail = actParams.get('email') || '';
+  const ACTIVATE_EXPIRY_MIN = 10; // configurable activation-link expiry (BRD v1.4 · NFR-6)
+
+  const [mode, setMode] = useState(isActivate ? 'activate' : 'signin'); // 'signin' | 'forgot' | 'sent' | 'reset' | 'done' | 'activate' | 'activated'
+  const [email, setEmail] = useState(activateEmail || (isAdmin ? DEMO_VALID.admin.email : DEMO_VALID.customer.email));
+  const [pw, setPw] = useState(isActivate ? '' : 'appro1234');
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -25,6 +31,7 @@ function LoginScreen({ variant = 'customer', onLogin }) {
   const [confirmPw, setConfirmPw] = useState('');
   const [showNew, setShowNew] = useState(false);
   const [resetPwErr, setResetPwErr] = useState('');
+  const [terms, setTerms] = useState(false);
 
   // failed-attempt + lockout state
   const [attempts, setAttempts] = useState(() => { const n = parseInt(sessionStorage.getItem(ATTEMPT_KEY) || '0', 10); return isNaN(n) ? 0 : n; });
@@ -127,6 +134,14 @@ function LoginScreen({ variant = 'customer', onLogin }) {
     setResetPwErr(''); setBusy(true);
     setTimeout(() => { setBusy(false); setNewPw(''); setConfirmPw(''); setMode('done'); }, 850);
   };
+  const submitActivate = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!resetPwValid) { setResetPwErr('Enter a password of at least 8 characters in both fields.'); return; }
+    if (!terms) { setResetPwErr('You must accept the Terms of Use to activate your account.'); return; }
+    setResetPwErr(''); setBusy(true);
+    setTimeout(() => { setBusy(false); setNewPw(''); setConfirmPw(''); setMode('activated'); }, 850);
+  };
+  const backToSignin = () => { try { window.history.replaceState({}, '', window.location.pathname); } catch (e) {} setPw(''); if (activateEmail) setEmail(activateEmail); setMode('signin'); };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', fontFamily: 'var(--font-ui)' }}>
@@ -302,6 +317,51 @@ function LoginScreen({ variant = 'customer', onLogin }) {
             <h2 style={{ margin: 0, fontSize: 23, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Password updated</h2>
             <p style={{ margin: '10px 0 24px', fontSize: 13.5, color: 'var(--ink-500)', lineHeight: 1.6 }}>Your password has been reset. Sign in with your new password to continue.</p>
             <Btn variant="primary" size="lg" onClick={() => { setPw(''); setMode('signin'); }} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5 }}>Back to sign in</Btn>
+          </div>
+        )}
+
+        {mode === 'activate' && (
+          <form onSubmit={submitActivate} style={{ width: '100%', maxWidth: 380 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--appro-blue-100)', color: 'var(--appro-blue-700)', borderRadius: 999, padding: '5px 12px', fontSize: 11.5, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', marginBottom: 16 }}><Icon name="lock" size={13} /> Account activation</div>
+            <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Activate your account</h2>
+            <p style={{ margin: '6px 0 24px', fontSize: 13.5, color: 'var(--ink-500)' }}>Set a password{activateEmail ? <> for <b style={{ color: 'var(--ink-800)' }}>{activateEmail}</b></> : ''} to activate your account and sign in to the {isAdmin ? 'Admin Console' : 'Customer Portal'}.</p>
+
+            <div style={{ marginBottom: 16 }}>
+              <label style={lab}>New password</label>
+              <div style={{ position: 'relative' }}>
+                <input type={showNew ? 'text' : 'password'} style={{ ...inp, paddingRight: 42, borderColor: tooShort ? 'var(--danger)' : 'var(--ink-300)' }} value={newPw} onChange={e => setNewPw(e.target.value)} placeholder="Min. 8 characters" autoFocus />
+                <button type="button" onClick={() => setShowNew(s => !s)} style={{ position: 'absolute', right: 10, top: 11, background: 'transparent', border: 0, cursor: 'pointer', color: 'var(--ink-400)' }}><Icon name={showNew ? 'eyeoff' : 'eye'} size={16} /></button>
+              </div>
+              {tooShort && <div style={{ fontSize: 12, color: 'var(--danger)', marginTop: 6 }}>Min. 8 characters.</div>}
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <label style={lab}>Confirm new password</label>
+              <input type={showNew ? 'text' : 'password'} style={{ ...inp, borderColor: mismatch ? 'var(--danger)' : 'var(--ink-300)' }} value={confirmPw} onChange={e => setConfirmPw(e.target.value)} placeholder="Re-enter new password" />
+              {mismatch && <div style={{ fontSize: 12, color: 'var(--danger)', marginTop: 6 }}>Passwords don't match.</div>}
+            </div>
+
+            <label onClick={() => { setTerms(t => !t); setResetPwErr(''); }} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer', marginBottom: 6 }}>
+              <span style={{ width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: terms ? 'var(--appro-blue)' : '#fff', border: '1.5px solid ' + (terms ? 'var(--appro-blue)' : 'var(--ink-300)'), color: '#fff' }}>{terms ? <Icon name="check" size={13} /> : null}</span>
+              <span style={{ fontSize: 13, color: 'var(--ink-700)', lineHeight: 1.5 }}>I agree to the <a href="#" onClick={e => e.preventDefault()} style={{ color: accent, fontWeight: 700, textDecoration: 'none' }}>Terms of Use</a></span>
+            </label>
+
+            {resetPwErr && <div style={{ fontSize: 12, color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: 6, margin: '6px 0 4px' }}><Icon name="alert" size={13} /> {resetPwErr}</div>}
+
+            <Btn variant="primary" size="lg" disabled={busy || !resetPwValid || !terms} onClick={submitActivate} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5, marginTop: 12, opacity: (!resetPwValid || !terms) ? 0.6 : 1 }}>
+              {busy ? 'Activating…' : 'Activate account'}
+            </Btn>
+            <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-400)', textAlign: 'center' }}>This link is valid for {ACTIVATE_EXPIRY_MIN} minutes and can be used once.</div>
+          </form>
+        )}
+
+        {mode === 'activated' && (
+          <div style={{ width: '100%', maxWidth: 380, textAlign: 'center' }}>
+            <div style={{ width: 60, height: 60, borderRadius: 16, background: 'var(--success-tint)', color: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <Icon name="check" size={28} stroke={3} />
+            </div>
+            <h2 style={{ margin: 0, fontSize: 23, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Account activated</h2>
+            <p style={{ margin: '10px 0 24px', fontSize: 13.5, color: 'var(--ink-500)', lineHeight: 1.6 }}>Your account is now active. Sign in with your email and password to continue.</p>
+            <Btn variant="primary" size="lg" onClick={backToSignin} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5 }}>Sign in to {isAdmin ? 'Admin Console' : 'Customer Portal'}</Btn>
           </div>
         )}
 

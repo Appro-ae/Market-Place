@@ -275,9 +275,6 @@ function AdminSettings({ onReset }) {
         </Card>
         <Card>
           <SectionHeader title="Catalog data" subtitle="Admin-published APIs are stored locally and shared with the customer portal"/>
-          <div style={{ fontSize: 12.5, color: 'var(--ink-600)', lineHeight: 1.6, marginBottom: 14 }}>
-            APIs you publish from this console are written to a shared catalog store and appear instantly in the Customer Portal's API Catalog. Use reset to clear locally-published APIs and restore the seeded set.
-          </div>
           <Btn variant="danger" icon="trash" onClick={onReset}>Reset published catalog</Btn>
         </Card>
       </div>
