@@ -64,7 +64,7 @@ const TUR_USERS0 = [
   { name: 'Service account · CI', email: 'ci@nuqud.ae', roles: ['Developer'], env: ['Sandbox'], dept: 'Engineering', status: true, activated: true, updated: '20/07/2026', by: 'yusuf@nuqud.ae' },
 ];
 const TUR_DEPTS = ['Engineering', 'Product', 'Finance', 'Operations', 'Security'];
-const TUR_LINK_EXPIRY_MIN = 10; // configurable activation-link expiry (default 10 minutes)
+const TUR_LINK_EXPIRY_MIN = 10080; // configurable activation-link expiry, in minutes (default 10080 = 7 days)
 
 const TUR_toast = (t, m, k) => window.toast && (window.toast[k || 'info'] ? window.toast[k || 'info'](t, m) : window.toast.info && window.toast.info(t, m));
 
