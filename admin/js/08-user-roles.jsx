@@ -345,7 +345,7 @@ function URUserFilterDrawer({ initial, onClose, onApply, onClear }) {
   );
 }
 
-function URUserList({ users, roles, onToggle, onAdd, onOpenInvite, onResend }) {
+function URUserList({ users, roles, onToggle, onAdd, onOpenInvite }) {
   const [q, setQ] = useURState('');
   const [filterOpen, setFilterOpen] = useURState(false);
   const [filter, setFilter] = useURState(UR_FILTER0);
@@ -457,7 +457,7 @@ function URUserForm({ roles, onCancel, onSave }) {
 }
 
 /* ============================================================ INVITATION SENT — confirmation (BRD v1.4 2.8.1 / AT01) */
-function URInviteSent({ user, onPreview, onResend, onDone }) {
+function URInviteSent({ user, onPreview, onDone }) {
   if (!user) return null;
   return (
     <div>
@@ -628,7 +628,6 @@ function UserRoleManagement() {
     UR_toast('Activation email sent', '“' + f.name + '” was created. A set-password link was sent to ' + f.email + '.', 'success');
     setUserView({ mode: 'sent', email: f.email });
   };
-  const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: ur_token(), updated: today } : u)); UR_toast('Invitation resent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
   const openActivateFor = email => { const u = users.find(x => x.email === email); if (u) ur_openActivate(u); };
   const decide = (id, decision, reason) => { setRequests(rs => rs.map(r => r.id === id ? { ...r, status: decision, expiry: '—', reason: reason || r.reason } : r)); UR_toast('Request ' + decision.toLowerCase(), decision === 'Approved' ? 'The change has been applied to the live configuration.' : 'The change was discarded. The maker has been notified.', decision === 'Approved' ? 'success' : 'info'); };
 
@@ -655,10 +654,10 @@ function UserRoleManagement() {
 
       {tab === 'users' && (
         userView.mode === 'list'
-          ? <URUserList users={users} roles={roles} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} onOpenInvite={openActivateFor} onResend={resendInvite} />
+          ? <URUserList users={users} roles={roles} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} onOpenInvite={openActivateFor} />
         : userView.mode === 'form'
           ? <URUserForm roles={roles} onCancel={() => setUserView({ mode: 'list' })} onSave={saveUser} />
-          : <URInviteSent user={users.find(u => u.email === userView.email)} onPreview={() => ur_openActivate(users.find(u => u.email === userView.email) || { email: userView.email })} onResend={() => resendInvite(userView.email)} onDone={() => setUserView({ mode: 'list' })} />)}
+          : <URInviteSent user={users.find(u => u.email === userView.email)} onPreview={() => ur_openActivate(users.find(u => u.email === userView.email) || { email: userView.email })} onDone={() => setUserView({ mode: 'list' })} />)}
 
       {tab === 'checkers' && <URCheckers groups={checkerGroups} setGroups={setCheckerGroups} />}
       {tab === 'queue' && <URQueue requests={requests} onDecision={decide} />}

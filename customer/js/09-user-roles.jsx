@@ -289,7 +289,7 @@ function TURUserFilterDrawer({ initial, onClose, onApply, onClear }) {
     </div>
   );
 }
-function TURUserList({ users, onToggle, onAdd, onOpenInvite, onResend }) {
+function TURUserList({ users, onToggle, onAdd, onOpenInvite }) {
   const [q, setQ] = useTURState('');
   const [filterOpen, setFilterOpen] = useTURState(false);
   const [filter, setFilter] = useTURState(TUR_FILTER0);
@@ -400,7 +400,7 @@ function TURUserForm({ roles, onCancel, onSave }) {
 }
 
 /* ============================================================ INVITATION SENT — confirmation (BRD v1.4 2.8.1 / AT01) */
-function TURInviteSent({ user, onPreview, onResend, onDone }) {
+function TURInviteSent({ user, onPreview, onDone }) {
   if (!user) return null;
   return (
     <div>
@@ -457,7 +457,6 @@ function TenantUserRoleManagement() {
     TUR_toast('Activation email sent', '“' + f.name + '” was created. A set-password link was sent to ' + f.email.trim() + '.', 'success');
     setUserView({ mode: 'sent', email: f.email.trim() });
   };
-  const resendInvite = email => { setUsers(us => us.map(u => u.email === email ? { ...u, token: tur_token(), linkSentMinAgo: 0, updated: today } : u)); TUR_toast('New link sent', 'A new activation link was sent. Any previous link is no longer valid.', 'success'); };
   const openActivateFor = email => { const u = users.find(x => x.email === email); if (u) tur_openActivate(u); };
 
   const tabs = [{ id: 'roles', label: 'Role Management', icon: 'lock' }, { id: 'users', label: 'User Management', icon: 'users' }];
@@ -473,10 +472,10 @@ function TenantUserRoleManagement() {
         : <TURRoleForm existing={roleView.role} initialGrants={roleView.role ? { ...grantsByRole[roleView.role] } : null} initialEnv={roleView.role ? roles.find(r => r.name === roleView.role).env : 'Both'} takenNames={roles.map(r => r.name)} onCancel={() => setRoleView({ mode: 'list' })} onSave={data => saveRole(data, roleView.role)} />)}
       {tab === 'users' && (
         userView.mode === 'list'
-          ? <TURUserList users={users} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} onOpenInvite={openActivateFor} onResend={resendInvite} />
+          ? <TURUserList users={users} onToggle={toggleUser} onAdd={() => setUserView({ mode: 'form' })} onOpenInvite={openActivateFor} />
         : userView.mode === 'form'
           ? <TURUserForm roles={roles} onCancel={() => setUserView({ mode: 'list' })} onSave={saveUser} />
-          : <TURInviteSent user={users.find(u => u.email === userView.email)} onPreview={() => tur_openActivate(users.find(u => u.email === userView.email) || { email: userView.email })} onResend={() => resendInvite(userView.email)} onDone={() => setUserView({ mode: 'list' })} />)}
+          : <TURInviteSent user={users.find(u => u.email === userView.email)} onPreview={() => tur_openActivate(users.find(u => u.email === userView.email) || { email: userView.email })} onDone={() => setUserView({ mode: 'list' })} />)}
     </div>
   );
 }
