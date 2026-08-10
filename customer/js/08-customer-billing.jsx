@@ -4,8 +4,6 @@ const CB = window.BILLING;
 const MYTENANT = 'T1';
 
 function CustomerBilling() {
-  const { useState } = React;
-  const [tab, setTab] = useState('overview');
   const t = CB.state.tenants.find(x => x.id === MYTENANT) || CB.state.tenants[0];
   const rows = CB.deriveTenant(MYTENANT);
   const active = rows.filter(x => x.active);
@@ -25,19 +23,11 @@ function CustomerBilling() {
   const prev = vals[4] || 1, dp = prev ? Math.round((subtotal - prev) / prev * 100) : 0;
   const methodColor = m => m === 'GET' ? 'var(--success)' : 'var(--appro-blue)';
 
-  const TabBtn = ({ id, children }) => (
-    <button onClick={() => setTab(id)} style={{ padding: '9px 18px', borderRadius: 8, fontWeight: 700, fontSize: 13.5, border: 0, cursor: 'pointer', fontFamily: 'var(--font-ui)', background: tab === id ? 'var(--appro-blue)' : 'transparent', color: tab === id ? '#fff' : 'var(--ink-500)' }}>{children}</button>
-  );
-
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      <div style={{ display: 'inline-flex', gap: 4, background: '#fff', border: '1px solid var(--ink-200)', padding: 5, borderRadius: 12, marginBottom: 20, boxShadow: '0 1px 2px rgba(12,25,49,.04)' }}>
-        <TabBtn id="overview">Overview</TabBtn>
-        <TabBtn id="subs">Subscriptions &amp; Usage</TabBtn>
-      </div>
+      <div style={{ fontSize: 13, color: 'var(--ink-500)', marginBottom: 18 }}>Your organization's billing overview. Pricing &amp; packages are configured by Appro.</div>
 
-      {tab === 'overview' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 18 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 18 }}>
           <div style={{ display: 'grid', gap: 18 }}>
             <Card>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
@@ -87,7 +77,6 @@ function CustomerBilling() {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 19, letterSpacing: 3, marginTop: 26 }}>•••• •••• •••• 4821</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: 11, marginTop: 18, opacity: .9 }}><span>VALID 07/28</span><span>{t.name.toUpperCase()}</span></div>
               </div>
-              <Btn variant="ghost" size="sm" style={{ marginTop: 10, width: '100%', justifyContent: 'center' }} onClick={() => window.toast && window.toast.info('Billing details', 'Opening your billing profile…')}>Update billing details</Btn>
             </Card>
             <Card>
               <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink-900)', marginBottom: 6 }}>Invoices</div>
@@ -100,33 +89,6 @@ function CustomerBilling() {
             </Card>
           </div>
         </div>
-      )}
-
-      {tab === 'subs' && (
-        <Card padding={0}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
-            <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Your subscriptions &amp; usage</div><div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{rows.length} plan(s) this cycle · metered against your committed volume</div></div>
-            <Btn variant="secondary" size="sm" icon="external" onClick={() => window.toast && window.toast.success('Export started', 'Usage detail (CSV) will download shortly.')}>Export</Btn>
-          </div>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
-            <thead style={{ background: 'var(--ink-50)' }}><tr>{['Service', 'Plan', 'Billing type', 'Committed', 'Success', 'Failed', 'Period charge'].map(h => <th key={h} style={{ textAlign: ['Success','Failed','Period charge','Committed'].includes(h) ? 'right' : 'left', padding: '11px 16px', fontSize: 10, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>{h}</th>)}</tr></thead>
-            <tbody>
-              {rows.map((r, i) => (
-                <tr key={r.subId} style={{ borderBottom: '1px solid var(--ink-100)' }}>
-                  <td style={{ padding: '12px 16px', fontWeight: 700, color: 'var(--ink-900)' }}>{r.name}</td>
-                  <td style={{ padding: '12px 16px' }}><div style={{ color: 'var(--ink-700)' }}>{r.prod.name}</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{r.pkg.name}</div></td>
-                  <td style={{ padding: '12px 16px' }}><span style={{ background: 'var(--ink-100)', border: '1px solid var(--ink-200)', padding: '3px 9px', borderRadius: 6, fontSize: 11.5, fontWeight: 700 }}>{r.btype}</span></td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{r.committed ? CB.fmtInt(r.committed) : '—'}</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{CB.fmtInt(r.success)}{r.ovfActive ? <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: r.blocked ? 'var(--danger)' : '#8a6c00', background: r.blocked ? 'var(--danger-tint)' : 'var(--warning-tint)', padding: '1px 6px', borderRadius: 5 }}>{r.blocked ? 'capped' : '+over'}</span> : null}</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', fontFamily: 'var(--font-mono)', color: r.failed ? 'var(--danger)' : 'var(--ink-500)' }}>{r.failed}</td>
-                  <td style={{ padding: '12px 16px', textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{CB.fmtUSD0(r.charge)}{r.minApplied ? <span style={{ marginLeft: 6, fontSize: 10, fontWeight: 700, color: 'var(--appro-blue)', background: 'var(--appro-blue-100)', padding: '1px 6px', borderRadius: 5 }}>min</span> : null}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div style={{ padding: '12px 16px', fontSize: 11.5, color: 'var(--ink-500)', borderTop: '1px solid var(--ink-100)' }}>Pricing & packages are configured by Appro. Need a different plan? <a href="#" onClick={e => { e.preventDefault(); window.toast && window.toast.info('Contact your account manager', 'We\u2019ll help you pick the right package.'); }} style={{ color: 'var(--appro-blue)', fontWeight: 700 }}>Request a change</a>.</div>
-        </Card>
-      )}
     </div>
   );
 }
