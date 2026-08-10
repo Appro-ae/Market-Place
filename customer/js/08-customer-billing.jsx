@@ -5,6 +5,7 @@ const MYTENANT = 'T1';
 
 function CustomerBilling() {
   const t = CB.state.tenants.find(x => x.id === MYTENANT) || CB.state.tenants[0];
+  const orgName = 'Nuqud Pay'; // signed-in organization (portal identity, not the billing-model label)
   const rows = CB.deriveTenant(MYTENANT);
   const active = rows.filter(x => x.active);
 
@@ -30,7 +31,7 @@ function CustomerBilling() {
       <div style={{ display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 18 }}>
           <div style={{ display: 'grid', gap: 18 }}>
             <Card>
-              <div><div style={{ fontWeight: 800, fontSize: 16, color: 'var(--ink-900)' }}>June 2026 · current cycle</div><div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{t.name} · closes Jun 30 · invoice Jul 3</div></div>
+              <div><div style={{ fontWeight: 800, fontSize: 16, color: 'var(--ink-900)' }}>June 2026 · current cycle</div><div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{orgName} · closes Jun 30 · invoice Jul 3</div></div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18, marginTop: 20 }}>
                 <div><div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.08em', color: 'var(--ink-500)', textTransform: 'uppercase' }}>Running total</div><div style={{ fontSize: 30, fontWeight: 800, color: '#0C1931', marginTop: 6, fontFamily: 'var(--font-display)' }}>{CB.fmtUSD0(subtotal)}</div><div style={{ fontSize: 13, fontWeight: 800, marginTop: 4, color: dp <= 0 ? 'var(--success)' : 'var(--danger)' }}>{dp <= 0 ? '↓ ' : '↑ '}{Math.abs(dp)}% vs May</div></div>
                 <div><div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.08em', color: 'var(--ink-500)', textTransform: 'uppercase' }}>Active plans</div><div style={{ fontSize: 18, fontWeight: 800, color: 'var(--ink-800)', marginTop: 8 }}>{active.length}</div><div style={{ fontSize: 12, color: 'var(--ink-500)' }}>{svcSet.size} service(s)</div></div>
@@ -68,8 +69,15 @@ function CustomerBilling() {
           </div>
           <div style={{ display: 'grid', gap: 18, alignContent: 'start' }}>
             <Card>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.08em', color: 'var(--ink-500)', textTransform: 'uppercase', marginBottom: 14 }}>Current charges · June</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13.5, color: 'var(--ink-600)', padding: '4px 0' }}><span>Subtotal (before VAT)</span><span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{CB.fmtUSD0(subtotal)}</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13.5, color: 'var(--ink-600)', padding: '4px 0 12px', borderBottom: '1px solid var(--ink-100)' }}><span>VAT (5%)</span><span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{CB.fmtUSD0(vat)}</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', paddingTop: 12 }}><span style={{ fontWeight: 800, fontSize: 14.5, color: '#0C1931' }}>Total due</span><span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 24, color: '#0C1931' }}>{CB.fmtUSD0(total)}</span></div>
+              <div style={{ fontSize: 12, color: 'var(--ink-500)', marginTop: 8 }}>Invoice issues Jul 3 · billed to {orgName}</div>
+            </Card>
+            <Card>
               <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--ink-900)', marginBottom: 6 }}>Invoices</div>
-              {[['Jun 2026', subtotal, false], ['May 2026', vals[4], true], ['Apr 2026', vals[3], true], ['Mar 2026', vals[2], true]].map((iv, i) => (
+              {[['Jun 2026', subtotal, false], ['May 2026', vals[4], true], ['Apr 2026', vals[3], true], ['Mar 2026', vals[2], true], ['Feb 2026', vals[1], true], ['Jan 2026', vals[0], true]].map((iv, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 0', borderTop: i ? '1px solid var(--ink-100)' : 0 }}>
                   <div><div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--ink-800)' }}>{iv[0]}</div><div style={{ fontFamily: 'var(--font-mono)', color: 'var(--ink-500)', fontSize: 12.5 }}>{CB.fmtUSD0(iv[1])}</div></div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -79,6 +87,9 @@ function CustomerBilling() {
                 </div>
               ))}
             </Card>
+            <div style={{ background: 'var(--appro-blue-50)', border: '1px solid var(--appro-blue-100)', borderRadius: 14, padding: '14px 16px', fontSize: 12.5, color: 'var(--ink-600)', lineHeight: 1.55 }}>
+              Pricing &amp; packages are configured by Appro. For a plan change or a billing question, contact your account manager.
+            </div>
           </div>
         </div>
 
