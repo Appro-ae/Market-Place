@@ -7,6 +7,16 @@ function Dashboard({ env, goTo }) {
   // PO review 13-08-2026 (GAS-562): no sub-environment selector on the dashboard —
   // the global Sandbox/Production toggle is the only environment control here.
   // Sub-environment selection stays on Usage & Analytics / Request Logs.
+
+  // Date filter (GAS-562 AC10): Today + the previous six days. Traffic cards and the
+  // errors feed show the selected day; billing/subscriptions stay on the current cycle.
+  const DAYS = ['Today', 'Aug 12', 'Aug 11', 'Aug 10', 'Aug 09', 'Aug 08', 'Aug 07'];
+  const [di, setDi] = React.useState(0);
+  const isToday = di === 0;
+  const REQ_DAY = isProd
+    ? ['1.82M', '1.71M', '1.93M', '1.64M', '1.77M', '1.52M', '1.60M']
+    : ['14,284', '13,902', '15,120', '14,008', '13,455', '12,380', '12,940'];
+
   const metrics = (demoEmpty ? [
     { label: 'Requests (24h)', value: '0', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
     { label: 'Success rate', value: '—', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
@@ -23,6 +33,7 @@ function Dashboard({ env, goTo }) {
     { label: 'Error rate', value: '1.6%', delta: '-0.3%', up: true, spark: [30,28,24,25,22,20,18,19,16,14,15,13] },
     { label: 'Monthly quota used', value: '14%', delta: '438K of 3.0M', up: true, quota: 14 },
   ]);
+  if (!demoEmpty) metrics[0] = { ...metrics[0], label: 'Requests (' + (isToday ? '24h' : DAYS[di]) + ')', value: REQ_DAY[di] };
 
   const apis = demoEmpty ? [] : [
     { name: 'Credit Score (Individual)', version: 'v2.0', status: isProd ? 'live' : 'active', calls: isProd ? '612K' : '4,812', latency: '98ms', err: '0.12%' },
@@ -41,6 +52,17 @@ function Dashboard({ env, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
+      {/* View-date filter (GAS-562 AC10) */}
+      <Card padding={0} style={{ marginBottom: 14 }}>
+        <div style={{ padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em', fontFamily: 'var(--font-ui)' }}>View date</span>
+          <div style={{ display: 'inline-flex', background: 'var(--ink-100)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600 }}>
+            {DAYS.map((d, i) => <button key={d} onClick={() => setDi(i)} style={{ background: di===i ? 'var(--appro-blue)' : 'transparent', color: di===i ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 11px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{d}</button>)}
+          </div>
+          <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Traffic cards & errors show the selected day · billing and subscriptions are always the current cycle</span>
+        </div>
+      </Card>
+
       {/* Welcome band — Appro brandmark gradient (45°, Dark Blue → Denim) */}
       <div style={{
         background: 'linear-gradient(45deg, #0C1931 0%, #1A2D52 45%, #3B7EF6 100%)',
@@ -167,7 +189,7 @@ function Dashboard({ env, goTo }) {
           <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Recent errors</div>
-              <div style={{ fontSize: 10.5, color: 'var(--ink-500)', marginTop: 1 }}>status ≥ 400 · {env}</div>
+              <div style={{ fontSize: 10.5, color: 'var(--ink-500)', marginTop: 1 }}>status ≥ 400 · {isToday ? env : DAYS[di] + ' · ' + env}</div>
             </div>
             <Btn variant="ghost" size="sm" onClick={() => goTo('logs')}>Logs →</Btn>
           </div>

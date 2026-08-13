@@ -38,16 +38,28 @@ function dbByProduct(products, topN) {
   return withVol.map(({ p, vol }) => ({ n: p.name, calls: vol.toFixed(1) + 'M', pct: Math.round(vol / total * 100), c: DB_CAT_COLOR[p.category] || 'var(--appro-blue)' }));
 }
 
+// Date filter (GAS-561 AC10): Today + the previous six days, like the ops-board "View date" row.
+const DB_DAYS = ['Today', 'Aug 12', 'Aug 11', 'Aug 10', 'Aug 09', 'Aug 08', 'Aug 07'];
+const DB_DAY_F = [1, .94, 1.06, .9, .97, .84, .88];
+const DB_DAY_TOTALS = {
+  production: ['5.9M', '5.5M', '6.3M', '5.3M', '5.7M', '5.0M', '5.2M'],
+  sandbox:    ['184K', '173K', '195K', '166K', '178K', '155K', '162K'],
+};
+
 function AdminDashboard({ env, requests, goTo }) {
   const [range, setRange] = useDB('24h');
-  const series = DB_SERIES[env][range];
+  const [di, setDi] = useDB(0);
+  const isToday = di === 0;
+  // A past day is a single-day view: the trend locks to that day's hourly series.
+  const base = DB_SERIES[env][isToday ? range : '24h'];
+  const series = isToday ? base : { ...base, bars: base.bars.map(b => Math.round(b * DB_DAY_F[di])), unit: 'Hourly · ' + DB_DAYS[di], total: DB_DAY_TOTALS[env][di], last: null };
   const kpi = DB_KPI[env];
   const bars = series.bars, max = Math.max(...bars);
 
-  // Live pipeline counts from the cross-portal request store (today's queue).
-  const pending = requests.filter(r => r.status === 'pending').length;
-  const approved = requests.filter(r => r.status === 'approved').length;
-  const rejected = requests.filter(r => r.status === 'rejected').length;
+  // Pipeline counts: live from the cross-portal request store for Today; per-day snapshots for past days.
+  const pending = isToday ? requests.filter(r => r.status === 'pending').length : [0,5,4,6,3,2,4][di];
+  const approved = isToday ? requests.filter(r => r.status === 'approved').length : [0,3,2,4,2,1,3][di];
+  const rejected = isToday ? requests.filter(r => r.status === 'rejected').length : [0,1,2,0,1,1,2][di];
 
   const byProduct = dbByProduct(dbCatalogue(), 8);
   const topTenants = [
@@ -81,10 +93,14 @@ function AdminDashboard({ env, requests, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      {/* Controls: range selector + freshness (GAS-561 AC4/AC6) */}
+      {/* Controls: date filter (AC10) + range selector + freshness (GAS-561 AC4/AC6) */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>View date</span>
         <div style={{ display: 'inline-flex', background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600 }}>
-          {['24h','7d','30d'].map(r => <button key={r} onClick={() => setRange(r)} style={{ background: range===r ? 'var(--appro-blue)' : 'transparent', color: range===r ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 13px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>{r}</button>)}
+          {DB_DAYS.map((d, i) => <button key={d} onClick={() => setDi(i)} style={{ background: di===i ? 'var(--appro-blue)' : 'transparent', color: di===i ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 11px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{d}</button>)}
+        </div>
+        <div style={{ display: 'inline-flex', background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600, opacity: isToday ? 1 : .45 }} title={isToday ? '' : 'A past day is a single-day view — range applies to Today'}>
+          {['24h','7d','30d'].map(r => <button key={r} onClick={() => isToday && setRange(r)} style={{ background: (isToday && range===r) ? 'var(--appro-blue)' : 'transparent', color: (isToday && range===r) ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 13px', borderRadius: 6, cursor: isToday ? 'pointer' : 'not-allowed', fontFamily: 'var(--font-ui)' }}>{r}</button>)}
         </div>
         <span style={{ fontSize: 11.5, color: 'var(--ink-500)' }}>Scope: <b style={{ color: 'var(--ink-700)', textTransform: 'capitalize' }}>{env}</b> · widgets follow your View permissions</span>
         <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
@@ -106,7 +122,7 @@ function AdminDashboard({ env, requests, goTo }) {
       {/* W2 — Subscription-request pipeline */}
       <Card padding={0} style={{ marginBottom: 16 }}>
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Subscription-request pipeline</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>Today's queue · MTD: 27 received · 20 approved · 4 rejected</div></div>
+          <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Subscription-request pipeline</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{isToday ? "Today's queue" : DB_DAYS[di] + ' queue'} · MTD: 27 received · 20 approved · 4 rejected</div></div>
           <Btn variant="ghost" size="sm" onClick={() => goTo('subscriptions')}>Open Subscription Management →</Btn>
         </div>
         <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
@@ -179,7 +195,7 @@ function AdminDashboard({ env, requests, goTo }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 16 }}>
         <Card padding={0}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Recent errors</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>status ≥ 400 · live tail · {env}</div></div>
+            <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Recent errors</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>status ≥ 400 · {isToday ? 'live tail' : DB_DAYS[di]} · {env}</div></div>
             <Btn variant="ghost" size="sm" onClick={() => goTo('logs')}>Open Request Logs →</Btn>
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
