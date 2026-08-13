@@ -12,7 +12,7 @@ name alone.
 | Title card subtitle | `Emirates NBD` | Under the `Super Portal` pill |
 | Title card logo | Emirates NBD wordmark | **ASK** — need the new bank's logo asset |
 | Portal sidebar logo | Emirates NBD lockup (Arabic + Latin) | Same asset, small |
-| Channel name | `Emirates NBD` | Slide 2 card + `Channel: Emirates NBD` chip on slide 3 |
+| Channel name | `Emirates NBD` | Now `Bank` for the unbranded build — see CAPTURE-SPEC.md |
 | Narration, line 1 | "Every mortgage application **{{BANK}}** receives…" | |
 | Narration, boundary line | "…put **{{BANK}}** outside its own appetite" | |
 | Narration, closing | "**{{BANK}}** sets the policy, prices the product…" | |

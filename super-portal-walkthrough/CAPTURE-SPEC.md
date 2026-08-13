@@ -78,10 +78,28 @@ Three rules from the brand guidelines that apply here:
 > needs to load `logo-white` into the channel branding slot as a setup step,
 > not as an afterthought.
 
-**B. What is the channel called?** It appears in eight shots and in the spoken
-narration's sense of "channel". Something functional rather than invented —
-`Direct Sales`, `Branch`, `Retail Banking`. Avoid a name that reads as a real
-institution.
+**B. Channel name — DECIDED: `Bank`.**
+
+Seed the channel as literally **`Bank`**. It then flows through everywhere the
+name is rendered, with no per-shot editing:
+
+| Shot | Renders as |
+|---|---|
+| 2 | Channel card titled `Bank` |
+| 3 | Chip reading `Channel: Bank` |
+| 7, 10, 17–21 | Channel selector, top-right, showing `Bank` |
+| 15 | Dialog: “…for MORTGAGE_LOAN — Bank will be pushed to Rule Engine” |
+| 21, 22 | `Channel` column reading `Bank` on every row |
+| 32 | User's Channel field chip reading `Bank` |
+
+The **title card** reads **Bank Super Portal** — `Super Portal` in the existing
+amber pill, `Bank` on the line beneath, where the client name used to sit.
+
+One knock-on: the slide 2 caption in the source read as the bank name followed
+by its city. With a generic channel that no longer parses, so the caption is now
+*"The channel is active in Dubai, with Mortgage Loan assigned and enabled. Every
+product toggle moves only after checker approval."* This is the **only** caption
+whose wording changes for the unbranded build.
 
 **Still needed:** the Appro logo files themselves. The branding skill documents
 them but does not currently ship them, so please send `logo-white.png` (or

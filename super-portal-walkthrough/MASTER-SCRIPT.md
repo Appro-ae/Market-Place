@@ -11,8 +11,10 @@ Extracted verbatim from `Super_Portal_Full_Walkthrough_Final_3.mp4`.
 | Caption band | fixed lower-third: **Title** (large) + **kicker** (small, blue) on the left, **body** (2 lines) centre, **`n / 34`** counter right |
 | Footer of title card | `Confidential — prepared by Appro` |
 
-`{{BANK}}` marks every token to swap for the next bank. See
-[SWAP-LIST.md](./SWAP-LIST.md) for the full replacement checklist.
+**Unbranded build.** The channel is named **Bank**; the title card reads
+**Bank Super Portal**. The narration needs no change — it never names a bank,
+it says "the bank" throughout. See [CAPTURE-SPEC.md](./CAPTURE-SPEC.md) for the
+screenshot spec and [SWAP-LIST.md](./SWAP-LIST.md) for what else is per-market.
 
 ---
 
@@ -20,8 +22,9 @@ Extracted verbatim from `Super_Portal_Full_Walkthrough_Final_3.mp4`.
 
 Timings are the narration's own; the voice runs continuously across slide
 changes, so cue the slides to the timestamps in §2 rather than to sentence ends.
+No bank is named anywhere in it.
 
-> **[0:00]** Every mortgage application {{BANK}} receives arrives here — already
+> **[0:00]** Every mortgage application the bank receives arrives here — already
 > verified, already enriched with identity, bureau and income data. This is
 > Super Portal, from first sign-in to log-out.
 >
@@ -60,7 +63,7 @@ changes, so cue the slides to the timestamps in §2 rather than to sentence ends
 > affordability, approved limit — written as readable mathematics. The
 > multiplier is tuned per group, published as a numbered version, reversible in
 > seconds. And whatever the formula returns, the boundary holds it: no
-> calculation can put {{BANK}} outside its own appetite.
+> calculation can put the bank outside its own appetite.
 >
 > **[3:07]** Sometimes the right answer is more than the customer asked for.
 > Higher Offer, switched on per product and channel.
@@ -96,7 +99,7 @@ changes, so cue the slides to the timestamps in §2 rather than to sentence ends
 > **[5:22]** The session ends. Everything done inside it stays attributed to a
 > named person at a recorded time.
 >
-> **[5:28]** Eleven modules, one platform. {{BANK}} sets the policy, prices the
+> **[5:28]** Eleven modules, one platform. The bank sets the policy, prices the
 > product, decides the case, and can prove exactly why. That is Super Portal.
 
 **Word count:** ~640 · **Pace:** ~112 wpm (measured, deliberate, no filler)
@@ -109,9 +112,9 @@ changes, so cue the slides to the timestamps in §2 rather than to sentence ends
 
 | # | IN | Title | Kicker | Body |
 |---|---|---|---|---|
-| — | 0:00 | **Super Portal** | {{BANK}} | *(title card — logo, wordmark, 3 stacked UI screenshots; footer `Confidential — prepared by Appro`)* |
+| — | 0:00 | **Super Portal** | Bank | *(title card — logo, wordmark, 3 stacked UI screenshots; footer `Confidential — prepared by Appro`)* |
 | 1 | 0:12 | Sign in | Login | Credentials are issued by an administrator in User Management. A new user sets their own password from an email invitation. |
-| 2 | 0:15 | Channel Management | Channels | {{BANK}}, active in {{CITY}}, with Mortgage Loan assigned and enabled. Every product toggle moves only after checker approval. |
+| 2 | 0:15 | Channel Management | Channels | The channel is active in Dubai, with Mortgage Loan assigned and enabled. Every product toggle moves only after checker approval. |
 | 3 | 0:29 | Product Details | Product setup | Amount and tenor boundaries, age limit and minimum salary, above the effective-dated pricing schemes attached to the product. |
 | 4 | 0:41 | Pricing Matrix — step 1 | Product setup | Scheme identity and effective window, profit rate type, floor and ceiling rates, EIBOR source and the full fee set. |
 | 5 | 0:54 | Pricing Matrix — step 2 | Product setup | STL, property status, transaction type and property location: the four factors that dimension the matrix. |

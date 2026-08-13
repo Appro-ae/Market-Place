@@ -14,14 +14,16 @@
     "captureClean": "Do not add outlines, dimming or annotation. The emphasis in the finished video is a post effect; the 'highlight' field is for the editor, not the capture agent.",
     "dataHygiene": "Seed synthetic customer records. Shots 23, 24, 26, 28, 31, 32 expose personal fields.",
     "branding": "NONE. See CAPTURE-SPEC.md section 2 for every place the name leaks.",
-    "sidebarLogo": "Appro logo-white, configured in the portal channel branding BEFORE capture \u2014 it is baked into all 31 sidebar shots and cannot be composited afterwards. Scale by width only (native ratio 3.45:1). No recolour, opacity, shadow or outline."
+    "sidebarLogo": "Appro logo-white, configured in the portal channel branding BEFORE capture \u2014 it is baked into all 31 sidebar shots and cannot be composited afterwards. Scale by width only (native ratio 3.45:1). No recolour, opacity, shadow or outline.",
+    "channelName": "Bank \u2014 seed the channel as literally 'Bank'. It renders through shots 2, 3, 7, 10, 15, 17-21, 22 and 32 with no per-shot editing.",
+    "titleCard": "Reads 'Bank Super Portal' \u2014 'Super Portal' in the amber pill, 'Bank' on the line beneath."
   },
   "alsoNeeded": [
-    "Appro logo files \u2014 logo-white (portal sidebar + title card, dark grounds) and logo-dark (letterhead, shot 28). The branding skill documents these but does not currently ship them.",
-    "DECISION: neutral channel name \u2014 appears in 8 shots (2, 3, 7, 10, 15, 17-21, 32)",
+    "Appro logo files as attachments or committed to assets/ \u2014 logo-white (portal sidebar + title card) and logo-dark (letterhead, shot 28)",
     "Neutral host for the address bar, e.g. demo.superportal.local",
     "Application IDs re-seeded with a neutral prefix",
-    "Synthetic customer and employer records"
+    "Synthetic customer and employer records",
+    "OPEN: does 'generic' extend to market-neutral? EIBOR / AECB / Emirates ID / emirate list are UAE-specific and three are spoken in the narration."
   ],
   "shots": [
     {
@@ -41,7 +43,7 @@
       "module": "Channel Management",
       "sidebar": "collapsed",
       "nav": "Channel Management",
-      "state": "Channel list with search field; one channel card showing bank name, city, Active pill, Mortgage Loan product tile with enabled tick",
+      "state": "Channel list with search field; one channel card titled 'Bank' with city, Active pill, Mortgage Loan product tile with enabled tick",
       "highlight": "channel card"
     },
     {
@@ -171,7 +173,7 @@
       "module": "Credit Decision",
       "sidebar": "expanded",
       "nav": "... > Strategies > Publish",
-      "state": "Confirmation dialog open naming the product and channel, with No / Yes NOTE: dialog text embeds the channel name.",
+      "state": "Confirmation dialog open reading '...for MORTGAGE_LOAN - Bank will be pushed to Rule Engine', with No / Yes",
       "highlight": "the dialog"
     },
     {
