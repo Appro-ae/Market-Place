@@ -105,11 +105,14 @@ whose wording changes for the unbranded build.
 them but does not currently ship them, so please send `logo-white.png` (or
 `.svg`) for the portal and title card, and `logo-dark` for the letterhead.
 
-**Still market-identifying:** the benchmark rate, the credit bureau, the
-national ID and the region list are UAE-specific. "No bank branding" doesn't
-by itself remove those. If the CPO wants the clip to read as market-neutral
-too, tell me — that one *does* reach the narration (three spoken references)
-and would need the voice track re-cut. If nothing is said, I'll leave them.
+**Market specifics — DECIDED: they stay.** The voice is kept exactly as
+recorded, and it speaks three UAE references (the benchmark rate, the national
+ID twice, and "emirate"). Changing what is on screen would contradict what is
+being said, so the benchmark rate, credit bureau, national ID, emirate list,
+currency and nationality segments all remain as they are.
+
+Generic here means **no client identity**, not "could be any market". Capture
+these screens exactly as the portal renders them.
 
 ---
 

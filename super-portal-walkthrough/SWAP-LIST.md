@@ -20,7 +20,9 @@ cannot be inferred from a name alone.
 
 ## B. Changes only if the market changes (UAE → elsewhere)
 
-Keep as-is for another **UAE** bank. All of these need review for any other market.
+**For the current unbranded build these all STAY.** The voice is kept exactly as
+recorded and speaks three of them, so changing the screens would contradict the
+audio. The table below applies only to a future cut for a different market.
 
 | Item | Emirates NBD value | If market changes |
 |---|---|---|

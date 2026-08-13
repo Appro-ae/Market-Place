@@ -16,14 +16,15 @@
     "branding": "NONE. See CAPTURE-SPEC.md section 2 for every place the name leaks.",
     "sidebarLogo": "Appro logo-white, configured in the portal channel branding BEFORE capture \u2014 it is baked into all 31 sidebar shots and cannot be composited afterwards. Scale by width only (native ratio 3.45:1). No recolour, opacity, shadow or outline.",
     "channelName": "Bank \u2014 seed the channel as literally 'Bank'. It renders through shots 2, 3, 7, 10, 15, 17-21, 22 and 32 with no per-shot editing.",
-    "titleCard": "Reads 'Bank Super Portal' \u2014 'Super Portal' in the amber pill, 'Bank' on the line beneath."
+    "titleCard": "Reads 'Bank Super Portal' \u2014 'Super Portal' in the amber pill, 'Bank' on the line beneath.",
+    "narration": "Kept exactly as recorded. It never names a bank - it says 'the bank' - so no re-cut is needed. It does speak three UAE references (benchmark rate, national ID twice, 'emirate'), which is why the market specifics stay on screen.",
+    "marketSpecifics": "STAY AS-IS. Benchmark rate, credit bureau, national ID, emirate list, currency and nationality segments are captured exactly as the portal renders them. Generic means no client identity, not market-neutral."
   },
   "alsoNeeded": [
-    "Appro logo files as attachments or committed to assets/ \u2014 logo-white (portal sidebar + title card) and logo-dark (letterhead, shot 28)",
+    "Appro logo files as attachments or committed to assets/ - logo-white (portal sidebar + title card) and logo-dark (letterhead, shot 28)",
     "Neutral host for the address bar, e.g. demo.superportal.local",
     "Application IDs re-seeded with a neutral prefix",
-    "Synthetic customer and employer records",
-    "OPEN: does 'generic' extend to market-neutral? EIBOR / AECB / Emirates ID / emirate list are UAE-specific and three are spoken in the narration."
+    "Synthetic customer and employer records"
   ],
   "shots": [
     {
