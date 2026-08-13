@@ -10,6 +10,22 @@ leaks are in places nobody thinks to look.
 
 ---
 
+## 0. Before capture — four setup steps
+
+None of these can be fixed afterwards in the edit. All four are baked into the
+screenshots at the moment they are taken.
+
+| # | Set up | Why it can't wait |
+|---|---|---|
+| 1 | Load Appro **`logo-white`** into the tenant's channel branding | Appears in 31 sidebar shots; compositing it later means masking all 31 |
+| 2 | Name the channel literally **`Bank`** | Renders in 10 places including a generated dialog sentence in shot 15 |
+| 3 | Serve the portal from a **neutral host** (e.g. `demo.superportal.local`) | The address bar is visible in all 34 shots |
+| 4 | Re-seed **application IDs** with a neutral prefix, and customer / employer records as synthetic | Visible in shots 21–28; the old prefix encodes the client |
+
+Once those four are in place, the 34 shots in section 3 can be captured in one pass.
+
+---
+
 ## 1. Global rules — read before shot 1
 
 **Capture clean. Do not add emphasis.** In the finished video each screenshot has
@@ -40,15 +56,15 @@ Work through this before capturing. Items 3–7 are the ones that get missed.
 
 | # | Where | Source build shows | Do instead |
 |---|---|---|---|
-| 1 | Sidebar lockup, every portal shot | Bank logo, top of nav | **Decision needed** — see below |
-| 2 | Title card | Logo + bank name under the wordmark | Drop the subtitle line; `Super Portal` alone |
+| 1 | Sidebar lockup, every portal shot | Bank logo, top of nav | **Appro `logo-white`** — set in the tenant before capture |
+| 2 | Title card | Logo + bank name under the wordmark | Appro logo; subtitle becomes **`Bank`** → reads *Bank Super Portal* |
 | 3 | **Browser address bar, all 34 shots** | Bank-derived subdomain | Serve from a neutral host, e.g. `demo.superportal.local` |
 | 4 | **Application IDs** (shots 21, 22, 23) | Reference prefix encoding the bank | Re-seed with a neutral prefix, e.g. `APP_202600000211` |
-| 5 | **Channel selector**, top-right (shots 7, 10, 17–21) | Bank name in the dropdown | Rename the channel — see below |
-| 6 | **Channel column** (shots 21, 22) | Bank name on every result row | Same rename, flows through |
-| 7 | **Publish dialog body** (shot 15) | Names product *and channel* in the sentence | Same rename, flows through |
-| 8 | Channel card (shot 2) and channel chip (shot 3) | Bank name | Same rename |
-| 9 | User's Channel field (shot 32) | Bank name chip | Same rename |
+| 5 | **Channel selector**, top-right (shots 7, 10, 17–21) | Bank name in the dropdown | Channel renamed **`Bank`** |
+| 6 | **Channel column** (shots 21, 22) | Bank name on every result row | Renders `Bank` automatically |
+| 7 | **Publish dialog body** (shot 15) | Names product *and channel* in the sentence | Renders `Bank` automatically |
+| 8 | Channel card (shot 2) and channel chip (shot 3) | Bank name | Renders `Bank` automatically |
+| 9 | User's Channel field (shot 32) | Bank name chip | Renders `Bank` automatically |
 | 10 | **Pre-approval letter** (shot 28) | Bank logo in the letter header | Neutral or blank letterhead |
 | 11 | Employer Name (shot 23) | A real-looking company | Synthetic employer |
 | 12 | Customer name, ID number, DOB, mobile, email (shots 21–28) | Applicant PII | Seed synthetic records |
