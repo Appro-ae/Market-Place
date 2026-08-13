@@ -4,27 +4,9 @@ function Dashboard({ env, goTo }) {
   const isProd = env === 'production';
   const demoEmpty = !!window.DEMO_EMPTY;
 
-  // Sub-environments from provisioned environments list, filtered by global Sandbox/Production toggle
-  const provisioned = (window.PROVISIONED_ENVS || []).filter(e => e.status === 'active' || e.status === 'live' || !e.status);
-  const fallbackEnvs = [
-    { id: 'sbx-core',   name: 'sandbox-core',       envType: 'sandbox',    region: 'me-central-1' },
-    { id: 'sbx-qa',     name: 'sandbox-qa',         envType: 'sandbox',    region: 'me-central-1' },
-    { id: 'prod-uae',   name: 'production-uae-1',   envType: 'production', region: 'me-central-1' },
-    { id: 'prod-ksa',   name: 'production-ksa-1',   envType: 'production', region: 'me-south-1' },
-  ];
-  const envs = (provisioned.length ? provisioned.map(e => ({
-    id: e.id || e.name,
-    name: e.name,
-    envType: e.envType || e.env || (/(prod)/i.test(e.name) ? 'production' : 'sandbox'),
-    region: (e.region || 'me-central-1').split(' · ')[0],
-  })) : fallbackEnvs);
-  const subEnvs = envs.filter(e => e.envType === env);
-  const [envId, setEnvId] = React.useState((subEnvs[0] || envs[0]).id);
-  React.useEffect(() => {
-    if (!subEnvs.some(e => e.id === envId)) setEnvId((subEnvs[0] || {}).id);
-  }, [env]);
-  const selectedEnv = envs.find(e => e.id === envId) || subEnvs[0] || envs[0];
-
+  // PO review 13-08-2026 (GAS-562): no sub-environment selector on the dashboard —
+  // the global Sandbox/Production toggle is the only environment control here.
+  // Sub-environment selection stays on Usage & Analytics / Request Logs.
   const metrics = (demoEmpty ? [
     { label: 'Requests (24h)', value: '0', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
     { label: 'Success rate', value: '—', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
@@ -59,23 +41,6 @@ function Dashboard({ env, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      {/* Sub-environment selector — filtered by global Sandbox/Production toggle */}
-      <Card padding={0} style={{ marginBottom: 14 }}>
-        <div style={{ padding: '14px 16px', display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Icon name="globe" size={15}/>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Environment</span>
-          </div>
-          <div style={{ position: 'relative', minWidth: 240 }}>
-            <select value={envId || ''} onChange={e => setEnvId(e.target.value)} style={{ width: '100%', appearance: 'none', border: '1px solid var(--ink-300)', borderRadius: 8, padding: '9px 32px 9px 12px', fontSize: 13, fontFamily: 'var(--font-ui)', color: 'var(--ink-800)', background: '#fff', cursor: 'pointer', fontWeight: 600 }}>
-              {subEnvs.map(e => <option key={e.id} value={e.id}>{e.name} · {e.region}</option>)}
-            </select>
-            <span style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ink-500)' }}><Icon name="chevron" size={14}/></span>
-          </div>
-          <span style={{ fontSize: 11, color: 'var(--ink-500)', fontFamily: 'var(--font-mono)' }}>{selectedEnv.envType === 'production' ? 'api' : 'sandbox'}.appro.ae · {selectedEnv.region}</span>
-        </div>
-      </Card>
-
       {/* Welcome band — Appro brandmark gradient (45°, Dark Blue → Denim) */}
       <div style={{
         background: 'linear-gradient(45deg, #0C1931 0%, #1A2D52 45%, #3B7EF6 100%)',
@@ -228,8 +193,8 @@ function Dashboard({ env, goTo }) {
         </Card>
       </div>
 
-      {/* Main grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 16, marginBottom: 20 }}>
+      {/* Connected APIs — full width (PO review 13-08-2026: readiness checklist removed from v1) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginBottom: 20 }}>
         {/* Connected APIs */}
         <Card padding={0}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -268,47 +233,10 @@ function Dashboard({ env, goTo }) {
           </div>
         </Card>
 
-        {/* Onboarding progress */}
-        <Card padding={0}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)' }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Production readiness</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 2 }}>4 of 6 complete · 2 remaining</div>
-            <div style={{ height: 6, background: 'var(--ink-100)', borderRadius: 999, marginTop: 12, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '66%', background: 'linear-gradient(90deg,var(--appro-blue),#1D4ED8)', borderRadius: 999 }}/>
-            </div>
-          </div>
-          <div style={{ padding: '8px 0' }}>
-            {[
-              { done: true, title: 'Organization verified', sub: 'CTR + Trade License on file' },
-              { done: true, title: 'Sandbox provisioned', sub: 'sbx_mb_8f2a · synthetic data' },
-              { done: true, title: 'Security review signed', sub: 'Pen-test report uploaded Apr 2' },
-              { done: true, title: 'Static source IPs registered', sub: '2 CIDR ranges' },
-              { done: false, title: 'Complete conformance tests', sub: '18/24 passing · fix signed-webhooks' },
-              { done: false, title: 'Production access request', sub: 'Requires admin sign-off' },
-            ].map((s, i) => (
-              <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '10px 20px' }}>
-                <div style={{
-                  width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                  background: s.done ? 'var(--success)' : '#fff',
-                  border: s.done ? 0 : '1.5px dashed var(--ink-300)',
-                  color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginTop: 1,
-                }}>{s.done && <Icon name="check" size={12} stroke={3}/>}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: s.done ? 'var(--ink-500)' : 'var(--ink-800)', textDecoration: s.done ? 'line-through' : 'none' }}>{s.title}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 1 }}>{s.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ padding: '12px 20px', borderTop: '1px solid var(--ink-100)' }}>
-            <Btn variant="primary" size="sm" icon="arrow" style={{ width: '100%', justifyContent: 'center' }}>Request production access</Btn>
-          </div>
-        </Card>
       </div>
 
-      {/* Activity + Quick start */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 16 }}>
+      {/* Activity — full width (PO review 13-08-2026: quick-start card removed from v1) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
         <Card padding={0}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Activity</div>
@@ -333,47 +261,6 @@ function Dashboard({ env, goTo }) {
           </div>
         </Card>
 
-        <Card padding={0}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)' }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Quick start</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 2 }}>Get a first response in &lt; 60 sec</div>
-          </div>
-          <div style={{ padding: 16, background: '#0C1931', margin: 16, borderRadius: 10, position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F56' }}/>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }}/>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#27C93F' }}/>
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,.4)', marginLeft: 8, fontFamily: 'var(--font-mono)' }}>terminal — curl</span>
-              <Icon name="copy" size={12} stroke={1.5}/>
-            </div>
-            <pre style={{ margin: 0, fontFamily: 'var(--font-mono)', fontSize: 11.5, color: '#E6F1F8', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-<span style={{ color: '#8aa7d6' }}>$</span> <span style={{ color: '#B3FF4C' }}>curl</span> https://{env === 'production' ? 'api' : 'sandbox'}.appro.ae/v2/accounts \{'\n'}
-{'  '}-H <span style={{ color: '#FFD66B' }}>"Authorization: Bearer $APPRO_KEY"</span> \{'\n'}
-{'  '}-H <span style={{ color: '#FFD66B' }}>"x-appro-env: {env}"</span>
-            </pre>
-          </div>
-          <div style={{ padding: '0 16px 16px', display: 'grid', gap: 8 }}>
-            {[
-              { t: 'Read the Quickstart', d: 'OAuth, OTP and your first call', icon: 'book' },
-              { t: 'Install the SDK', d: 'Node · Python · Java · .NET', icon: 'terminal' },
-              { t: 'Open the Playground', d: 'Try live calls in the browser', icon: 'sparkle' },
-            ].map(q => (
-              <a key={q.t} href="#" style={{
-                padding: '10px 12px', border: '1px solid var(--ink-200)', borderRadius: 8,
-                display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit',
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: 6, background: 'var(--appro-blue-100)', color: 'var(--appro-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name={q.icon} size={14}/>
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--ink-800)' }}>{q.t}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{q.d}</div>
-                </div>
-                <Icon name="arrow" size={14}/>
-              </a>
-            ))}
-          </div>
-        </Card>
       </div>
     </div>
   );
