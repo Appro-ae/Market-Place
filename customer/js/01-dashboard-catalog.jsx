@@ -26,12 +26,12 @@ function Dashboard({ env, goTo }) {
     { label: 'Requests (24h)', value: '1.82M', delta: '+4.1%', up: true, spark: [30,42,38,55,62,58,74,70,82,78,88,95] },
     { label: 'Success rate', value: '99.82%', delta: '+0.04%', up: true, spark: [90,92,91,93,94,92,95,96,97,97,98,99] },
     { label: 'Error rate', value: '0.18%', delta: '+0.02%', up: false, spark: [10,12,14,13,15,18,16,20,22,18,15,18] },
-    { label: 'Monthly quota used', value: '68%', delta: '2.0M of 3.0M', up: true, quota: 68 },
+    { label: 'Monthly quota used', value: '68%', delta: '2.0M of 3.0M', up: true, quota: 68, note: 'Committed-volume packages only · 1 pay-as-you-go excluded' },
   ] : [
     { label: 'Requests (24h)', value: '14,284', delta: '+22%', up: true, spark: [20,28,30,42,45,55,60,58,72,70,80,90] },
     { label: 'Success rate', value: '98.4%', delta: '+0.9%', up: true, spark: [80,82,85,84,88,90,89,92,91,95,96,98] },
     { label: 'Error rate', value: '1.6%', delta: '-0.3%', up: true, spark: [30,28,24,25,22,20,18,19,16,14,15,13] },
-    { label: 'Monthly quota used', value: '14%', delta: '438K of 3.0M', up: true, quota: 14 },
+    { label: 'Monthly quota used', value: '14%', delta: '438K of 3.0M', up: true, quota: 14, note: 'Committed-volume packages only · 1 pay-as-you-go excluded' },
   ]);
   if (!demoEmpty) metrics[0] = { ...metrics[0], label: 'Requests (' + (isToday ? '24h' : DAYS[di]) + ')', value: REQ_DAY[di] };
 
@@ -104,8 +104,12 @@ function Dashboard({ env, goTo }) {
               <span style={{ fontSize: 11, fontWeight: 600, color: m.up ? 'var(--success)' : 'var(--danger)', whiteSpace: 'nowrap', flexShrink: 0 }}>{m.up ? '↑' : '↓'} {m.delta}</span>
             </div>
             {m.quota != null ? (
-              <div style={{ marginTop: 20, height: 8, background: 'var(--ink-100)', borderRadius: 999, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: m.quota + '%', background: m.quota > 85 ? 'var(--danger)' : 'linear-gradient(90deg,var(--appro-blue),#1D4ED8)', borderRadius: 999 }}/>
+              <div style={{ marginTop: 14 }}>
+                <div style={{ height: 8, background: 'var(--ink-100)', borderRadius: 999, overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: m.quota + '%', background: m.quota > 85 ? 'var(--danger)' : 'linear-gradient(90deg,var(--appro-blue),#1D4ED8)', borderRadius: 999 }}/>
+                </div>
+                {/* GAS-562: the % covers committed-volume packages only — uncapped types have no denominator. */}
+                {m.note && <div style={{ fontSize: 10, color: 'var(--ink-500)', marginTop: 6, lineHeight: 1.3 }}>{m.note}</div>}
               </div>
             ) : (
             <svg viewBox="0 0 120 32" style={{ width: '100%', height: 32, marginTop: 10, display: 'block' }}>
