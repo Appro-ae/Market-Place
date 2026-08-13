@@ -79,6 +79,9 @@ function statusMeta(s) {
 /* ============================ SIDEBAR ============================ */
 function AdminSidebar({ screen, onNav, counts, onLogout }) {
   const groups = [
+    { grp: 'Overview', items: [
+      { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+    ]},
     { grp: 'Administration', items: [
       { id: 'tenant-management', label: 'Tenant Management', icon: 'tenant', count: counts['tenant-management'] },
       { id: 'product-setup', label: 'Product Setup', icon: 'product' },
@@ -140,8 +143,11 @@ function AdminSidebar({ screen, onNav, counts, onLogout }) {
   );
 }
 
-function AdminTopbar({ title, breadcrumb }) {
-  const [env, setEnv] = useState('sandbox');
+function AdminTopbar({ title, breadcrumb, env: envProp, onEnv }) {
+  // Controlled when AdminApp lifts the environment (GAS-561 AC3); falls back to local state.
+  const [envLocal, setEnvLocal] = useState('sandbox');
+  const env = envProp || envLocal;
+  const setEnv = onEnv || setEnvLocal;
   return (
     <header style={{ padding: '18px 32px', background: '#fff', borderBottom: '1px solid var(--ink-200)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10, gap: 20 }}>
       <div style={{ minWidth: 0, flexShrink: 0 }}>

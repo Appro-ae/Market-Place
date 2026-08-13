@@ -17,11 +17,15 @@ function loadLiveRequests() { try { return JSON.parse(localStorage.getItem(REQ_K
 function loadRequests() { return [...loadLiveRequests(), ...SEED_REQUESTS]; }        // tenant requests first, then seed
 function persistLiveRequests(all) { localStorage.setItem(REQ_KEY, JSON.stringify(all.filter(r => !SEED_REQ_IDS.has(r.id)))); }
 
-const ADMIN_SCREENS = ['tenant-management','product-setup','billing','subscriptions','user-roles'];
+const ADMIN_SCREENS = ['dashboard','tenant-management','product-setup','billing','subscriptions','user-roles'];
 function AdminApp({ onLogout }) {
-  const [screen, setScreen] = useState(() => { const s = localStorage.getItem('admin.screen') || 'tenant-management'; return ADMIN_SCREENS.includes(s) ? s : 'tenant-management'; });
+  const [screen, setScreen] = useState(() => { const s = localStorage.getItem('admin.screen') || 'dashboard'; return ADMIN_SCREENS.includes(s) ? s : 'dashboard'; });
   const [published, setPublished] = useState(loadPublished);
   const [requests, setRequests] = useState(loadRequests);
+  // Global environment scope (GAS-561 AC3): lifted from the topbar so screens can read it,
+  // mirroring the customer portal's portal.env pattern.
+  const [env, setEnv] = useState(() => localStorage.getItem('admin.env') || 'sandbox');
+  useEffect(() => { localStorage.setItem('admin.env', env); }, [env]);
   useEffect(() => { localStorage.setItem('admin.screen', screen); }, [screen]);
 
   // Live sync: pick up new tenant requests from the Customer Portal (fires across tabs),
@@ -76,7 +80,8 @@ function AdminApp({ onLogout }) {
   const onReset = () => { persist([]); window.toast.info('Catalog reset', 'Locally-published APIs cleared; seeded set restored.'); };
 
   let body, title;
-  if (screen === 'tenant-management') { title = 'Tenant Management'; body = <TenantManagement/>; }
+  if (screen === 'dashboard') { title = 'Dashboard'; body = <AdminDashboard env={env} requests={requests} goTo={setScreen}/>; }
+  else if (screen === 'tenant-management') { title = 'Tenant Management'; body = <TenantManagement/>; }
   else if (screen === 'product-setup') { title = 'Product Setup'; body = <ProductSetup/>; }
   else if (screen === 'billing') { title = 'Billing Management'; body = <AdminBilling/>; }
   else if (screen === 'subscriptions') { title = 'Subscription Management'; body = <SubscriptionManagement/>; }
@@ -91,7 +96,7 @@ function AdminApp({ onLogout }) {
       <AdminTweaks/>
       <AdminSidebar screen={screen} onNav={setScreen} counts={counts} onLogout={onLogout}/>
       <main style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
-        <AdminTopbar title={title} breadcrumb={title}/>
+        <AdminTopbar title={title} breadcrumb={title} env={env} onEnv={setEnv}/>
         <div style={{ position: 'relative', flex: 1, minHeight: 0 }}>{body}</div>
       </main>
     </div>
