@@ -4,42 +4,24 @@ function Dashboard({ env, goTo }) {
   const isProd = env === 'production';
   const demoEmpty = !!window.DEMO_EMPTY;
 
-  // Sub-environments from provisioned environments list, filtered by global Sandbox/Production toggle
-  const provisioned = (window.PROVISIONED_ENVS || []).filter(e => e.status === 'active' || e.status === 'live' || !e.status);
-  const fallbackEnvs = [
-    { id: 'sbx-core',   name: 'sandbox-core',       envType: 'sandbox',    region: 'me-central-1' },
-    { id: 'sbx-qa',     name: 'sandbox-qa',         envType: 'sandbox',    region: 'me-central-1' },
-    { id: 'prod-uae',   name: 'production-uae-1',   envType: 'production', region: 'me-central-1' },
-    { id: 'prod-ksa',   name: 'production-ksa-1',   envType: 'production', region: 'me-south-1' },
-  ];
-  const envs = (provisioned.length ? provisioned.map(e => ({
-    id: e.id || e.name,
-    name: e.name,
-    envType: e.envType || e.env || (/(prod)/i.test(e.name) ? 'production' : 'sandbox'),
-    region: (e.region || 'me-central-1').split(' · ')[0],
-  })) : fallbackEnvs);
-  const subEnvs = envs.filter(e => e.envType === env);
-  const [envId, setEnvId] = React.useState((subEnvs[0] || envs[0]).id);
-  React.useEffect(() => {
-    if (!subEnvs.some(e => e.id === envId)) setEnvId((subEnvs[0] || {}).id);
-  }, [env]);
-  const selectedEnv = envs.find(e => e.id === envId) || subEnvs[0] || envs[0];
-
+  // PO review 13-08-2026 (GAS-562): no sub-environment selector on the dashboard —
+  // the global Sandbox/Production toggle is the only environment control here.
+  // Sub-environment selection stays on Usage & Analytics / Request Logs.
   const metrics = (demoEmpty ? [
     { label: 'Requests (24h)', value: '0', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
     { label: 'Success rate', value: '—', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
-    { label: 'p95 latency', value: '—', delta: '0 ms', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
     { label: 'Error rate', value: '—', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
+    { label: 'Monthly quota used', value: '—', delta: 'no plan yet', up: true, quota: 0 },
   ] : isProd ? [
     { label: 'Requests (24h)', value: '1.82M', delta: '+4.1%', up: true, spark: [30,42,38,55,62,58,74,70,82,78,88,95] },
     { label: 'Success rate', value: '99.82%', delta: '+0.04%', up: true, spark: [90,92,91,93,94,92,95,96,97,97,98,99] },
-    { label: 'p95 latency', value: '142 ms', delta: '-8 ms', up: true, spark: [70,65,72,68,60,58,55,52,50,48,45,42] },
     { label: 'Error rate', value: '0.18%', delta: '+0.02%', up: false, spark: [10,12,14,13,15,18,16,20,22,18,15,18] },
+    { label: 'Monthly quota used', value: '68%', delta: '2.0M of 3.0M', up: true, quota: 68 },
   ] : [
     { label: 'Requests (24h)', value: '14,284', delta: '+22%', up: true, spark: [20,28,30,42,45,55,60,58,72,70,80,90] },
     { label: 'Success rate', value: '98.4%', delta: '+0.9%', up: true, spark: [80,82,85,84,88,90,89,92,91,95,96,98] },
-    { label: 'p95 latency', value: '210 ms', delta: '-22 ms', up: true, spark: [85,82,78,72,68,65,60,58,52,50,48,45] },
     { label: 'Error rate', value: '1.6%', delta: '-0.3%', up: true, spark: [30,28,24,25,22,20,18,19,16,14,15,13] },
+    { label: 'Monthly quota used', value: '14%', delta: '438K of 3.0M', up: true, quota: 14 },
   ]);
 
   const apis = demoEmpty ? [] : [
@@ -59,23 +41,6 @@ function Dashboard({ env, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      {/* Sub-environment selector — filtered by global Sandbox/Production toggle */}
-      <Card padding={0} style={{ marginBottom: 14 }}>
-        <div style={{ padding: '14px 16px', display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Icon name="globe" size={15}/>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Environment</span>
-          </div>
-          <div style={{ position: 'relative', minWidth: 240 }}>
-            <select value={envId || ''} onChange={e => setEnvId(e.target.value)} style={{ width: '100%', appearance: 'none', border: '1px solid var(--ink-300)', borderRadius: 8, padding: '9px 32px 9px 12px', fontSize: 13, fontFamily: 'var(--font-ui)', color: 'var(--ink-800)', background: '#fff', cursor: 'pointer', fontWeight: 600 }}>
-              {subEnvs.map(e => <option key={e.id} value={e.id}>{e.name} · {e.region}</option>)}
-            </select>
-            <span style={{ position: 'absolute', right: 11, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ink-500)' }}><Icon name="chevron" size={14}/></span>
-          </div>
-          <span style={{ fontSize: 11, color: 'var(--ink-500)', fontFamily: 'var(--font-mono)' }}>{selectedEnv.envType === 'production' ? 'api' : 'sandbox'}.appro.ae · {selectedEnv.region}</span>
-        </div>
-      </Card>
-
       {/* Welcome band — Appro brandmark gradient (45°, Dark Blue → Denim) */}
       <div style={{
         background: 'linear-gradient(45deg, #0C1931 0%, #1A2D52 45%, #3B7EF6 100%)',
@@ -116,18 +81,120 @@ function Dashboard({ env, goTo }) {
               <div style={{ fontSize: 26, fontWeight: 500, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em', lineHeight: 1 }}>{m.value}</div>
               <span style={{ fontSize: 11, fontWeight: 600, color: m.up ? 'var(--success)' : 'var(--danger)', whiteSpace: 'nowrap', flexShrink: 0 }}>{m.up ? '↑' : '↓'} {m.delta}</span>
             </div>
+            {m.quota != null ? (
+              <div style={{ marginTop: 20, height: 8, background: 'var(--ink-100)', borderRadius: 999, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: m.quota + '%', background: m.quota > 85 ? 'var(--danger)' : 'linear-gradient(90deg,var(--appro-blue),#1D4ED8)', borderRadius: 999 }}/>
+              </div>
+            ) : (
             <svg viewBox="0 0 120 32" style={{ width: '100%', height: 32, marginTop: 10, display: 'block' }}>
               <polyline fill="none" stroke="var(--appro-blue)" strokeWidth="1.5"
                 points={m.spark.map((v,i)=>`${(i/(m.spark.length-1))*120},${32-(v/100)*28}`).join(' ')}/>
               <polygon fill="rgba(59,126,246,.18)" stroke="none"
                 points={`0,32 ${m.spark.map((v,i)=>`${(i/(m.spark.length-1))*120},${32-(v/100)*28}`).join(' ')} 120,32`}/>
             </svg>
+            )}
           </Card>
         ))}
       </div>
 
-      {/* Main grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 16, marginBottom: 20 }}>
+      {/* Billing snapshot + Subscriptions & requests + Recent errors (GAS-562 W4/W5/W6) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1.15fr 1fr', gap: 14, marginBottom: 20 }}>
+        {/* W4 — Billing snapshot (per tenant, environment-independent) */}
+        <Card padding={0}>
+          <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Billing snapshot</div>
+            <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--ink-500)', background: 'var(--ink-100)', padding: '3px 8px', borderRadius: 999, textTransform: 'uppercase', letterSpacing: '.05em' }}>All environments</span>
+          </div>
+          <div style={{ padding: '16px 18px' }}>
+            <div style={{ fontSize: 11, color: 'var(--ink-500)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '.06em' }}>Running total · June cycle</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 6 }}>
+              <div style={{ fontSize: 25, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)' }}>{demoEmpty ? 'AED 0' : 'AED 19,340'}</div>
+              {!demoEmpty && <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--success)' }}>↑ +4% vs May</span>}
+            </div>
+            <div style={{ fontSize: 11.5, color: 'var(--ink-500)', marginTop: 4 }}>incl. VAT 5% · cycle closes Jun 30 · invoice Jul 3</div>
+            <div style={{ marginTop: 14, display: 'grid', gap: 8 }}>
+              {(demoEmpty ? [] : [
+                { m: 'Jun 2026', s: 'Pending', c: 'var(--warning)' },
+                { m: 'May 2026', s: 'Paid', c: 'var(--success)' },
+              ]).map(inv => (
+                <div key={inv.m} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5, padding: '8px 10px', border: '1px solid var(--ink-100)', borderRadius: 8 }}>
+                  <span style={{ fontWeight: 600, color: 'var(--ink-800)' }}>Invoice · {inv.m}</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 700, color: inv.c, background: `color-mix(in srgb, ${inv.c} 12%, white)`, padding: '2px 9px', borderRadius: 999 }}>{inv.s}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ padding: '10px 18px', borderTop: '1px solid var(--ink-100)' }}>
+            <Btn variant="ghost" size="sm" onClick={() => goTo('billing')}>Open Subscriptions & Billing →</Btn>
+          </div>
+        </Card>
+
+        {/* W5 — Subscriptions & pending requests */}
+        <Card padding={0}>
+          <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Subscriptions & requests</div>
+            <Btn variant="ghost" size="sm" onClick={() => goTo('requests')}>View all →</Btn>
+          </div>
+          <div style={{ padding: '14px 18px', display: 'flex', gap: 8 }}>
+            {[['Active', demoEmpty ? 0 : 5, 'var(--success)'], ['Trial', demoEmpty ? 0 : 1, 'var(--info)'], ['Pending', demoEmpty ? 0 : 2, 'var(--warning)']].map(([l, n, c]) => (
+              <div key={l} style={{ flex: 1, textAlign: 'center', background: `color-mix(in srgb, ${c} 7%, white)`, border: `1px solid color-mix(in srgb, ${c} 22%, white)`, borderRadius: 9, padding: '10px 6px' }}>
+                <div style={{ fontSize: 20, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)' }}>{n}</div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, color: c }}>{l}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ padding: '0 18px 14px', display: 'grid', gap: 10 }}>
+            {(demoEmpty ? [] : [
+              { api: 'AECB Credit Report v2.0', target: 'production', stage: 3, label: 'Security review' },
+              { api: 'EFR v1.1', target: 'sandbox', stage: 4, label: 'Approval' },
+            ]).map(r => (
+              <div key={r.api} style={{ border: '1px solid var(--ink-100)', borderRadius: 8, padding: '9px 10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6 }}>
+                  <span style={{ fontWeight: 600, color: 'var(--ink-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.api} <span style={{ color: 'var(--ink-500)', fontWeight: 500 }}>→ {r.target}</span></span>
+                  <span style={{ color: 'var(--appro-blue)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.label} · {r.stage}/5</span>
+                </div>
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {[1,2,3,4,5].map(s => <div key={s} style={{ flex: 1, height: 4, borderRadius: 999, background: s <= r.stage ? 'var(--appro-blue)' : 'var(--ink-100)' }}/>)}
+                </div>
+              </div>
+            ))}
+            {demoEmpty && <div style={{ fontSize: 12, color: 'var(--ink-500)', textAlign: 'center', padding: '8px 0' }}>No open requests</div>}
+          </div>
+        </Card>
+
+        {/* W6 — Recent errors (selected environment) */}
+        <Card padding={0}>
+          <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Recent errors</div>
+              <div style={{ fontSize: 10.5, color: 'var(--ink-500)', marginTop: 1 }}>status ≥ 400 · {env}</div>
+            </div>
+            <Btn variant="ghost" size="sm" onClick={() => goTo('logs')}>Logs →</Btn>
+          </div>
+          <div>
+            {(demoEmpty ? [] : (isProd ? [
+              { t: '14:22:03', m: 'POST', p: '/v2/income/verify', s: 400 },
+              { t: '14:21:50', m: 'GET', p: '/v2/identity/verify', s: 401 },
+              { t: '14:18:22', m: 'GET', p: '/v2/aecb/score', s: 429 },
+            ] : [
+              { t: '14:20:11', m: 'POST', p: '/v2/aecb/report', s: 400 },
+              { t: '14:16:40', m: 'GET', p: '/v2/email/verify', s: 429 },
+              { t: '14:12:05', m: 'POST', p: '/v2/efr/company', s: 500 },
+            ])).map((r, i, arr) => (
+              <div key={i} style={{ padding: '10px 18px', display: 'flex', gap: 10, alignItems: 'center', fontSize: 11.5, fontFamily: 'var(--font-mono)', borderBottom: i < arr.length-1 ? '1px solid var(--ink-100)' : 0 }}>
+                <span style={{ color: 'var(--ink-500)' }}>{r.t}</span>
+                <span style={{ color: 'var(--ink-600)' }}>{r.m}</span>
+                <span style={{ flex: 1, color: 'var(--ink-800)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.p}</span>
+                <span style={{ fontWeight: 700, color: r.s >= 500 ? 'var(--danger)' : 'var(--warning)' }}>{r.s}</span>
+              </div>
+            ))}
+            {demoEmpty && <div style={{ fontSize: 12, color: 'var(--ink-500)', textAlign: 'center', padding: '18px 0' }}>No errors — no traffic yet</div>}
+          </div>
+        </Card>
+      </div>
+
+      {/* Connected APIs — full width (PO review 13-08-2026: readiness checklist removed from v1) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginBottom: 20 }}>
         {/* Connected APIs */}
         <Card padding={0}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -166,47 +233,10 @@ function Dashboard({ env, goTo }) {
           </div>
         </Card>
 
-        {/* Onboarding progress */}
-        <Card padding={0}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)' }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Production readiness</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 2 }}>4 of 6 complete · 2 remaining</div>
-            <div style={{ height: 6, background: 'var(--ink-100)', borderRadius: 999, marginTop: 12, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: '66%', background: 'linear-gradient(90deg,var(--appro-blue),#1D4ED8)', borderRadius: 999 }}/>
-            </div>
-          </div>
-          <div style={{ padding: '8px 0' }}>
-            {[
-              { done: true, title: 'Organization verified', sub: 'CTR + Trade License on file' },
-              { done: true, title: 'Sandbox provisioned', sub: 'sbx_mb_8f2a · synthetic data' },
-              { done: true, title: 'Security review signed', sub: 'Pen-test report uploaded Apr 2' },
-              { done: true, title: 'Static source IPs registered', sub: '2 CIDR ranges' },
-              { done: false, title: 'Complete conformance tests', sub: '18/24 passing · fix signed-webhooks' },
-              { done: false, title: 'Production access request', sub: 'Requires admin sign-off' },
-            ].map((s, i) => (
-              <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '10px 20px' }}>
-                <div style={{
-                  width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
-                  background: s.done ? 'var(--success)' : '#fff',
-                  border: s.done ? 0 : '1.5px dashed var(--ink-300)',
-                  color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginTop: 1,
-                }}>{s.done && <Icon name="check" size={12} stroke={3}/>}</div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: s.done ? 'var(--ink-500)' : 'var(--ink-800)', textDecoration: s.done ? 'line-through' : 'none' }}>{s.title}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 1 }}>{s.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div style={{ padding: '12px 20px', borderTop: '1px solid var(--ink-100)' }}>
-            <Btn variant="primary" size="sm" icon="arrow" style={{ width: '100%', justifyContent: 'center' }}>Request production access</Btn>
-          </div>
-        </Card>
       </div>
 
-      {/* Activity + Quick start */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 16 }}>
+      {/* Activity — full width (PO review 13-08-2026: quick-start card removed from v1) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16 }}>
         <Card padding={0}>
           <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Activity</div>
@@ -231,47 +261,6 @@ function Dashboard({ env, goTo }) {
           </div>
         </Card>
 
-        <Card padding={0}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--ink-100)' }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Quick start</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-500)', marginTop: 2 }}>Get a first response in &lt; 60 sec</div>
-          </div>
-          <div style={{ padding: 16, background: '#0C1931', margin: 16, borderRadius: 10, position: 'relative' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FF5F56' }}/>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#FFBD2E' }}/>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#27C93F' }}/>
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,.4)', marginLeft: 8, fontFamily: 'var(--font-mono)' }}>terminal — curl</span>
-              <Icon name="copy" size={12} stroke={1.5}/>
-            </div>
-            <pre style={{ margin: 0, fontFamily: 'var(--font-mono)', fontSize: 11.5, color: '#E6F1F8', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
-<span style={{ color: '#8aa7d6' }}>$</span> <span style={{ color: '#B3FF4C' }}>curl</span> https://{env === 'production' ? 'api' : 'sandbox'}.appro.ae/v2/accounts \{'\n'}
-{'  '}-H <span style={{ color: '#FFD66B' }}>"Authorization: Bearer $APPRO_KEY"</span> \{'\n'}
-{'  '}-H <span style={{ color: '#FFD66B' }}>"x-appro-env: {env}"</span>
-            </pre>
-          </div>
-          <div style={{ padding: '0 16px 16px', display: 'grid', gap: 8 }}>
-            {[
-              { t: 'Read the Quickstart', d: 'OAuth, OTP and your first call', icon: 'book' },
-              { t: 'Install the SDK', d: 'Node · Python · Java · .NET', icon: 'terminal' },
-              { t: 'Open the Playground', d: 'Try live calls in the browser', icon: 'sparkle' },
-            ].map(q => (
-              <a key={q.t} href="#" style={{
-                padding: '10px 12px', border: '1px solid var(--ink-200)', borderRadius: 8,
-                display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit',
-              }}>
-                <div style={{ width: 28, height: 28, borderRadius: 6, background: 'var(--appro-blue-100)', color: 'var(--appro-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon name={q.icon} size={14}/>
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--ink-800)' }}>{q.t}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{q.d}</div>
-                </div>
-                <Icon name="arrow" size={14}/>
-              </a>
-            ))}
-          </div>
-        </Card>
       </div>
     </div>
   );

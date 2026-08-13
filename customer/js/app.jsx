@@ -297,5 +297,7 @@ function Root() {
   if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
   return <App onLogout={() => { localStorage.removeItem('portal.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
-window.DEMO_EMPTY = true;
+// GAS-562 AC8: the empty-state preview flag. Off so the dashboard design renders with data
+// (empty states remain the production behaviour on genuine no-data).
+window.DEMO_EMPTY = false;
 ReactDOM.createRoot(document.getElementById('root')).render(<Root/>);
