@@ -1,9 +1,9 @@
 # Swap list — re-skinning the walkthrough for a new bank
 
-Everything below is bank-, market- or environment-specific in the Emirates NBD
-cut. Give me the new bank name and I will regenerate the deck and script with
-these replaced; the ones marked **ASK** are the ones I cannot infer from a bank
-name alone.
+Everything below is client-, market- or environment-specific in the source cut.
+The current build is **unbranded** — channel `Bank`, title card `Bank Super Portal`.
+This list stays useful for any future client-branded cut; **ASK** marks what
+cannot be inferred from a name alone.
 
 ## A. Always changes (driven by the bank name)
 
@@ -13,11 +13,10 @@ name alone.
 | Title card logo | Emirates NBD wordmark | **ASK** — need the new bank's logo asset |
 | Portal sidebar logo | Emirates NBD lockup (Arabic + Latin) | Same asset, small |
 | Channel name | `Emirates NBD` | Now `Bank` for the unbranded build — see CAPTURE-SPEC.md |
-| Narration, line 1 | "Every mortgage application **{{BANK}}** receives…" | |
-| Narration, boundary line | "…put **{{BANK}}** outside its own appetite" | |
-| Narration, closing | "**{{BANK}}** sets the policy, prices the product…" | |
+| **Narration** | — | **No change, ever.** The script never names a bank; it says "the bank" in all three places. The voice track is client-agnostic as recorded. |
 | Demo URL in browser chrome | `enbd.uat.smbp-v2.aladdinweb.dev` | **ASK** — new tenant subdomain |
 | Login username | `antofelix@appro.ae` | **ASK** — or keep the Appro demo user |
+| Application ID prefix | `ENBDC_APPRO_…` / `ENBDC_ALADDIN…` | Encodes the bank — re-seed with a neutral prefix |
 
 ## B. Changes only if the market changes (UAE → elsewhere)
 
