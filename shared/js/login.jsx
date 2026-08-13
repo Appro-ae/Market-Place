@@ -14,12 +14,15 @@ function LoginScreen({ variant = 'customer', onLogin }) {
   const ATTEMPT_KEY = 'appro.attempts.' + variant;
 
   // Activation link support: .../activate?token=  →  ?activate=1&email=&token= on the portal.
+  // Link validity is derived server-side from the generated-link date (7-day configurable window,
+  // GAS-192 AC6). The duration is deliberately never shown on-screen — the email's %%VALID_TIME%%
+  // is the only place the window is stated (GAS-224 AC4). Demo: token=expired renders the expired state.
   const actParams = (() => { try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); } })();
   const isActivate = actParams.has('activate') || actParams.has('token');
+  const isActivateExpired = isActivate && actParams.get('token') === 'expired';
   const activateEmail = actParams.get('email') || '';
-  const ACTIVATE_EXPIRY_MIN = 10; // configurable activation-link expiry (BRD v1.4 · NFR-6)
 
-  const [mode, setMode] = useState(isActivate ? 'activate' : 'signin'); // 'signin' | 'forgot' | 'sent' | 'reset' | 'done' | 'activate' | 'activated'
+  const [mode, setMode] = useState(isActivateExpired ? 'activate-expired' : (isActivate ? 'activate' : 'signin')); // 'signin' | 'forgot' | 'sent' | 'reset' | 'done' | 'activate' | 'activate-expired' | 'activate-link-sent' | 'activated'
   const [email, setEmail] = useState(activateEmail || (isAdmin ? DEMO_VALID.admin.email : DEMO_VALID.customer.email));
   const [pw, setPw] = useState(isActivate ? '' : 'appro1234');
   const [show, setShow] = useState(false);
@@ -142,6 +145,8 @@ function LoginScreen({ variant = 'customer', onLogin }) {
     setTimeout(() => { setBusy(false); setNewPw(''); setConfirmPw(''); setMode('activated'); }, 850);
   };
   const backToSignin = () => { try { window.history.replaceState({}, '', window.location.pathname); } catch (e) {} setPw(''); if (activateEmail) setEmail(activateEmail); setMode('signin'); };
+  // AT03: the ONLY trigger is this self-service request on the expired screen (CLR-014 — no admin resend).
+  const requestNewLink = () => { setBusy(true); setTimeout(() => { setBusy(false); setMode('activate-link-sent'); }, 850); };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', fontFamily: 'var(--font-ui)' }}>
@@ -350,7 +355,7 @@ function LoginScreen({ variant = 'customer', onLogin }) {
             <Btn variant="primary" size="lg" disabled={busy || !resetPwValid || !terms} onClick={submitActivate} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5, marginTop: 12, opacity: (!resetPwValid || !terms) ? 0.6 : 1 }}>
               {busy ? 'Activating…' : 'Activate account'}
             </Btn>
-            <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-400)', textAlign: 'center' }}>This link is valid for {ACTIVATE_EXPIRY_MIN} minutes and can be used once.</div>
+            <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-400)', textAlign: 'center' }}>This link can be used once.</div>
           </form>
         )}
 
@@ -362,6 +367,27 @@ function LoginScreen({ variant = 'customer', onLogin }) {
             <h2 style={{ margin: 0, fontSize: 23, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Account activated</h2>
             <p style={{ margin: '10px 0 24px', fontSize: 13.5, color: 'var(--ink-500)', lineHeight: 1.6 }}>Your account is now active. Sign in with your email and password to continue.</p>
             <Btn variant="primary" size="lg" onClick={backToSignin} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5 }}>Sign in to {isAdmin ? 'Admin Console' : 'Customer Portal'}</Btn>
+          </div>
+        )}
+
+        {mode === 'activate-expired' && (
+          <div style={{ width: '100%', maxWidth: 380 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--appro-blue-100)', color: 'var(--appro-blue-700)', borderRadius: 999, padding: '5px 12px', fontSize: 11.5, fontWeight: 700, letterSpacing: '.04em', textTransform: 'uppercase', marginBottom: 16 }}><Icon name="lock" size={13} /> Account activation</div>
+            <h2 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Link expired</h2>
+            {/* IEM020 — verbatim from the 2.1 catalogue; page-level, not attached to a field. */}
+            <p style={{ margin: '10px 0 24px', fontSize: 13.5, color: 'var(--ink-500)', lineHeight: 1.6 }}>This activation link is invalid or has expired. Request a new link below.</p>
+            <Btn variant="primary" size="lg" disabled={busy} onClick={requestNewLink} style={{ width: '100%', justifyContent: 'center', height: 46, fontSize: 14.5 }}>{busy ? 'Sending…' : 'Email me a new link'}</Btn>
+            <div style={{ marginTop: 14, fontSize: 12, color: 'var(--ink-400)', textAlign: 'center' }}>A fresh link will be sent to {activateEmail || 'your email address'}.</div>
+          </div>
+        )}
+
+        {mode === 'activate-link-sent' && (
+          <div style={{ width: '100%', maxWidth: 380, textAlign: 'center' }}>
+            <div style={{ width: 60, height: 60, borderRadius: 16, background: 'var(--success-tint)', color: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <Icon name="check" size={28} stroke={3} />
+            </div>
+            <h2 style={{ margin: 0, fontSize: 23, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-display)', letterSpacing: '-0.01em' }}>Check your inbox</h2>
+            <p style={{ margin: '10px 0 24px', fontSize: 13.5, color: 'var(--ink-500)', lineHeight: 1.6 }}>A fresh activation link is on its way{activateEmail ? <> to <b style={{ color: 'var(--ink-800)' }}>{activateEmail}</b></> : ''}. The previous link no longer works.</p>
           </div>
         )}
 
