@@ -13,11 +13,12 @@
     "theme": "portal light theme",
     "captureClean": "Do not add outlines, dimming or annotation. The emphasis in the finished video is a post effect; the 'highlight' field is for the editor, not the capture agent.",
     "dataHygiene": "Seed synthetic customer records. Shots 23, 24, 26, 28, 31, 32 expose personal fields.",
-    "branding": "NONE. See CAPTURE-SPEC.md section 2 for every place the name leaks."
+    "branding": "NONE. See CAPTURE-SPEC.md section 2 for every place the name leaks.",
+    "sidebarLogo": "Appro logo-white, configured in the portal channel branding BEFORE capture \u2014 it is baked into all 31 sidebar shots and cannot be composited afterwards. Scale by width only (native ratio 3.45:1). No recolour, opacity, shadow or outline."
   },
   "alsoNeeded": [
-    "DECISION: what fills the sidebar logo slot (recommended: the Super Portal mark)",
-    "DECISION: neutral channel name \u2014 appears in 8 shots (shots 2, 3, 7, 10, 15, 17-21, 32)",
+    "Appro logo files \u2014 logo-white (portal sidebar + title card, dark grounds) and logo-dark (letterhead, shot 28). The branding skill documents these but does not currently ship them.",
+    "DECISION: neutral channel name \u2014 appears in 8 shots (2, 3, 7, 10, 15, 17-21, 32)",
     "Neutral host for the address bar, e.g. demo.superportal.local",
     "Application IDs re-seeded with a neutral prefix",
     "Synthetic customer and employer records"

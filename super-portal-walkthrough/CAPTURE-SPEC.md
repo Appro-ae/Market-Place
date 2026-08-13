@@ -53,22 +53,39 @@ Work through this before capturing. Items 3–7 are the ones that get missed.
 | 11 | Employer Name (shot 23) | A real-looking company | Synthetic employer |
 | 12 | Customer name, ID number, DOB, mobile, email (shots 21–28) | Applicant PII | Seed synthetic records |
 
-**Two decisions I need from you:**
+**A. Sidebar logo slot — DECIDED: the Appro logo.**
 
-**A. What fills the sidebar logo slot?** It cannot be empty — the nav has a
-fixed header block and a blank one looks broken. Options, in my order of
-preference:
+Which version depends on the surface it sits on, per the Appro contrast rule
+(dark logo on light grounds, white logo on dark):
 
-1. The **Super Portal** mark itself — reads as product, not client. Cleanest.
-2. A neutral placeholder lockup (a generic mark plus the channel name).
-3. Collapse the sidebar to icons on **all 34 shots** — sidesteps it entirely,
-   but changes the look of 31 shots and loses the module labels the video
-   leans on. I don't recommend it.
+| Surface | Ground | Version |
+|---|---|---|
+| Portal sidebar (31 shots) | dark navy | **`logo-white`** |
+| Title card | dark navy | **`logo-white`** |
+| Pre-approval letter, shot 28 | white | **`logo-dark`** |
+
+Three rules from the brand guidelines that apply here:
+
+- **Never redraw or reconstruct the logo** — the supplied file only.
+- **Scale by width only.** Native ratio is 3.45 : 1; height always follows.
+  Never set both dimensions.
+- **No recolouring, opacity, shadow, glow, outline or container box.** Only two
+  versions exist, dark and white.
+
+> ⚠️ **The sidebar logo must be configured in the portal *before* capture.** It
+> is baked into all 31 screenshots at capture time — it cannot be composited in
+> afterwards without masking every one of them. Whoever sets up the demo tenant
+> needs to load `logo-white` into the channel branding slot as a setup step,
+> not as an afterthought.
 
 **B. What is the channel called?** It appears in eight shots and in the spoken
 narration's sense of "channel". Something functional rather than invented —
 `Direct Sales`, `Branch`, `Retail Banking`. Avoid a name that reads as a real
 institution.
+
+**Still needed:** the Appro logo files themselves. The branding skill documents
+them but does not currently ship them, so please send `logo-white.png` (or
+`.svg`) for the portal and title card, and `logo-dark` for the letterhead.
 
 **Still market-identifying:** the benchmark rate, the credit bureau, the
 national ID and the region list are UAE-specific. "No bank branding" doesn't
