@@ -1,0 +1,50 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 1600px; height: 940px; position: relative; overflow: hidden;
+         font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; }
+  .bg { position: absolute; inset: 0; background: url('sc_clean.png') no-repeat center/cover; }
+  .dim { position: absolute; inset: 0; background: rgba(9,25,45,.52); }
+
+  .modal { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+           width: 620px; background: #fff; border-radius: 14px; padding: 34px 38px 30px;
+           box-shadow: 0 24px 60px rgba(6,20,38,.38); }
+  .icon { width: 58px; height: 58px; border-radius: 50%; background: #E8F1FA;
+          display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
+  .icon svg { width: 28px; height: 28px; stroke: #1668B3; stroke-width: 2.1; fill: none;
+              stroke-linecap: round; stroke-linejoin: round; }
+  h2 { font-size: 19px; color: #0E2A4E; text-align: center; line-height: 1.45; font-weight: 700;
+       margin-bottom: 8px; }
+  .sub { font-size: 13.5px; color: #5A6B85; text-align: center; line-height: 1.5; margin-bottom: 22px; }
+  .sub b { color: #0E2A4E; }
+
+  label { display: block; font-size: 13px; font-weight: 700; color: #0E2A4E; margin-bottom: 7px; }
+  label i { color: #D92D20; font-style: normal; }
+  .input { border: 1.5px solid #CFD9E5; border-radius: 8px; padding: 12px 14px; font-size: 13.5px;
+           color: #9AA7B8; height: 84px; }
+  .hint { font-size: 11.5px; color: #7A8798; margin-top: 7px; }
+
+  .btns { display: flex; gap: 13px; margin-top: 26px; }
+  .btn { flex: 1; text-align: center; border-radius: 8px; font-size: 14px; font-weight: 700;
+         padding: 13px 0; }
+  .btn.back { background: #fff; color: #35618A; border: 1.6px solid #C6D3E2; }
+  .btn.go { background: #1668B3; color: #fff; box-shadow: 0 3px 9px rgba(22,104,179,.34); }
+</style></head>
+<body>
+  <div class="bg"></div><div class="dim"></div>
+  <div class="modal">
+    <div class="icon">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+    </div>
+    <h2>Are you sure you want to revert this Application?</h2>
+    <div class="sub">The application will be returned to <b>Awaiting Credit Approval</b> for review.</div>
+    <label>Revert Reason <i>*</i></label>
+    <div class="input">Enter your comment</div>
+    <div class="hint">A reason is mandatory and will be saved against the application.</div>
+    <div class="btns">
+      <div class="btn back">Back</div>
+      <div class="btn go">Yes, Revert</div>
+    </div>
+  </div>
+</body></html>

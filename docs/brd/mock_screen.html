@@ -1,0 +1,159 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+         background: #EEF2F6; width: 1600px; height: 940px; display: flex; overflow: hidden; }
+
+  /* ---- sidebar ---- */
+  .side { width: 74px; background: #0E2A4E; display: flex; flex-direction: column;
+          align-items: center; padding: 14px 0; flex-shrink: 0; }
+  .logo { width: 44px; height: 44px; background: #fff; border-radius: 10px; display: flex;
+          align-items: center; justify-content: center; margin-bottom: 6px; }
+  .logo svg { width: 24px; height: 24px; }
+  .rule { width: 30px; height: 3px; background: #4FB3D9; border-radius: 2px; margin-bottom: 20px; }
+  .ico { width: 38px; height: 38px; border-radius: 9px; margin-bottom: 13px; display: flex;
+         align-items: center; justify-content: center; }
+  .ico svg { width: 19px; height: 19px; stroke: #8FA8C4; fill: none; stroke-width: 1.7; }
+  .ico.on { background: #14395F; }
+  .ico.on svg { stroke: #fff; }
+  .side .spacer { flex: 1; }
+
+  /* ---- main ---- */
+  .main { flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+  .infocard { background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+              padding: 16px 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 11px 30px; }
+  .f { display: flex; font-size: 12.5px; }
+  .f .k { color: #5A6B85; width: 132px; flex-shrink: 0; }
+  .f .v { color: #0E2A4E; font-weight: 700; }
+  .f .v.norm { font-weight: 700; }
+
+  .cols { flex: 1; display: flex; gap: 14px; min-height: 0; }
+
+  /* ---- audit table ---- */
+  .tablecard { flex: 1.62; background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+               padding: 14px 16px; display: flex; flex-direction: column; min-width: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  th { background: #EDF3F7; color: #0E2A4E; font-weight: 700; text-align: left;
+       padding: 9px 8px; font-size: 10.5px; line-height: 1.25; }
+  th:first-child { border-radius: 6px 0 0 6px; }
+  th:last-child { border-radius: 0 6px 6px 0; }
+  td { padding: 9px 8px; color: #33415C; border-bottom: 1px solid #EFF3F8; line-height: 1.3; }
+  tr.alt td { background: #F7FAFC; }
+
+  .pager { margin-top: auto; padding-top: 12px; display: flex; justify-content: center;
+           align-items: center; gap: 7px; font-size: 11.5px; color: #4A5A78; }
+  .pg { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center;
+        justify-content: center; }
+  .pg.on { background: #1668B3; color: #fff; font-weight: 700; }
+
+  /* ---- right panel ---- */
+  .panel { flex: 1; background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
+           padding: 0 0 16px; display: flex; flex-direction: column; min-width: 0; }
+  .tabs { display: flex; gap: 34px; padding: 14px 22px 0; border-bottom: 1px solid #E6ECF3; }
+  .tab { font-size: 12.5px; color: #1F7BB6; padding-bottom: 11px; font-weight: 600; }
+  .tab.on { color: #0E5C8A; border-bottom: 2.5px solid #1668B3; }
+  .acc { padding: 16px 20px 0; display: flex; flex-direction: column; gap: 9px; }
+  .row { background: #E4EFF4; border-radius: 7px; padding: 11px 15px; display: flex;
+         justify-content: space-between; align-items: center; }
+  .row span { font-size: 12.5px; color: #0E2A4E; font-weight: 700; }
+  .row svg { width: 13px; height: 13px; stroke: #35618A; stroke-width: 2.2; fill: none; }
+
+  .actions { margin-top: auto; padding: 0 20px; display: flex; justify-content: flex-end;
+             align-items: center; gap: 12px; position: relative; }
+  .btn { border-radius: 7px; font-size: 12.5px; font-weight: 700; padding: 11px 22px; }
+  .btn.ghost { background: #F1F4F7; color: #A9B4C2; }
+  .btn.primary { background: #1668B3; color: #fff; box-shadow: 0 2px 6px rgba(22,104,179,.32); }
+  .newmark { position: absolute; right: -6px; bottom: -7px; width: 116px; height: 54px;
+             border: 2.5px dashed #D92D20; border-radius: 11px; pointer-events: none; }
+  .newlbl { position: absolute; right: 4px; bottom: 52px; background: #D92D20; color: #fff;
+            font-size: 10.5px; font-weight: 800; letter-spacing: .6px; padding: 3px 9px;
+            border-radius: 5px; }
+</style></head>
+<body>
+  <div class="side">
+    <div class="logo"><svg viewBox="0 0 24 24"><path d="M4 18 L9 5 L14 18 M11 6 L16 19 L21 6" stroke="#1668B3" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg></div>
+    <div class="rule"></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-4 3.3-6 7-6s7 2 7 6"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M5 6h6M5 12h14M5 18h9"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><circle cx="10" cy="9" r="3"/><path d="M4 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M17 8l2 2 3-3"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></div>
+    <div class="ico on"><svg viewBox="0 0 24 24"><path d="M5 5h4l2 5-2.5 1.5a11 11 0 005 5L15 14l5 2v4a1 1 0 01-1 1A16 16 0 014 6a1 1 0 011-1z"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4M4 16l8 4 8-4"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="11" r="2.4"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/></svg></div>
+    <div class="spacer"></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-4 3.3-6 7-6s7 2 7 6"/></svg></div>
+    <div class="ico"><svg viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 012 2v12a2 2 0 01-2 2h-4"/><path d="M9 16l-4-4 4-4M5 12h9"/></svg></div>
+  </div>
+
+  <div class="main">
+    <div class="infocard">
+      <div class="f"><div class="k">Offer</div><div class="v">: PersonalLoan0001</div></div>
+      <div class="f"><div class="k">Relationship Status</div><div class="v">: ETB</div></div>
+      <div class="f"><div class="k">Email ID</div><div class="v">: Khaled.Mohammed@appro.ae</div></div>
+      <div class="f"><div class="k">Full Name</div><div class="v">: Rohail Abbas Syed Mumtaz Abbas Zaidi</div></div>
+      <div class="f"><div class="k">Proposed Calculated Limit</div><div class="v">: ৳ 342,110.23</div></div>
+      <div class="f"><div class="k">Offer Name</div><div class="v">: PersonalLoan0001</div></div>
+    </div>
+
+    <div class="cols">
+      <div class="tablecard">
+        <table>
+          <thead><tr>
+            <th style="width:34px">No</th><th style="width:96px">Step</th><th style="width:80px">Start Time</th>
+            <th style="width:80px">End Time</th><th style="width:88px">Step Details</th>
+            <th style="width:82px">Current Application Status</th><th style="width:70px">Step Status</th>
+            <th style="width:62px">Action By</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Select Product Type</td><td>05/08/2026 11:31:04</td><td>05/08/2026 11:31:04</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr class="alt"><td>2</td><td>Select Employment Type</td><td>05/08/2026 11:31:15</td><td>05/08/2026 11:31:15</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr><td>3</td><td>Confirm Bureau Consent</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr class="alt"><td>4</td><td>Confirm PIA statement</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr><td>5</td><td>Confirm FTS statement</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr class="alt"><td>6</td><td>Confirm Marketing Consent</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr><td>7</td><td>Confirm T&amp;C</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr class="alt"><td>8</td><td>Confirm Cooling Off Period</td><td>05/08/2026 11:31:57</td><td>05/08/2026 11:31:57</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr><td>9</td><td>Scan EID (Front &amp; Back)</td><td>05/08/2026 11:32:42</td><td>05/08/2026 11:32:42</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+            <tr class="alt"><td>10</td><td>Pre-dedupe Check</td><td>05/08/2026 11:32:45</td><td>05/08/2026 11:32:45</td><td>Successful</td><td>Lead</td><td>Successful</td><td>System</td></tr>
+          </tbody>
+        </table>
+        <div class="pager">
+          <span>&#8592; Previous</span><div class="pg on">1</div><div class="pg">2</div><div class="pg">3</div>
+          <div class="pg">4</div><div class="pg">5</div><div class="pg">6</div><span>Next &#8594;</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="tabs">
+          <div class="tab on">Application Details</div><div class="tab">View Documents</div><div class="tab">Comments</div>
+        </div>
+        <div class="acc">
+          <div class="row"><span>Cross-Application Identifier Match</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Approved Credit Information</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Failed Reasons</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Customer Due Diligence</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Application Details</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Income Related Info</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Liability Info</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>Credit Indicator</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="row"><span>DBR Indicator</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+        </div>
+        <div class="actions">
+          <div class="btn ghost">Cancel Application</div>
+          <div class="newlbl">NEW</div>
+          <div class="btn primary">Revert</div>
+          <div class="newmark"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  if (location.hash === '#clean') {
+    document.querySelectorAll('.newmark,.newlbl').forEach(function (e) { e.remove(); });
+  }
+</script>
+</body></html>
