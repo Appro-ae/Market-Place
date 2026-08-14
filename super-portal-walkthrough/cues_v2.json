@@ -355,7 +355,7 @@
  },
  {
   "shot": "23",
-  "src": "set1/shots/shot-23.png",
+  "src": "fixed/shot-23.png",
   "rect": [
    0.145,
    0.13,
@@ -418,7 +418,7 @@
  },
  {
   "shot": "27",
-  "src": "set1/shots/shot-27.png",
+  "src": "fixed/shot-27.png",
   "rect": [
    0.655,
    0.19,
@@ -447,7 +447,7 @@
  },
  {
   "shot": "29",
-  "src": "set1/shots/shot-29.png",
+  "src": "fixed/shot-29.png",
   "rect": [
    0.38,
    0.35,
