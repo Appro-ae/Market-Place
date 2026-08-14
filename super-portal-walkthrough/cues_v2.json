@@ -1,0 +1,550 @@
+[
+ {
+  "shot": "01",
+  "src": "fixed/shot-01.png",
+  "rect": [
+   0.605,
+   0.16,
+   0.945,
+   0.8
+  ],
+  "preburned": false,
+  "in": 12,
+  "out": 15,
+  "dur": 3,
+  "title": "Sign in",
+  "kicker": "Login",
+  "body": "Credentials are issued by an administrator in User Management. A new user sets their own password from an email invitation."
+ },
+ {
+  "shot": "02",
+  "src": "fixed/shot-02.png",
+  "rect": [
+   0.44,
+   0.2,
+   0.86,
+   0.42
+  ],
+  "preburned": false,
+  "in": 15,
+  "out": 29,
+  "dur": 14,
+  "title": "Channel Management",
+  "kicker": "Channels",
+  "body": "The channel is active in Dubai, with the product assigned and enabled. Every product toggle moves only after checker approval."
+ },
+ {
+  "shot": "03",
+  "src": "set1/shots/shot-03.png",
+  "rect": [
+   0.155,
+   0.545,
+   0.905,
+   0.86
+  ],
+  "preburned": false,
+  "in": 29,
+  "out": 41,
+  "dur": 12,
+  "title": "Product Details",
+  "kicker": "Product setup",
+  "body": "Amount and tenor boundaries, age limit and minimum salary, above the effective-dated pricing schemes attached to the product."
+ },
+ {
+  "shot": "04",
+  "src": "set1/shots/shot-04.png",
+  "rect": [
+   0.14,
+   0.4,
+   0.955,
+   0.66
+  ],
+  "preburned": false,
+  "in": 41,
+  "out": 54,
+  "dur": 13,
+  "title": "Pricing Matrix \u2014 step 1",
+  "kicker": "Product setup",
+  "body": "Scheme identity and effective window, profit rate type, floor and ceiling rates, EIBOR source and the full fee set."
+ },
+ {
+  "shot": "05",
+  "src": "set1/shots/shot-05.png",
+  "rect": [
+   0.14,
+   0.27,
+   0.955,
+   0.86
+  ],
+  "preburned": false,
+  "in": 54,
+  "out": 62,
+  "dur": 8,
+  "title": "Pricing Matrix \u2014 step 2",
+  "kicker": "Product setup",
+  "body": "STL, property status, transaction type and property location: the four factors that dimension the matrix."
+ },
+ {
+  "shot": "06",
+  "src": "set1/shots/shot-06.png",
+  "rect": [
+   0.14,
+   0.31,
+   0.955,
+   0.86
+  ],
+  "preburned": false,
+  "in": 62,
+  "out": 73,
+  "dur": 11,
+  "title": "Pricing Matrix \u2014 step 3",
+  "kicker": "Product setup",
+  "body": "One row per factor combination. History Version recovers the pricing that actually applied on any past date."
+ },
+ {
+  "shot": "07",
+  "src": "set1/shots/shot-07.png",
+  "rect": [
+   0.145,
+   0.2,
+   0.955,
+   0.56
+  ],
+  "preburned": false,
+  "in": 73,
+  "out": 80,
+  "dur": 7,
+  "title": "Consent & disclosure library",
+  "kicker": "Collateral setup",
+  "body": "Bureau Consent, Cooling Off, FATCA & CRS, Fund Transfer and Key Facts \u2014 each versioned with its last-updated stamp."
+ },
+ {
+  "shot": "08",
+  "src": "set1/shots/shot-08.png",
+  "rect": [
+   0.735,
+   0.145,
+   0.955,
+   0.26
+  ],
+  "preburned": false,
+  "in": 80,
+  "out": 87,
+  "dur": 7,
+  "title": "Version history",
+  "kicker": "Collateral setup",
+  "body": "Every consent keeps its own version list, so the exact wording a customer saw on a given date can always be recovered."
+ },
+ {
+  "shot": "09",
+  "src": "set1/shots/shot-09.png",
+  "rect": [
+   0.145,
+   0.7,
+   0.955,
+   0.9
+  ],
+  "preburned": false,
+  "in": 87,
+  "out": 94,
+  "dur": 7,
+  "title": "Edit in place",
+  "kicker": "Collateral setup",
+  "body": "Wording is edited in the portal, not in a release. The change publishes under the same Maker/Checker discipline."
+ },
+ {
+  "shot": "10",
+  "src": "set1/shots/shot-10.png",
+  "rect": [
+   0.145,
+   0.19,
+   0.435,
+   0.56
+  ],
+  "preburned": false,
+  "in": 94,
+  "out": 106,
+  "dur": 12,
+  "title": "Segmentation",
+  "kicker": "Strategy setup",
+  "body": "Populations judged differently \u2014 residency and age here \u2014 each with its own Manual Review posture."
+ },
+ {
+  "shot": "11",
+  "src": "set1/shots/shot-11.png",
+  "rect": [
+   0.36,
+   0.13,
+   0.64,
+   0.72
+  ],
+  "preburned": false,
+  "in": 106,
+  "out": 115,
+  "dur": 9,
+  "title": "Edit segmentation",
+  "kicker": "Strategy setup",
+  "body": "Each attribute switches on with its own condition and value. Nothing is typed free-form."
+ },
+ {
+  "shot": "12",
+  "src": "set1/shots/shot-12.png",
+  "rect": [
+   0.33,
+   0.19,
+   0.67,
+   0.7
+  ],
+  "preburned": false,
+  "in": 115,
+  "out": 123,
+  "dur": 8,
+  "title": "Attribute library",
+  "kicker": "Strategy setup",
+  "body": "The attributes in play across every segment, chosen centrally so all segments stay comparable."
+ },
+ {
+  "shot": "13",
+  "src": "set1/shots/shot-13.png",
+  "rect": [
+   0.415,
+   0.33,
+   0.955,
+   0.72
+  ],
+  "preburned": false,
+  "in": 123,
+  "out": 133,
+  "dur": 10,
+  "title": "Filtration",
+  "kicker": "Strategy setup",
+  "body": "Within-segment conditions \u2014 nationality, employment type, age band, minimum income, length of service \u2014 added row by row."
+ },
+ {
+  "shot": "14",
+  "src": "orig/o14.png",
+  "rect": null,
+  "preburned": true,
+  "in": 133,
+  "out": 142,
+  "dur": 9,
+  "title": "Deviation",
+  "kicker": "Strategy setup",
+  "body": "Age and bureau-score exceptions permitted inside a formula \u2014 a controlled, logged breach instead of an outright decline."
+ },
+ {
+  "shot": "15",
+  "src": "set1/shots/shot-15.png",
+  "rect": [
+   0.38,
+   0.33,
+   0.62,
+   0.6
+  ],
+  "preburned": false,
+  "in": 142,
+  "out": 147,
+  "dur": 5,
+  "title": "Publish to Rule Engine",
+  "kicker": "Strategy setup",
+  "body": "Nothing is live until it is explicitly pushed. The confirmation names the product and the channel it affects."
+ },
+ {
+  "shot": "16",
+  "src": "orig/o16.png",
+  "rect": null,
+  "preburned": true,
+  "in": 147,
+  "out": 156,
+  "dur": 9,
+  "title": "Confirmed",
+  "kicker": "Strategy setup",
+  "body": "Segmentation and filtration updated in the Rule Engine. From this moment the new policy decides live applications."
+ },
+ {
+  "shot": "17",
+  "src": "set1/shots/shot-17.png",
+  "rect": [
+   0.145,
+   0.28,
+   0.955,
+   0.55
+  ],
+  "preburned": false,
+  "in": 156,
+  "out": 168,
+  "dur": 12,
+  "title": "63 calculated variables",
+  "kicker": "Limit setup",
+  "body": "Production formulas rendered as readable mathematics \u2014 DTI, DBR, affordability, monthly gross income, approved limit."
+ },
+ {
+  "shot": "18",
+  "src": "set1/shots/shot-18.png",
+  "rect": [
+   0.515,
+   0.33,
+   0.955,
+   0.56
+  ],
+  "preburned": false,
+  "in": 168,
+  "out": 175,
+  "dur": 7,
+  "title": "Income Multiplier",
+  "kicker": "Limit setup",
+  "body": "How much lending a given income is deemed to support, tuned per group and published as a numbered version."
+ },
+ {
+  "shot": "19",
+  "src": "set1/shots/shot-19.png",
+  "rect": [
+   0.145,
+   0.26,
+   0.955,
+   0.46
+  ],
+  "preburned": false,
+  "in": 175,
+  "out": 185,
+  "dur": 10,
+  "title": "Decision Boundary",
+  "kicker": "Limit setup",
+  "body": "The min\u2013max envelope every calculated outcome has to fall inside, with the deviation type applied."
+ },
+ {
+  "shot": "20",
+  "src": "set1/shots/shot-20.png",
+  "rect": [
+   0.145,
+   0.2,
+   0.955,
+   0.4
+  ],
+  "preburned": false,
+  "in": 185,
+  "out": 194,
+  "dur": 9,
+  "title": "Higher Offer enabled",
+  "kicker": "Offer setup",
+  "body": "Offer the customer more than requested, delivered as a pre-approval letter message \u2014 up to ten, per product and channel."
+ },
+ {
+  "shot": "21",
+  "src": "orig/o21.png",
+  "rect": null,
+  "preburned": true,
+  "in": 194,
+  "out": 204,
+  "dur": 10,
+  "title": "Find any application",
+  "kicker": "Application enquiry",
+  "body": "Search by Application ID, Emirates ID, email or phone across every record, newest first."
+ },
+ {
+  "shot": "22",
+  "src": "orig/o22.png",
+  "rect": null,
+  "preburned": true,
+  "in": 204,
+  "out": 213,
+  "dur": 9,
+  "title": "Narrowed",
+  "kicker": "Application enquiry",
+  "body": "Two records for one email address, with type, status, nationality and originating channel on the row."
+ },
+ {
+  "shot": "23",
+  "src": "set1/shots/shot-23.png",
+  "rect": [
+   0.145,
+   0.13,
+   0.955,
+   0.55
+  ],
+  "preburned": false,
+  "in": 213,
+  "out": 226,
+  "dur": 13,
+  "title": "The case file",
+  "kicker": "Application enquiry",
+  "body": "Declared and finalised income, DSR before and after settlement, bureau score, rule-engine result \u2014 read-only."
+ },
+ {
+  "shot": "24",
+  "src": "orig/o24.png",
+  "rect": null,
+  "preburned": true,
+  "in": 226,
+  "out": 234,
+  "dur": 8,
+  "title": "Credit indicators",
+  "kicker": "Application enquiry",
+  "body": "DBR, DTI, exposure, active and closed contracts, worst payment delay and cheque-bounce history across 24 months."
+ },
+ {
+  "shot": "25",
+  "src": "set1/shots/shot-25.png",
+  "rect": [
+   0.1,
+   0.1,
+   0.9,
+   0.72
+  ],
+  "preburned": false,
+  "in": 234,
+  "out": 243,
+  "dur": 9,
+  "title": "Why it decided",
+  "kicker": "Application enquiry",
+  "body": "Every criterion checked against the bank setup value, with the limit assignment result and each approved offer."
+ },
+ {
+  "shot": "26",
+  "src": "set1/shots/shot-26.png",
+  "rect": [
+   0.1,
+   0.07,
+   0.9,
+   0.8
+  ],
+  "preburned": false,
+  "in": 243,
+  "out": 250,
+  "dur": 7,
+  "title": "The arithmetic, exposed",
+  "kicker": "Application enquiry",
+  "body": "Income \u00d7 multiplier, maximum DBR per policy, affordability, DBR room, product bounds \u2014 down to the approved limit."
+ },
+ {
+  "shot": "27",
+  "src": "set1/shots/shot-27.png",
+  "rect": [
+   0.655,
+   0.19,
+   0.955,
+   0.86
+  ],
+  "preburned": false,
+  "in": 250,
+  "out": 262,
+  "dur": 12,
+  "title": "The evidence file",
+  "kicker": "Application enquiry",
+  "body": "EID front and back, selfie, signature, EFR, PIA consent audit trail, AECB and CAM reports, and the AIP letter."
+ },
+ {
+  "shot": "28",
+  "src": "orig/o28.png",
+  "rect": null,
+  "preburned": true,
+  "in": 262,
+  "out": 271,
+  "dur": 9,
+  "title": "The customer letter",
+  "kicker": "Application enquiry",
+  "body": "Generated automatically the moment the offer is accepted, emailed to the customer and filed against the case."
+ },
+ {
+  "shot": "29",
+  "src": "set1/shots/shot-29.png",
+  "rect": [
+   0.38,
+   0.35,
+   0.62,
+   0.62
+  ],
+  "preburned": false,
+  "in": 271,
+  "out": 279,
+  "dur": 8,
+  "title": "Route to a queue",
+  "kicker": "Manual queue",
+  "body": "Send the case on to Credit Queue L2 or L3 \u2014 allocation by authority level, recorded on the audit trail."
+ },
+ {
+  "shot": "30",
+  "src": "set1/shots/shot-30.png",
+  "rect": [
+   0.1,
+   0.13,
+   0.9,
+   0.75
+  ],
+  "preburned": false,
+  "in": 279,
+  "out": 290,
+  "dur": 11,
+  "title": "Override, inside policy",
+  "kicker": "Manual queue",
+  "body": "The officer picks product and offer; approval limit, tenor, rate and instalment recalculate live within policy bounds."
+ },
+ {
+  "shot": "31",
+  "src": "set1/shots/shot-31.png",
+  "rect": [
+   0.145,
+   0.18,
+   0.955,
+   0.46
+  ],
+  "preburned": false,
+  "in": 290,
+  "out": 297,
+  "dur": 7,
+  "title": "Users",
+  "kicker": "User & role",
+  "body": "Role, active status, when the record last changed and who changed it."
+ },
+ {
+  "shot": "32",
+  "src": "set1/shots/shot-32.png",
+  "rect": [
+   0.145,
+   0.53,
+   0.5,
+   0.7
+  ],
+  "preburned": false,
+  "in": 297,
+  "out": 311,
+  "dur": 14,
+  "title": "View PII Data",
+  "kicker": "User & role",
+  "body": "A deliberate grant \u2014 off by default, never inherited, approved through Maker/Checker, effective at next sign-in."
+ },
+ {
+  "shot": "33",
+  "src": "set1/shots/shot-33.png",
+  "rect": [
+   0.145,
+   0.16,
+   0.955,
+   0.33
+  ],
+  "preburned": false,
+  "in": 311,
+  "out": 319,
+  "dur": 8,
+  "title": "Roles",
+  "kicker": "User & role",
+  "body": "One row per role, one column per module. Every permission is explicit rather than inherited."
+ },
+ {
+  "shot": "34",
+  "src": "set1/shots/shot-34.png",
+  "rect": [
+   0.39,
+   0.36,
+   0.61,
+   0.58
+  ],
+  "preburned": false,
+  "in": 319,
+  "out": 342.67,
+  "dur": 23.67,
+  "title": "Log out",
+  "kicker": "Log out",
+  "body": "The session ends. Everything done inside it stays on the audit trail, attributed to the named user."
+ }
+]
