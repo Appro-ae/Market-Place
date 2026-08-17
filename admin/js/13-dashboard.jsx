@@ -38,28 +38,50 @@ function dbByProduct(products, topN) {
   return withVol.map(({ p, vol }) => ({ n: p.name, calls: vol.toFixed(1) + 'M', pct: Math.round(vol / total * 100), c: DB_CAT_COLOR[p.category] || 'var(--appro-blue)' }));
 }
 
-// Date filter (GAS-561 AC10): Today + the previous six days, like the ops-board "View date" row.
-const DB_DAYS = ['Today', 'Aug 12', 'Aug 11', 'Aug 10', 'Aug 09', 'Aug 08', 'Aug 07'];
-const DB_DAY_F = [1, .94, 1.06, .9, .97, .84, .88];
-const DB_DAY_TOTALS = {
-  production: ['5.9M', '5.5M', '6.3M', '5.3M', '5.7M', '5.0M', '5.2M'],
-  sandbox:    ['184K', '173K', '195K', '166K', '178K', '155K', '162K'],
-};
+// Period filter (GAS-561 AC10, v2): Day / Month / Year granularity + native picker.
+// Best-practice dashboard time control — replaces the fixed 24h/7d/30d + day-chip combo.
+// Day → date picker (hourly trend) · Month → month picker (daily trend) · Year → year select (monthly trend).
+const DB_TODAY = '2026-08-17';
+const DB_ENV_BASE = { production: 5900000, sandbox: 184000 };  // representative calls/day
+const DB_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DB_PICK = { border: '1px solid var(--ink-200)', borderRadius: 8, padding: '7px 11px', fontSize: 12.5, fontFamily: 'var(--font-ui)', background: '#fff', color: 'var(--ink-800)', fontWeight: 600, cursor: 'pointer' };
+function dbHash(s){ let h = 2166136261; for (let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function dbNoise(key, i){ return (dbHash(key + ':' + i) % 30) / 100; }  // 0..0.29, deterministic per (key,i)
+function dbFmt(n){ return n>=1e9 ? (n/1e9).toFixed(2)+'B' : n>=1e6 ? (n/1e6).toFixed(1)+'M' : n>=1e3 ? (n/1e3).toFixed(0)+'K' : String(Math.round(n)); }
+function dbDaysInMonth(ym){ const [y,m] = ym.split('-').map(Number); return new Date(y, m, 0).getDate(); }
+function dbFmtDay(d){ const [y,m,dd] = d.split('-').map(Number); return dd + ' ' + DB_MONTHS[m-1] + ' ' + y; }
+function dbFmtMonth(ym){ const [y,m] = ym.split('-').map(Number); return DB_MONTHS[m-1] + ' ' + y; }
+// Build the trend series + total for the chosen granularity/value (deterministic, so a demo pick visibly changes the chart).
+function dbSeries(env, gran, day, month, year){
+  const base = DB_ENV_BASE[env];
+  if (gran === 'day'){
+    const shape = [62,70,68,75,82,78,88,90,85,92,96,94,90,88,92,95,99,96,93,90,88,85,80,76];
+    return { bars: shape.map((v,i)=>Math.round(v*(0.85+dbNoise(day,i)))), unit: 'Hourly · '+dbFmtDay(day), total: dbFmt(base*(0.9+dbNoise(day,99))), x: i => i%4===0 ? String(i).padStart(2,'0')+':00' : null };
+  }
+  if (gran === 'month'){
+    const n = dbDaysInMonth(month);
+    return { bars: Array.from({length:n},(_,i)=>Math.round((700+Math.sin(i/3)*160+i*6)*(0.8+dbNoise(month,i)))), unit: 'Daily · '+dbFmtMonth(month), total: dbFmt(base*n*(0.9+dbNoise(month,99))), x: i => (i===0||(i+1)%5===0) ? String(i+1) : null };
+  }
+  return { bars: DB_MONTHS.map((_,i)=>Math.round((900+Math.sin(i/2)*260)*(0.8+dbNoise(year,i)))), unit: 'Monthly · '+year, total: dbFmt(base*365*(0.9+dbNoise(year,99))), x: i => DB_MONTHS[i] };
+}
 
 function AdminDashboard({ env, requests, goTo }) {
-  const [range, setRange] = useDB('24h');
-  const [di, setDi] = useDB(0);
-  const isToday = di === 0;
-  // A past day is a single-day view: the trend locks to that day's hourly series.
-  const base = DB_SERIES[env][isToday ? range : '24h'];
-  const series = isToday ? base : { ...base, bars: base.bars.map(b => Math.round(b * DB_DAY_F[di])), unit: 'Hourly · ' + DB_DAYS[di], total: DB_DAY_TOTALS[env][di], last: null };
+  const [gran, setGran] = useDB('day');
+  const [day, setDay] = useDB(DB_TODAY);
+  const [month, setMonth] = useDB('2026-08');
+  const [year, setYear] = useDB('2026');
+  const periodKey = gran === 'day' ? day : gran === 'month' ? month : year;
+  const periodLabel = gran === 'day' ? dbFmtDay(day) : gran === 'month' ? dbFmtMonth(month) : ('Year ' + year);
+  const isCurrent = gran === 'day' && day === DB_TODAY;
+  const series = dbSeries(env, gran, day, month, year);
   const kpi = DB_KPI[env];
   const bars = series.bars, max = Math.max(...bars);
 
-  // Pipeline counts: live from the cross-portal request store for Today; per-day snapshots for past days.
-  const pending = isToday ? requests.filter(r => r.status === 'pending').length : [0,5,4,6,3,2,4][di];
-  const approved = isToday ? requests.filter(r => r.status === 'approved').length : [0,3,2,4,2,1,3][di];
-  const rejected = isToday ? requests.filter(r => r.status === 'rejected').length : [0,1,2,0,1,1,2][di];
+  // Pipeline counts: live from the cross-portal request store for the current day; deterministic snapshot for any other period.
+  const snap = (n, mod) => dbHash(periodKey + ':' + n) % mod;
+  const pending = isCurrent ? requests.filter(r => r.status === 'pending').length : 1 + snap('p', 6);
+  const approved = isCurrent ? requests.filter(r => r.status === 'approved').length : 1 + snap('a', 6);
+  const rejected = isCurrent ? requests.filter(r => r.status === 'rejected').length : snap('r', 4);
 
   const byProduct = dbByProduct(dbCatalogue(), 8);
   const topTenants = [
@@ -93,15 +115,16 @@ function AdminDashboard({ env, requests, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      {/* Controls: date filter (AC10) + range selector + freshness (GAS-561 AC4/AC6) */}
+      {/* Controls: period picker (Day/Month/Year + native picker) + freshness — GAS-561 AC10 */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center', flexWrap: 'wrap' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>View date</span>
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>Period</span>
         <div style={{ display: 'inline-flex', background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600 }}>
-          {DB_DAYS.map((d, i) => <button key={d} onClick={() => setDi(i)} style={{ background: di===i ? 'var(--appro-blue)' : 'transparent', color: di===i ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 11px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{d}</button>)}
+          {[['day','Day'],['month','Month'],['year','Year']].map(([k, l]) => <button key={k} onClick={() => setGran(k)} style={{ background: gran===k ? 'var(--appro-blue)' : 'transparent', color: gran===k ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>{l}</button>)}
         </div>
-        <div style={{ display: 'inline-flex', background: '#fff', border: '1px solid var(--ink-200)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600, opacity: isToday ? 1 : .45 }} title={isToday ? '' : 'A past day is a single-day view — range applies to Today'}>
-          {['24h','7d','30d'].map(r => <button key={r} onClick={() => isToday && setRange(r)} style={{ background: (isToday && range===r) ? 'var(--appro-blue)' : 'transparent', color: (isToday && range===r) ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 13px', borderRadius: 6, cursor: isToday ? 'pointer' : 'not-allowed', fontFamily: 'var(--font-ui)' }}>{r}</button>)}
-        </div>
+        {gran === 'day'   && <input type="date"  value={day}   max={DB_TODAY}  onChange={e => setDay(e.target.value)}   style={DB_PICK}/>}
+        {gran === 'month' && <input type="month" value={month} max="2026-08"   onChange={e => setMonth(e.target.value)} style={DB_PICK}/>}
+        {gran === 'year'  && <select value={year} onChange={e => setYear(e.target.value)} style={DB_PICK}>{['2024','2025','2026'].map(y => <option key={y} value={y}>{y}</option>)}</select>}
+        {gran === 'day' && day !== DB_TODAY && <button onClick={() => setDay(DB_TODAY)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>Today</button>}
         <span style={{ fontSize: 11.5, color: 'var(--ink-500)' }}>Scope: <b style={{ color: 'var(--ink-700)', textTransform: 'capitalize' }}>{env}</b> · widgets follow your View permissions</span>
         <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Updated <b style={{ color: 'var(--ink-700)' }}>just now</b></span>
@@ -122,7 +145,7 @@ function AdminDashboard({ env, requests, goTo }) {
       {/* W2 — Subscription-request pipeline */}
       <Card padding={0} style={{ marginBottom: 16 }}>
         <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Subscription-request pipeline</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{isToday ? "Today's queue" : DB_DAYS[di] + ' queue'} · MTD: 27 received · 20 approved · 4 rejected</div></div>
+          <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Subscription-request pipeline</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>{isCurrent ? "Today's queue" : periodLabel + ' snapshot'} · MTD: 27 received · 20 approved · 4 rejected</div></div>
           <Btn variant="ghost" size="sm" onClick={() => goTo('subscriptions')}>Open Subscription Management →</Btn>
         </div>
         <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
@@ -195,7 +218,7 @@ function AdminDashboard({ env, requests, goTo }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 16 }}>
         <Card padding={0}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Recent errors</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>status ≥ 400 · {isToday ? 'live tail' : DB_DAYS[di]} · {env}</div></div>
+            <div><div style={{ fontSize: 14, fontWeight: 700, color: '#0C1931' }}>Recent errors</div><div style={{ fontSize: 11, color: 'var(--ink-500)' }}>status ≥ 400 · {isCurrent ? 'live tail' : periodLabel} · {env}</div></div>
             <Btn variant="ghost" size="sm" onClick={() => goTo('logs')}>Open Request Logs →</Btn>
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>

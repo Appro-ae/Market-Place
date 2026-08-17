@@ -1,5 +1,21 @@
 // Dashboard + Catalog screens for the API Marketplace Customer Portal
 
+// Period filter helpers (GAS-562 AC10, v2) — Day / Month / Year granularity + native picker.
+const CU_TODAY = '2026-08-17';
+const CU_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CU_PICK = { border: '1px solid var(--ink-300)', borderRadius: 8, padding: '8px 11px', fontSize: 12.5, fontFamily: 'var(--font-ui)', background: '#fff', color: 'var(--ink-800)', fontWeight: 600, cursor: 'pointer' };
+function cuHash(s){ let h = 2166136261; for (let i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function cuFmtDay(d){ const [y,m,dd] = d.split('-').map(Number); return dd + ' ' + CU_MONTHS[m-1] + ' ' + y; }
+function cuFmtMonth(ym){ const [y,m] = ym.split('-').map(Number); return CU_MONTHS[m-1] + ' ' + y; }
+// Requests count for the selected period — deterministic and env-aware (so a demo pick visibly changes the value).
+function cuRequests(isProd, gran, day, month, year){
+  const key = gran === 'day' ? day : gran === 'month' ? month : year;
+  const dayBase = isProd ? 1820000 : 14284;
+  const mult = gran === 'day' ? 1 : gran === 'month' ? 30 : 365;
+  const n = dayBase * mult * (0.85 + (cuHash(key) % 30) / 100);
+  return n >= 1e9 ? (n/1e9).toFixed(2)+'B' : n >= 1e6 ? (n/1e6).toFixed(2)+'M' : Math.round(n).toLocaleString();
+}
+
 function Dashboard({ env, goTo }) {
   const isProd = env === 'production';
   const demoEmpty = !!window.DEMO_EMPTY;
@@ -8,14 +24,15 @@ function Dashboard({ env, goTo }) {
   // the global Sandbox/Production toggle is the only environment control here.
   // Sub-environment selection stays on Usage & Analytics / Request Logs.
 
-  // Date filter (GAS-562 AC10): Today + the previous six days. Traffic cards and the
-  // errors feed show the selected day; billing/subscriptions stay on the current cycle.
-  const DAYS = ['Today', 'Aug 12', 'Aug 11', 'Aug 10', 'Aug 09', 'Aug 08', 'Aug 07'];
-  const [di, setDi] = React.useState(0);
-  const isToday = di === 0;
-  const REQ_DAY = isProd
-    ? ['1.82M', '1.71M', '1.93M', '1.64M', '1.77M', '1.52M', '1.60M']
-    : ['14,284', '13,902', '15,120', '14,008', '13,455', '12,380', '12,940'];
+  // Period filter (GAS-562 AC10, v2): Day / Month / Year + native picker. Traffic cards and the
+  // errors feed reflect the selected period; billing/subscriptions stay on the current cycle.
+  const [gran, setGran] = React.useState('day');
+  const [day, setDay] = React.useState(CU_TODAY);
+  const [month, setMonth] = React.useState('2026-08');
+  const [year, setYear] = React.useState('2026');
+  const periodLabel = gran === 'day' ? cuFmtDay(day) : gran === 'month' ? cuFmtMonth(month) : ('Year ' + year);
+  const periodShort = gran === 'day' ? (day === CU_TODAY ? '24h' : cuFmtDay(day)) : gran === 'month' ? cuFmtMonth(month) : year;
+  const isCurrent = gran === 'day' && day === CU_TODAY;
 
   const metrics = (demoEmpty ? [
     { label: 'Requests (24h)', value: '0', delta: '0%', up: true, spark: [0,0,0,0,0,0,0,0,0,0,0,0] },
@@ -33,7 +50,7 @@ function Dashboard({ env, goTo }) {
     { label: 'Error rate', value: '1.6%', delta: '-0.3%', up: true, spark: [30,28,24,25,22,20,18,19,16,14,15,13] },
     { label: 'Monthly quota used', value: '14%', delta: '438K of 3.0M', up: true, quota: 14, note: 'Committed-volume packages only · 1 pay-as-you-go excluded' },
   ]);
-  if (!demoEmpty) metrics[0] = { ...metrics[0], label: 'Requests (' + (isToday ? '24h' : DAYS[di]) + ')', value: REQ_DAY[di] };
+  if (!demoEmpty) metrics[0] = { ...metrics[0], label: 'Requests (' + periodShort + ')', value: cuRequests(isProd, gran, day, month, year) };
 
   const apis = demoEmpty ? [] : [
     { name: 'Credit Score (Individual)', version: 'v2.0', status: isProd ? 'live' : 'active', calls: isProd ? '612K' : '4,812', latency: '98ms', err: '0.12%' },
@@ -52,14 +69,18 @@ function Dashboard({ env, goTo }) {
 
   return (
     <div style={{ padding: 28, background: 'var(--ink-100)', minHeight: '100%' }}>
-      {/* View-date filter (GAS-562 AC10) */}
+      {/* Period filter (GAS-562 AC10) — Day / Month / Year + native picker */}
       <Card padding={0} style={{ marginBottom: 14 }}>
         <div style={{ padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em', fontFamily: 'var(--font-ui)' }}>View date</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.05em', fontFamily: 'var(--font-ui)' }}>Period</span>
           <div style={{ display: 'inline-flex', background: 'var(--ink-100)', borderRadius: 8, padding: 3, fontSize: 12, fontWeight: 600 }}>
-            {DAYS.map((d, i) => <button key={d} onClick={() => setDi(i)} style={{ background: di===i ? 'var(--appro-blue)' : 'transparent', color: di===i ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 11px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)', whiteSpace: 'nowrap' }}>{d}</button>)}
+            {[['day','Day'],['month','Month'],['year','Year']].map(([k, l]) => <button key={k} onClick={() => setGran(k)} style={{ background: gran===k ? 'var(--appro-blue)' : 'transparent', color: gran===k ? '#fff' : 'var(--ink-500)', border: 0, padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>{l}</button>)}
           </div>
-          <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Traffic cards & errors show the selected day · billing and subscriptions are always the current cycle</span>
+          {gran === 'day'   && <input type="date"  value={day}   max={CU_TODAY} onChange={e => setDay(e.target.value)}   style={CU_PICK}/>}
+          {gran === 'month' && <input type="month" value={month} max="2026-08"  onChange={e => setMonth(e.target.value)} style={CU_PICK}/>}
+          {gran === 'year'  && <select value={year} onChange={e => setYear(e.target.value)} style={CU_PICK}>{['2024','2025','2026'].map(y => <option key={y} value={y}>{y}</option>)}</select>}
+          {gran === 'day' && day !== CU_TODAY && <button onClick={() => setDay(CU_TODAY)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>Today</button>}
+          <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Traffic cards &amp; errors reflect the selected period · billing and subscriptions are always the current cycle</span>
         </div>
       </Card>
 
@@ -193,7 +214,7 @@ function Dashboard({ env, goTo }) {
           <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--ink-100)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0C1931', fontFamily: 'var(--font-ui)' }}>Recent errors</div>
-              <div style={{ fontSize: 10.5, color: 'var(--ink-500)', marginTop: 1 }}>status ≥ 400 · {isToday ? env : DAYS[di] + ' · ' + env}</div>
+              <div style={{ fontSize: 10.5, color: 'var(--ink-500)', marginTop: 1 }}>status ≥ 400 · {isCurrent ? env : periodLabel + ' · ' + env}</div>
             </div>
             <Btn variant="ghost" size="sm" onClick={() => goTo('logs')}>Logs →</Btn>
           </div>
