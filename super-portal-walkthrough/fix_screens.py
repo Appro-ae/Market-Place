@@ -183,4 +183,53 @@ for k in (31,32):
         x=cx-13.5+i*9
         d.ellipse([x-2.4,cy-2.4,x+2.4,cy+2.4],fill=dot)
     save(im,k); print(f'f{k:03d} done')
+# ---------- f023/f024 : channel column cells ----------
+# The v10 tail fill overflowed the table edge, painting white bars across the
+# highlight ring and page background, and the replacement text was bold and
+# offset. Rebuild each channel cell in place: revert the whole right side,
+# find each text band, fill it by lerping the clean background rows above and
+# below, and draw 'Bank' at the original size, position, weight and ink.
+def fix_channel(k, rev, ytop, ybot):
+    ov,im=load(k)
+    revert(im,ov,rev)
+    a=np.array(im).astype(float)
+    TX0=1645
+    o=np.asarray(ov).astype(int); olu=lum_of(o)
+    sub=olu[ytop:ybot,TX0:1745]
+    bgref=np.percentile(sub,90,axis=1)
+    inkcnt=(sub<(bgref[:,None]-25)).sum(axis=1)
+    rws=np.where(inkcnt>6)[0]
+    bands=[]; cur=[rws[0]]
+    for r in rws[1:]:
+        if r-cur[-1]<=3: cur.append(r)
+        else: bands.append(cur); cur=[r]
+    bands.append(cur)
+    todo=[]
+    for b in bands:
+        if len(b)<4 or len(b)>16: continue
+        y0,y1=ytop+b[0]-2,ytop+b[-1]+3
+        band=olu[y0:y1,TX0:1745]
+        bp=np.percentile(band,90)
+        ink_m=band<bp-25
+        ys,xs=np.where(ink_m)
+        px=o[y0:y1,TX0:1745][ink_m]
+        order=np.argsort(px.sum(axis=1))
+        ink=tuple(int(v) for v in np.median(px[order[:max(1,len(order)//4)]],axis=0))
+        xstart=TX0+xs.min(); xend=TX0+xs.max()+22
+        top=a[y0-4:y0-1,TX0:xend].mean(axis=0)
+        bot=a[y1+1:y1+4,TX0:xend].mean(axis=0)
+        n=y1-y0
+        t=np.linspace(0,1,n)[:,None,None]
+        a[y0:y1,TX0:xend]=top[None,:,:]*(1-t)+bot[None,:,:]*t
+        todo.append((xstart,y0+2,len(b)+1,ink))
+    im=Image.fromarray(a.clip(0,255).astype('uint8'))
+    d=ImageDraw.Draw(im)
+    for xstart,y0,h,ink in todo:
+        sz=int(round(h/0.72))
+        tight(d,(xstart,y0-int(round(sz*0.26))),'Bank',font(sz),ink,track=-0.6)
+    save(im,k); print(f'f{k:03d} channel bands:',len(todo))
+
+fix_channel(24,(1600,280,1920,545),345,470)
+fix_channel(23,(1600,340,1920,830),355,810)
 print('all done')
+
