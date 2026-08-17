@@ -48,17 +48,21 @@ def save(im,k): im.save(f'final/f{k:03d}.png')
 # value line and redraw at the original size and position.
 ov,im=load(25)
 revert(im,ov,(350,170,1000,255))
-a=np.array(im)
-for y in range(199,216):
-    bgc=np.median(a[y,645:690],axis=0)
-    a[y,366:635]=bgc.round()
-im.paste(Image.fromarray(a),(0,0))
+a=np.array(im).astype(float)
+top=a[196:201,364:640].mean(axis=0)
+bot=a[216:221,364:640].mean(axis=0)
+t=np.linspace(0,1,15)[:,None,None]
+a[201:216,364:640]=top[None,:,:]*(1-t)+bot[None,:,:]*t
+im=Image.fromarray(a.clip(0,255).astype('uint8'))
 o=np.asarray(ov).astype(int); ol=lum_of(o)
-mask=ol[203:212,368:530]<120
-ink=tuple(int(v) for v in np.median(o[203:212,368:530][mask],axis=0))
+mask=ol[200:216,368:530]<150
+px=o[200:216,368:530][mask]
+order=np.argsort(px.sum(axis=1))
+ink=tuple(int(v) for v in np.median(px[order[:max(1,len(order)//4)]],axis=0))
+ys,xs=np.where(mask)
 d=ImageDraw.Draw(im)
-sz=14
-tight(d,(368,204-int(round(sz*0.26))),'APP_202600000211',font(sz,True),ink,track=-0.6)
+sz=13
+tight(d,(368,(200+ys.min())-int(round(sz*0.26))),'APP_202600000211',font(sz),ink,track=-0.6)
 save(im,25); print('f025 done')
 
 # ---------- f023 : restore the search-options dropdown ----------
@@ -231,5 +235,54 @@ def fix_channel(k, rev, ytop, ybot):
 
 fix_channel(24,(1600,280,1920,545),345,470)
 fix_channel(23,(1600,340,1920,830),355,810)
+# ---------- f023/f024 : application-ID cells at original weight ----------
+# The v10 rewrite drew the IDs thinner and paler than the original semibold
+# dark-navy values. Rebuild each cell like the channel cells: revert, fill
+# each text band from the clean rows above/below, redraw bold at the
+# original size and ink. On f023 only rows below the restored dropdown are
+# rebuilt (450+); the top two rows are occluded by the dropdown.
+def fix_ids(k, ytop, ybot, ids):
+    ov,im=load(k)
+    revert(im,ov,(372,ytop,640,ybot))
+    a=np.array(im).astype(float)
+    TX0,TX1=380,600
+    o=np.asarray(ov).astype(int); olu=lum_of(o)
+    sub=olu[ytop:ybot,TX0:TX1]
+    bgref=np.percentile(sub,90,axis=1)
+    inkcnt=(sub<(bgref[:,None]-25)).sum(axis=1)
+    rws=np.where(inkcnt>8)[0]
+    bands=[]; cur=[rws[0]]
+    for r in rws[1:]:
+        if r-cur[-1]<=3: cur.append(r)
+        else: bands.append(cur); cur=[r]
+    bands.append(cur)
+    todo=[]
+    for b in bands:
+        if len(b)<5 or len(b)>18: continue
+        y0,y1=ytop+b[0]-2,ytop+b[-1]+3
+        band=olu[y0:y1,TX0:TX1]
+        bp=np.percentile(band,90)
+        ink_m=band<bp-25
+        ys,xs=np.where(ink_m)
+        px=o[y0:y1,TX0:TX1][ink_m]
+        order=np.argsort(px.sum(axis=1))
+        ink=tuple(int(v) for v in np.median(px[order[:max(1,len(order)//4)]],axis=0))
+        xstart=TX0+xs.min(); xend=TX0+xs.max()+24
+        top=a[y0-4:y0-1,TX0:xend].mean(axis=0)
+        bot=a[y1+1:y1+4,TX0:xend].mean(axis=0)
+        n=y1-y0
+        t=np.linspace(0,1,n)[:,None,None]
+        a[y0:y1,TX0:xend]=top[None,:,:]*(1-t)+bot[None,:,:]*t
+        todo.append((xstart,y0+2,len(b)+1,ink))
+    im=Image.fromarray(a.clip(0,255).astype('uint8'))
+    d=ImageDraw.Draw(im)
+    for i,(xstart,y0,h,ink) in enumerate(todo):
+        sz=int(round(h/0.72))
+        tight(d,(xstart,y0-int(round(sz*0.26))),ids[i],font(sz,True),ink,track=-0.6)
+    save(im,k); print(f'f{k:03d} id bands:',len(todo))
+
+fix_ids(23,450,810,[f'APP_2026000002{n:02d}' for n in range(9,-1,-1)])
+fix_ids(24,345,470,['APP_202600000211','APP_202600000210'])
 print('all done')
+
 

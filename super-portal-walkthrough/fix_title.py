@@ -95,7 +95,10 @@ def swap_lockup(im,xa,xb,div,g_top,g_bot,mark_h):
     px=xa+10
     span=[m for m in mids if px<=m[0]<=px+mkr.width]
     yc=sum(m[1] for m in span)/len(span)
-    im.paste(mkr,(int(px),int(round(yc-mkr.height/2))),mkr)
+    # centre the x-height band, not the full box: 'appro' carries descenders,
+    # so the visual body must sit above the geometric centre (as in the native
+    # portal sidebar)
+    im.paste(mkr,(int(px),int(round(yc-mkr.height/2-mkr.height*0.15))),mkr)
 
 # measured card tilts: -3.5 / -2.5 / -2.0 degrees
 d1=divline(-0.0612,1056,196.7)
