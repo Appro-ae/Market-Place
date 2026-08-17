@@ -117,6 +117,7 @@ function App({ onLogout }) {
     settings: 'Settings',
     verification: 'Verification',
     environments: 'Environments',
+    profile: 'My Profile',
   };
 
   const withSub = (a) => a ? ({ ...a, subscribed: subscribedIds.includes(a.id), requested: requestedIds.includes(a.id) }) : a;
@@ -194,6 +195,7 @@ function App({ onLogout }) {
   else if (screen === 'settings') body = <Settings/>;
   else if (screen === 'verification') body = <Verification status={verification} setStatus={setVerification}/>;
   else if (screen === 'environments') body = <Environments env={env}/>;
+  else if (screen === 'profile') body = <AccountProfile/>;
   else body = <div style={{padding:40,color:'var(--ink-500)'}}>Placeholder — {titles[screen]}</div>;
 
   // Tweaks — Appro palette
@@ -216,7 +218,7 @@ function App({ onLogout }) {
       <ToastHost/>
       <Sidebar screen={screen === 'apiDetail' ? 'catalog' : screen} onNav={setScreen} env={env} onLogout={onLogout}/>
       <main data-screen-label={titles[screen]}>
-        <Topbar title={titles[screen]} subtitle={titles[screen]} env={env} setEnv={setEnv} verification={verification}/>
+        <Topbar title={titles[screen]} subtitle={titles[screen]} env={env} setEnv={setEnv} verification={verification} onProfile={() => setScreen('profile')}/>
         {screen !== 'verification' && <VerificationBanner status={verification} goTo={setScreen}/>}
         {body}
       </main>
@@ -294,7 +296,7 @@ function Root() {
   // Account-activation link (.../activate?token=) opens the set-password screen regardless of any existing session.
   const activating = (() => { try { const p = new URLSearchParams(window.location.search); return p.has('activate') || p.has('token'); } catch (e) { return false; } })();
   if (activating) return <><ToastHost/><TenantActivateAccount/></>;
-  if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={() => { localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
+  if (!authed) return <><ToastHost/><LoginScreen variant="customer" onLogin={(cred) => { try { if (cred && cred.email) localStorage.setItem('portal.userEmail', cred.email); } catch (e) {} localStorage.setItem('portal.authed', '1'); setAuthed(true); }}/></>;
   return <App onLogout={() => { localStorage.removeItem('portal.authed'); window.approApi && window.approApi.logout(); setAuthed(false); }}/>;
 }
 // GAS-562 AC8: the empty-state preview flag. Off so the dashboard design renders with data
