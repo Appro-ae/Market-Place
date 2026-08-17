@@ -145,7 +145,10 @@ function AccountProfile() {
   const roleColor = (typeof TUR_ROLE_DEFS0 !== 'undefined' && (TUR_ROLE_DEFS0.find(r => r.name === u.role) || {}).color) || '#3B7EF6';
   const depts = (typeof TUR_DEPTS !== 'undefined') ? TUR_DEPTS : ['Engineering', 'Product', 'Finance', 'Operations', 'Security'];
   const grantedSet = new Set(u.permissions || []);
-  const groups = (typeof TUR_GROUPS !== 'undefined') ? TUR_GROUPS : [];
+  // Only surface permission groups whose module is built. Operate & Organization are hidden
+  // until those modules exist (per PO) — show Build only for now.
+  const PROF_LIVE_GROUPS = ['Build'];
+  const groups = ((typeof TUR_GROUPS !== 'undefined') ? TUR_GROUPS : []).filter(g => PROF_LIVE_GROUPS.includes(g.g));
 
   const saveProfile = () => { setEdit(false); window.toast && window.toast.success('Profile updated', 'Your account details were saved.'); };
 
