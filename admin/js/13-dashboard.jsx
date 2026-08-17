@@ -125,7 +125,6 @@ function AdminDashboard({ env, requests, goTo }) {
         {gran === 'month' && <input type="month" value={month} max="2026-08"   onChange={e => setMonth(e.target.value)} style={DB_PICK}/>}
         {gran === 'year'  && <select value={year} onChange={e => setYear(e.target.value)} style={DB_PICK}>{['2024','2025','2026'].map(y => <option key={y} value={y}>{y}</option>)}</select>}
         {gran === 'day' && day !== DB_TODAY && <button onClick={() => setDay(DB_TODAY)} style={{ background: 'transparent', border: 0, color: 'var(--appro-blue)', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-ui)' }}>Today</button>}
-        <span style={{ fontSize: 11.5, color: 'var(--ink-500)' }}>Scope: <b style={{ color: 'var(--ink-700)', textTransform: 'capitalize' }}>{env}</b> · widgets follow your View permissions</span>
         <div style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 10 }}>
           <span style={{ fontSize: 11, color: 'var(--ink-500)' }}>Updated <b style={{ color: 'var(--ink-700)' }}>just now</b></span>
           <Btn variant="secondary" size="sm" icon="refresh" onClick={() => window.toast && window.toast.success('Dashboard refreshed', 'All widgets re-queried for ' + env + '.')}>Refresh</Btn>
