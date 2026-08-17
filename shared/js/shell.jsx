@@ -78,7 +78,8 @@ function Sidebar({ screen, onNav, env, onLogout }) {
   { label: 'Organization', items: [
     { id: 'verification', label: 'Verification', icon: 'lock' },
     { id: 'users', label: 'User Role Management', icon: 'users' },
-    { id: 'settings', label: 'Settings', icon: 'settings' }]
+    { id: 'settings', label: 'Settings', icon: 'settings' },
+    { id: 'profile', label: 'My Profile', icon: 'users' }]
   }];
 
   return (
@@ -194,7 +195,13 @@ function EnvSwitcher({ env, onChange }) {
 
 }
 
-function Topbar({ title, subtitle, env, setEnv, onCommand }) {
+function Topbar({ title, subtitle, env, setEnv, onCommand, onProfile }) {
+  // Bind the chip to the signed-in identity (was a hard-coded "Amira Saleh" constant — the
+  // design root cause behind GAS-135). Falls back gracefully if no current-user is resolved.
+  const me = (typeof window !== 'undefined' && window.getCurrentUser) ? window.getCurrentUser() : null;
+  const meName = (me && me.fullName) || 'Amira Saleh';
+  const meInitials = (me && me.fullName) ? me.fullName.trim().split(/\s+/).filter(Boolean).map((w, i, a) => (i === 0 || i === a.length - 1) ? w[0] : '').join('').toUpperCase() : (me && me.__null ? '?' : 'AS');
+  const meSub = me ? ((me.role || 'Member') + ' · ' + (me.org || 'Nuqud Pay')) : 'Admin · Nuqud Pay';
   return (
     <header style={{
       padding: '14px 28px', background: '#fff', borderBottom: '1px solid #E5EAEC',
@@ -234,11 +241,11 @@ function Topbar({ title, subtitle, env, setEnv, onCommand }) {
           <div style={{ position: 'absolute', top: -2, right: -4, background: '#2563EB', color: '#fff', borderRadius: 999, fontSize: 9, padding: '1px 5px', fontWeight: 700 }}>2</div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', paddingLeft: 14, borderLeft: '1px solid #E5EAEC' }}>
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg,#3B7EF6,#00AEEF)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>AS</div>
+        <div onClick={onProfile} title="My Profile" style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', paddingLeft: 14, borderLeft: '1px solid #E5EAEC' }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'linear-gradient(135deg,#3B7EF6,#00AEEF)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12, flexShrink: 0 }}>{meInitials}</div>
           <div style={{ whiteSpace: 'nowrap' }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-800)', fontFamily: 'var(--font-ui)' }}>Amira Saleh</div>
-            <div style={{ fontSize: 10, color: 'var(--ink-500)' }}>Admin · Nuqud Pay</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-800)', fontFamily: 'var(--font-ui)' }}>{meName}</div>
+            <div style={{ fontSize: 10, color: 'var(--ink-500)' }}>{meSub}</div>
           </div>
         </div>
       </div>
