@@ -125,13 +125,28 @@ def bands(a,X0,X1,y_lo,y_hi):
             else: out.append([y,y])
     return [b for b in out if 4<=b[1]-b[0]<=26]
 
-def rewrite_col(w,X0,X1,y_lo,y_hi,fx,bold=False):
-    a=np.array(w).astype(int); d=ImageDraw.Draw(w); n=0
-    for i,(y0,y1) in enumerate(bands(a,X0,X1,y_lo,y_hi)):
-        strip=a[max(0,y0-8),X0-8:X1+28]
-        bgc=tuple(int(v) for v in np.median(strip,axis=0))
-        d.rectangle([X0-8,y0-8,X1+28,y1+8],fill=bgc)
-        d.text((X0,y0-3),fx(i),font=font(13,bold),fill=(40,48,70) if sum(bgc)>360 else (152,160,174))
+def inpaint_ink(w,x0,y0,x1,y1,thresh=22):
+    a=np.array(w).astype(float)
+    x0=max(0,x0); y0=max(0,y0); x1=min(a.shape[1],x1); y1=min(a.shape[0],y1)
+    for x in range(x0,x1):
+        col=a[y0:y1,x,:]; lum=col.mean(axis=1)
+        bg=np.percentile(col,85,axis=0)
+        col[lum<bg.mean()-thresh]=bg
+        a[y0:y1,x,:]=col
+    w.paste(Image.fromarray(a.clip(0,255).astype('uint8')).crop((x0,y0,x1,y1)),(x0,y0))
+
+def rewrite_col(w,X0,X1,y_lo,y_hi,fx,bold=False,keep=124,sx=None):
+    a=np.array(w).astype(int); found=bands(a,X0,X1,y_lo,y_hi); n=0
+    W=np.array(w).shape[1]
+    if sx is None: sx=min(W-2,X1+45)
+    for i,(y0,y1) in enumerate(found):
+        ink=tuple(int(v) for v in a[y0:y1,X0:X1].reshape(-1,3).min(axis=0))
+        inpaint_ink(w,X0-6,y0-5,X1+30,y1+6,thresh=11)
+        aa=np.array(w); d=ImageDraw.Draw(w)
+        for y in range(max(0,y0-5),min(aa.shape[0],y1+6)):
+            bgc=tuple(int(v) for v in aa[y,sx])
+            d.line([(X0+keep,y),(min(W-1,X1+30),y)],fill=bgc)
+        tight(d,(X0,y0-3),fx(i),font(13,bold),ink,track=-0.6)
         n+=1
     return n
 
@@ -167,10 +182,10 @@ def run():
             hit=selector(w,strip)
             PROC[k]=f'selector:{hit}'
         if k==21:
-            rewrite_col(w,1533,1697,330,800,lambda i:'Bank',bold=True)
+            rewrite_col(w,1533,1697,330,800,lambda i:'Bank',bold=True,keep=40,sx=1517)
             rewrite_col(w,278,470,330,800,lambda i:f'APP_2026000002{11-i:02d}')
         if k==22:
-            rewrite_col(w,1533,1697,330,470,lambda i:'Bank',bold=True)
+            rewrite_col(w,1533,1697,330,470,lambda i:'Bank',bold=True,keep=40,sx=1517)
             rewrite_col(w,278,470,330,470,lambda i:f'APP_2026000002{11-i:02d}')
         if k==28:
             a=np.array(w).astype(int); d=ImageDraw.Draw(w)
@@ -206,9 +221,10 @@ def run():
             d.rounded_rectangle([319,237,348,275],8,fill=(30,38,72))
             fB=font(15,True); d.text((334-d.textlength('B',font=fB)/2,247),'B',font=fB,fill=(210,214,224))
         if k==23:
+            ink=tuple(int(v) for v in np.array(a[196:224,372:600]).reshape(-1,3).min(axis=0))
             bg=tuple(int(v) for v in np.median(a[210,630:700],axis=0))
             d.rectangle([368,196,615,226],fill=bg)
-            d.text((372,199),'APP_202600000211',font=font(18,True),fill=(30,38,64))
+            tight(d,(372,199),'APP_202600000211',font(18,True),ink,track=-0.8)
         if k==15:
             bg=tuple(int(v) for v in np.median(a[530,930:1000],axis=0))
             d.rectangle([788,440,1114,524],fill=bg)
@@ -245,20 +261,37 @@ def run():
             m=lum<bg.mean()-22
             col[m]=bg; a[y0:y1,x,:]=col
     im=Image.fromarray(a.clip(0,255).astype('uint8'))
-    # tilted mini lockups: vertical-lerp erase + rotated native block
-    for (x0,y0,x1,y1,ang) in [(1040,156,1172,212,-3.0),(1056,281,1174,337,-2.5),(996,578,1117,624,-2.0),(1066,399,1182,441,-2.5)]:
+    for (cx,cy,angT) in [(1837,230,-2.5),(1815,600,-2.0)]:
+        W2,H2=118,40
+        t=Image.new('RGBA',(W2,H2),(0,0,0,0)); td=ImageDraw.Draw(t)
+        td.rounded_rectangle([1,1,W2-2,H2-2],10,fill=(246,247,250,255),outline=(219,222,230,255),width=1)
+        td.text((10,12),'Channel',font=font(11),fill=(128,136,152,255))
+        td.text((64,12),'Bank',font=font(11),fill=(96,104,122,255))
+        td.line([(101,17),(105,22)],fill=(120,128,144,255),width=1)
+        td.line([(105,22),(109,17)],fill=(120,128,144,255),width=1)
+        t=t.rotate(angT,expand=True,resample=Image.BICUBIC)
+        im.paste(t,(cx-t.size[0]//2,cy-t.size[1]//2),t)
+    # tilted mini lockups: per-column dark-run erase + rotated native block
+    for (x0,y0,x1,y1,ang) in [(1038,148,1176,220,-3.0),(1052,274,1178,344,-2.5),(992,570,1121,632,-2.0),(1062,392,1186,449,-2.5)]:
         a=np.array(im).astype(float)
-        T=a[y0-7:y0-2,x0:x1].mean(axis=0); B=a[y1+2:y1+7,x0:x1].mean(axis=0)
-        h=y1-y0; u=np.linspace(0,1,h)[:,None,None]
-        a[y0:y1,x0:x1]=T[None,:,:]*(1-u)+B[None,:,:]*u
+        for x in range(x0,x1):
+            col=a[y0:y1,x,:]; lum=col.mean(axis=1)
+            ref=(lum[:3].mean()+lum[-3:].mean())/2.0
+            dark=lum<ref-14
+            if dark.any():
+                i0=max(1,int(np.argmax(dark))-2)
+                i1=min(len(dark)-1,len(dark)-int(np.argmax(dark[::-1]))+2)
+                nn=i1-i0
+                if nn>0:
+                    t0=col[i0-1]; b0=col[i1]
+                    col[i0:i1]=t0[None,:]+(b0-t0)[None,:]*np.linspace(0,1,nn)[:,None]
+                    a[y0:y1,x,:]=col
         im=Image.fromarray(a.clip(0,255).astype('uint8'))
-        tgt=np.median(a[y0:y1,x0:x1].reshape(-1,3),axis=0)
+        tgt=np.median(a[y0+10:y1-10,x0+10:x1-10].reshape(-1,3),axis=0)
         ac,bc=gainmap(tgt,SRC_BG)
         blk=np.clip(BLK*ac[None,None,:]+bc[None,None,:],0,255)
-        ww=x1-x0-14; hh=int(BLK.shape[0]*ww/BLK.shape[1])
+        ww=x1-x0-16; hh=int(BLK.shape[0]*ww/BLK.shape[1])
         bi=Image.fromarray(blk.astype('uint8')).resize((ww,hh),Image.LANCZOS).convert('RGBA')
-        msk=Image.new('L',(ww,hh),0); ImageDraw.Draw(msk).rounded_rectangle([2,2,ww-3,hh-3],8,fill=255)
-        bi.putalpha(msk.filter(ImageFilter.GaussianBlur(1.5)))
         bir=bi.rotate(ang,expand=True,resample=Image.BICUBIC)
         cx,cy=(x0+x1)//2,(y0+y1)//2
         im.paste(bir,(cx-bir.size[0]//2,cy-bir.size[1]//2),bir)
