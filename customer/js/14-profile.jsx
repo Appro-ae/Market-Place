@@ -169,7 +169,7 @@ function AccountProfile() {
             <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', background: roleColor, padding: '3px 10px', borderRadius: 7 }}>{u.role}</span>
             <TURUserStatus on={u.status} />
           </div>
-          <div style={{ fontSize: 13.5, color: 'var(--ink-600)', marginTop: 4 }}>{u.email || <span style={{ color: 'var(--ink-400)', fontStyle: 'italic' }}>Email not provided</span>} · {u.org}</div>
+          <div style={{ fontSize: 13.5, color: 'var(--ink-600)', marginTop: 4 }}>{u.email || <span style={{ color: 'var(--ink-400)', fontStyle: 'italic' }}>Email not provided</span>}</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <Btn variant="secondary" icon="lock" onClick={() => setPwOpen(true)}>Change password</Btn>
@@ -177,9 +177,8 @@ function AccountProfile() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, alignItems: 'start' }}>
-        {/* Basic details (personal, partly editable) */}
-        <div style={{ background: '#fff', borderRadius: 14, boxShadow: '0 1px 3px rgba(12,25,49,.06)', padding: 22 }}>
+      {/* Basic details (personal, partly editable) */}
+      <div style={{ background: '#fff', borderRadius: 14, boxShadow: '0 1px 3px rgba(12,25,49,.06)', padding: 22 }}>
           <ProfCardHead icon="users" title="Basic details" sub="Your personal account information"
             right={edit ? null : null} />
           {!edit ? (
@@ -187,7 +186,6 @@ function AccountProfile() {
               <PField label="Full name" value={u.fullName} />
               <PField label="Email address" value={u.email} />
               <PField label="Department" value={u.dept} />
-              <PField label="Preferred language" value={lang} />
               <PField label="Environment scope" value={(u.env && u.env.length) ? u.env.join(' + ') : null} />
             </div>
           ) : (
@@ -201,30 +199,12 @@ function AccountProfile() {
               <select value={dept} onChange={e => setDept(e.target.value)} style={{ width: '100%', boxSizing: 'border-box', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--ink-200)', fontSize: 14, fontFamily: 'var(--font-ui)', background: '#fff' }}>
                 {depts.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.04em', margin: '14px 0 5px' }}>Preferred language</label>
-              <select value={lang} onChange={e => setLang(e.target.value)} style={{ width: '100%', boxSizing: 'border-box', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--ink-200)', fontSize: 14, fontFamily: 'var(--font-ui)', background: '#fff' }}>
-                {['English', 'العربية (Arabic)'].map(l => <option key={l} value={l}>{l}</option>)}
-              </select>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 18 }}>
                 <Btn variant="secondary" onClick={() => { setEdit(false); setName(u.fullName || ''); setDept(u.dept || ''); }}>Cancel</Btn>
                 <Btn variant="primary" icon="check" onClick={saveProfile}>Save</Btn>
               </div>
             </div>
           )}
-        </div>
-
-        {/* Organisation & compliance (read-only, from /me) */}
-        <div style={{ background: '#fff', borderRadius: 14, boxShadow: '0 1px 3px rgba(12,25,49,.06)', padding: 22 }}>
-          <ProfCardHead icon="globe" title="Organisation & compliance" sub="Read-only — sourced from your session" />
-          <PField label="Organisation" value={u.org} />
-          <PField label="Organisation ID" value={u.orgId} mono />
-          <PField label="Tenant ID" value={u.tenantId} mono />
-          <PField label="Jurisdiction" value={u.jurisdiction} />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0' }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--ink-500)', textTransform: 'uppercase', letterSpacing: '.04em' }}>KYC / KYB state</div>
-            <StatusPill kind={u.kycState === 'Verified' ? 'active' : u.kycState === 'In review' ? 'review' : 'pending'}>{u.kycState}</StatusPill>
-          </div>
-        </div>
       </div>
 
       {/* Roles & permissions (read-only, reflects /me permissions) */}
