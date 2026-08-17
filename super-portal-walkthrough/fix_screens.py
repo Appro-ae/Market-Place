@@ -42,24 +42,32 @@ def revert(im,ov,box):
 
 def save(im,k): im.save(f'final/f{k:03d}.png')
 
-# ---------- f025 : big Application ID ----------
+# ---------- f025 : Application ID value line ----------
+# The original renders the ID as a normal field value (same size as the EID
+# number below it), sitting under the "Application ID" label. Erase only the
+# value line and redraw at the original size and position.
 ov,im=load(25)
 revert(im,ov,(350,170,1000,255))
 a=np.array(im)
-for y in range(194,230):
-    bgc=np.median(a[y,640:690],axis=0)
-    a[y,364:635]=bgc.round()
+for y in range(199,216):
+    bgc=np.median(a[y,645:690],axis=0)
+    a[y,366:635]=bgc.round()
 im.paste(Image.fromarray(a),(0,0))
-ol=lum_of(np.asarray(ov)); ink_mask=ol[194:230,364:635]<120
-rows=ink_mask.sum(axis=1)
-capr=np.where(rows>rows.max()*0.3)[0]
-cap=capr.max()-capr.min()+1; base_y=194+capr.min()
-oink=np.asarray(ov)[194:230,364:635][ink_mask]
-ink=tuple(int(v) for v in np.median(oink,axis=0))
-sz=int(round(cap/0.72))
+o=np.asarray(ov).astype(int); ol=lum_of(o)
+mask=ol[203:212,368:530]<120
+ink=tuple(int(v) for v in np.median(o[203:212,368:530][mask],axis=0))
 d=ImageDraw.Draw(im)
-tight(d,(368,base_y-int(sz*0.26)),'APP_202600000211',font(sz,True),ink,track=-0.8)
-save(im,25); print('f025 done cap',cap,'sz',sz)
+sz=14
+tight(d,(368,204-int(round(sz*0.26))),'APP_202600000211',font(sz,True),ink,track=-0.6)
+save(im,25); print('f025 done')
+
+# ---------- f023 : restore the search-options dropdown ----------
+# The column rewrite had clobbered the "Email ID" and "Phone Number" options
+# in the open search dropdown (the narration names all four options). The
+# dropdown contains no branding, so restore it wholesale.
+ov,im=load(23)
+revert(im,ov,(370,298,758,442))
+save(im,23); print('f023 dropdown restored')
 
 # ---------- f004 : caption ink ----------
 ov,im=load(4)
