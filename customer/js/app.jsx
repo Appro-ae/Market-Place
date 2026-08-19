@@ -220,6 +220,7 @@ function App({ onLogout }) {
       <main data-screen-label={titles[screen]}>
         <Topbar title={titles[screen]} subtitle={titles[screen]} env={env} setEnv={setEnv} verification={verification} onProfile={() => setScreen('profile')}/>
         {screen !== 'verification' && <VerificationBanner status={verification} goTo={setScreen}/>}
+        {(screen === 'dashboard' || screen === 'billing') && <UsageAlertBanner goTo={setScreen}/>}
         {body}
       </main>
 

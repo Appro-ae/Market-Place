@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<title>TT06 — Usage / commitment alert email</title>
+<style>
+  body{margin:0;padding:34px;background:#EEF1F4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#0C1931}
+  .wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  .lbl{font-size:11px;font-weight:800;letter-spacing:.10em;text-transform:uppercase;color:#5A6472;margin:0 2px 9px}
+  .mail{background:#fff;border:1px solid #DFE4EA;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(12,25,49,.07)}
+  .hdr{padding:14px 20px;border-bottom:1px solid #EDF0F3;background:#FAFBFC;font-size:12px;color:#5A6472}
+  .hdr b{color:#0C1931}
+  .subj{font-size:14.5px;font-weight:700;color:#0C1931;margin-top:6px}
+  .body{padding:22px 24px;font-size:13.5px;line-height:1.68;color:#262829}
+  .body p{margin:0 0 13px}
+  .brand{display:flex;align-items:center;gap:9px;padding:16px 24px 0}
+  .brand .mk{font-family:Georgia,serif;font-size:19px;font-weight:700;letter-spacing:-.02em;color:#0C1931}
+  .brand .pill{font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#3B7EF6;background:#EAF1FE;border-radius:999px;padding:3px 9px}
+  .stat{border:1px solid #EDF0F3;border-radius:10px;padding:13px 15px;margin:4px 0 15px;background:#FAFBFC}
+  .bar{height:9px;border-radius:6px;background:#E7EBF0;overflow:hidden;margin-top:9px}
+  .bar i{display:block;height:100%}
+  .big{font-size:21px;font-weight:800;letter-spacing:-.01em}
+  .muted{font-size:12px;color:#5A6472}
+  .cta{display:inline-block;background:#3B7EF6;color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:10px 18px;border-radius:9px;margin:3px 0 6px}
+  .ftr{border-top:1px solid #EDF0F3;padding:14px 24px;font-size:11.5px;color:#7A828E;line-height:1.6}
+  .warn{color:#92400E}.dang{color:#991B1B}
+  .note{grid-column:1/-1;background:#fff;border:1px solid #DFE4EA;border-radius:12px;padding:16px 20px;font-size:12.5px;color:#3C4655}
+</style></head><body>
+<div class="wrap">
+
+  <div>
+    <p class="lbl">TT06 · Variant A — approaching (80% / 90%)</p>
+    <div class="mail">
+      <div class="hdr"><div>To: <b>billing@nuqud.ae</b> · Cc: <b>amira@nuqud.ae</b></div>
+        <div class="subj">Credit Score — Individual usage alert — 84% of your committed volume</div></div>
+      <div class="brand"><span class="mk">appro</span><span class="pill">API Marketplace</span></div>
+      <div class="body">
+        <p>Dear <b>Nuqud Pay</b> team,</p>
+        <p>This is a usage update for your <b>Credit Score — Individual</b> subscription (Committed 100k / yr) on the Customer Portal.</p>
+        <div class="stat">
+          <div class="big warn">84%</div>
+          <div class="muted">84,000 of 100,000 committed transactions used this billing cycle</div>
+          <div class="bar"><i style="width:84%;background:#D97706"></i></div>
+        </div>
+        <p>Your cycle ends on <b>30/06/2026</b>.</p>
+        <p><a class="cta" href="#">Review your usage</a></p>
+        <p>Best regards,<br/>Customer Portal Team</p>
+      </div>
+      <div class="ftr">Note: This is an auto-generated email, please do not reply.</div>
+    </div>
+  </div>
+
+  <div>
+    <p class="lbl">TT06 · Variant B — reached / exceeded (100%+)</p>
+    <div class="mail">
+      <div class="hdr"><div>To: <b>billing@nuqud.ae</b> · Cc: <b>amira@nuqud.ae</b></div>
+        <div class="subj">Credit Score — Individual usage alert — 118% of your committed volume</div></div>
+      <div class="brand"><span class="mk">appro</span><span class="pill">API Marketplace</span></div>
+      <div class="body">
+        <p>Dear <b>Nuqud Pay</b> team,</p>
+        <p>This is a usage update for your <b>Credit Score — Individual</b> subscription (Committed 100k / yr) on the Customer Portal.</p>
+        <div class="stat">
+          <div class="big dang">118%</div>
+          <div class="muted">118,000 of 100,000 committed transactions used this billing cycle</div>
+          <div class="bar"><i style="width:100%;background:#DC2626"></i></div>
+        </div>
+        <p><b>You have reached your committed volume.</b> Additional usage is handled per your plan: <b>Pay-as-you-go overage</b> ($3.90/req where applicable), so you can keep operating without interruption.</p>
+        <p>Your cycle ends on <b>30/06/2026</b>.</p>
+        <p><a class="cta" href="#">Review your usage</a></p>
+        <p>Best regards,<br/>Customer Portal Team</p>
+      </div>
+      <div class="ftr">Note: This is an auto-generated email, please do not reply.</div>
+    </div>
+  </div>
+
+  <div class="note" style="color:#3C4655">
+    <b>Merge fields</b> — %%ORG_NAME%% · %%PRODUCT_NAME%% · %%PACKAGE_NAME%% · %%USED_TXNS%% · %%COMMITTED_TXNS%% · %%USED_PERCENT%% · %%THRESHOLD%% · %%CYCLE_END_DATE%% · %%OVERFLOW_MODE%% · %%OVERAGE_RATE%% · %%PORTAL_NAME%% · %%LOGIN_LINK%%.
+    &nbsp;<b>Sent at most once per threshold, per package, per billing cycle.</b> Committed-volume packages only — a tenant on Pay-as-you-go / Usage band / On request receives no email at all.
+  </div>
+
+</div></body></html>
