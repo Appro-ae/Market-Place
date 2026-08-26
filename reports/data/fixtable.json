@@ -1,0 +1,104 @@
+{
+ "rows": [
+  {
+   "dev": "NgoHuu.Toan",
+   "squad": "Channel / Admin / DP",
+   "alloc": 1.0,
+   "raw": 34,
+   "fixes": 30,
+   "rework": 10,
+   "first": 20,
+   "rate": 1.7,
+   "fpr": 67,
+   "share": 23
+  },
+  {
+   "dev": "Tang Ha Long",
+   "squad": "Bank",
+   "alloc": 1.0,
+   "raw": 26,
+   "fixes": 23,
+   "rework": 4,
+   "first": 19,
+   "rate": 1.3,
+   "fpr": 83,
+   "share": 18
+  },
+  {
+   "dev": "Nguyen Trong Quan",
+   "squad": "Channel / Admin / DP",
+   "alloc": 1.0,
+   "raw": 21,
+   "fixes": 20,
+   "rework": 2,
+   "first": 18,
+   "rate": 1.1,
+   "fpr": 90,
+   "share": 16
+  },
+  {
+   "dev": "phamhoang.nam",
+   "squad": "Channel / Admin / DP",
+   "alloc": 1.0,
+   "raw": 21,
+   "fixes": 18,
+   "rework": 3,
+   "first": 15,
+   "rate": 1.0,
+   "fpr": 83,
+   "share": 14
+  },
+  {
+   "dev": "KhoeHD",
+   "squad": "Bank",
+   "alloc": 0.5,
+   "raw": 20,
+   "fixes": 18,
+   "rework": 0,
+   "first": 18,
+   "rate": 2.0,
+   "fpr": 100,
+   "share": 14
+  },
+  {
+   "dev": "LongLH",
+   "squad": "Bank",
+   "alloc": 1.0,
+   "raw": 11,
+   "fixes": 10,
+   "rework": 3,
+   "first": 7,
+   "rate": 0.6,
+   "fpr": 70,
+   "share": 8
+  },
+  {
+   "dev": "Thanh Tung Nguyen",
+   "squad": "Channel / Admin / DP",
+   "alloc": 1.0,
+   "raw": 11,
+   "fixes": 9,
+   "rework": 2,
+   "first": 7,
+   "rate": 0.5,
+   "fpr": 78,
+   "share": 7
+  },
+  {
+   "dev": "Minh Hoang",
+   "squad": "Channel / Admin / DP",
+   "alloc": 1.0,
+   "raw": 0,
+   "fixes": 0,
+   "rework": 0,
+   "first": 0,
+   "rate": 0.0,
+   "fpr": 0,
+   "share": 0
+  }
+ ],
+ "total": 128,
+ "working": 18,
+ "total_raw": 144,
+ "total_first": 104
+}

@@ -1,0 +1,9 @@
+# Raw Jira API pulls - regenerated on every run, ~2MB
+openbugs_p*.json
+window_p*.json
+fixset_summaries.json
+agg.json
+__pycache__/
+# intermediate build fragments, concatenated into the final dashboards
+d1_part*.html
+d2_part*.html

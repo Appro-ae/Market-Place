@@ -1,0 +1,141 @@
+AMP-2358	Unable to Create Insurance – Missing Pricing Type Field & Improper Error Handling
+AMP-2375	When editing existing Admin Account mobile number, it is not being updated in the Channel Admin Account table.
+AMP-2391	[Email Template - SAP] Incorrect Template Type displayed for Email Templates
+AMP-2496	FTS Trigger-AECB Monthly Salary Credit shows 0, but the application status remains "In Progress"
+AMP-2581	Application CO BORROWER cancel but on CJ still is successfully
+AMP-2586	[PartnerPortal - PT] Improper input validation
+AMP-2589	[PartnerPortal - PT] Insufficient anti-automation on adding roles
+AMP-2597	[PartnerPortal - PT] Negative Price Accepted (Business Logic Flaw)
+AMP-2611	[UAT] - Cannot add the coborrower back after removal
+AMP-2614	[PartnerPortal - PT] Unrestricted File Upload
+AMP-2617	[PartnerPortal - PT] Misconfigured CSP
+AMP-2626	Co borrower go to Credit queue but on CJ display max eli screen
+AMP-2646	Missing ET012 When manual approval
+AMP-2653	[DC > Application enquiry] The label (S1- S6) are missing in Scoring breakdown section.
+AMP-2654	[DC > Consolidation assessment] Text in header for score circle is different from user story.
+AMP-2659	[PartnerPortal - PT] Broken Access Control 
+AMP-2693	Missing pagination on Debt Consolidation Action Queue list
+AMP-2694	Unnecessary filter and sort items displayed on Action Queue screen
+AMP-2695	Assignee dropdown includes unnecessary users
+AMP-2696	Missing Assignor, Re‑assignor, and Viewer permission
+AMP-2697	Verify export with 0 records
+AMP-2752	Override popup displays incorrect EMI fields for Single Application flow
+AMP-2766	[DP] Score Check — Filtration runs and displays results for groups that failed segmentation
+AMP-2767	[DP] Score Check — Filtration Condition column blank instead of AND/OR
+AMP-2768	[DP] Score Check - Application status stays Lead when audit trail shows Blocked after all groups fail
+AMP-2772	[DP] Score Check - Empty segment tables shown instead of 'no active segments' message when all attributes inactive
+AMP-2820	[DP] SMS Templates — NT07 "Send OTP" template missing entirely from SMS Template list (all products)
+AMP-2824	[AdminPortal - PT] No rate limit on account creation
+AMP-2868	Consent Content is not displayed on the Appro Website
+AMP-2875	[BankPortal - PT] Stored XSS via Malicious PDF Upload – Embedded JavaScript Executes on File Preview
+AMP-2878	[DP] Insurance Detail — "Outstanding balance" in Applied to and "per month / per year" in Frequency not greyed out
+AMP-2888	[Super Portal][Report Enquiry] Drop List Report missing from the Report Type dropdown on all product tabs
+AMP-2889	[Super Portal][Report Enquiry] Incomplete Application Report returns zero rows for applications that qualify
+AMP-2892	[Super Portal][Report Enquiry] Login Reports have no per-step dynamic columns; Step name is always blank
+AMP-2894	[Super Portal][Report Enquiry] Approved Transactions returns Cancelled/Rejected applications and blank approved-offer columns
+AMP-2898	No KFS displayed in CJ
+AMP-2900	\tReport Enquiry does not restrict product type tabs based on User Management configuration — CC/AL tabs shown to ML+PL-only user
+AMP-2908	"Date of Application" filter does not work — results outside the selected date range are still displayed
+AMP-2922	[1 Aug] [CJ] Bug
+AMP-2937	[Bank Portal][Rule Engine]  Property Type INCORRECT
+AMP-2970	Blue line under Contact Support
+AMP-2975	Audit Trail - Not display step detail for Score Check Management 
+AMP-2977	Cannot download AIP letter 
+AMP-2980	[CJ > Co borrower] Co borrower is unable to complete and proceed to the application from after settling the liabilities 
+AMP-2981	Missing decision status on limit assignment
+AMP-2985	Display Bank Logo, not Account Name
+AMP-2987	Fetch offer incorrect with Transaction type/ Property status
+AMP-2994	[Consent Capture > Audit trail] Scroll action is not captured when a scrollable consent container is scrolled
+AMP-2996	[1 Aug]  No proper data in Fraud Queue
+AMP-2997	[1 Aug]  Application still in-progress when rejecting from Fraud
+AMP-3001	All line breaks are stripped after saving email
+AMP-3002	RE-Missing income sources
+AMP-3003	[1 Aug]  [Not a Bug] - Need to put validation on Expense, cannot exceed salary
+AMP-3005	CJ display incorrect when application borrower Go to QUEUE
+AMP-3013	[1 Aug] (Not a bug) - Update Application Code template 
+AMP-3015	[1 Aug] Application got stuck in Fraud , and Enquiry still showing Fraud Check in Current queue 
+AMP-3016	Administrative Ban (Dubai) INCORRECT ON RE
+AMP-3017	Display no proper data in view list 
+AMP-3020	Summary tab show null 
+AMP-3021	DIB2 application is awaiting customer selection but don't display on CJ
+AMP-3025	Incorrect calculation for Joint flow
+AMP-3026	[2 Aug] Duplicate step name in audit trail 
+AMP-3031	SP Anto Feedbacks
+AMP-3033	[2 Aug] After co-borrower confirm their contribution , Primary got "Offer not found" error
+AMP-3034	[2 Aug] Co borrower cannot create application 
+AMP-3035	[2 Aug] Primary  Status auto updated to Awaiting Credit Approval
+AMP-3039	Display incorrect value in offer detail
+AMP-3054	Co-borrower's status already be updated in Bank portal, but DP and CJ does not reflect
+AMP-3055	ML-Finalize income incorrect
+AMP-3060	Can not update Collateral Management
+AMP-3062	Missing stress rate and offer name should show include offer name+pricing matrix and duration incorrect
+AMP-3063	Final Offer Details System Approved - AIP and Final Offer Details Customer Confirmed - AIP should show 1 offer
+AMP-3064	[Collateral Management] List capped at 10 records with no pagination - legacy Marketing Consent unreachable on Credit Card and Auto Loan
+AMP-3068	Client has not selected offer, but DP and CJ show Completed
+AMP-3070	[Single flow] After selecting the customized offer (5Y fixed) , no updated info reflected
+AMP-3071	Do not display channel code (ENBDC), use Emirates NBD 
+AMP-3075	After Confirm customized offer, the system does not allow user to back to original amount
+AMP-3084	[CJ > Prypco] Getting error after face scan. 
+AMP-3087	[Consent Capture] Bank's T&C not captured when customer selects an offer, and captured when they do not
+AMP-3089	[Consent Capture &gt; Website] Consent PDF is not generated after OTP verification
+AMP-3090	[Bank Portal &gt; Documents] "System uploaded" shows the time the page is opened, not the upload time
+AMP-3093	[Consent Capture] REGRESSION - consent PDF generation stopped on 2026-08-03, nothing generated since
+AMP-3095	\tScore Card configuration for "WORST_DLQ_6M_ALL_SVC" gives Score = 100 for (>= 0 AND <= 0 instead of a proper range)
+AMP-3096	[Bank Portal][Rule Engine] Application Score incorrect
+AMP-3101	Missing E2E and Credit Analysis reports include 7 variable scores and Final Application Score
+AMP-3103	[DP > Strategies] UAE National is displaying in application value when application is created with expat eid.
+AMP-3104	[Arab bank v3 > Employment type] Criteria is failing because bank setup value is "Employed" and application value is "Salaried".
+AMP-3107	[Prypco > Add back incomes] Add back incomes are used in calculation of offers.
+AMP-3114	Can not edit attribute- Strategies
+AMP-3118	[Arab bank v3] AIP letter received in email is not password protected.
+AMP-3124	[BankPortal-PT] Broken Object Level Authorization – User Without Termination Queue Department Access Can Retrieve Application PII via Direct API Call
+AMP-3129	TML FLAG not display value on RE
+AMP-3132	ML- File upload 10MB-> But still display validate maximum file
+AMP-3133	Report skip application ID
+AMP-3136	Value combine don't display 
+AMP-3147	Income mutipler breakdown is missing 2 values — unlabeled header row and "Decision Boundary Deviation" — when calculating Approved Limit Amount without Income Multiplier
+AMP-3149	Income multiple missing decision status, final decision from , redundant boundary
+AMP-3154	CJ | Terms and Conditions is currently disabled for Appro channel 
+AMP-3155	Refinancing Page does not show consent updated on Collateral management 
+AMP-3156	Can not complete Co borrower flow
+AMP-3157	User Management | move Add User button to the top, make it align with other tabs
+AMP-3158	User Management | Deactivate/Activate an account needs confirmation popup, and toast message
+AMP-3160	User Management | Be able to input mobile not in UAE
+AMP-3162	[CJ > File upload] User is able to upload exe and all other file types. 
+AMP-3163	[CJ > Upload] User is able to upload file of 11 mb in size.
+AMP-3164	Role Mgmt | Cannot delete the Role
+AMP-3166	User without "View Conditional Offer" permission for Mortgage Loan can still view Conditional Offer
+AMP-3170	[CJ > Offer detail screen] An error message is displayed on CJ, when user open the offer detail screen.
+AMP-3171	Aplication is still Rejected even after Conditional Offer Approval Method Turn on
+AMP-3172	Incorrect step order in audit trail
+AMP-3173	ARAB -Summary application co borrower still MISSING DATA
+AMP-3183	Co borrower change REJECT -> AWAITING CUSTOMER AFTER APPROVE PRIMARY FROM CREDIT QUEUE
+AMP-3188	Add Time range
+AMP-3189	[CJ > Co borrower] Offer is not coming for co borrower 
+AMP-3193	[AdminPortal-PT] Hardcoded Cryptographic Keys Exposed in Publicly Accessible config.js
+AMP-3197	[Strategies] 'Number of Active Contracts' has none of its 4 sub-attributes, and duplicates an older attribute that has them
+AMP-3198	[Strategies] AC1 #9 attribute 'Overdue amount in current month' does not exist under that name
+AMP-3200	[Strategies] Deviation is missing
+AMP-3201	[Strategies] 'Number of Active Contracts' missing children field
+AMP-3202	Application sources missing value
+AMP-3208	Status on CJ and bank portal not sync-> can not complete FLOW
+AMP-3215	[BankPortal - PT] Broken Access Control – Direct URL Access to Maker/Checker Queue Bypasses Missing Menu Permission
+AMP-3216	Manual queue report- app in queue but on report column display NULL
+AMP-3218	Funnel | Offer Stage does not match
+AMP-3220	Co- borrower- After remove co borrower-> click settle -> display issue
+AMP-3225	Decision boundary display incorrect
+AMP-3242	DC Report Bug
+AMP-3256	ARAB BANK- Strategy not yet create but fail reason show manual :ON
+AMP-3260	[DP > Action queue] Application with score above 50 is displaying as ineligible.
+AMP-3264	ARAB BANK- (C) Proposed Limit Amount FOR PL incorrect
+AMP-3265	Arab bank- PL-Missing follow EMI with fix type
+AMP-3266	[DC > Action queue] Verify got failed when application is in watchlist state.
+AMP-3272	ARB-auto loann- Match offer incorrect with Car condition
+AMP-3273	Arab bank- auto loan still in progress
+AMP-3274	Header is not aligned
+AMP-3275	No error message highlighted when click on Save button
+AMP-3278	ARAB Bank-auto loan-Missing formula finalize interest rate
+AMP-3279	Arab bank-auto loan- loan tenor incorrect
+AMP-3280	Base URL needs to be non editable in Edit/Create mode
+AMP-3281	Start/End Date cannot be past date
+AMP-3301	[DC > Action queue] 500 internal server error when user sort by "Modified date"

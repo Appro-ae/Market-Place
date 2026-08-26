@@ -1,0 +1,8 @@
+Criterion 3 (BA scope rewrite before developer transition) - changelog coverage
+Read in full: 9 of 141 fix tickets
+  AMP-3188 (FAIL - excluded), AMP-2358, AMP-2586, AMP-2589, AMP-2597, AMP-2614, AMP-2617, AMP-2611, AMP-2646 (all PASS)
+Rule derived: a BA summary/description edit fails criterion 3 only when it lands AFTER the
+ticket was first assigned to the developer (mid-flight redefinition). Pre-assignment triage
+edits do not count. This reproduces the spec's own AMP-3188 judgement and clears AMP-2611/2646.
+Residual: 132 tickets not changelog-read for criterion 3.
+Criteria 1,2,5,6 and rework/first-pass are EXACT and COMPLETE across all 141 via JQL history.

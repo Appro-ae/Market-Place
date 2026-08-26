@@ -1,0 +1,9 @@
+key	dev	crit1_transition	crit2_selfreassign	crit3_no_ba_rewrite	crit5_isbug	crit6_not_cancelled	firstpass	verdict	note
+AMP-3188	toan	PASS	PASS	FAIL	PASS	PASS	yes	EXCLUDE	Phuong rewrote summary 2x + description 5x on 11-13 Aug before Toan transition 13 Aug 16:10
+AMP-2358	toan	PASS	PASS	PASS	PASS	PASS	no	COUNT	rework: Phuong reverted UAT TESTING->To Do 30 Jul after nam 24 Jul; Toan resubmitted 4 Aug (status 10:07:35, reassign 10:07:31)
+AMP-2586	toan	PASS	PASS	PASS	PASS	PASS	no	COUNT	rework: Faeeq Ajaz rejected 5 Aug + 11 Aug; Toan resubmitted 12 Aug 11:34:45, self-reassign 11:34:52 (7s)
+AMP-2589	toan	PASS	PASS	PASS	PASS	PASS	no	COUNT	rework: rejected 5 Aug + 11 Aug by Faeeq; Toan resubmit 12 Aug 11:34:48, reassign 11:35:07 (19s)
+AMP-2597	toan	PASS	PASS	PASS	PASS	PASS	no	COUNT	rework: rejected 5 Aug by Faeeq; Toan resubmit 6 Aug 14:36:03, reassign 14:36:09 (6s)
+AMP-2614	toan	PASS	PASS	PASS	PASS	PASS	no	COUNT	rework: rejected 5 Aug + 11 Aug by Faeeq; Toan resubmit 12 Aug 11:34:59, reassign 11:35:02 (3s)
+AMP-2611	tung	PASS	PASS	PASS	PASS	PASS	no	COUNT	Phuong summary+desc edits 13 Jul were pre-assignment triage, not mid-flight rewrite; Tung transition 14 Aug 16:31:39, reassign 16:31:36
+AMP-2646	nam	PASS	PASS	PASS	PASS	PASS	no	COUNT	Hien desc edit 15 Jul at triage; nam transition 13 Aug 19:19:19, reassign 19:19:21 (2s)
