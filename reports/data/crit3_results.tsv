@@ -1,0 +1,149 @@
+AMP-2358	PASS	no post-assignment scope edit
+AMP-2375	PASS	no post-assignment scope edit
+AMP-2391	PASS	no post-assignment scope edit
+AMP-2496	FAIL	Hien Nguyen: 1x summary + 0x desc after dev touch
+AMP-2535	PASS	no post-assignment scope edit
+AMP-2536	PASS	no post-assignment scope edit
+AMP-2541	PASS	no post-assignment scope edit
+AMP-2542	PASS	no post-assignment scope edit
+AMP-2543	PASS	no post-assignment scope edit
+AMP-2581	PASS	no post-assignment scope edit
+AMP-2586	PASS	no post-assignment scope edit
+AMP-2589	PASS	no post-assignment scope edit
+AMP-2597	PASS	no post-assignment scope edit
+AMP-2611	PASS	no post-assignment scope edit
+AMP-2614	PASS	no post-assignment scope edit
+AMP-2617	PASS	no post-assignment scope edit
+AMP-2626	PASS	no post-assignment scope edit
+AMP-2646	PASS	Hien Nguyen: 0x summary + 1x desc after dev touch
+AMP-2653	PASS	Mansoor desc edit 15 Jul at triage, before Quan took it 25 Aug
+AMP-2654	PASS	no post-assignment scope edit
+AMP-2659	PASS	no post-assignment scope edit
+AMP-2693	PASS	no post-assignment scope edit
+AMP-2694	PASS	no post-assignment scope edit
+AMP-2695	PASS	no post-assignment scope edit
+AMP-2696	PASS	no post-assignment scope edit
+AMP-2697	PASS	no post-assignment scope edit
+AMP-2752	PASS	no post-assignment scope edit
+AMP-2766	PASS	no post-assignment scope edit
+AMP-2767	PASS	no post-assignment scope edit
+AMP-2768	PASS	no post-assignment scope edit
+AMP-2772	PASS	no post-assignment scope edit
+AMP-2820	PASS	no post-assignment scope edit
+AMP-2824	PASS	no post-assignment scope edit
+AMP-2868	PASS	no post-assignment scope edit
+AMP-2875	PASS	no post-assignment scope edit
+AMP-2878	PASS	no post-assignment scope edit
+AMP-2888	PASS	no post-assignment scope edit
+AMP-2889	PASS	no post-assignment scope edit
+AMP-2892	PASS	no post-assignment scope edit
+AMP-2894	PASS	no post-assignment scope edit
+AMP-2898	PASS	no post-assignment scope edit
+AMP-2900	PASS	no post-assignment scope edit
+AMP-2908	PASS	no post-assignment scope edit
+AMP-2922	FAIL	Nguyen Thi Thuy Phuong: 2x summary + 2x desc after dev touch; Huyen: 2x summary + 0x desc after dev touch
+AMP-2937	PASS	no post-assignment scope edit
+AMP-2970	FAIL	Nguyen Thi Thuy Phuong: 1x summary + 1x desc after dev touch
+AMP-2975	PASS	no post-assignment scope edit
+AMP-2977	PASS	no post-assignment scope edit
+AMP-2980	PASS	no post-assignment scope edit
+AMP-2981	PASS	no post-assignment scope edit
+AMP-2985	PASS	no post-assignment scope edit
+AMP-2987	PASS	no post-assignment scope edit
+AMP-2994	PASS	no post-assignment scope edit
+AMP-2996	FAIL	Nguyen Thi Thuy Phuong: 1x summary + 2x desc after dev touch
+AMP-2997	PASS	no post-assignment scope edit
+AMP-3001	FAIL	Nguyen Thi Thuy Phuong: 2x summary + 0x desc after dev touch
+AMP-3002	PASS	no post-assignment scope edit
+AMP-3003	PASS	no post-assignment scope edit
+AMP-3005	PASS	no post-assignment scope edit
+AMP-3013	PASS	no post-assignment scope edit
+AMP-3015	PASS	no post-assignment scope edit
+AMP-3016	PASS	no post-assignment scope edit
+AMP-3017	PASS	no post-assignment scope edit
+AMP-3020	PASS	no post-assignment scope edit
+AMP-3021	PASS	no post-assignment scope edit
+AMP-3025	PASS	Huyen: 0x summary + 1x desc after dev touch
+AMP-3026	PASS	no post-assignment scope edit
+AMP-3031	FAIL	Huyen: 0x summary + 4x desc after dev touch
+AMP-3033	PASS	no post-assignment scope edit
+AMP-3034	PASS	no post-assignment scope edit
+AMP-3035	PASS	no post-assignment scope edit
+AMP-3039	PASS	no post-assignment scope edit
+AMP-3054	PASS	no post-assignment scope edit
+AMP-3055	PASS	no post-assignment scope edit
+AMP-3060	PASS	no post-assignment scope edit
+AMP-3062	PASS	no post-assignment scope edit
+AMP-3063	PASS	no post-assignment scope edit
+AMP-3064	PASS	no post-assignment scope edit
+AMP-3068	PASS	no post-assignment scope edit
+AMP-3070	FAIL	Nguyen Thi Thuy Phuong: 0x summary + 3x desc after dev touch
+AMP-3071	PASS	no post-assignment scope edit
+AMP-3075	PASS	no post-assignment scope edit
+AMP-3084	PASS	no post-assignment scope edit
+AMP-3087	PASS	no post-assignment scope edit
+AMP-3089	PASS	no post-assignment scope edit
+AMP-3090	PASS	no post-assignment scope edit
+AMP-3093	PASS	no post-assignment scope edit
+AMP-3095	PASS	no post-assignment scope edit
+AMP-3096	PASS	no post-assignment scope edit
+AMP-3101	PASS	no post-assignment scope edit
+AMP-3103	PASS	no post-assignment scope edit
+AMP-3104	PASS	no post-assignment scope edit
+AMP-3107	PASS	no post-assignment scope edit
+AMP-3114	PASS	no post-assignment scope edit
+AMP-3118	PASS	no post-assignment scope edit
+AMP-3124	PASS	no post-assignment scope edit
+AMP-3129	PASS	no post-assignment scope edit
+AMP-3132	PASS	no post-assignment scope edit
+AMP-3133	PASS	no post-assignment scope edit
+AMP-3136	PASS	no post-assignment scope edit
+AMP-3147	PASS	no post-assignment scope edit
+AMP-3149	PASS	no post-assignment scope edit
+AMP-3154	PASS	no post-assignment scope edit
+AMP-3155	PASS	no post-assignment scope edit
+AMP-3156	PASS	no post-assignment scope edit
+AMP-3157	PASS	no post-assignment scope edit
+AMP-3158	PASS	no post-assignment scope edit
+AMP-3160	PASS	no post-assignment scope edit
+AMP-3162	PASS	no post-assignment scope edit
+AMP-3163	PASS	no post-assignment scope edit
+AMP-3164	PASS	no post-assignment scope edit
+AMP-3166	PASS	no post-assignment scope edit
+AMP-3170	PASS	no post-assignment scope edit
+AMP-3171	PASS	no post-assignment scope edit
+AMP-3172	PASS	no post-assignment scope edit
+AMP-3173	PASS	no post-assignment scope edit
+AMP-3183	PASS	no post-assignment scope edit
+AMP-3188	FAIL	Nguyen Thi Thuy Phuong: 1x summary + 1x desc after dev touch
+AMP-3189	PASS	no post-assignment scope edit
+AMP-3193	PASS	no post-assignment scope edit
+AMP-3197	PASS	no post-assignment scope edit
+AMP-3198	PASS	no post-assignment scope edit
+AMP-3200	FAIL	Hien Nguyen: 1x summary + 1x desc after dev touch
+AMP-3201	PASS	no post-assignment scope edit
+AMP-3202	PASS	no post-assignment scope edit
+AMP-3208	PASS	no post-assignment scope edit
+AMP-3215	PASS	no post-assignment scope edit
+AMP-3216	FAIL	Hien Nguyen: 0x summary + 5x desc after dev touch
+AMP-3218	FAIL	Nguyen Thi Thuy Phuong: 0x summary + 2x desc after dev touch
+AMP-3220	PASS	no post-assignment scope edit
+AMP-3225	PASS	no post-assignment scope edit
+AMP-3242	PASS	Nguyen Thi Thuy Phuong: 0x summary + 1x desc after dev touch
+AMP-3256	PASS	no post-assignment scope edit
+AMP-3260	PASS	no post-assignment scope edit
+AMP-3264	PASS	no post-assignment scope edit
+AMP-3265	PASS	no post-assignment scope edit
+AMP-3266	PASS	no post-assignment scope edit
+AMP-3272	PASS	no post-assignment scope edit
+AMP-3273	PASS	no post-assignment scope edit
+AMP-3274	PASS	no post-assignment scope edit
+AMP-3275	PASS	no post-assignment scope edit
+AMP-3276	PASS	no post-assignment scope edit
+AMP-3278	PASS	no post-assignment scope edit
+AMP-3279	PASS	no post-assignment scope edit
+AMP-3280	PASS	no post-assignment scope edit
+AMP-3281	PASS	no post-assignment scope edit
+AMP-3287	PASS	no post-assignment scope edit
+AMP-3301	PASS	no post-assignment scope edit
+AMP-3329	PASS	no post-assignment scope edit

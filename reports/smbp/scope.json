@@ -1,0 +1,178 @@
+{
+ "release": "Release 3.1",
+ "release_date": "2026-08-31",
+ "today": "2026-08-26",
+ "window_start": "2026-08-01",
+ "window_end": "2026-08-26",
+ "cut_date": "2026-08-24",
+ "crs": {
+  "AMP-2564": "Channel / Admin / Distribution Portal",
+  "AMP-3305": "Bank Portal"
+ },
+ "items": {
+  "AMP-3306": [
+   "Channel",
+   "Grace Period & Salary Date",
+   "AMP-2564"
+  ],
+  "AMP-3259": [
+   "Channel",
+   "Conditional Offer on journey",
+   "AMP-2564"
+  ],
+  "AMP-2509": [
+   "Channel",
+   "Website & tracking",
+   "AMP-2564"
+  ],
+  "AMP-1961": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1962": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1963": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1964": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1965": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1966": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1989": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1990": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-1991": [
+   "Distribution Portal",
+   "Offline Product",
+   "AMP-2564"
+  ],
+  "AMP-2024": [
+   "Distribution Portal",
+   "Offer Management",
+   "AMP-2564"
+  ],
+  "AMP-2025": [
+   "Distribution Portal",
+   "Offer Management",
+   "AMP-2564"
+  ],
+  "AMP-1956": [
+   "Distribution Portal",
+   "Offline Bank",
+   "AMP-2564"
+  ],
+  "AMP-1957": [
+   "Distribution Portal",
+   "Offline Bank",
+   "AMP-2564"
+  ],
+  "AMP-1958": [
+   "Distribution Portal",
+   "Offline Bank",
+   "AMP-2564"
+  ],
+  "AMP-1959": [
+   "Distribution Portal",
+   "Offline Bank",
+   "AMP-2564"
+  ],
+  "AMP-1960": [
+   "Distribution Portal",
+   "Offline Bank",
+   "AMP-2564"
+  ],
+  "AMP-3231": [
+   "Admin Portal",
+   "UTM Management",
+   "AMP-2564"
+  ],
+  "AMP-3237": [
+   "Admin Portal",
+   "Collateral Management",
+   "AMP-2564"
+  ],
+  "AMP-1786": [
+   "Bank Portal",
+   "Product Setup",
+   "AMP-3305"
+  ],
+  "AMP-1787": [
+   "Bank Portal",
+   "Product Setup",
+   "AMP-3305"
+  ],
+  "AMP-1985": [
+   "Bank Portal",
+   "Conditional Offer",
+   "AMP-3305"
+  ],
+  "AMP-1987": [
+   "Bank Portal",
+   "Conditional Offer",
+   "AMP-3305"
+  ],
+  "AMP-2269": [
+   "Bank Portal",
+   "Grace Period & First EMI Day",
+   "AMP-3305"
+  ],
+  "AMP-3239": [
+   "Bank Portal",
+   "Tuning Performance",
+   "AMP-3305"
+  ],
+  "AMP-3240": [
+   "Bank Portal",
+   "Tuning Performance",
+   "AMP-3305"
+  ]
+ },
+ "weights": {
+  "UAT Validated": 1.0,
+  "UAT TESTING": 0.75,
+  "Tested with Bugs": 0.5,
+  "Implemented": 0.4,
+  "IN DEVELOPMENT": 0.25
+ },
+ "bank_squad": [
+  "712020:c2a391b8-b1e5-42bb-9e9c-91bb7d24586c",
+  "63bce3990a1b5442166a3d21",
+  "63e355a0c2b1cb6b3473dc4c"
+ ],
+ "channel_squad": [
+  "712020:24847883-770b-4c91-a45a-ddff2c07621e",
+  "712020:64c3eeff-75f1-486a-bd37-1d52056c7412",
+  "712020:0d960272-5e65-4945-9bce-70be70ca8043",
+  "712020:f82f417d-1c4e-4d17-b0cb-4f69a6dac4ed",
+  "712020:6c94ea85-2e20-4e82-852f-18a2a98fcf41"
+ ],
+ "ignore_bugs": [
+  "AMP-2079"
+ ],
+ "run_id": "2026-08-26-eod",
+ "as_of": "2026-08-26 23:59 GST"
+}

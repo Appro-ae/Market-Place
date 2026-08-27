@@ -1,0 +1,984 @@
+{
+ "days_to_release": 5,
+ "scope_items": 28,
+ "open_defects": 40,
+ "high": 14,
+ "prog": 62,
+ "per_portal": {
+  "Distribution Portal": {
+   "items": 16,
+   "pct": 73,
+   "defects": 34,
+   "high": 11,
+   "ageing": [
+    23,
+    1,
+    10
+   ],
+   "oldest": 61,
+   "cr": "AMP-2564"
+  },
+  "Admin Portal": {
+   "items": 2,
+   "pct": 25,
+   "defects": 4,
+   "high": 2,
+   "ageing": [
+    4,
+    0,
+    0
+   ],
+   "oldest": 4,
+   "cr": "AMP-2564"
+  },
+  "Bank Portal": {
+   "items": 7,
+   "pct": 59,
+   "defects": 1,
+   "high": 1,
+   "ageing": [
+    0,
+    1,
+    0
+   ],
+   "oldest": 15,
+   "cr": "AMP-3305"
+  },
+  "Channel": {
+   "items": 3,
+   "pct": 33,
+   "defects": 1,
+   "high": 0,
+   "ageing": [
+    1,
+    0,
+    0
+   ],
+   "oldest": 1,
+   "cr": "AMP-2564"
+  }
+ },
+ "per_cr": {
+  "AMP-2564": {
+   "n": 21,
+   "mix": [
+    5,
+    6,
+    7,
+    0,
+    1,
+    2
+   ]
+  },
+  "AMP-3305": {
+   "n": 7,
+   "mix": [
+    1,
+    2,
+    2,
+    1,
+    1,
+    0
+   ]
+  }
+ },
+ "stages": [
+  "UAT Validated",
+  "UAT TESTING",
+  "Tested with Bugs",
+  "Implemented",
+  "IN DEVELOPMENT",
+  "none"
+ ],
+ "prog_total_w": 17.4,
+ "feats": {
+  "Bank Portal||Product Setup": {
+   "items": 2,
+   "mix": [
+    1,
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "pct": 75,
+   "keys": [
+    "AMP-1786",
+    "AMP-1787"
+   ]
+  },
+  "Distribution Portal||Offline Bank": {
+   "items": 5,
+   "mix": [
+    0,
+    1,
+    4,
+    0,
+    0,
+    0
+   ],
+   "pct": 55,
+   "keys": [
+    "AMP-1956",
+    "AMP-1957",
+    "AMP-1958",
+    "AMP-1959",
+    "AMP-1960"
+   ]
+  },
+  "Distribution Portal||Offline Product": {
+   "items": 9,
+   "mix": [
+    5,
+    2,
+    2,
+    0,
+    0,
+    0
+   ],
+   "pct": 83,
+   "keys": [
+    "AMP-1961",
+    "AMP-1962",
+    "AMP-1963",
+    "AMP-1964",
+    "AMP-1965",
+    "AMP-1966",
+    "AMP-1989",
+    "AMP-1990",
+    "AMP-1991"
+   ]
+  },
+  "Bank Portal||Conditional Offer": {
+   "items": 2,
+   "mix": [
+    0,
+    1,
+    1,
+    0,
+    0,
+    0
+   ],
+   "pct": 62,
+   "keys": [
+    "AMP-1985",
+    "AMP-1987"
+   ]
+  },
+  "Distribution Portal||Offer Management": {
+   "items": 2,
+   "mix": [
+    0,
+    2,
+    0,
+    0,
+    0,
+    0
+   ],
+   "pct": 75,
+   "keys": [
+    "AMP-2024",
+    "AMP-2025"
+   ]
+  },
+  "Bank Portal||Grace Period & First EMI Day": {
+   "items": 1,
+   "mix": [
+    0,
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   "pct": 40,
+   "keys": [
+    "AMP-2269"
+   ]
+  },
+  "Channel||Website & tracking": {
+   "items": 1,
+   "mix": [
+    0,
+    0,
+    0,
+    0,
+    1,
+    0
+   ],
+   "pct": 25,
+   "keys": [
+    "AMP-2509"
+   ]
+  },
+  "Admin Portal||UTM Management": {
+   "items": 1,
+   "mix": [
+    0,
+    0,
+    1,
+    0,
+    0,
+    0
+   ],
+   "pct": 50,
+   "keys": [
+    "AMP-3231"
+   ]
+  },
+  "Admin Portal||Collateral Management": {
+   "items": 1,
+   "mix": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "pct": 0,
+   "keys": [
+    "AMP-3237"
+   ]
+  },
+  "Bank Portal||Tuning Performance": {
+   "items": 2,
+   "mix": [
+    0,
+    1,
+    0,
+    0,
+    1,
+    0
+   ],
+   "pct": 50,
+   "keys": [
+    "AMP-3239",
+    "AMP-3240"
+   ]
+  },
+  "Channel||Conditional Offer on journey": {
+   "items": 1,
+   "mix": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+   ],
+   "pct": 0,
+   "keys": [
+    "AMP-3259"
+   ]
+  },
+  "Channel||Grace Period & Salary Date": {
+   "items": 1,
+   "mix": [
+    0,
+    1,
+    0,
+    0,
+    0,
+    0
+   ],
+   "pct": 75,
+   "keys": [
+    "AMP-3306"
+   ]
+  }
+ },
+ "high_list": [
+  {
+   "key": "AMP-3171",
+   "portal": "Bank Portal",
+   "feature": "Conditional Offer",
+   "summary": "Aplication is still Rejected even after Conditional Offer Approval Method Turn on",
+   "parent": "AMP-1985",
+   "status": "UAT TESTING",
+   "priority": "High",
+   "age": 15,
+   "owner": "Nguyen Thi Thuy Phuong",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3276",
+   "portal": "Admin Portal",
+   "feature": "UTM Management",
+   "summary": "After Deleting UTM, the User still able to access the UTM link",
+   "parent": "AMP-3231",
+   "status": "To Do",
+   "priority": "High",
+   "age": 4,
+   "owner": "Thanh Tung Nguyen",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3289",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline bank] Already live banks are displaying in bank dropdown list while creating a offline bank.",
+   "parent": "AMP-1957",
+   "status": "To Do",
+   "priority": "High",
+   "age": 2,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3290",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline bank] User is able to create a offline bank without any logo.",
+   "parent": "AMP-1957",
+   "status": "To Do",
+   "priority": "High",
+   "age": 2,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3293",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline bank] Bank created with inactive toggle enabled but showed as active in list and detail screen.",
+   "parent": "AMP-1957",
+   "status": "To Do",
+   "priority": "High",
+   "age": 2,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3308",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline bank > Create product] Product row shows no parameter summary \u2014 only Name/Type/Status/Actions, no \"4.5% p.a. - AED 500,000 - 60 mo\" string",
+   "parent": "AMP-1958",
+   "status": "To Do",
+   "priority": "High",
+   "age": 1,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3310",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline product] Max Tenure field hidden for Mortgage Loan and Auto Loan",
+   "parent": "AMP-1959",
+   "status": "To Do",
+   "priority": "High",
+   "age": 1,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3311",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline product] Insert Variable has no menu and no \"Channel Name\" option \u2014 only Application Code exists, inserted directly with no picker",
+   "parent": "AMP-1959",
+   "status": "To Do",
+   "priority": "High",
+   "age": 1,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3312",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline product] Insert Variable always appends to the end, ignoring cursor position",
+   "parent": "AMP-1959",
+   "status": "To Do",
+   "priority": "High",
+   "age": 1,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3316",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline product] Age Band and Income Band eligibility fields don't exist anywhere on the product screen",
+   "parent": "AMP-1959",
+   "status": "To Do",
+   "priority": "High",
+   "age": 1,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3322",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "summary": "[DP > Offline bank] Offline banks and its offers are not showing on appro website.",
+   "parent": "AMP-1960",
+   "status": "To Do",
+   "priority": "High",
+   "age": 0,
+   "owner": "Minh Hoang",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3324",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "summary": "[Offline Product Add on] Add on pop-up is not opening when user clicks on it from offer screen.",
+   "parent": "AMP-1990",
+   "status": "To Do",
+   "priority": "High",
+   "age": 0,
+   "owner": "Nguyen Trong Quan",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3325",
+   "portal": "Admin Portal",
+   "feature": "UTM Management",
+   "summary": "Analytics",
+   "parent": "AMP-3231",
+   "status": "To Do",
+   "priority": "High",
+   "age": 0,
+   "owner": "Nguyen Trong Quan",
+   "rule": ""
+  },
+  {
+   "key": "AMP-3326",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "summary": "[CJ > Insurance] Key facts and Tnc are not loading, showing a blank page.",
+   "parent": "AMP-1990",
+   "status": "To Do",
+   "priority": "High",
+   "age": 0,
+   "owner": "Nguyen Trong Quan",
+   "rule": ""
+  }
+ ],
+ "owner_load": [
+  [
+   "Minh Hoang",
+   9
+  ],
+  [
+   "Nguyen Trong Quan",
+   3
+  ],
+  [
+   "Nguyen Thi Thuy Phuong",
+   1
+  ],
+  [
+   "Thanh Tung Nguyen",
+   1
+  ]
+ ],
+ "days": [
+  "2026-08-01",
+  "2026-08-02",
+  "2026-08-03",
+  "2026-08-04",
+  "2026-08-05",
+  "2026-08-06",
+  "2026-08-07",
+  "2026-08-08",
+  "2026-08-09",
+  "2026-08-10",
+  "2026-08-11",
+  "2026-08-12",
+  "2026-08-13",
+  "2026-08-14",
+  "2026-08-15",
+  "2026-08-16",
+  "2026-08-17",
+  "2026-08-18",
+  "2026-08-19",
+  "2026-08-20",
+  "2026-08-21",
+  "2026-08-22",
+  "2026-08-23",
+  "2026-08-24",
+  "2026-08-25",
+  "2026-08-26"
+ ],
+ "raised": [
+  19,
+  7,
+  11,
+  3,
+  25,
+  14,
+  17,
+  2,
+  0,
+  20,
+  24,
+  11,
+  7,
+  7,
+  0,
+  0,
+  3,
+  0,
+  4,
+  4,
+  9,
+  10,
+  0,
+  13,
+  18,
+  6
+ ],
+ "closed": [
+  29,
+  0,
+  1,
+  1,
+  2,
+  11,
+  8,
+  7,
+  6,
+  2,
+  2,
+  10,
+  20,
+  0,
+  0,
+  0,
+  5,
+  1,
+  0,
+  0,
+  0,
+  1,
+  0,
+  1,
+  13,
+  0
+ ],
+ "cumR": [
+  19,
+  26,
+  37,
+  40,
+  65,
+  79,
+  96,
+  98,
+  98,
+  118,
+  142,
+  153,
+  160,
+  167,
+  167,
+  167,
+  170,
+  170,
+  174,
+  178,
+  187,
+  197,
+  197,
+  210,
+  228,
+  234
+ ],
+ "cumK": [
+  29,
+  29,
+  30,
+  31,
+  33,
+  44,
+  52,
+  59,
+  65,
+  67,
+  69,
+  79,
+  99,
+  99,
+  99,
+  99,
+  104,
+  105,
+  105,
+  105,
+  105,
+  106,
+  106,
+  107,
+  120,
+  120
+ ],
+ "tot_raised": 234,
+ "tot_closed": 120,
+ "cyc_bands": [
+  27,
+  40,
+  19,
+  15,
+  19
+ ],
+ "cyc_median": 7,
+ "cyc_n": 120,
+ "dev_age": {
+  "Tang Ha Long": {
+   "squad": "Bank",
+   "bands": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "total": 0,
+   "oldest": 0,
+   "overmonth": 0
+  },
+  "LongLH": {
+   "squad": "Bank",
+   "bands": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "total": 0,
+   "oldest": 0,
+   "overmonth": 0
+  },
+  "KhoeHD": {
+   "squad": "Bank",
+   "bands": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "total": 0,
+   "oldest": 0,
+   "overmonth": 0
+  },
+  "NgoHuu.Toan": {
+   "squad": "Channel / Admin / DP",
+   "bands": [
+    0,
+    0,
+    9,
+    47
+   ],
+   "total": 56,
+   "oldest": 104,
+   "overmonth": 84
+  },
+  "phamhoang.nam": {
+   "squad": "Channel / Admin / DP",
+   "bands": [
+    2,
+    1,
+    4,
+    10
+   ],
+   "total": 17,
+   "oldest": 124,
+   "overmonth": 59
+  },
+  "Minh Hoang": {
+   "squad": "Channel / Admin / DP",
+   "bands": [
+    22,
+    2,
+    0,
+    4
+   ],
+   "total": 28,
+   "oldest": 82,
+   "overmonth": 14
+  },
+  "Nguyen Trong Quan": {
+   "squad": "Channel / Admin / DP",
+   "bands": [
+    5,
+    0,
+    0,
+    0
+   ],
+   "total": 5,
+   "oldest": 5,
+   "overmonth": 0
+  },
+  "Thanh Tung Nguyen": {
+   "squad": "Channel / Admin / DP",
+   "bands": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "total": 1,
+   "oldest": 4,
+   "overmonth": 0
+  }
+ },
+ "rel_raised_since_cut": 26,
+ "scope": {
+  "AMP-1786": {
+   "key": "AMP-1786",
+   "status": "UAT Validated",
+   "portal": "Bank Portal",
+   "feature": "Product Setup",
+   "cr": "AMP-3305",
+   "summary": "[Bank Portal][Product Setup] Manual Bank - Personal Loan - View details/Create/Edit a product",
+   "assignee": "unassigned"
+  },
+  "AMP-1787": {
+   "key": "AMP-1787",
+   "status": "Tested with Bugs",
+   "portal": "Bank Portal",
+   "feature": "Product Setup",
+   "cr": "AMP-3305",
+   "summary": "[Bank Portal][Product Setup] Manual Bank - Auto Loan - View details/Create/Edit a product",
+   "assignee": "Hien Nguyen"
+  },
+  "AMP-1956": {
+   "key": "AMP-1956",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Bank (P1) - View Offline Bank List",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1957": {
+   "key": "AMP-1957",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Bank (P2) - Create/ Edit an Offline Bank ",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1958": {
+   "key": "AMP-1958",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Bank (P3) - Create/Edit a Product on offline bank",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1959": {
+   "key": "AMP-1959",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Bank (P4) - Create/Edit an Offline Bank (Other Information)",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1960": {
+   "key": "AMP-1960",
+   "status": "UAT TESTING",
+   "portal": "Distribution Portal",
+   "feature": "Offline Bank",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Bank (P5) - Offer from Offline Bank",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1961": {
+   "key": "AMP-1961",
+   "status": "UAT Validated",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P1) - View list of Insurance",
+   "assignee": "unassigned"
+  },
+  "AMP-1962": {
+   "key": "AMP-1962",
+   "status": "UAT Validated",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P2) - Insurance Detail page (Basic Information)",
+   "assignee": "unassigned"
+  },
+  "AMP-1963": {
+   "key": "AMP-1963",
+   "status": "UAT Validated",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P3) - Insurance Detail page (Other Info)",
+   "assignee": "unassigned"
+  },
+  "AMP-1964": {
+   "key": "AMP-1964",
+   "status": "UAT Validated",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P4) - Upselling List",
+   "assignee": "unassigned"
+  },
+  "AMP-1965": {
+   "key": "AMP-1965",
+   "status": "UAT Validated",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P5) - Upselling Detail ",
+   "assignee": "unassigned"
+  },
+  "AMP-1966": {
+   "key": "AMP-1966",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P7) - Display Insurance on Customer Journey",
+   "assignee": "Nguyen Thi Thuy Phuong"
+  },
+  "AMP-1985": {
+   "key": "AMP-1985",
+   "status": "Tested with Bugs",
+   "portal": "Bank Portal",
+   "feature": "Conditional Offer",
+   "cr": "AMP-3305",
+   "summary": "[Bank Portal][Conditional Offer] Configuration Screen",
+   "assignee": "Hien Nguyen"
+  },
+  "AMP-1987": {
+   "key": "AMP-1987",
+   "status": "UAT TESTING",
+   "portal": "Bank Portal",
+   "feature": "Conditional Offer",
+   "cr": "AMP-3305",
+   "summary": "[Bank Portal][Conditional Offer] After adjustment re-calculation",
+   "assignee": "Hien Nguyen"
+  },
+  "AMP-1989": {
+   "key": "AMP-1989",
+   "status": "UAT TESTING",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P6) - Fetching Offline Products",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1990": {
+   "key": "AMP-1990",
+   "status": "UAT TESTING",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P9) - Offline Product on Offer screens",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-1991": {
+   "key": "AMP-1991",
+   "status": "Tested with Bugs",
+   "portal": "Distribution Portal",
+   "feature": "Offline Product",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offline Product (P8) - Upsell on Customer Journey",
+   "assignee": "Nguyen Thi Thuy Phuong"
+  },
+  "AMP-2024": {
+   "key": "AMP-2024",
+   "status": "UAT TESTING",
+   "portal": "Distribution Portal",
+   "feature": "Offer Management",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offer Mgmt (P1) - View list of Setup",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-2025": {
+   "key": "AMP-2025",
+   "status": "UAT TESTING",
+   "portal": "Distribution Portal",
+   "feature": "Offer Management",
+   "cr": "AMP-2564",
+   "summary": "[DP] Offer Mgmt (P2) - Edit list of Setup",
+   "assignee": "Mansoor ahmad"
+  },
+  "AMP-2269": {
+   "key": "AMP-2269",
+   "status": "Implemented",
+   "portal": "Bank Portal",
+   "feature": "Grace Period & First EMI Day",
+   "cr": "AMP-3305",
+   "summary": "[Bank Portal][Backend Logics] Add Grace Period logics and First EMI Day into calculations",
+   "assignee": "Hien Nguyen"
+  },
+  "AMP-2509": {
+   "key": "AMP-2509",
+   "status": "IN DEVELOPMENT",
+   "portal": "Channel",
+   "feature": "Website & tracking",
+   "cr": "AMP-2564",
+   "summary": "Appro Website - Point to offline Bank (Shutdown existing bank- HSBC, Liv, Citi, Enbd & Deem) ",
+   "assignee": "Minh Hoang"
+  },
+  "AMP-3231": {
+   "key": "AMP-3231",
+   "status": "Tested with Bugs",
+   "portal": "Admin Portal",
+   "feature": "UTM Management",
+   "cr": "AMP-2564",
+   "summary": "UTM Management ",
+   "assignee": "Nguyen Thi Thuy Phuong"
+  },
+  "AMP-3237": {
+   "key": "AMP-3237",
+   "status": "Ready To Clarify",
+   "portal": "Admin Portal",
+   "feature": "Collateral Management",
+   "cr": "AMP-2564",
+   "summary": "[DP] Collateral Management/Email Template - Hide Appro's specific Collateral and Email from other channels",
+   "assignee": "Bui Minh Trang - Emma"
+  },
+  "AMP-3239": {
+   "key": "AMP-3239",
+   "status": "UAT TESTING",
+   "portal": "Bank Portal",
+   "feature": "Tuning Performance",
+   "cr": "AMP-3305",
+   "summary": "[Bank Porta][Turning Performance] Move logic execute formular from brm-service to queue-service",
+   "assignee": "Long"
+  },
+  "AMP-3240": {
+   "key": "AMP-3240",
+   "status": "IN DEVELOPMENT",
+   "portal": "Bank Portal",
+   "feature": "Tuning Performance",
+   "cr": "AMP-3305",
+   "summary": "[Bank Porta][Turning Performance] Enhance step calculate variable",
+   "assignee": "Long"
+  },
+  "AMP-3259": {
+   "key": "AMP-3259",
+   "status": "Ready To Clarify",
+   "portal": "Channel",
+   "feature": "Conditional Offer on journey",
+   "cr": "AMP-2564",
+   "summary": "Conditional Offer on journey",
+   "assignee": "unassigned"
+  },
+  "AMP-3306": {
+   "key": "AMP-3306",
+   "status": "UAT TESTING",
+   "portal": "Channel",
+   "feature": "Grace Period & Salary Date",
+   "cr": "AMP-2564",
+   "summary": "Grace Period & Salary Date on PL, AL, ML journey",
+   "assignee": "Hien Nguyen"
+  }
+ }
+}

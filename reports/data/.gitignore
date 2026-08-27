@@ -1,0 +1,8 @@
+# raw Jira API pulls and scratch working files - regenerated each run
+*.json
+!scope.json
+!fixtable.json
+*.tsv
+__pycache__/
+d1_part*.html
+d2_part*.html

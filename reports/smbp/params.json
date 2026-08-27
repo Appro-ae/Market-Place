@@ -1,0 +1,153 @@
+{
+ "_comment": "The only file you edit between runs. Everything else is derived.",
+ "cloud_id": "c501c3c5-8601-4a1a-90fb-e833f87ed209",
+ "site": "scvaladdin.atlassian.net",
+ "project": "AMP",
+ "timezone": "Asia/Dubai",
+ "cr_keys": [
+  "AMP-2564",
+  "AMP-3305"
+ ],
+ "cr_labels": {
+  "AMP-2564": "Channel / Admin / Distribution Portal",
+  "AMP-3305": "Bank Portal"
+ },
+ "target_release": "Release 3.1",
+ "release_date": "2026-08-31",
+ "release_date_override": null,
+ "cut_date_offset_days": 7,
+ "window_start": null,
+ "window_end": "2026-08-26",
+ "exclude_keys": [],
+ "portal_merge_map": {
+  "Super Portal": "Bank Portal"
+ },
+ "feature_renames": {
+  "Backend Logics": "Grace Period & First EMI Day"
+ },
+ "portal_order": [
+  "Channel",
+  "Distribution Portal",
+  "Admin Portal",
+  "Bank Portal"
+ ],
+ "portal_goals": {
+  "Bank Portal": "Complete the Auto Loan flow \u2014 except DOL, which lands in Release 3.2."
+ },
+ "stage_weights": {
+  "UAT Validated": 1.0,
+  "UAT TESTING": 0.75,
+  "Tested with Bugs": 0.5,
+  "Implemented": 0.4,
+  "IN DEVELOPMENT": 0.25,
+  "US Approved": 0.0,
+  "To Do": 0.0,
+  "Ready To Clarify": 0.0
+ },
+ "open_bug_statuses": [
+  "To Do",
+  "In Progress",
+  "Ready To Clarify",
+  "UAT TESTING"
+ ],
+ "closed_resolution_statuses": [
+  "Done",
+  "Cancelled",
+  "UAT Validated"
+ ],
+ "status_ids": {
+  "Cancelled": "10056"
+ },
+ "dev_roster": [
+  {
+   "name": "Tang Ha Long",
+   "squad": "Bank",
+   "id": "712020:c2a391b8-b1e5-42bb-9e9c-91bb7d24586c",
+   "alloc": 1.0,
+   "jira_display": "Long"
+  },
+  {
+   "name": "LongLH",
+   "squad": "Bank",
+   "id": "63bce3990a1b5442166a3d21",
+   "alloc": 1.0
+  },
+  {
+   "name": "KhoeHD",
+   "squad": "Bank",
+   "id": "63e355a0c2b1cb6b3473dc4c",
+   "alloc": 0.5
+  },
+  {
+   "name": "NgoHuu.Toan",
+   "squad": "Channel / Admin / DP",
+   "id": "712020:24847883-770b-4c91-a45a-ddff2c07621e",
+   "alloc": 1.0
+  },
+  {
+   "name": "phamhoang.nam",
+   "squad": "Channel / Admin / DP",
+   "id": "712020:64c3eeff-75f1-486a-bd37-1d52056c7412",
+   "alloc": 1.0
+  },
+  {
+   "name": "Minh Hoang",
+   "squad": "Channel / Admin / DP",
+   "id": "712020:0d960272-5e65-4945-9bce-70be70ca8043",
+   "alloc": 1.0
+  },
+  {
+   "name": "Nguyen Trong Quan",
+   "squad": "Channel / Admin / DP",
+   "id": "712020:f82f417d-1c4e-4d17-b0cb-4f69a6dac4ed",
+   "alloc": 1.0
+  },
+  {
+   "name": "Thanh Tung Nguyen",
+   "squad": "Channel / Admin / DP",
+   "id": "712020:6c94ea85-2e20-4e82-852f-18a2a98fcf41",
+   "alloc": 1.0
+  }
+ ],
+ "testers": [
+  {
+   "name": "Hien Nguyen",
+   "id": "712020:4e0784ee-42bb-497a-b8ae-30dc424aed95"
+  },
+  {
+   "name": "Mansoor ahmad",
+   "id": "712020:19567d9d-bbad-4b99-953f-93c7e1ab85d1"
+  },
+  {
+   "name": "Nguyen Thi Thuy Phuong",
+   "id": "63e37b40bf837c6893db3660"
+  },
+  {
+   "name": "Faeeq Ajaz",
+   "id": "712020:171cf219-273b-4843-bd2f-b3a52591985a",
+   "role": "Security tester",
+   "workstream": "PartnerPortal PT"
+  }
+ ],
+ "testers_pending_confirmation": [],
+ "ignore_bugs": [
+  "AMP-2079"
+ ],
+ "ageing_bands_scope": [
+  5,
+  30
+ ],
+ "ageing_bands_dev": [
+  5,
+  14,
+  30
+ ],
+ "cycle_bands": [
+  2,
+  7,
+  14,
+  30
+ ],
+ "as_of": "2026-08-26 23:59 GST",
+ "run_id": "2026-08-26-eod"
+}

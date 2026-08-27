@@ -1,0 +1,12 @@
+{"_source":"reconstructed from the 25 Aug published dashboards (first run predates the pipeline)",
+ "run_date":"2026-08-25","days_to_release":6,"scope_items":28,"open_defects":41,"high":10,"prog":59,
+ "tot_raised":228,"tot_closed":89,"closed_series_starts":"2026-08-04",
+ "per_portal":{"Distribution Portal":{"items":16,"pct":73,"defects":34,"high":8},
+   "Admin Portal":{"items":2,"pct":38,"defects":5,"high":1},
+   "Bank Portal":{"items":7,"pct":52,"defects":1,"high":1},
+   "Channel":{"items":3,"pct":13,"defects":1,"high":0}},
+ "scope_status":{"AMP-3306":"Implemented","AMP-3231":"UAT TESTING","AMP-3239":"IN DEVELOPMENT",
+   "AMP-2509":"Ready To Clarify"},
+ "fixes_raw":{"NgoHuu.Toan":33,"Tang Ha Long":26,"phamhoang.nam":21,"KhoeHD":20,
+   "Nguyen Trong Quan":13,"LongLH":11,"Thanh Tung Nguyen":11,"Minh Hoang":0},
+ "dev_open_total":167}

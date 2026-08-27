@@ -1,0 +1,28 @@
+AMP-1786	UAT Validated	Enhancement	unassigned	AMP-1783	Medium	[Bank Portal][Product Setup] Manual Bank - Personal Loan - View details/Create/Edit a product
+AMP-1787	Tested with Bugs	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Product Setup] Manual Bank - Auto Loan - View details/Create/Edit a product
+AMP-1956	Tested with Bugs	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Bank (P1) - View Offline Bank List
+AMP-1957	Tested with Bugs	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Bank (P2) - Create/ Edit an Offline Bank 
+AMP-1958	Tested with Bugs	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Bank (P3) - Create/Edit a Product on offline bank
+AMP-1959	Tested with Bugs	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Bank (P4) - Create/Edit an Offline Bank (Other Information)
+AMP-1960	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Bank (P5) - Offer from Offline Bank
+AMP-1961	UAT Validated	Story	unassigned	-	Low	[DP] Offline Product (P1) - View list of Insurance
+AMP-1962	UAT Validated	Story	unassigned	-	Low	[DP] Offline Product (P2) - Insurance Detail page (Basic Information)
+AMP-1963	UAT Validated	Story	unassigned	-	Low	[DP] Offline Product (P3) - Insurance Detail page (Other Info)
+AMP-1964	UAT Validated	Story	unassigned	-	Low	[DP] Offline Product (P4) - Upselling List
+AMP-1965	UAT Validated	Story	unassigned	-	Low	[DP] Offline Product (P5) - Upselling Detail 
+AMP-1966	Tested with Bugs	Story	Nguyen Thi Thuy Phuong	-	Low	[DP] Offline Product (P7) - Display Insurance on Customer Journey
+AMP-1985	Tested with Bugs	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Conditional Offer] Configuration Screen
+AMP-1987	UAT TESTING	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Conditional Offer] After adjustment re-calculation
+AMP-1989	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Product (P6) - Fetching Offline Products
+AMP-1990	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Product (P9) - Offline Product on Offer screens
+AMP-1991	Tested with Bugs	Story	Nguyen Thi Thuy Phuong	AMP-346	Low	[DP] Offline Product (P8) - Upsell on Customer Journey
+AMP-2024	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offer Mgmt (P1) - View list of Setup
+AMP-2025	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offer Mgmt (P2) - Edit list of Setup
+AMP-2269	UAT TESTING	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Backend Logics] Add Grace Period logics and First EMI Day into calculations
+AMP-2509	IN DEVELOPMENT	Story	Minh Hoang	-	Low	Appro Website - Point to offline Bank (Shutdown existing bank- HSBC, Liv, Citi, Enbd & Deem) 
+AMP-3231	Tested with Bugs	Story	Nguyen Thi Thuy Phuong	-	Low	UTM Management 
+AMP-3237	Ready To Clarify	Story	Bui Minh Trang - Emma	-	Low	[DP] Collateral Management/Email Template - Hide Appro's specific Collateral and Email from other channels
+AMP-3239	UAT TESTING	Task	Long	AMP-1783	Low	[Bank Porta][Turning Performance] Move logic execute formular from brm-service to queue-service
+AMP-3240	IN DEVELOPMENT	Task	Long	AMP-1783	Low	[Bank Porta][Turning Performance] Enhance step calculate variable
+AMP-3259	Ready To Clarify	Story	unassigned	-	Low	Conditional Offer on journey
+AMP-3306	UAT TESTING	Story	Hien Nguyen	-	Low	Grace Period & Salary Date on PL, AL, ML journey
