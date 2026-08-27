@@ -1,8 +1,27 @@
-Criterion 3 (BA scope rewrite before developer transition) - changelog coverage
-Read in full: 9 of 141 fix tickets
-  AMP-3188 (FAIL - excluded), AMP-2358, AMP-2586, AMP-2589, AMP-2597, AMP-2614, AMP-2617, AMP-2611, AMP-2646 (all PASS)
-Rule derived: a BA summary/description edit fails criterion 3 only when it lands AFTER the
-ticket was first assigned to the developer (mid-flight redefinition). Pre-assignment triage
-edits do not count. This reproduces the spec's own AMP-3188 judgement and clears AMP-2611/2646.
-Residual: 132 tickets not changelog-read for criterion 3.
-Criteria 1,2,5,6 and rework/first-pass are EXACT and COMPLETE across all 141 via JQL history.
+Criterion 3 (BA scope rewrite after the ticket reached the developer) — changelog coverage
+
+Read in full: 149 of 149 fix tickets (100%).
+
+Rule: a BA summary/description edit fails criterion 3 only when it lands AFTER the ticket
+was first assigned to a developer (mid-flight redefinition). Pre-assignment triage edits do
+not count. This reproduces the spec's own AMP-3188 judgement and clears AMP-2611/2646.
+
+FAIL: 11 tickets
+  AMP-2496  Hien Nguyen: 1x summary + 0x desc after dev touch [already excluded as Cancelled]
+  AMP-2922  Nguyen Thi Thuy Phuong: 2x summary + 2x desc after dev touch; Huyen: 2x summary + 0x desc after dev touch
+  AMP-2970  Nguyen Thi Thuy Phuong: 1x summary + 1x desc after dev touch
+  AMP-2996  Nguyen Thi Thuy Phuong: 1x summary + 2x desc after dev touch
+  AMP-3001  Nguyen Thi Thuy Phuong: 2x summary + 0x desc after dev touch
+  AMP-3031  Huyen: 0x summary + 4x desc after dev touch
+  AMP-3070  Nguyen Thi Thuy Phuong: 0x summary + 3x desc after dev touch
+  AMP-3188  Nguyen Thi Thuy Phuong: 1x summary + 1x desc after dev touch
+  AMP-3200  Hien Nguyen: 1x summary + 1x desc after dev touch
+  AMP-3216  Hien Nguyen: 0x summary + 5x desc after dev touch
+  AMP-3218  Nguyen Thi Thuy Phuong: 0x summary + 2x desc after dev touch
+
+Deductions applied to the fix table: 10
+(exclusions run in precedence order Cancelled > not-a-bug > criterion 3 > criterion 2,
+ so a ticket failing two tests is deducted once.)
+
+Criteria 1, 2, 5, 6 and the rework/first-pass split are EXACT and COMPLETE across all
+tickets via JQL history operators; only criterion 3 requires reading changelogs.

@@ -18,7 +18,7 @@ AMP-1990	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offline Product (P9) -
 AMP-1991	Tested with Bugs	Story	Nguyen Thi Thuy Phuong	AMP-346	Low	[DP] Offline Product (P8) - Upsell on Customer Journey
 AMP-2024	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offer Mgmt (P1) - View list of Setup
 AMP-2025	UAT TESTING	Story	Mansoor ahmad	AMP-346	Low	[DP] Offer Mgmt (P2) - Edit list of Setup
-AMP-2269	Implemented	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Backend Logics] Add Grace Period logics and First EMI Day into calculations
+AMP-2269	UAT TESTING	Story	Hien Nguyen	AMP-1783	Medium	[Bank Portal][Backend Logics] Add Grace Period logics and First EMI Day into calculations
 AMP-2509	IN DEVELOPMENT	Story	Minh Hoang	-	Low	Appro Website - Point to offline Bank (Shutdown existing bank- HSBC, Liv, Citi, Enbd & Deem) 
 AMP-3231	Tested with Bugs	Story	Nguyen Thi Thuy Phuong	-	Low	UTM Management 
 AMP-3237	Ready To Clarify	Story	Bui Minh Trang - Emma	-	Low	[DP] Collateral Management/Email Template - Hide Appro's specific Collateral and Email from other channels

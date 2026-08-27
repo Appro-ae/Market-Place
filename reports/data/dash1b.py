@@ -1,13 +1,18 @@
 from dash1 import *
 P2=['Channel','Distribution Portal','Admin Portal','Bank Portal']
+_pp = next((k['prev'] for k in (MVD or {}).get('kpi', []) if k['label'] == 'Weighted completion'), None)
+_progprev = f' — {"up" if int(str(_pp).rstrip(chr(37))) < A["prog"] else "down"} from {_pp} yesterday' if _pp else ''
+_back = [x for x in (MVD or {}).get('moves', []) if x['dir'] == 'backward' and x['portal'] == 'Admin Portal']
+_adminwhy = (', held back by ' + ' and '.join(f'{x["key"]} going back to {x["to"].lower()}' for x in _back)) if _back else ''
 h=[]
 h.append('<div class="card" style="margin-bottom:20px"><div class="ctitle">Feature progress</div>'
  '<div class="csub">Every Release 3.1 feature, grouped by portal, with the tickets that make it up · progress is weighted on '
  'delivery stage: UAT Validated 100%, in UAT testing 75%, tested with bugs 50%, implemented 40%, in development 25%, not yet in test 0%</div>')
 h.append(f'<div class="hero"><span class="heronum">{A["prog"]}%</span><span class="herotxt">'
- f'Weighted completion across the 28 Release 3.1 items — up from 59% yesterday.<br>'
- f'Distribution Portal still carries 16 of the 28 items at {A["per_portal"]["Distribution Portal"]["pct"]}%; '
- f'Admin Portal slipped to {A["per_portal"]["Admin Portal"]["pct"]}% when AMP-3231 went back to tested-with-bugs.</span></div>')
+ f'Weighted completion across the 28 Release 3.1 items{_progprev}.<br>'
+ f'Distribution Portal still carries {A["per_portal"]["Distribution Portal"]["items"]} of the 28 items at '
+ f'{A["per_portal"]["Distribution Portal"]["pct"]}%; Admin Portal sits at {A["per_portal"]["Admin Portal"]["pct"]}% '
+ f'on {A["per_portal"]["Admin Portal"]["items"]} items{_adminwhy}.</span></div>')
 h.append('<table><thead><tr><th>Feature</th><th>What it delivers</th><th class="num">Items</th>'
          '<th>Delivery stage mix</th><th class="num">Progress</th></tr></thead><tbody>')
 for p in P2:
@@ -44,7 +49,8 @@ for b in A['high_list']:
              f'<td>{esc(b["owner"])}<div class="held">holding {b["age"]}d</div></td></tr>')
 h.append('</tbody></table></div>')
 
-h.append('<div class="foot">Data pulled live from Jira on 26 August 2026. Scope = the 28 items listed under Release 3.1 '
+h.append('<div class="foot">Data pulled live from Jira, <b>as of 26 August 2026, 23:59 GST</b>. Verified at pull time: no AMP issue carries an update timestamp on 27 August, so every panel here is exactly the '
+ 'end-of-26-August position &mdash; nothing has been rewound or estimated. Scope = the 28 items listed under Release 3.1 '
  '(31 August 2026) in the release-items tables of AMP-2564 (21) and AMP-3305 (7); Release 3.2 items are excluded. '
  'Open defect = Bug in To Do / In Progress / Ready To Clarify / UAT Testing traced to a scope item through its issue links; '
  'Done, Cancelled and UAT Validated excluded. Portal categories come from the Category column of each CR\'s own release-items table, '
@@ -54,7 +60,9 @@ h.append('<div class="foot">Data pulled live from Jira on 26 August 2026. Scope 
  '<b>Discrepancies found this run:</b> AMP-3305\'s Release 3.1 table is headed "8 items" but lists 7 rows; AMP-3323 is linked to AMP-2564 '
  'and labelled P1 but does not appear in the CR table, while AMP-3237 is in the table but is not returned by the CR\'s own P1 filter; '
  'AMP-2564\'s Package Timeline gives Release 3.2 as 4 September while its own 3.2 table heading says 7 September. '
- 'The oldest open defect is 61 days, so the third ageing band is shown as 31+ rather than the standard 31–60.</div>')
+ 'The oldest open defect is 61 days, so the third ageing band is shown as 31+ rather than the standard 31–60. '
+ 'One data-quality note: <code>status = Cancelled</code> matches nothing in this Jira site &mdash; the status must be queried '
+ 'by id (<code>status = 10056</code>), so any saved filter using the name undercounts.</div>')
 h.append('</div></body></html>')
 open('d1_part2.html','w').write('\n'.join(h))
 print('part2 written')

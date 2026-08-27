@@ -1,13 +1,27 @@
 """Movement since the previous run — diff current agg.json against the most recent prior run."""
-import json, os, glob, datetime as dt
+import json, os, re, glob, datetime as dt
 
-def load_prev(reports_dir, today):
+RUN_RE = re.compile(r'^\d{4}-\d{2}-\d{2}(-[A-Za-z0-9]+)?$')
+
+def load_prev(reports_dir, run_id):
+    """Newest run folder strictly older than run_id.
+
+    Accepts both `<date>` and `<date>-<suffix>` folders (e.g. 2026-08-26-eod), so more
+    than one run per day chains correctly.  Plain lexicographic order is the right order
+    here because every folder starts with an ISO date and a suffixed run always follows
+    the bare one for the same day.
+    """
     runs = sorted(d for d in os.listdir(reports_dir)
-                  if len(d) == 10 and d[4] == '-' and d < today
+                  if RUN_RE.match(d) and d < run_id
                   and os.path.exists(os.path.join(reports_dir, d, 'agg.json')))
     if not runs: return None, None
     prev = runs[-1]
-    return prev, json.load(open(os.path.join(reports_dir, prev, 'agg.json')))
+    agg = json.load(open(os.path.join(reports_dir, prev, 'agg.json')))
+    agg.setdefault('run_date', prev[:10])       # folders predating the chaining fields
+    agg.setdefault('run_id', prev)
+    if 'scope_status' not in agg and 'scope' in agg:
+        agg['scope_status'] = {k: v['status'] for k, v in agg['scope'].items()}
+    return prev, agg
 
 def arrow(d, good_down=False):
     if d == 0: return ('flat', '±0')

@@ -158,8 +158,20 @@ dev-ageing board; no "Project manager's read" section; no High & Blocker table h
 
 ## 8. Open items
 
-- **Faeeq Ajaz** receives and rejects developer handoffs in volume but is not on the
-  `testers` list — confirm before counting him as a tester.
+- ~~**Faeeq Ajaz** — confirm before counting him as a tester.~~ **Resolved 26 Aug:** confirmed
+  as **Security tester**, workstream *PartnerPortal PT*. He is now in `testers` in
+  `params.json` with `role` and `workstream`, and Dashboard 2 carries a penetration-test
+  callout under the fixes table. All 31 of his tickets are pen-test findings across four PT
+  workstreams (BOD 12, Partner Portal 9, Bank Portal 7, Admin Portal 3).
 - The count of open bugs held by the 8 developers fell 167 → 107 between the 25 and 26 Aug
   runs, while only 6 bugs were raised and 0 closed on 26 Aug. That is a bulk reassignment,
-  not closures — confirm what happened.
+  not closures — confirm what happened. **Still open**: the end-of-26-Aug re-pull puts the
+  figure at **87**, a further drop of 20 with no matching closures, so the reassignment is
+  ongoing rather than a one-off.
+- The **25 Aug baseline** (`reports/2026-08-25/agg.json`) was reconstructed from that day's
+  published dashboard and carries only 4 of 28 scope statuses. Day-over-day status-move
+  detection is therefore complete only from the 26 Aug midday run onward. `analyse.py` now
+  writes `run_date`, `run_id`, `scope_status` (all 28) and `dev_open_total` into every
+  `agg.json`, so this self-heals from today forward. No action needed.
+- **Pen-test rework rate is 82%** against 18% across all fixes — a security finding is 4.6×
+  more likely to bounce. Worth deciding whether PT work should be estimated at double cost.

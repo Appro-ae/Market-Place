@@ -40,25 +40,37 @@ h.append(f'<div class="card" style="margin-bottom:20px"><div class="ctitle">Rele
  f'<span class="lg"><span class="sw" style="background:{YEL}"></span>6–30 days</span>'
  f'<span class="lg"><span class="sw" style="background:{RED}"></span>31+ days</span></div></div>')
 
-h.append('<div class="foot">Data pulled live from Jira on 26 August 2026. Raised = Bug created in project AMP between 1 and 26 August. '
+import json as _j
+_F=_j.load(open('fixtable.json')); _S=_j.load(open('security.json'))
+_C3=' '.join(open('crit3_fail_keys.txt').read().split()).replace('AMP-','').replace(' ',', ')
+_N=_F['audit_coverage'].split('/')[1]
+h.append('<div class="foot">Data pulled live from Jira, <b>as of 26 August 2026, 23:59 GST</b>. '
+ 'Verified at pull time: no AMP issue carries an update timestamp on 27 August, so every current-state panel on this '
+ 'page is exactly the end-of-26-August position &mdash; nothing has been rewound or estimated. '
+ 'Raised = Bug created in project AMP between 1 and 26 August. '
  'Closed = Bug with a resolution date in the window (Done, Cancelled or UAT Validated). '
  'Fixes per developer start from Jira status history: <code>status changed from "To Do" to "UAT TESTING" by &lt;developer&gt; '
- 'DURING ("2026-08-01","2026-08-27")</code> — the transition the developer performs personally when submitting a fix to test. '
+ 'DURING ("2026-08-01","2026-08-27")</code> &mdash; the transition the developer performs personally when submitting a fix to test. '
  'This replaces the earlier assignee-field method, which mis-credited handoffs performed by others and missed Nguyen Thi Thuy Phuong as a tester. '
- '<b>Verification applied to all 144 raw transitions:</b> the developer must also have performed the reassignment themselves (3 excluded), '
- 'the ticket must not have ended Cancelled (10 excluded), and titles marked not-a-bug are dropped (2 excluded: AMP-3003, AMP-3013). '
+ f'<b>Verification applied to all {_F["total_raw"]} raw transitions</b>, which resolve to {_N} distinct tickets: the developer must also have performed '
+ f'the reassignment themselves ({_F["excl"]["crit2"]} excluded), the ticket must not have ended Cancelled ({_F["excl"]["cancelled"]} excluded), '
+ f'and titles marked not-a-bug are dropped ({_F["excl"]["notabug"]} excluded: AMP-3003, AMP-3013). '
  'Per your instruction, Cancelled outcomes are excluded and a first-pass rate is reported alongside the fix count; '
  'a fix is first-pass when the ticket was never rejected from UAT Testing back to To Do. '
- '<b>Full changelog audit completed on all 141 fix tickets.</b> A BA edit disqualifies a fix only when it lands '
- 'after the ticket reached the developer — triage-time edits before assignment do not count. '
- '11 tickets failed that test (AMP-2496, 2922, 2970, 2996, 3001, 3031, 3070, 3188, 3200, 3216, 3218), '
- 'seven of them Toan\'s, which is why his verified count sits well below his raw transition count. '
+ f'<b>Full changelog audit completed on all {_N} fix tickets ({_F["audit_coverage"]}).</b> A BA edit disqualifies a fix only when it lands '
+ 'after the ticket reached the developer &mdash; triage-time edits before assignment do not count. '
+ f'11 tickets failed that test (AMP-{_C3}); AMP-2496 was already excluded as Cancelled, so {_F["excl"]["crit3"]} deductions remain. '
+ f'Seven are Toan\'s, which is why his verified count sits well below his raw transition count. '
+ f'Net: {_F["total_raw"]} raw transitions &minus; {sum(_F["excl"].values())} exclusions = <b>{_F["total"]} verified fixes</b>, '
+ f'{_F["total_first"]} of them first-pass ({round(100*_F["total_first"]/_F["total"])}%). '
  'Developers are Tang Ha Long, LongLH and KhoeHD (Bank) and Toan, Nam, Minh, Quan and Tung (Channel / Admin / DP); '
- 'testers receiving handoffs are Hien Nguyen, Mansoor ahmad and Nguyen Thi Thuy Phuong — <b>Faeeq Ajaz is now also receiving and rejecting '
- 'developer handoffs in volume and should be confirmed as a tester.</b> '
+ 'testers receiving handoffs are Hien Nguyen, Mansoor ahmad and Nguyen Thi Thuy Phuong, '
+ f'plus <b>{_S["tester"]}, confirmed as {_S["role"]}</b>, who raises and verifies the penetration-test findings shown above. '
  'Release 3.1 scope is the 28 items listed under Release 3.1 in each CR\'s release-items table. '
  'Per your Bank-team rule, a Bank Portal defect held by a developer outside the Bank squad is reported under Channel: AMP-3298 (phamhoang.nam) '
- 'shows as Channel; AMP-3171 stays Bank Portal because Nguyen Thi Thuy Phuong is a BA.</div>')
+ 'shows as Channel; AMP-3171 stays Bank Portal because Nguyen Thi Thuy Phuong is a BA. '
+ 'One data-quality note carried forward: <code>status = Cancelled</code> matches nothing in this Jira site &mdash; the status must be '
+ 'queried by id (<code>status = 10056</code>), so any saved filter using the name undercounts.</div>')
 h.append('</div></body></html>')
 open('d2_part2.html','w').write('\n'.join(h))
 print('d2 part2 ok')

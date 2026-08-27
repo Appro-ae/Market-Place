@@ -51,7 +51,8 @@ recipient. **[USER RULE]** Surface these as questions — never absorb them sile
 
 ## Phase 2 — Audit and summarise
 
-`audit.py` then `analyse.py`. A **verified fix** requires all six:
+`extract_audit.py` → `mkfixtable.py` → `analyse.py` → `mkmovement.py` → `mksecurity.py`.
+A **verified fix** requires all six:
 
 1. The developer personally performed the To Do → UAT TESTING transition (the JQL guarantees this).
 2. The developer also performed the reassignment — `AND assignee changed BY <dev> DURING (window)`.
@@ -65,15 +66,38 @@ recipient. **[USER RULE]** Surface these as questions — never absorb them sile
 6. Exclude tickets whose final status is Cancelled, and report a **first-pass rate**
    alongside the raw count. **[USER RULE — confirmed 26 Aug]**
 
+Exclusions are applied in precedence order — Cancelled, then not-a-bug, then criterion 3,
+then criterion 2 — so a ticket failing two tests is deducted once. `mkfixtable.py` enforces
+this; check 9 proves `raw − Σexclusions = verified`. Raw transitions exceed distinct tickets
+whenever two developers each submit the same ticket (26 Aug: 152 transitions, 149 tickets).
+
 ## Phase 3 — Render
 
-`render.py` writes both dashboards into `reports/<YYYY-MM-DD>/`, plus `agg.json` for
-tomorrow's comparison. Dashboard 1 opens with a **Movement since <date>** card diffing
-the previous run: KPI deltas, portal deltas, and item-level status moves split
-forward/backward. A backward move is the signal a percentage hides — surface it.
+`dash1.py` + `dash1b.py` → `d1_part*.html`; `dash2b.py` + `dash2c.py` → `d2_part*.html`;
+concatenate each pair into `reports/<run_id>/`, alongside `agg.json`, `fixtable.json`,
+`movement.json` and `security.json` for tomorrow's comparison.
 
-Then run all 12 self-checks (below), and screenshot each dashboard in headless Chromium
-to confirm no SVG value label clips.
+`run_id` is `params.json`'s `run_id` (default: the run date). **More than one run per day**
+uses a `<date>-<suffix>` folder, e.g. `2026-08-26-eod`; `movement.load_prev` accepts both
+forms and orders them lexicographically, so the chain is date → date-suffix → next date.
+`mkmovement.py` then produces two legs: `daily` (vs the previous *day's* run, which is what
+the KPI strip and the narrative lines use) and `overnight` (vs an earlier run the same day,
+rendered as the navy strip). Skip the overnight leg when there is only one run that day.
+
+Dashboard 1 opens with the **Movement since <date>** card: KPI deltas, portal deltas, and
+item-level status moves split forward/backward. A backward move is the signal a percentage
+hides — surface it. Dashboard 2 carries a **penetration-test callout** under the fixes table
+(`mksecurity.py`, driven by the `role: Security tester` entry in `params.json` `testers`):
+raised / closed / open, fixed this window, and the PT rework rate against the all-fix rate.
+
+**Never hardcode a narrative number.** Every "up from X yesterday", "gone X → Y",
+"almost all on Z" line reads from `movement.json` or `agg.json`; the 26 Aug run found three
+that had gone stale. Working days to release ≠ calendar days — compute both.
+
+Then run `selfcheck.py` (all 12 checks plus the rendered-HTML cross-checks) and screenshot
+each dashboard in headless Chromium at `/opt/pw-browsers/chromium-*/chrome-linux/chrome`
+to confirm no SVG value label clips. To inspect a region below the fold, load the page in
+an offset `<iframe>` and screenshot that.
 
 ## Phase 4 — Deliver
 
@@ -98,10 +122,17 @@ headline movement, the audited fix table, and every data-quality finding.
 
 ## Self-checks — all must pass before publishing
 
-portal items = scope total · portal defects = KPI · portal High = KPI = list length ·
-ageing bands = defect total · owner load = High total · feature items = scope total ·
-CR bars = scope total · cycle bands = closed total · fix shares ≈ 100% ·
-fix rows = audited total · dev ageing bands = totals · audit coverage = N/N.
+`selfcheck.py` runs these; it exits non-zero on any failure, so never publish without it.
 
-Plus: every SVG value label inside its viewBox, and any rule the data breaks raised as a
-question (new status, new portal, count mismatch, ageing beyond the top band).
+portal items = scope total · portal defects = KPI · portal High = KPI = list length ·
+ageing bands = defect total per portal · feature items = scope total · CR items = scope
+total and status mix sums per CR · cycle bands = closed total · raised/closed series sum to
+totals and cumulative ends match · fix-table row and total arithmetic (`raw − Σexcl =
+verified`, `rework + first = fixes`) · dev ageing bands = totals and grand total ·
+criterion-3 changelog coverage = N/N · every SVG `<text>` anchor inside its viewBox.
+
+Plus rendered-HTML cross-checks: the fix total, raw total, security block, as-of label and
+audit coverage all appear in the output, and no superseded wording survives.
+
+Plus: any rule the data breaks raised as a question (new status, new portal, count
+mismatch, ageing beyond the top band).

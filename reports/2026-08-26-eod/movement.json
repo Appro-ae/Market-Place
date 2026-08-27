@@ -1,0 +1,290 @@
+{
+ "daily": {
+  "prev_date": "2026-08-25",
+  "kpi": [
+   {
+    "label": "Days to release",
+    "prev": "6",
+    "now": "5",
+    "delta": "-1",
+    "cls": "good"
+   },
+   {
+    "label": "Scope items",
+    "prev": "28",
+    "now": "28",
+    "delta": "\u00b10",
+    "cls": "flat"
+   },
+   {
+    "label": "Open defects on scope",
+    "prev": "41",
+    "now": "38",
+    "delta": "-3",
+    "cls": "good"
+   },
+   {
+    "label": "High & Blocker",
+    "prev": "10",
+    "now": "14",
+    "delta": "+4",
+    "cls": "bad"
+   },
+   {
+    "label": "Weighted completion",
+    "prev": "59%",
+    "now": "63%",
+    "delta": "+4",
+    "cls": "good"
+   }
+  ],
+  "portal": [
+   {
+    "portal": "Distribution Portal",
+    "pct_prev": 73,
+    "pct_now": 73,
+    "pct_d": "\u00b10",
+    "pct_cls": "flat",
+    "def_prev": 34,
+    "def_now": 32,
+    "def_d": "-2",
+    "def_cls": "good",
+    "hi_prev": 8,
+    "hi_now": 10,
+    "hi_d": "+2",
+    "hi_cls": "bad"
+   },
+   {
+    "portal": "Admin Portal",
+    "pct_prev": 38,
+    "pct_now": 25,
+    "pct_d": "-13",
+    "pct_cls": "bad",
+    "def_prev": 5,
+    "def_now": 4,
+    "def_d": "-1",
+    "def_cls": "good",
+    "hi_prev": 1,
+    "hi_now": 3,
+    "hi_d": "+2",
+    "hi_cls": "bad"
+   },
+   {
+    "portal": "Bank Portal",
+    "pct_prev": 52,
+    "pct_now": 64,
+    "pct_d": "+12",
+    "pct_cls": "good",
+    "def_prev": 1,
+    "def_now": 1,
+    "def_d": "\u00b10",
+    "def_cls": "flat",
+    "hi_prev": 1,
+    "hi_now": 1,
+    "hi_d": "\u00b10",
+    "hi_cls": "flat"
+   },
+   {
+    "portal": "Channel",
+    "pct_prev": 13,
+    "pct_now": 33,
+    "pct_d": "+20",
+    "pct_cls": "good",
+    "def_prev": 1,
+    "def_now": 1,
+    "def_d": "\u00b10",
+    "def_cls": "flat",
+    "hi_prev": 0,
+    "hi_now": 0,
+    "hi_d": "\u00b10",
+    "hi_cls": "flat"
+   }
+  ],
+  "moves": [
+   {
+    "key": "AMP-3231",
+    "frm": "UAT TESTING",
+    "to": "Tested with Bugs",
+    "dir": "backward",
+    "feature": "UTM Management",
+    "portal": "Admin Portal"
+   },
+   {
+    "key": "AMP-3306",
+    "frm": "Implemented",
+    "to": "UAT TESTING",
+    "dir": "forward",
+    "feature": "Grace Period & Salary Date",
+    "portal": "Channel"
+   },
+   {
+    "key": "AMP-3239",
+    "frm": "IN DEVELOPMENT",
+    "to": "UAT TESTING",
+    "dir": "forward",
+    "feature": "Tuning Performance",
+    "portal": "Bank Portal"
+   },
+   {
+    "key": "AMP-2509",
+    "frm": "Ready To Clarify",
+    "to": "IN DEVELOPMENT",
+    "dir": "forward",
+    "feature": "Website & tracking",
+    "portal": "Channel"
+   }
+  ],
+  "scope": [],
+  "fixes": [
+   {
+    "dev": "Nguyen Trong Quan",
+    "delta": "+8",
+    "raw": 21
+   },
+   {
+    "dev": "Minh Hoang",
+    "delta": "+6",
+    "raw": 6
+   },
+   {
+    "dev": "Thanh Tung Nguyen",
+    "delta": "+2",
+    "raw": 13
+   },
+   {
+    "dev": "NgoHuu.Toan",
+    "delta": "+1",
+    "raw": 34
+   }
+  ],
+  "prev_run_id": "2026-08-25",
+  "same_day": false
+ },
+ "overnight": {
+  "prev_date": "2026-08-26",
+  "kpi": [
+   {
+    "label": "Days to release",
+    "prev": "5",
+    "now": "5",
+    "delta": "\u00b10",
+    "cls": "flat"
+   },
+   {
+    "label": "Scope items",
+    "prev": "28",
+    "now": "28",
+    "delta": "\u00b10",
+    "cls": "flat"
+   },
+   {
+    "label": "Open defects on scope",
+    "prev": "40",
+    "now": "38",
+    "delta": "-2",
+    "cls": "good"
+   },
+   {
+    "label": "High & Blocker",
+    "prev": "14",
+    "now": "14",
+    "delta": "\u00b10",
+    "cls": "flat"
+   },
+   {
+    "label": "Weighted completion",
+    "prev": "62%",
+    "now": "63%",
+    "delta": "+1",
+    "cls": "good"
+   }
+  ],
+  "portal": [
+   {
+    "portal": "Distribution Portal",
+    "pct_prev": 73,
+    "pct_now": 73,
+    "pct_d": "\u00b10",
+    "pct_cls": "flat",
+    "def_prev": 34,
+    "def_now": 32,
+    "def_d": "-2",
+    "def_cls": "good",
+    "hi_prev": 11,
+    "hi_now": 10,
+    "hi_d": "-1",
+    "hi_cls": "good"
+   },
+   {
+    "portal": "Admin Portal",
+    "pct_prev": 25,
+    "pct_now": 25,
+    "pct_d": "\u00b10",
+    "pct_cls": "flat",
+    "def_prev": 4,
+    "def_now": 4,
+    "def_d": "\u00b10",
+    "def_cls": "flat",
+    "hi_prev": 2,
+    "hi_now": 3,
+    "hi_d": "+1",
+    "hi_cls": "bad"
+   },
+   {
+    "portal": "Bank Portal",
+    "pct_prev": 59,
+    "pct_now": 64,
+    "pct_d": "+5",
+    "pct_cls": "good",
+    "def_prev": 1,
+    "def_now": 1,
+    "def_d": "\u00b10",
+    "def_cls": "flat",
+    "hi_prev": 1,
+    "hi_now": 1,
+    "hi_d": "\u00b10",
+    "hi_cls": "flat"
+   },
+   {
+    "portal": "Channel",
+    "pct_prev": 33,
+    "pct_now": 33,
+    "pct_d": "\u00b10",
+    "pct_cls": "flat",
+    "def_prev": 1,
+    "def_now": 1,
+    "def_d": "\u00b10",
+    "def_cls": "flat",
+    "hi_prev": 0,
+    "hi_now": 0,
+    "hi_d": "\u00b10",
+    "hi_cls": "flat"
+   }
+  ],
+  "moves": [
+   {
+    "key": "AMP-2269",
+    "frm": "Implemented",
+    "to": "UAT TESTING",
+    "dir": "forward",
+    "feature": "Grace Period & First EMI Day",
+    "portal": "Bank Portal"
+   }
+  ],
+  "scope": [],
+  "fixes": [
+   {
+    "dev": "Minh Hoang",
+    "delta": "+6",
+    "raw": 6
+   },
+   {
+    "dev": "Thanh Tung Nguyen",
+    "delta": "+2",
+    "raw": 13
+   }
+  ],
+  "prev_run_id": "2026-08-26",
+  "same_day": true
+ }
+}

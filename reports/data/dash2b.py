@@ -1,4 +1,5 @@
 from dash2 import *
+import json
 CSS = CSS_BASE + """
 .window{font-size:12.5px;opacity:.7;margin-bottom:24px;line-height:1.5}
 .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;max-width:620px}
@@ -29,6 +30,16 @@ td.tot{font-size:15px} td.big{font-size:16px}
 .relnums{display:flex;gap:34px}
 .rnv{font-size:28px;font-weight:900;line-height:1}
 .rnl{font-size:11px;opacity:.75;margin-top:5px}
+.sec{margin-top:14px;border-top:2px solid #edf2ff;padding-top:13px}
+.sech{display:flex;align-items:baseline;gap:9px;margin-bottom:7px}
+.sectag{background:#d92d20;color:#fff;font-size:9.5px;font-weight:900;letter-spacing:.9px;padding:2px 7px;border-radius:8px}
+.sect{font-size:12.5px;font-weight:900}
+.secx{font-size:11.5px;opacity:.72;line-height:1.55}
+.secx b{opacity:1}
+.secn{display:flex;gap:22px;margin:9px 0 2px;flex-wrap:wrap}
+.secn div{font-size:11px;opacity:.7}
+.secn b{display:block;font-size:19px;font-weight:900;letter-spacing:-.5px;opacity:1;margin-bottom:2px}
+.secred{color:#d92d20}
 """
 h=[]
 h.append('<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"><title>Defect &amp; Developer Performance</title>')
@@ -64,8 +75,8 @@ h.append('</div>')
 
 h.append('<div class="grid2b"><div class="card"><div class="ctitle">Fixes per developer</div>'
  f'<div class="csub">{F["total"]} verified fixes from {F["total_raw"]} raw To&nbsp;Do&nbsp;→&nbsp;UAT&nbsp;Testing transitions · '
- f'full changelog audit on all 141 tickets · '
- 'rate = fixes / available days (18 working days × allocation) · first-pass = not previously rejected back to To Do</div>'
+ f'full changelog audit on all {F["audit_coverage"].split("/")[1]} tickets · '
+ f'rate = fixes / available days ({F["working"]} working days × allocation) · first-pass = not previously rejected back to To Do</div>'
  '<table><thead><tr><th>Developer</th><th>Alloc</th><th class="num">Fixes</th><th>Share</th>'
  '<th class="num">%</th><th class="num">First&nbsp;pass</th><th class="num">Per day</th></tr></thead><tbody>')
 mx=max(r['fixes'] for r in F['rows']) or 1
@@ -77,7 +88,29 @@ for r in F['rows']:
     h.append(f'<tr{cls}><td class="wsname">{r["dev"]}<div class="sq">{r["squad"]}</div></td><td>{al}</td>'
              f'<td class="num tot">{r["fixes"]}</td><td class="progcell">{bar}</td><td class="num">{r["share"]}%</td>'
              f'<td class="num">{fp}</td><td class="num big">{r["rate"]}</td></tr>')
-h.append('</tbody></table></div>')
+h.append('</tbody></table>')
+
+S=json.load(open('security.json'))
+_ws=' · '.join(f'{w["name"]} {w["n"]}' for w in S['workstreams'])
+_by=', '.join(f'{d} {n}' for d,n in S['fixed_by'])
+_ow=' and '.join(S['open_owners'])
+_mult=round(S['pt_rework_pct']/S['all_rework_pct'],1) if S['all_rework_pct'] else 0
+h.append('<div class="sec"><div class="sech"><span class="sectag">SECURITY</span>'
+ f'<span class="sect">Penetration-test findings &mdash; verified by {S["tester"]}, {S["role"]}</span></div>'
+ '<div class="secn">'
+ f'<div><b>{S["raised"]}</b>raised</div>'
+ f'<div><b>{S["closed"]}</b>closed</div>'
+ f'<div><b class="secred">{S["open"]}</b>still open</div>'
+ f'<div><b>{S["fixed_in_window"]}</b>fixed this window</div>'
+ f'<div><b class="secred">{S["pt_rework_pct"]}%</b>rejected at least once</div>'
+ '</div>'
+ f'<div class="secx">{_ws}. Of the {S["fixed_in_window"]} PT findings fixed in this window '
+ f'({_by}), <b>{S["fixed_rework"]} were rejected back to To&nbsp;Do at least once &mdash; {S["pt_rework_pct"]}%, '
+ f'against {S["all_rework_pct"]}% across all fixes.</b> A security finding is {_mult}&times; more likely to come back '
+ f'than an ordinary defect, so PT work should be planned at roughly double its nominal cost. '
+ f'The last finding was raised {dt.date.fromisoformat(S["last_raised"]).strftime("%-d %B")} &mdash; the test wave is complete and what remains is verification. '
+ f'The {S["open"]} still open all sit with {_ow}, outside the eight-developer roster, so they do not appear in the queues above.</div></div>')
+h.append('</div>')
 h.append(f'<div class="card"><div class="ctitle">Time from raised to closed</div>'
  f'<div class="csub">{A["cyc_n"]} closed defects · median {A["cyc_median"]} days · the 31+ band is what threatens a release date</div>{cycle()}'
  f'<div class="legend"><span class="lg"><span class="sw" style="background:{BLUE}"></span>Within a week</span>'

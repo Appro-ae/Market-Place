@@ -1,0 +1,90 @@
+{
+ "tester": "Faeeq Ajaz",
+ "role": "Security tester",
+ "raised": 31,
+ "closed": 27,
+ "open": 4,
+ "last_raised": "2026-08-13",
+ "workstreams": [
+  {
+   "name": "BOD",
+   "n": 12
+  },
+  {
+   "name": "Partner Portal",
+   "n": 9
+  },
+  {
+   "name": "Bank Portal",
+   "n": 7
+  },
+  {
+   "name": "Admin Portal",
+   "n": 3
+  }
+ ],
+ "open_items": [
+  {
+   "key": "AMP-2505",
+   "ws": "BOD",
+   "pri": "Low",
+   "asg": "Faaiz Jaffar"
+  },
+  {
+   "key": "AMP-2521",
+   "ws": "BOD",
+   "pri": "Low",
+   "asg": "Faaiz Jaffar"
+  },
+  {
+   "key": "AMP-2522",
+   "ws": "BOD",
+   "pri": "Medium",
+   "asg": "Faaiz Jaffar"
+  },
+  {
+   "key": "AMP-2523",
+   "ws": "BOD",
+   "pri": "Medium",
+   "asg": "Faaiz Jaffar"
+  }
+ ],
+ "open_owners": [
+  "Faaiz Jaffar"
+ ],
+ "fixed_in_window": 11,
+ "fixed_rework": 9,
+ "pt_rework_pct": 82,
+ "all_rework_pct": 18,
+ "fixed_by": [
+  [
+   "NgoHuu.Toan",
+   6
+  ],
+  [
+   "Nguyen Trong Quan",
+   2
+  ],
+  [
+   "LongLH",
+   2
+  ],
+  [
+   "Tang Ha Long",
+   1
+  ]
+ ],
+ "fixed_keys": [
+  "AMP-2586",
+  "AMP-2589",
+  "AMP-2597",
+  "AMP-2614",
+  "AMP-2617",
+  "AMP-2659",
+  "AMP-2824",
+  "AMP-2875",
+  "AMP-3124",
+  "AMP-3193",
+  "AMP-3215"
+ ]
+}

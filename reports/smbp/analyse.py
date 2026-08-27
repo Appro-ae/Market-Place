@@ -151,7 +151,11 @@ out = dict(
   days=[x.isoformat() for x in days], raised=R, closed=K, cumR=cumR, cumK=cumK,
   tot_raised=sum(R), tot_closed=sum(K), cyc_bands=cyc_bands, cyc_median=median, cyc_n=len(cyc),
   dev_age=dev_age, rel_raised_since_cut=rel_raised_since_cut,
-  scope=scope)
+  scope=scope,
+  # --- chaining fields: consumed by movement.py on the next run ---
+  run_date=C['today'], run_id=C.get('run_id', C['today']),
+  scope_status={k: v['status'] for k, v in scope.items()},
+  dev_open_total=sum(v['total'] for v in dev_age.values()))
 json.dump(out, open('agg.json','w'), default=str, indent=1)
 
 print(f"\nRelease {C['release']} | {out['days_to_release']} days to release")

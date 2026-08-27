@@ -152,10 +152,24 @@ h.append(f'<style>{CSS}</style></head>\n<body><div class="wrap">')
 h.append(topbar('RELEASE 3.1 · 31 AUG 2026'))
 h.append('<h1>Release 3.1 — Programme Status</h1>')
 h.append('<div class="deck">AMP-2564 · Channel / Admin / Distribution Portal &nbsp;|&nbsp; AMP-3305 · Bank Portal</div>')
-h.append('<div class="csub" style="margin-bottom:22px">Refreshed live from Jira on 26 August 2026 · scope taken from the Release 3.1 tables in each CR</div>')
+h.append('<div class="csub" style="margin-bottom:22px">Refreshed live from Jira, as of 26 August 2026 23:59 GST · scope taken from the Release 3.1 tables in each CR</div>')
 
-fresh=len([b for b in A['high_list'] if b['age']<=2])
-h.append(f'<div class="alert">Since yesterday High &amp; Blocker has gone 10 → {A["high"]}, and {fresh} of the {A["high"]} were raised in the last 48 hours — almost all on Offline Bank (AMP-1957/1958/1959/1960) in Distribution Portal, with 5 working days to release.</div>')
+# --- headline banner, entirely data-driven so it can never go stale ---
+import collections as _c, datetime as _dt, json as _json
+C = _json.load(open('scope.json'))
+MV = _json.load(open('movement.json'))
+MVD = MV.get('daily') if isinstance(MV, dict) and 'daily' in MV else MV
+_hprev = next((k['prev'] for k in (MVD or {}).get('kpi', []) if k['label'] == 'High & Blocker'), None)
+_hmove = f'has gone {_hprev} → {A["high"]}' if _hprev is not None else f'stands at {A["high"]}'
+_fresh = [b for b in A['high_list'] if b['age'] <= 2]
+_top, _topn = _c.Counter(f'{b["feature"]} in {b["portal"]}' for b in _fresh).most_common(1)[0]
+_topkeys = sorted({b['parent'] for b in _fresh if f'{b["feature"]} in {b["portal"]}' == _top})
+_rel = _dt.date.fromisoformat(C['release_date']); _tod = _dt.date.fromisoformat(C['today'])
+_wd = sum(1 for i in range(1, (_rel - _tod).days + 1) if (_tod + _dt.timedelta(i)).weekday() < 5)
+h.append(f'<div class="alert">Since {"yesterday" if MVD else "the last run"} High &amp; Blocker {_hmove}, '
+ f'and {len(_fresh)} of the {A["high"]} were raised in the last 48 hours — '
+ f'{_topn} of those {len(_fresh)} on {_top} ({"/".join(_topkeys)}), '
+ f'with {_wd} working days to release.</div>')
 
 h.append('<div class="kpis">')
 for cls,num,lbl in [('y',A['days_to_release'],'Days to release'),('',28,'Release 3.1 items across both tickets'),
