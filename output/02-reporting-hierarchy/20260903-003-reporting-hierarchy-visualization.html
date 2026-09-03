@@ -8,12 +8,14 @@
 <style>
   :root{
     --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff;
+    /* portal visual language (from live Super Portal screenshots 02/09/2026) */
+    --p-dark:#1e1e1e; --p-red:#c02a11; --p-bg:#f4f4f6; --p-ink:#171717; --p-line:#e8e8ea;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'Lato',sans-serif;background:var(--lavender);color:var(--navy);padding:0 0 40px;}
   .classification{font-size:10px;letter-spacing:1px;color:var(--navy);background:var(--white);
     padding:6px 28px;border-bottom:1px solid rgba(26,33,77,0.10);font-weight:700;text-transform:uppercase;}
-  .page{max-width:1180px;margin:0 auto;padding:0 24px;}
+  .page{max-width:1220px;margin:0 auto;padding:0 24px;}
 
   /* header */
   .hdr{background:var(--white);border-radius:16px;margin-top:22px;padding:26px 30px;display:flex;
@@ -37,7 +39,7 @@
   .panel{display:none;}
   .panel.active{display:block;}
 
-  /* generic components */
+  /* generic doc components */
   .banner{border-radius:12px;padding:16px 20px;margin-bottom:16px;font-size:13.5px;line-height:1.55;
     background:rgba(59,126,246,0.07);border:1px solid rgba(59,126,246,0.25);color:var(--navy);}
   .banner-gold{background:rgba(253,186,35,0.10);border:1px solid rgba(253,186,35,0.45);}
@@ -57,7 +59,6 @@
   .chip-part{background:var(--yellow);color:var(--navy);}
   .chip-not{background:var(--navy);color:var(--white);}
   .chip-new{background:var(--yellow);color:var(--navy);}
-  .chip-gap{background:var(--navy);color:var(--white);}
   .chip-prop{background:var(--white);color:var(--blue);border:1px dashed var(--blue);}
   h2.sec{font-size:18px;font-weight:900;margin:22px 0 12px;color:var(--navy);}
   h2.sec .accent{color:var(--blue);}
@@ -77,49 +78,105 @@
   .fbox.navy .ftitle,.fbox.navy .fbody{color:var(--white);}
   .farrow{align-self:center;font-size:20px;color:rgba(26,33,77,0.30);font-weight:900;}
 
-  /* tables */
-  table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
-  th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
-  td{font-size:11.5px;padding:8px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.45;}
-  tr:nth-child(even) td{background:var(--lavender);}
+  /* doc tables */
+  .doc table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
+  .doc th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
+  .doc td{font-size:11.5px;padding:8px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.45;}
+  .doc tr:nth-child(even) td{background:var(--lavender);}
   .tbl-wrap{overflow-x:auto;border-radius:12px;}
 
-  /* org chart */
-  .sim{display:grid;grid-template-columns:340px 1fr;gap:16px;align-items:start;}
-  .org{background:var(--white);border-radius:14px;padding:18px;}
-  .org h3{font-size:13px;font-weight:900;margin-bottom:4px;}
-  .org .hint{font-size:10.5px;opacity:.7;margin-bottom:12px;}
-  .node{border:1.5px solid rgba(59,126,246,0.35);border-radius:10px;padding:8px 12px;margin:6px 0;cursor:pointer;
-    background:var(--white);transition:all .2s;position:relative;}
-  .node:hover{transform:translateY(-1px);border-color:var(--blue);}
-  .node.sel{background:var(--navy);border-color:var(--navy);}
-  .node.sel .nname,.node.sel .nrole{color:var(--white);}
-  .nname{font-size:12.5px;font-weight:900;color:var(--navy);}
-  .nrole{font-size:10px;color:var(--blue);font-weight:700;}
-  .lvl1{margin-left:0;} .lvl2{margin-left:26px;} .lvl3{margin-left:52px;}
-  .lvl2::before,.lvl3::before{content:"";position:absolute;left:-14px;top:50%;width:12px;height:1.5px;background:rgba(59,126,246,0.4);}
-  .toggle{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:11.5px;font-weight:700;}
-  .result-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
-  .scopebadge{font-size:11px;font-weight:900;background:rgba(59,126,246,0.10);border:1px solid rgba(59,126,246,0.35);
-    color:var(--navy);padding:5px 12px;border-radius:16px;}
-  .empty{background:var(--white);border-radius:12px;padding:30px;text-align:center;font-size:13px;font-weight:700;}
-  tr.rowhide{display:none;}
-  td .tagchip{font-size:9.5px;font-weight:900;padding:2px 8px;border-radius:10px;background:rgba(59,126,246,0.12);color:var(--navy);}
-  td .tagchip.un{background:var(--yellow);}
+  /* ═══════════ PORTAL RECREATION (faithful to Super Portal screenshots) ═══════════ */
+  .frame{border-radius:14px;overflow:hidden;border:1px solid rgba(26,33,77,0.15);background:var(--p-bg);
+    display:grid;grid-template-columns:216px 1fr;min-height:430px;}
+  .frame.noside{grid-template-columns:1fr;}
+  .pside{background:var(--p-dark);color:#fff;padding:14px 0 10px;display:flex;flex-direction:column;font-size:11.5px;}
+  .plogo{margin:0 14px 14px;background:#3a3a3a;border-radius:10px;padding:9px 12px;font-weight:900;font-size:13px;letter-spacing:.3px;
+    border-bottom:none;display:flex;align-items:center;gap:8px;}
+  .plogo .pdot{width:16px;height:16px;border-radius:50%;background:var(--p-red);display:inline-block;}
+  .pmenu{list-style:none;flex:1;}
+  .pmenu li{padding:8px 16px;display:flex;align-items:center;gap:9px;color:#e8e8e8;white-space:nowrap;}
+  .pmenu li .mi{width:15px;height:15px;border:1.5px solid #9a9a9a;border-radius:4px;flex-shrink:0;}
+  .pmenu li.chev::after{content:"⌄";margin-left:auto;color:#9a9a9a;}
+  .pmenu li.open::after{content:"⌃";margin-left:auto;color:#e8e8e8;}
+  .pmenu li.sub{padding-left:30px;}
+  .pmenu li.active-red{background:var(--p-red);border-radius:8px;margin:2px 10px;padding:8px 12px 8px 20px;font-weight:700;}
+  .pmenu li.dim{opacity:.85;}
+  .pmenu .pfoot{margin-top:10px;border-top:1px solid #3a3a3a;padding-top:8px;}
+  .pmain{padding:16px 18px;min-width:0;}
+  .ptitle{font-size:17px;font-weight:900;color:var(--p-ink);}
+  .pcrumb{font-size:10.5px;color:#8a8a8a;margin-top:3px;margin-bottom:12px;}
+  .pcrumb b{color:var(--p-ink);}
+  .ptab{display:inline-block;background:var(--p-dark);color:#fff;font-size:11.5px;font-weight:700;
+    padding:9px 20px;border-radius:8px 8px 0 0;}
+  .pcard{background:#fff;border-radius:0 10px 10px 10px;padding:12px;border:1px solid var(--p-line);}
+  .psearch{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .pselect{border:1px solid #d9d9dc;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;color:var(--p-ink);background:#fff;}
+  .pinput{flex:1;min-width:120px;border:1px solid #d9d9dc;border-radius:8px;padding:7px 10px;font-size:11px;color:#8a8a8a;background:#fff;}
+  .pradio{font-size:10.5px;color:var(--p-ink);display:flex;align-items:center;gap:4px;}
+  .pradio .rd{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--p-ink);display:inline-block;}
+  .pradio.on .rd{border-color:var(--p-red);box-shadow:inset 0 0 0 2.5px #fff, inset 0 0 0 8px var(--p-red);}
+  .pbtn{border:1px solid #d9d9dc;background:#fff;border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--p-ink);}
+  .pbtn.red{background:var(--p-red);border-color:var(--p-red);color:#fff;}
+  .ptable{width:100%;border-collapse:collapse;background:#fff;}
+  .ptable th{background:#efeff1;color:var(--p-ink);font-size:10px;font-weight:700;text-align:left;padding:7px 7px;vertical-align:top;}
+  .ptable td{font-size:10px;color:var(--p-ink);padding:8px 7px;border-top:1px solid var(--p-line);vertical-align:top;}
+  .ptable td:first-child{white-space:nowrap;}
+  .ptable tr:nth-child(even) td{background:#fafafb;}
+  .pchip{font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;}
+  .pchip.single{background:#e5f5e9;color:#1d7a3d;}
+  .pchip.joint{background:#efe7fb;color:#6b3fc9;}
+  .newcol{background:var(--yellow) !important;color:var(--navy) !important;}
+  .newcell{background:rgba(253,186,35,0.14) !important;font-weight:700;}
+  .uncell{color:#a35a00;font-weight:900;}
+  .pfootr{display:flex;justify-content:center;align-items:center;gap:8px;font-size:10.5px;color:#8a8a8a;padding:10px 0 2px;}
+  .pfootr .pg{background:var(--p-dark);color:#fff;border-radius:6px;padding:3px 8px;font-weight:700;}
+  .scopepill{display:inline-flex;align-items:center;gap:6px;background:rgba(253,186,35,0.16);border:1.5px solid var(--yellow);
+    color:var(--navy);font-size:10.5px;font-weight:900;padding:5px 12px;border-radius:16px;}
+  .empty-row td{text-align:center;padding:26px 0 !important;font-weight:900;font-size:12px;color:var(--p-red);white-space:normal;}
 
-  /* wireframes */
-  .wire{background:var(--white);border-radius:14px;padding:18px;}
-  .wire h3{font-size:13.5px;font-weight:900;margin-bottom:10px;}
-  .wfield{display:flex;align-items:center;gap:10px;margin:7px 0;}
-  .wlabel{width:170px;font-size:11.5px;font-weight:700;}
-  .winput{flex:1;border:1px solid rgba(26,33,77,0.2);border-radius:8px;padding:7px 10px;font-size:11.5px;background:var(--white);color:var(--navy);}
-  .winput.newf{border:2px solid var(--yellow);background:rgba(253,186,35,0.08);font-weight:700;}
-  .winput.propf{border:2px dashed var(--blue);background:rgba(59,126,246,0.05);font-weight:700;}
-  .legend{font-size:10.5px;margin-top:10px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  /* persona bar */
+  .simbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--white);border-radius:14px;
+    padding:12px 16px;margin-bottom:12px;}
+  .simbar .lbl{font-size:11.5px;font-weight:900;margin-right:2px;}
+  .pers{border:1.5px solid rgba(59,126,246,0.4);background:var(--white);color:var(--navy);border-radius:18px;
+    padding:6px 13px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Lato',sans-serif;transition:all .2s;}
+  .pers:hover{transform:translateY(-1px);}
+  .pers.sel{background:var(--navy);border-color:var(--navy);color:var(--white);}
+  .pers small{display:block;font-size:9px;font-weight:700;opacity:.75;}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;margin-left:auto;}
+  .orgline{font-size:10.5px;background:var(--white);border-radius:12px;padding:8px 16px;margin-bottom:12px;color:var(--navy);}
+  .orgline b{font-weight:900;}
+
+  /* customize drawer recreation */
+  .drawer{background:#fff;border-radius:10px;border:1px solid var(--p-line);padding:14px;max-width:420px;}
+  .drawer h4{font-size:14px;font-weight:900;color:var(--p-ink);margin-bottom:10px;}
+  .dcard{display:flex;align-items:center;gap:9px;border:1px solid var(--p-line);border-radius:10px;
+    padding:9px 11px;margin-bottom:7px;background:#fff;font-size:11px;color:var(--p-ink);}
+  .dcard .drag{color:#c2c2c6;font-size:12px;letter-spacing:1px;}
+  .dcard .cb{width:14px;height:14px;border-radius:4px;background:var(--p-ink);color:#fff;font-size:10px;line-height:14px;text-align:center;flex-shrink:0;}
+  .dcard .cb.off{background:#fff;border:1.5px solid #c2c2c6;}
+  .dcard .fixedtag{margin-left:auto;background:#efeff1;border-radius:8px;font-size:9px;font-weight:700;padding:2px 8px;color:#6a6a6a;}
+  .dcard.newrow{border:2px solid var(--yellow);background:rgba(253,186,35,0.10);font-weight:900;}
+  .dfoot{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;}
+
+  /* details recreation */
+  .dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px;}
+  .dfield .dl{font-size:10px;font-weight:900;color:var(--p-ink);}
+  .dfield .dv{font-size:10.5px;color:var(--p-ink);margin-top:2px;}
+  .dfield.newf{background:rgba(253,186,35,0.14);border:1.5px solid var(--yellow);border-radius:8px;padding:6px 8px;}
+  .acc{border:1px solid var(--p-line);border-radius:9px;background:#efeff1;font-size:11px;font-weight:900;color:var(--p-ink);
+    padding:9px 12px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;}
+  .acc span{color:#8a8a8a;}
+  .acc.open{background:var(--p-dark);color:#fff;}
+  .acc.newacc{border:2px dashed var(--blue);background:rgba(59,126,246,0.06);color:var(--navy);}
+  .accbody{border:1px solid var(--p-line);border-radius:9px;padding:10px 12px;margin:-3px 0 8px;background:#fff;font-size:10.5px;line-height:1.7;}
+
+  .legend{font-size:10.5px;margin-top:10px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:var(--navy);}
   .swatch{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:4px;}
+  tr.rowhide{display:none;}
 
   footer{margin-top:34px;text-align:center;font-size:10px;color:var(--navy);opacity:.75;line-height:1.6;}
-  @media (max-width:860px){ .sim,.grid-2,.grid-3{grid-template-columns:1fr;} }
+  @media (max-width:900px){ .grid-2,.grid-3,.dgrid{grid-template-columns:1fr;} .frame{grid-template-columns:1fr;} .pside{display:none;} }
 </style>
 </head>
 <body>
@@ -130,16 +187,16 @@
     <div>
       <span class="pill-tag">AMP-2548 · Sprint 13 · Ready To Clarify</span>
       <h1 style="margin-top:10px;">Reporting Hierarchy — <span class="accent">Visibility &amp; Case Assignment</span></h1>
-      <div class="sub">Function visualization of the BA's user story vs the CPO input requirements</div>
-      <div class="meta">Prepared by Huyen (PO) · 03/09/2026 · Sources: AMP-2548, AMP-3323 (UTM), ACP-226/227/258, ADIB-5651/6725/7172, live RAKBANK portal screenshots<br>
-      All screen data below is <b>illustrative</b> — names are taken from the user story's own examples.</div>
+      <div class="sub">The BA's user story rendered onto the live Super Portal screens, vs the CPO input requirements</div>
+      <div class="meta">Prepared by Huyen (PO) · 03/09/2026 · Sources: AMP-2548, AMP-3323 (UTM), ACP-226/227/258, ADIB-5651/6725/7172, live Super Portal screenshots (02/09/2026)<br>
+      Screen layouts recreated from the provided portal screenshots; bank logo replaced and all data replaced with <b>illustrative examples</b> — no customer information.</div>
     </div>
     <div class="dots"><span></span><span></span><span></span><span></span></div>
   </div>
 
   <div class="tabs">
     <button class="tab active" data-t="t1">1 · Overview</button>
-    <button class="tab" data-t="t2">2 · Hierarchy &amp; Visibility Simulator</button>
+    <button class="tab" data-t="t2">2 · Enquiry Simulator (live screen)</button>
     <button class="tab" data-t="t3">3 · Case Tagging Flow</button>
     <button class="tab" data-t="t4">4 · Screen Impact</button>
     <button class="tab" data-t="t5">5 · Gaps &amp; Decision</button>
@@ -208,53 +265,89 @@
     <p class="note">Yellow boxes = steps the US does not yet define. The filter (steps 4–5) cannot ship without the data steps (1–2).</p>
   </div>
 
-  <!-- ══════════ TAB 2 · SIMULATOR ══════════ -->
+  <!-- ══════════ TAB 2 · ENQUIRY SIMULATOR ON THE LIVE SCREEN ══════════ -->
   <div class="panel" id="t2">
     <div class="banner">
-      <b>Click a user</b> to log in as them. The application list applies AC4/AC5 exactly as written in the US.
-      Org structure uses the story's own example names (3 levels, matching the BA's "03-Level" mockup).
+      <b>Your Application Enquiry screen with the feature applied.</b> Pick who is logged in — the row set follows AC4/AC5 exactly.
+      The <span class="chip chip-new">Assigned To</span> column is the proposed addition; everything else is the screen as it runs today.
     </div>
-    <div class="sim">
-      <div class="org">
-        <h3>Reporting hierarchy</h3>
-        <div class="hint">User → Reporting Manager set on the user record (AC1)</div>
-        <div class="node lvl1 sel" data-u="fatima"><div class="nname">Fatima</div><div class="nrole">Head of Sales · RM: None</div></div>
-        <div class="node lvl2" data-u="jane"><div class="nname">Jane Smith</div><div class="nrole">Team Lead · RM: Fatima</div></div>
-        <div class="node lvl3" data-u="alice"><div class="nname">Alice Rahman</div><div class="nrole">Credit Officer · RM: Jane Smith</div></div>
-        <div class="node lvl2" data-u="john"><div class="nname">John Doe</div><div class="nrole">Team Lead · RM: Fatima</div></div>
-        <div class="node lvl3" data-u="khalid"><div class="nname">Khalid</div><div class="nrole">Sales Officer · RM: John Doe</div></div>
-        <div class="node lvl1" data-u="ops" style="border-style:dashed;"><div class="nname">Ops / Back-office user</div><div class="nrole">No cases · no reports</div></div>
-        <div class="toggle">
-          <input type="checkbox" id="viewall">
-          <label for="viewall">"View All Applications" permission <span class="chip chip-prop">Proposed R4</span></label>
+    <div class="simbar">
+      <span class="lbl">Logged in as:</span>
+      <button class="pers sel" data-u="fatima">Fatima<small>Head of Sales</small></button>
+      <button class="pers" data-u="jane">Jane Smith<small>Team Lead</small></button>
+      <button class="pers" data-u="john">John Doe<small>Team Lead</small></button>
+      <button class="pers" data-u="alice">Alice Rahman<small>Credit Officer</small></button>
+      <button class="pers" data-u="khalid">Khalid<small>Sales Officer</small></button>
+      <button class="pers" data-u="ops">Ops user<small>no cases · no reports</small></button>
+      <label class="toggle"><input type="checkbox" id="viewall"> "View All Applications" <span class="chip chip-prop">Proposed R4</span></label>
+    </div>
+    <div class="orgline">
+      <b>Reporting hierarchy (AC1):</b> Fatima → Jane Smith → Alice Rahman &nbsp;·&nbsp; Fatima → John Doe → Khalid &nbsp;·&nbsp; 3 levels, per the story's own examples
+      &nbsp;&nbsp;<span class="scopepill" id="scope">Manager · full subtree + own (AC5) · 6 of 7 rows</span>
+    </div>
+
+    <div class="frame">
+      <div class="pside">
+        <div class="plogo"><span class="pdot"></span> Bank Portal</div>
+        <ul class="pmenu">
+          <li><span class="mi"></span>Channel Management</li>
+          <li class="chev"><span class="mi"></span>Communication Setup</li>
+          <li class="chev"><span class="mi"></span>Product Setup</li>
+          <li><span class="mi"></span>Conditional Offer</li>
+          <li class="chev"><span class="mi"></span>Master List</li>
+          <li class="chev"><span class="mi"></span>Credit Decision</li>
+          <li class="chev"><span class="mi"></span>Limit Assignment</li>
+          <li><span class="mi"></span>Collateral Management</li>
+          <li class="open"><span class="mi"></span><b>Enquiry</b></li>
+          <li class="active-red">Application Enquiry</li>
+          <li class="chev"><span class="mi"></span>Manual Queue</li>
+          <li class="chev"><span class="mi"></span>Users Management</li>
+          <li class="chev"><span class="mi"></span>Assignment Management</li>
+          <li class="pfoot"><span class="mi"></span>Profile</li>
+          <li><span class="mi"></span>Logout</li>
+        </ul>
+      </div>
+      <div class="pmain">
+        <div class="ptitle">Application Enquiry</div>
+        <div class="pcrumb">Enquiry &nbsp;›&nbsp; <b>Application Enquiry</b></div>
+        <span class="ptab">Mortgage Loan</span>
+        <div class="pcard">
+          <div class="psearch">
+            <span class="pselect">Application ID &nbsp;▾</span>
+            <span class="pinput">Search</span>
+            <span class="pradio on"><span class="rd"></span>Like Search</span>
+            <span class="pradio"><span class="rd"></span>Equal Search</span>
+            <span class="pbtn" style="margin-left:auto;">Customized Table</span>
+          </div>
+          <div class="tbl-wrap">
+          <table class="ptable" id="apps">
+            <thead><tr>
+              <th>Application ID</th><th>Customer Name</th><th>Application Type</th><th>Relationship Type</th>
+              <th>Status</th><th>CIF</th><th>Previous Application Code</th><th>Channel</th>
+              <th class="newcol">Assigned To ★</th>
+            </tr></thead>
+            <tbody>
+              <tr data-o="fatima"><td>RAK_APPRO_202600000201</td><td>Customer A</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>Completed</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Fatima</td></tr>
+              <tr data-o="jane"><td>RAK_APPRO_202600000202</td><td>Customer B</td><td><span class="pchip single">Single</span></td><td>ETB</td><td>In Progress</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Jane Smith</td></tr>
+              <tr data-o="alice"><td>RAK_APPRO_202600000203</td><td>Customer C</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>Awaiting Customer Selection</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Alice Rahman</td></tr>
+              <tr data-o="alice"><td>RAK_APPRO_202600000204</td><td>Customer D</td><td><span class="pchip joint">Joint(1)</span></td><td>ETB</td><td>Completed</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Alice Rahman</td></tr>
+              <tr data-o="john"><td>RAK_APPRO_202600000205</td><td>Customer E</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>Cancelled</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">John Doe</td></tr>
+              <tr data-o="khalid"><td>RAK_APPRO_202600000206</td><td>Customer F</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>In Progress</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Khalid</td></tr>
+              <tr data-o="unassigned"><td>APPRO_APPRO_202600008401</td><td>Customer G</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>In Progress</td><td>–</td><td>–</td><td>APPRO</td><td class="newcell uncell">— Unassigned —</td></tr>
+              <tr class="empty-row rowhide" id="im005"><td colspan="9">IM005 — No results found</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <div class="pfootr">← Previous &nbsp;<span class="pg">1</span>&nbsp; Next →</div>
         </div>
       </div>
-      <div>
-        <div class="result-head">
-          <h2 class="sec" style="margin:0;">Application Enquiry — <span class="accent" id="whoami">Fatima</span></h2>
-          <span class="scopebadge" id="scope">Manager · full subtree + own</span>
-        </div>
-        <div class="tbl-wrap">
-        <table id="apps">
-          <thead><tr><th>Application ID</th><th>Customer Name</th><th>Status</th><th>Assigned To</th></tr></thead>
-          <tbody>
-            <tr data-o="fatima"><td>RAK_APPRO_202600000201</td><td>Customer A</td><td>Completed</td><td><span class="tagchip">Fatima</span></td></tr>
-            <tr data-o="jane"><td>RAK_APPRO_202600000202</td><td>Customer B</td><td>In Progress</td><td><span class="tagchip">Jane Smith</span></td></tr>
-            <tr data-o="alice"><td>RAK_APPRO_202600000203</td><td>Customer C</td><td>Awaiting Customer Selection</td><td><span class="tagchip">Alice Rahman</span></td></tr>
-            <tr data-o="alice"><td>RAK_APPRO_202600000204</td><td>Customer D</td><td>Completed</td><td><span class="tagchip">Alice Rahman</span></td></tr>
-            <tr data-o="john"><td>RAK_APPRO_202600000205</td><td>Customer E</td><td>Cancelled</td><td><span class="tagchip">John Doe</span></td></tr>
-            <tr data-o="khalid"><td>RAK_APPRO_202600000206</td><td>Customer F</td><td>In Progress</td><td><span class="tagchip">Khalid</span></td></tr>
-            <tr data-o="unassigned"><td>APPRO_APPRO_202600008401</td><td>Customer G</td><td>In Progress</td><td><span class="tagchip un">— Unassigned —</span></td></tr>
-          </tbody>
-        </table>
-        </div>
-        <div class="empty" id="im005" style="display:none;margin-top:10px;">IM005 — No results found</div>
-        <div class="banner banner-gold" style="margin-top:12px;font-size:12px;">
-          <b>Watch the last row.</b> The unassigned application (customer-direct, no staff tag) is visible to <b>nobody</b> under the US as written —
-          only the proposed View-All permission reveals it. This is gap R5: round-robin default assignment (ADIB-7172 pattern) or an explicit
-          Unassigned pool is required.
-        </div>
-      </div>
+    </div>
+
+    <div class="banner banner-gold" style="margin-top:12px;font-size:12px;">
+      <b>Watch the last row.</b> The unassigned APPRO-channel application (customer-direct, no staff tag) is visible to <b>nobody</b> under the US
+      as written — only the proposed View-All permission reveals it (try the Ops user, then tick the toggle). That is gap R5: round-robin default
+      assignment (ADIB-7172 pattern) or an explicit Unassigned pool is required. ★ AC6 keeps existing columns unchanged and filters rows invisibly —
+      the Assigned To column is my proposed addition so users understand why their list changed.
     </div>
   </div>
 
@@ -298,7 +391,7 @@
     </div>
 
     <h2 class="sec">Why Staff ID and not UTM <span class="accent">as the assignment key</span></h2>
-    <div class="tbl-wrap">
+    <div class="doc tbl-wrap">
     <table>
       <thead><tr><th style="width:20%;">Dimension</th><th>Staff ID / Sale Code</th><th>UTM (AMP-3323 — UAT Validated)</th></tr></thead>
       <tbody>
@@ -316,56 +409,143 @@
     </div>
   </div>
 
-  <!-- ══════════ TAB 4 · SCREEN IMPACT ══════════ -->
+  <!-- ══════════ TAB 4 · SCREEN IMPACT (on the real screens) ══════════ -->
   <div class="panel" id="t4">
     <div class="banner">
-      Wireframes reflect the live RAKBANK portal structure (screenshots 02/09/2026) with the US changes applied.
+      Every mock below reuses the layout of your Super Portal screenshots (02/09/2026) with the feature layered on.
       <span class="chip chip-new">NEW — in US</span>&nbsp;<span class="chip chip-prop">PROPOSED — closes a gap</span>
     </div>
+
+    <h2 class="sec">A · Customize Table — <span class="accent">where the new column appears</span> <span class="chip chip-prop">Proposed</span></h2>
     <div class="grid-2">
-      <div class="wire">
-        <h3>User Management · Add / Edit User <span class="chip chip-cov">AC1</span></h3>
-        <div class="wfield"><div class="wlabel">First Name</div><div class="winput">Alice</div></div>
-        <div class="wfield"><div class="wlabel">Last Name</div><div class="winput">Rahman</div></div>
-        <div class="wfield"><div class="wlabel">Email ID</div><div class="winput">alice.rahman@bank.com</div></div>
-        <div class="wfield"><div class="wlabel">Department</div><div class="winput">Credit Operations</div></div>
-        <div class="wfield"><div class="wlabel">Reporting Manager</div><div class="winput newf">Jane Smith (Credit Operations) ▾ — searchable, optional, no self-assignment</div></div>
-        <div class="wfield"><div class="wlabel">Sale Code / Staff ID</div><div class="winput propf">e.g. RAK00123 — unique, maker/checker, audited (gap R1)</div></div>
-        <div class="legend">
-          <span><span class="swatch" style="background:rgba(253,186,35,0.6);border:2px solid var(--yellow);"></span>NEW per US</span>
-          <span><span class="swatch" style="border:2px dashed var(--blue);background:rgba(59,126,246,0.05);"></span>Proposed — the matching key AC4 needs but the US never adds</span>
-        </div>
-        <p class="note">Saving follows Maker/Checker (AC7): request in Maker Queue → Checker approval → change effective. Old/new value comparison shows the Reporting Manager row.</p>
+      <div class="drawer">
+        <h4>Customize Table</h4>
+        <div class="dcard"><span>🔒</span><span class="cb">✓</span> Application ID <span class="fixedtag">Fixed</span></div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Customer Name</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Application Type</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Relationship Type (NTB/ETB)</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Status</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> CIF</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Previous Application Code</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb">✓</span> Channel</div>
+        <div class="dcard newrow"><span class="drag">⠿</span><span class="cb">✓</span> Assigned To (Sale Staff) <span class="fixedtag" style="background:var(--yellow);color:var(--navy);">NEW</span></div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb off"></span> Product Sub Type</div>
+        <div class="dcard"><span class="drag">⠿</span><span class="cb off"></span> Date of Application</div>
+        <div class="dfoot"><span class="pbtn">Reset</span><span class="pbtn red">Apply</span></div>
       </div>
-      <div class="wire">
-        <h3>User Management · List of Users <span class="chip chip-cov">AC3</span></h3>
-        <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>User Name</th><th>Email</th><th>Department</th><th style="background:var(--yellow);color:var(--navy);">Reporting Manager ⇅</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>Fatima</td><td>fatima@bank.com</td><td>Sales</td><td>—</td><td>Active</td></tr>
-            <tr><td>Jane Smith</td><td>jane.smith@bank.com</td><td>Credit Operations</td><td>Fatima</td><td>Active</td></tr>
-            <tr><td>Alice Rahman</td><td>alice.rahman@bank.com</td><td>Credit Operations</td><td>Jane Smith</td><td>Active</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <p class="note">New column after Department — sortable, in filter panel, in search scope, in export. View Details shows Reporting Manager read-only ("None" when empty) per AC2.</p>
-        <p class="note" style="font-weight:700;">Open lifecycle rules (R2): cycle validation beyond self-assignment · deactivating/deleting a manager who has reports · RM change mid-application moves historical cases between teams.</p>
+      <div class="card">
+        <h3>Why this drawer matters</h3>
+        <p>AC6 states existing columns remain unchanged and the pre-filter works invisibly. Recommendation: ship <b>Assigned To (Sale Staff)</b> as a
+        customizable column — default ON for managers and View-All users, so people understand why their row set changed.</p>
+        <ul>
+          <li>Follows the existing Customize Table pattern — drag to reorder, toggle to show/hide, Application ID stays Fixed.</li>
+          <li>Also add it to the filter panel and the export, same as every other column.</li>
+          <li class="ref">Precedent: ADIB-7388 — referral code stored in "Refer code" and displayed as staff referral in the Super Portal.</li>
+        </ul>
+        <p class="note">Filter/search/export behavior for the new column mirrors AC3's treatment of Reporting Manager on List of Users.</p>
       </div>
     </div>
-    <div class="wire" style="margin-top:14px;">
-      <h3>Enquiry · Application Enquiry <span class="chip chip-cov">AC4 / AC5 / AC6</span></h3>
-      <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Application ID</th><th>Customer Name</th><th>Application Type</th><th>Relationship Type</th><th>Status</th><th>CIF</th><th>Previous Application Code</th><th>Channel</th><th style="background:var(--yellow);color:var(--navy);">Assigned To *</th></tr></thead>
-        <tbody>
-          <tr><td>RAK_APPRO_202600000203</td><td>Customer C</td><td>Single</td><td>NTB</td><td>Awaiting Customer Selection</td><td>—</td><td>—</td><td>RAKBANK</td><td>Alice Rahman</td></tr>
-          <tr><td>RAK_APPRO_202600000204</td><td>Customer D</td><td>Single</td><td>ETB</td><td>Completed</td><td>—</td><td>—</td><td>RAKBANK</td><td>Alice Rahman</td></tr>
-        </tbody>
-      </table>
+
+    <h2 class="sec">B · Application Details — <span class="accent">show who owns the case</span> <span class="chip chip-prop">Proposed</span></h2>
+    <div class="frame noside">
+      <div class="pmain">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div class="ptitle">Application Details</div>
+            <div class="pcrumb">Enquiry &nbsp;›&nbsp; Application Enquiry &nbsp;›&nbsp; <b>Application Details</b></div>
+          </div>
+          <span class="pbtn">Cancel Application</span>
+        </div>
+        <div class="pcard" style="border-radius:10px;">
+          <div style="font-size:13px;font-weight:900;color:var(--p-ink);margin-bottom:10px;">Details</div>
+          <div class="dgrid">
+            <div class="dfield"><div class="dl">Application ID</div><div class="dv">RAK_APPRO_202600000203</div></div>
+            <div class="dfield"><div class="dl">Application Status</div><div class="dv">Awaiting Customer Selection</div></div>
+            <div class="dfield"><div class="dl">Application Created Date</div><div class="dv">14 Aug 2026</div></div>
+            <div class="dfield"><div class="dl">Product Type</div><div class="dv">Mortgage Loan</div></div>
+            <div class="dfield newf"><div class="dl">Assigned To ★</div><div class="dv"><b>Alice Rahman (RAK00123)</b></div></div>
+            <div class="dfield newf"><div class="dl">Capture Channel ★</div><div class="dv"><b>UTM · salesagentCode</b></div></div>
+            <div class="dfield newf"><div class="dl">Reporting Manager (at capture) ★</div><div class="dv"><b>Jane Smith</b></div></div>
+            <div class="dfield"><div class="dl">…</div><div class="dv">existing fields unchanged</div></div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:12px;">
+          <div class="pcard" style="border-radius:10px;">
+            <div style="font-size:11px;font-weight:900;margin-bottom:8px;color:var(--p-ink);">Audit trail (existing table + proposed entry)</div>
+            <div class="tbl-wrap">
+            <table class="ptable">
+              <thead><tr><th>No</th><th>Step</th><th>Step Details</th><th>State</th><th>Action By</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td class="newcell">Sale Staff Assignment ★</td><td class="newcell" style="white-space:normal;">Assigned To = RAK00123 via UTM salesagentCode</td><td>Lead</td><td>System</td></tr>
+                <tr><td>2</td><td>Finalize Income by ECB</td><td>Finalized Income is success</td><td>Awaiting Bank Approval</td><td>System</td></tr>
+                <tr><td>3</td><td>Application Score Generation</td><td>Application Score: 686</td><td>Awaiting Bank Approval</td><td>System</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <p class="note">Mirrors ADIB-6725 AC4 — "UTM Sourced application" as the first audit entry; here it records the staff tag + channel.</p>
+          </div>
+          <div class="pcard" style="border-radius:10px;">
+            <div style="font-size:11px;font-weight:900;margin-bottom:8px;color:var(--p-ink);">Right panel — Application Details tab</div>
+            <div class="acc">Failed Reason <span>⌄</span></div>
+            <div class="acc">Final Offer Details – AIP <span>⌄</span></div>
+            <div class="acc open">Application Details <span>⌃</span></div>
+            <div class="acc newacc">Sourcing &amp; Assignment ★ <span>⌃</span></div>
+            <div class="accbody">
+              <b>Assigned To:</b> Alice Rahman (RAK00123)<br>
+              <b>Capture channel:</b> UTM · salesagentCode<br>
+              <b>UTM Source / Medium / Campaign:</b> partner · website · Q3<br>
+              <b>Reporting Manager (at capture):</b> Jane Smith
+            </div>
+            <div class="acc">Income Related Info <span>⌄</span></div>
+            <div class="acc">Liability Info <span>⌄</span></div>
+            <div class="acc">Credit Indicator <span>⌄</span></div>
+          </div>
+        </div>
       </div>
-      <p class="note">Existing columns unchanged (AC6) — the row set shrinks via the pre-filter: staff → own cases; manager → subtree.
-      * The US keeps the filter invisible; showing an <b>Assigned To</b> column (at least for managers and view-all users) is proposed so users understand why the list changed. Report Enquiry follows the same scope incl. exports — baseline reference to be fixed (R6).</p>
+    </div>
+
+    <h2 class="sec">C · Users Management — <span class="accent">where the hierarchy is set</span> <span class="chip chip-new">AC1–AC3</span></h2>
+    <div class="frame noside">
+      <div class="pmain">
+        <div class="ptitle">Users Management</div>
+        <div class="pcrumb">Users &nbsp;›&nbsp; <b>User Management</b> &nbsp;›&nbsp; Edit User</div>
+        <div class="grid-2">
+          <div class="pcard" style="border-radius:10px;">
+            <div style="font-size:11px;font-weight:900;margin-bottom:8px;color:var(--p-ink);">Edit User</div>
+            <div class="dgrid" style="grid-template-columns:1fr 1fr;">
+              <div class="dfield"><div class="dl">First Name</div><div class="dv pinput" style="display:block;">Alice</div></div>
+              <div class="dfield"><div class="dl">Last Name</div><div class="dv pinput" style="display:block;">Rahman</div></div>
+              <div class="dfield"><div class="dl">Email ID</div><div class="dv pinput" style="display:block;">alice.rahman@bank.com</div></div>
+              <div class="dfield"><div class="dl">Department</div><div class="dv pinput" style="display:block;">Credit Operations</div></div>
+              <div class="dfield newf" style="grid-column:1/-1;"><div class="dl">Reporting Manager ★ NEW (AC1)</div><div class="dv"><b>Jane Smith (Credit Operations) ▾</b> — searchable dropdown of active users · optional · no self-assignment</div></div>
+              <div class="dfield" style="grid-column:1/-1;border:2px dashed var(--blue);border-radius:8px;padding:6px 8px;background:rgba(59,126,246,0.05);"><div class="dl" style="color:var(--blue);">Sale Code / Staff ID — PROPOSED (gap R1)</div><div class="dv"><b>RAK00123</b> — unique · maker/checker · audited · the matching key AC4 needs</div></div>
+            </div>
+            <p class="note">Save follows Maker/Checker (AC7): Maker Queue → Checker approval with old/new comparison → change effective.</p>
+          </div>
+          <div class="pcard" style="border-radius:10px;">
+            <div style="font-size:11px;font-weight:900;margin-bottom:8px;color:var(--p-ink);">List of Users (AC3)</div>
+            <div class="tbl-wrap">
+            <table class="ptable">
+              <thead><tr><th>User Name</th><th>Email</th><th>Department</th><th class="newcol">Reporting Manager ⇅ ★</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Fatima</td><td>fatima@bank.com</td><td>Sales</td><td class="newcell">—</td><td>Active</td></tr>
+                <tr><td>Jane Smith</td><td>jane.smith@bank.com</td><td>Credit Operations</td><td class="newcell">Fatima</td><td>Active</td></tr>
+                <tr><td>John Doe</td><td>john.doe@bank.com</td><td>Sales</td><td class="newcell">Fatima</td><td>Active</td></tr>
+                <tr><td>Alice Rahman</td><td>alice.rahman@bank.com</td><td>Credit Operations</td><td class="newcell">Jane Smith</td><td>Active</td></tr>
+                <tr><td>Khalid</td><td>khalid@bank.com</td><td>Sales</td><td class="newcell">John Doe</td><td>Active</td></tr>
+              </tbody>
+            </table>
+            </div>
+            <p class="note">New sortable column after Department — in the filter panel, search scope and export. View Details shows it read-only, "None" when empty (AC2).</p>
+            <p class="note" style="font-weight:700;">Open lifecycle rules (R2): cycle validation beyond self-assignment · deactivating/deleting a manager who has reports · RM change mid-application moves historical cases between teams.</p>
+          </div>
+        </div>
+        <p class="note">Add/Edit User screen was not in the provided screenshots — field layout indicative, chrome per portal style. The Enquiry screens above are recreated 1:1.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:rgba(253,186,35,0.6);border:2px solid var(--yellow);"></span>NEW per US / proposed column placement</span>
+      <span><span class="swatch" style="border:2px dashed var(--blue);background:rgba(59,126,246,0.05);"></span>PROPOSED — closes a gap the US doesn't cover yet</span>
     </div>
   </div>
 
@@ -412,7 +592,7 @@
 
   <footer>
     This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains<br>
-    Appro Onboarding Solutions FZ-LLC · Prepared 03/09/2026 · Illustrative data only — no customer information
+    Appro Onboarding Solutions FZ-LLC · Prepared 03/09/2026 · Screen recreations based on provided portal screenshots · Illustrative data only — no customer information
   </footer>
 </div>
 
@@ -437,32 +617,29 @@
     ops:[]
   };
   var LABEL = {
-    fatima:['Fatima','Manager · full subtree + own (AC5)'],
-    jane:['Jane Smith','Manager · subtree (Alice) + own (AC5)'],
-    john:['John Doe','Manager · subtree (Khalid) + own (AC5)'],
-    alice:['Alice Rahman','Staff · own cases only (AC4)'],
-    khalid:['Khalid','Staff · own cases only (AC4)'],
-    ops:['Ops / Back-office','No cases · no reports — sees nothing (gap R4)']
+    fatima:'Manager · full subtree + own (AC5)',
+    jane:'Manager · subtree (Alice) + own (AC5)',
+    john:'Manager · subtree (Khalid) + own (AC5)',
+    alice:'Staff · own cases only (AC4)',
+    khalid:'Staff · own cases only (AC4)',
+    ops:'No cases · no reports — sees nothing (gap R4)'
   };
   var current='fatima';
   function render(){
     var viewall=document.getElementById('viewall').checked;
     var allowed=SUBTREE[current]||[];
     var visible=0;
-    document.querySelectorAll('#apps tbody tr').forEach(function(tr){
-      var owner=tr.dataset.o;
-      var show=viewall||allowed.indexOf(owner)>=0;
+    document.querySelectorAll('#apps tbody tr[data-o]').forEach(function(tr){
+      var show=viewall||allowed.indexOf(tr.dataset.o)>=0;
       tr.classList.toggle('rowhide',!show);
       if(show)visible++;
     });
-    document.getElementById('whoami').textContent=LABEL[current][0];
-    document.getElementById('scope').textContent=(viewall?'View All permission · every case incl. unassigned':LABEL[current][1])+' · '+visible+' of 7 rows';
-    document.getElementById('im005').style.display=visible===0?'block':'none';
-    document.getElementById('apps').style.display=visible===0?'none':'table';
+    document.getElementById('scope').textContent=(viewall?'View All permission · every case incl. unassigned':LABEL[current])+' · '+visible+' of 7 rows';
+    document.getElementById('im005').classList.toggle('rowhide',visible!==0);
   }
-  document.querySelectorAll('.node').forEach(function(n){
+  document.querySelectorAll('.pers').forEach(function(n){
     n.addEventListener('click',function(){
-      document.querySelectorAll('.node').forEach(function(m){m.classList.remove('sel');});
+      document.querySelectorAll('.pers').forEach(function(m){m.classList.remove('sel');});
       n.classList.add('sel');
       current=n.dataset.u;
       render();
