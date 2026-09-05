@@ -147,7 +147,12 @@
         <div class="farrow">→</div>
         <div class="fbox"><div class="flabel">Governance</div><div class="ftitle">Maker → Checker</div><div class="fbody">Both fields via ACP-245 flow; uniqueness + cycle validated at save AND re-validated at Checker approval (AC10.5).</div></div>
         <div class="farrow">→</div>
-        <div class="fbox navy"><div class="flabel">Visible where</div><div class="ftitle">Details + List + Export</div><div class="fbody">Read-only on View Details; two sortable columns after Department on List of Users; in filter panel, search scope and export.</div></div>
+        <div class="fbox navy"><div class="flabel">Visible where</div><div class="ftitle">Details + List + Export</div><div class="fbody">Read-only on View Details ("—" / "None" when empty); two sortable columns after Department on List of Users; in filter panel, search scope and export.</div></div>
+      </div>
+      <div class="flow" style="margin-top:8px;">
+        <div class="fbox gold"><div class="flabel">If Staff ID left empty</div><div class="ftitle">Cannot be matched, not in pool</div><div class="fbody">No UTM attribution possible; excluded from the sales round-robin pool; sees applications only with the "View All Applications" permission. <span class="ref">AC1</span></div></div>
+        <div class="fbox gold"><div class="flabel">If Reporting Manager left empty</div><div class="ftitle">Standalone / top-level user</div><div class="fbody">No upstream manager; their applications are visible only to themselves and to View-All users. <span class="ref">AC1</span></div></div>
+        <div class="fbox"><div class="flabel">Maker / Checker request</div><div class="ftitle">Header + old/new comparison</div><div class="fbody">Request ID, Module = User Management, Type Create/Update/Delete, Status Pending Review, Updated By, Last Updated; Maker and Checker Detail show old vs new for Staff ID and RM (see W6). <span class="ref">AC10</span></div></div>
       </div>
     </div>
 
@@ -167,7 +172,7 @@
       <div class="flow">
         <div class="fbox"><div class="flabel">Staff-level</div><div class="ftitle">Own tagged cases only</div><div class="fbody">Logged-in Staff ID = application's attributed Staff ID. Empty → IM005.</div></div>
         <div class="farrow">→</div>
-        <div class="fbox"><div class="flabel">Manager</div><div class="ftitle">Full subtree, unlimited depth + own</div><div class="fbody">Recursive traversal of Reporting Manager chain. Real-time: RM change moves cases between managers immediately.</div></div>
+        <div class="fbox"><div class="flabel">Manager</div><div class="ftitle">Full subtree, unlimited depth + own</div><div class="fbody">Recursive traversal of the Reporting Manager chain (level 1, level 2 … until no more reports) plus the manager's own tagged cases. No reports and no own cases → IM005. Real-time: an RM change moves cases between managers immediately.</div></div>
         <div class="farrow">→</div>
         <div class="fbox"><div class="flabel">Ops / admin</div><div class="ftitle">"View All Applications"</div><div class="fbody">Role-level permission (Role Management, ACP-257 pattern), default off. Sees everything incl. untagged. Enquiry-only — no User Management rights.</div></div>
         <div class="farrow">→</div>
@@ -178,21 +183,26 @@
     <div class="lane">
       <div class="lane-title"><span class="lane-badge">Stage 4</span> Screens affected <span class="ref">AC9</span></div>
       <div class="flow">
-        <div class="fbox"><div class="flabel">Application Enquiry</div><div class="ftitle">Rows filtered + new column</div><div class="fbody">"Assigned To (Sale Staff)" via Customize Table — default ON for managers/View-All, OFF for staff. Existing columns and actions unchanged.</div></div>
+        <div class="fbox"><div class="flabel">Application Enquiry · ACP-226/227</div><div class="ftitle">Rows filtered + new column</div><div class="fbody">"Assigned To (Sale Staff)" added via Customize Table — default ON for managers/View-All, OFF for staff; "—" for untagged. Existing columns, actions and detail views unchanged.</div></div>
         <div class="farrow">→</div>
-        <div class="fbox"><div class="flabel">Application Details</div><div class="ftitle">New read-only field + audit</div><div class="fbody">"Assigned To (Sale Staff)" on the detail screen; first audit-trail entry at origination.</div></div>
+        <div class="fbox"><div class="flabel">Application Details · ACP-227</div><div class="ftitle">New read-only field + audit</div><div class="fbody">"Assigned To (Sale Staff)" on the View Detail screen; first audit-trail entry "Assigned to [Staff Name] via [UTM / Round-Robin]" at origination.</div></div>
         <div class="farrow">→</div>
-        <div class="fbox"><div class="flabel">Report Enquiry</div><div class="ftitle">Same scope incl. exports</div><div class="fbody">Staff → own; manager → subtree; View-All → all (ACP-230, ACP-265/266/268).</div></div>
+        <div class="fbox"><div class="flabel">Report Enquiry · ACP-230, 265/266/268</div><div class="ftitle">Same scope + same new column</div><div class="fbody">Report data scoped staff → own; manager → subtree; View-All → all. Exported report data follows the same scope. The Assigned To column is added to both enquiry screens.</div></div>
       </div>
     </div>
 
     <div class="lane">
-      <div class="lane-title"><span class="lane-badge">Stage 5</span> Lifecycle &amp; go-live <span class="ref">AC8 · IA2 · IA4</span></div>
+      <div class="lane-title"><span class="lane-badge">Stage 5</span> Lifecycle &amp; go-live <span class="ref">AC8 · IA1 · IA2 · IA3 · IA4</span></div>
       <div class="flow">
-        <div class="fbox"><div class="flabel">Deactivate manager</div><div class="ftitle">Blocked — IEM003</div><div class="fbody">Until all direct reports are re-pointed or set to None.</div></div>
-        <div class="fbox"><div class="flabel">Deactivate staff</div><div class="ftitle">Blocked — IEM004</div><div class="fbody">Until open tagged cases are reassigned or reach terminal status.</div></div>
-        <div class="fbox"><div class="flabel">RM change</div><div class="ftitle">Real-time recalculation</div><div class="fbody">After Checker approval; visibility follows the current hierarchy, not the one at creation.</div></div>
-        <div class="fbox navy"><div class="flabel">Go-live</div><div class="ftitle">Grant View-All to all, restrict progressively</div><div class="fbody">Historical cases have no tag; all existing enquiry users keep full visibility, then admins remove it as tagged volume builds.</div></div>
+        <div class="fbox"><div class="flabel">Deactivate / delete manager</div><div class="ftitle">Blocked — IEM003</div><div class="fbody">"Reporting Manager for [N] active user(s)" — until all direct reports are re-pointed to another RM or set to None.</div></div>
+        <div class="fbox"><div class="flabel">Deactivate staff with cases</div><div class="ftitle">Blocked — IEM004</div><div class="fbody">"[N] open tagged application(s)" — until open tagged cases are reassigned or reach a terminal status.</div></div>
+        <div class="fbox"><div class="flabel">RM change</div><div class="ftitle">Real-time recalculation</div><div class="fbody">Takes effect after Checker approval; existing tagged cases move with the user — visibility follows the current hierarchy, not the one at creation.</div></div>
+        <div class="fbox navy"><div class="flabel">Go-live · IA2</div><div class="ftitle">Grant View-All to all, restrict progressively</div><div class="fbody">Pre-existing applications have no tag; all existing enquiry users receive View-All at go-live, then admins remove it from staff-level users as tagged cases flow in.</div></div>
+      </div>
+      <div class="flow" style="margin-top:8px;">
+        <div class="fbox"><div class="flabel">IA1</div><div class="ftitle">Maker/Checker queue not affected</div><div class="fbody">Visibility rules do not change Maker/Checker routing, authority sets or approval levels.</div></div>
+        <div class="fbox gold"><div class="flabel">IA3 · flagged</div><div class="ftitle">Email notifications — RM in CC?</div><div class="fbody">Audit of all templates that notify the assigned staff; if CC is needed, a separate enhancement ticket defines which ones.</div></div>
+        <div class="fbox"><div class="flabel">IA4</div><div class="ftitle">Two portals, two permissions</div><div class="fbody">Distribution Portal captures salesagentCode and keeps "View All Application Sources" (AMP-3323); Bank Portal matches it to Staff ID and uses "View All Applications". Separate — no deduplication needed.</div></div>
       </div>
     </div>
   </div>
