@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP-2548 PO Review Pack — Flow, Wireframes, Best Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff;
+    --p-dark:#1e1e1e; --p-red:#c02a11; --p-bg:#f4f4f6; --p-ink:#171717; --p-line:#e8e8ea; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Lato',sans-serif;background:var(--lavender);color:var(--navy);padding:0 0 40px;}
+  .classification{font-size:10px;letter-spacing:1px;color:var(--navy);background:var(--white);
+    padding:6px 28px;border-bottom:1px solid rgba(26,33,77,0.10);font-weight:700;text-transform:uppercase;}
+  .page{max-width:1220px;margin:0 auto;padding:0 24px;}
+  .hdr{background:var(--white);border-radius:16px;margin-top:22px;padding:26px 30px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;}
+  .hdr h1{font-size:25px;font-weight:900;color:var(--navy);line-height:1.15;}
+  .hdr h1 .accent{color:var(--blue);}
+  .hdr .sub{font-size:13.5px;font-weight:700;color:var(--blue);margin-top:6px;}
+  .hdr .meta{font-size:11px;color:var(--navy);margin-top:10px;line-height:1.6;}
+  .dots{display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .dots span{width:14px;height:14px;border-radius:50%;background:var(--blue);display:inline-block;}
+  .dots span:last-child{margin-left:5px;}
+  .pill-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;color:var(--blue);border:1px solid rgba(59,126,246,0.35);background:rgba(59,126,246,0.09);}
+  .tabs{display:flex;gap:8px;margin:20px 0 18px;flex-wrap:wrap;}
+  .tab{border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;padding:10px 18px;border-radius:22px;background:var(--white);color:var(--navy);transition:all .25s;}
+  .tab:hover{transform:translateY(-1px);} .tab.active{background:var(--navy);color:var(--white);}
+  .panel{display:none;} .panel.active{display:block;}
+  h2.sec{font-size:18px;font-weight:900;margin:22px 0 4px;color:var(--navy);} h2.sec .accent{color:var(--blue);}
+  .secsub{font-size:12px;color:var(--navy);opacity:.75;margin-bottom:12px;}
+  .ref{font-size:10.5px;font-weight:700;color:var(--blue);}
+  .note{font-size:11px;color:var(--navy);opacity:.75;margin-top:8px;line-height:1.5;}
+  .banner{border-radius:12px;padding:15px 20px;margin:12px 0;font-size:13px;line-height:1.55;background:rgba(59,126,246,0.07);border:1px solid rgba(59,126,246,0.25);color:var(--navy);}
+  .banner-gold{background:rgba(253,186,35,0.10);border:1px solid rgba(253,186,35,0.45);}
+  .banner-navy{background:var(--navy);border:1px solid var(--navy);color:var(--white);}
+  .banner b{font-weight:900;}
+  .chip{display:inline-block;font-size:10px;font-weight:900;padding:3px 10px;border-radius:12px;letter-spacing:.4px;white-space:nowrap;}
+  .chip-al{background:var(--blue);color:var(--white);} .chip-con{background:var(--yellow);color:var(--navy);} .chip-gap{background:var(--navy);color:var(--white);}
+  .chip-new{background:var(--yellow);color:var(--navy);} .chip-prop{background:var(--white);color:var(--blue);border:1px dashed var(--blue);}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;} .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .card{background:var(--white);border-radius:14px;padding:18px;border-left:4px solid var(--blue);}
+  .card-gold{border-left-color:var(--yellow);} .card-navy{border-left-color:var(--navy);}
+  .card h3{font-size:14px;font-weight:900;margin-bottom:6px;} .card p,.card li{font-size:12px;line-height:1.6;} .card ul{padding-left:18px;margin-top:6px;}
+
+  /* flow lanes */
+  .lane{background:var(--white);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+  .lane-title{font-size:13px;font-weight:900;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .lane-badge{font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:12px;background:var(--navy);color:var(--white);}
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;}
+  .fbox{flex:1;min-width:140px;border-radius:12px;padding:11px 12px;background:var(--white);border:1.5px solid rgba(59,126,246,0.30);}
+  .fbox .flabel{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue);margin-bottom:4px;}
+  .fbox .ftitle{font-size:12px;font-weight:900;color:var(--navy);line-height:1.3;}
+  .fbox .fbody{font-size:10.5px;margin-top:5px;line-height:1.5;color:var(--navy);}
+  .fbox.gold{border-color:rgba(253,186,35,0.65);background:rgba(253,186,35,0.09);} .fbox.gold .flabel{color:var(--navy);}
+  .fbox.navy{background:var(--navy);border-color:var(--navy);} .fbox.navy .flabel{color:var(--yellow);} .fbox.navy .ftitle,.fbox.navy .fbody{color:var(--white);}
+  .farrow{align-self:center;font-size:17px;color:rgba(26,33,77,0.30);font-weight:900;}
+
+  /* doc tables */
+  .doc table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
+  .doc th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
+  .doc td{font-size:11px;padding:8px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.5;}
+  .doc tr:nth-child(even) td{background:var(--lavender);}
+  .tbl-wrap{overflow-x:auto;border-radius:12px;}
+
+  /* portal recreation */
+  .frame{border-radius:14px;overflow:hidden;border:1px solid rgba(26,33,77,0.15);background:var(--p-bg);display:grid;grid-template-columns:200px 1fr;margin-bottom:14px;}
+  .frame.noside{grid-template-columns:1fr;}
+  .pside{background:var(--p-dark);color:#fff;padding:12px 0 10px;display:flex;flex-direction:column;font-size:11px;}
+  .plogo{margin:0 12px 12px;background:#3a3a3a;border-radius:10px;padding:8px 11px;font-weight:900;font-size:12px;display:flex;align-items:center;gap:8px;}
+  .plogo .pdot{width:14px;height:14px;border-radius:50%;background:var(--p-red);display:inline-block;}
+  .pmenu{list-style:none;flex:1;} .pmenu li{padding:7px 14px;display:flex;align-items:center;gap:8px;color:#e8e8e8;white-space:nowrap;}
+  .pmenu li .mi{width:13px;height:13px;border:1.5px solid #9a9a9a;border-radius:4px;flex-shrink:0;}
+  .pmenu li.chev::after{content:"⌄";margin-left:auto;color:#9a9a9a;} .pmenu li.open::after{content:"⌃";margin-left:auto;color:#e8e8e8;}
+  .pmenu li.active-red{background:var(--p-red);border-radius:8px;margin:2px 9px;padding:7px 10px 7px 18px;font-weight:700;}
+  .pmain{padding:14px 16px;min-width:0;}
+  .ptitle{font-size:16px;font-weight:900;color:var(--p-ink);} .pcrumb{font-size:10px;color:#8a8a8a;margin:3px 0 10px;} .pcrumb b{color:var(--p-ink);}
+  .ptab{display:inline-block;background:var(--p-dark);color:#fff;font-size:11px;font-weight:700;padding:8px 18px;border-radius:8px 8px 0 0;}
+  .pcard{background:#fff;border-radius:10px;padding:12px;border:1px solid var(--p-line);}
+  .pcard.tabbed{border-radius:0 10px 10px 10px;}
+  .psearch{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .pselect{border:1px solid #d9d9dc;border-radius:8px;padding:6px 9px;font-size:10.5px;font-weight:700;color:var(--p-ink);background:#fff;}
+  .pinput{flex:1;min-width:110px;border:1px solid #d9d9dc;border-radius:8px;padding:6px 9px;font-size:10.5px;color:#8a8a8a;background:#fff;}
+  .pbtn{border:1px solid #d9d9dc;background:#fff;border-radius:8px;padding:6px 11px;font-size:10.5px;font-weight:700;color:var(--p-ink);display:inline-block;}
+  .pbtn.red{background:var(--p-red);border-color:var(--p-red);color:#fff;} .pbtn.dark{background:var(--p-dark);border-color:var(--p-dark);color:#fff;}
+  .ptable{width:100%;border-collapse:collapse;background:#fff;}
+  .ptable th{background:#efeff1;color:var(--p-ink);font-size:10px;font-weight:700;text-align:left;padding:7px 7px;vertical-align:top;}
+  .ptable td{font-size:10px;color:var(--p-ink);padding:8px 7px;border-top:1px solid var(--p-line);vertical-align:top;}
+  .ptable td:first-child{white-space:nowrap;} .ptable tr:nth-child(even) td{background:#fafafb;}
+  .pchip{font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;} .pchip.single{background:#e5f5e9;color:#1d7a3d;} .pchip.joint{background:#efe7fb;color:#6b3fc9;}
+  .newcol{background:var(--yellow) !important;color:var(--navy) !important;} .newcell{background:rgba(253,186,35,0.14) !important;font-weight:700;}
+  .dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 14px;}
+  .dgrid.two{grid-template-columns:1fr 1fr;}
+  .dfield .dl{font-size:9.5px;font-weight:900;color:var(--p-ink);} .dfield .dv{font-size:10.5px;color:var(--p-ink);margin-top:2px;}
+  .dfield.newf{background:rgba(253,186,35,0.14);border:1.5px solid var(--yellow);border-radius:8px;padding:6px 8px;}
+  .dfield.lockf{background:#f4f4f6;border:1.5px solid #c9c9ce;border-radius:8px;padding:6px 8px;}
+  .winput{border:1px solid #d9d9dc;border-radius:8px;padding:6px 9px;font-size:10.5px;background:#fff;color:var(--p-ink);display:block;margin-top:3px;}
+  .winput.newf{border:2px solid var(--yellow);background:rgba(253,186,35,0.08);font-weight:700;}
+  .winput.lock{background:#f4f4f6;color:#6a6a6a;border-style:dashed;}
+  .err{font-size:9.5px;color:var(--p-red);font-weight:700;margin-top:3px;}
+  .scopepill{display:inline-flex;align-items:center;gap:6px;background:rgba(253,186,35,0.16);border:1.5px solid var(--yellow);color:var(--navy);font-size:10px;font-weight:900;padding:4px 10px;border-radius:16px;}
+  .acc{border:1px solid var(--p-line);border-radius:9px;background:#efeff1;font-size:10.5px;font-weight:900;color:var(--p-ink);padding:8px 11px;margin-bottom:6px;display:flex;justify-content:space-between;}
+  .acc span{color:#8a8a8a;} .acc.open{background:var(--p-dark);color:#fff;}
+  .modal{max-width:420px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid var(--p-line);padding:16px;box-shadow:0 6px 24px rgba(0,0,0,0.08);}
+  .modal h4{font-size:12.5px;font-weight:900;color:var(--p-ink);margin-bottom:6px;} .modal p{font-size:10.5px;color:var(--p-ink);line-height:1.5;}
+  .toggle-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-top:1px solid var(--p-line);font-size:10.5px;color:var(--p-ink);}
+  .sw{width:30px;height:16px;border-radius:9px;background:#c9c9ce;position:relative;display:inline-block;} .sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;}
+  .sw.on{background:var(--p-red);} .sw.on::after{left:16px;}
+  .legend{font-size:10.5px;margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+  .swatch{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:4px;}
+  .wire-h{font-size:13px;font-weight:900;margin:14px 0 8px;color:var(--navy);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  footer{margin-top:34px;text-align:center;font-size:10px;color:var(--navy);opacity:.75;line-height:1.7;}
+  footer a{color:var(--blue);text-decoration:none;}
+  @media (max-width:900px){ .grid-2,.grid-3,.dgrid{grid-template-columns:1fr;} .frame{grid-template-columns:1fr;} .pside{display:none;} }
+</style>
+</head>
+<body>
+<div class="classification">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+<div class="page">
+
+  <div class="hdr">
+    <div>
+      <span class="pill-tag">AMP-2548 v4 · PO Final Review</span>
+      <h1 style="margin-top:10px;">Reporting Manager Visibility &amp; Case Assignment — <span class="accent">PO Review Pack</span></h1>
+      <div class="sub">Feature flow · wireframes on the live portal · design decisions vs market best practice</div>
+      <div class="meta">Prepared by Huyen (PO) · 05/09/2026 · Source: AMP-2548 v4 (05/09) · Market references: Salesforce Help (role hierarchy, queues, assignment rules, record ownership transfer), Microsoft Learn (Dynamics 365 hierarchy security, assignment rules) — links in footer · Screen layouts recreated from the live Super Portal; illustrative data only</div>
+    </div>
+    <div class="dots"><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-t="t1">1 · Feature Flow</button>
+    <button class="tab" data-t="t2">2 · Wireframes</button>
+    <button class="tab" data-t="t3">3 · Best-Practice Check</button>
+    <button class="tab" data-t="t4">4 · PO Decision</button>
+  </div>
+
+  <!-- ══════════ TAB 1 · FEATURE FLOW ══════════ -->
+  <div class="panel active" id="t1">
+    <div class="banner"><b>What v4 delivers in one sentence:</b> every user gets an immutable Staff ID and a Reporting Manager; every new application is tagged to a Staff ID at origination (UTM code or sales round-robin); enquiry screens show staff their own cases, managers their whole subtree, and View-All roles everything — governed by maker/checker, lifecycle guards and audit.</div>
+
+    <div class="lane">
+      <div class="lane-title"><span class="lane-badge">Stage 1</span> Setup — User Management <span class="ref">AC1 · AC2 · AC3 · AC10</span></div>
+      <div class="flow">
+        <div class="fbox"><div class="flabel">Add user</div><div class="ftitle">Staff ID (optional, unique)</div><div class="fbody">Alphanumeric ≤50, trimmed, case-insensitive unique (IEM001). Maps to UTM salesagentCode. <b>Read-only once approved</b> — correction = deactivate + recreate.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Add / edit user</div><div class="ftitle">Reporting Manager (optional)</div><div class="fbody">Searchable dropdown of active users. No self-assignment; cycle at any depth blocked (IEM002).</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Governance</div><div class="ftitle">Maker → Checker</div><div class="fbody">Both fields via ACP-245 flow; uniqueness + cycle validated at save AND re-validated at Checker approval (AC10.5).</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox navy"><div class="flabel">Visible where</div><div class="ftitle">Details + List + Export</div><div class="fbody">Read-only on View Details; two sortable columns after Department on List of Users; in filter panel, search scope and export.</div></div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-title"><span class="lane-badge">Stage 2</span> Attribution at origination <span class="ref">AC4</span></div>
+      <div class="flow">
+        <div class="fbox"><div class="flabel">URL has salesagentCode</div><div class="ftitle">UTM match → tagged</div><div class="fbody">Case-insensitive match to an active Staff ID → application tagged. Only UTM is attempted when a code is present.</div></div>
+        <div class="fbox gold"><div class="flabel">Code present but unmatched</div><div class="ftitle">Untagged + alert</div><div class="fbody">Typo / leaver → no fallback; ET51-pattern email to ops with code, app ref, timestamp. Visible to View-All only.</div></div>
+        <div class="fbox"><div class="flabel">No code in URL</div><div class="ftitle">Sales round-robin → tagged</div><div class="fbody">Pool = active users with Staff ID, per channel/product. Lowest attributed count, A→Z tiebreak. Writes the Staff ID attribution (not the queue's Assigned To).</div></div>
+        <div class="fbox gold"><div class="flabel">Pool empty</div><div class="ftitle">Untagged + alert</div><div class="fbody">Not configured for channel/product → untagged, alert to ops.</div></div>
+        <div class="fbox navy"><div class="flabel">Rule</div><div class="ftitle">Tag is immutable</div><div class="fbody">Set once at origination; audit entry "Assigned to [Staff] via [UTM / Round-Robin]".</div></div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-title"><span class="lane-badge">Stage 3</span> Visibility resolution — pre-filter before all existing filters <span class="ref">AC5 · AC6 · AC7</span></div>
+      <div class="flow">
+        <div class="fbox"><div class="flabel">Staff-level</div><div class="ftitle">Own tagged cases only</div><div class="fbody">Logged-in Staff ID = application's attributed Staff ID. Empty → IM005.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Manager</div><div class="ftitle">Full subtree, unlimited depth + own</div><div class="fbody">Recursive traversal of Reporting Manager chain. Real-time: RM change moves cases between managers immediately.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Ops / admin</div><div class="ftitle">"View All Applications"</div><div class="fbody">Role-level permission (Role Management, ACP-257 pattern), default off. Sees everything incl. untagged. Enquiry-only — no User Management rights.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox gold"><div class="flabel">Untagged cases</div><div class="ftitle">View-All only</div><div class="fbody">Not visible to any staff or manager.</div></div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-title"><span class="lane-badge">Stage 4</span> Screens affected <span class="ref">AC9</span></div>
+      <div class="flow">
+        <div class="fbox"><div class="flabel">Application Enquiry</div><div class="ftitle">Rows filtered + new column</div><div class="fbody">"Assigned To (Sale Staff)" via Customize Table — default ON for managers/View-All, OFF for staff. Existing columns and actions unchanged.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Application Details</div><div class="ftitle">New read-only field + audit</div><div class="fbody">"Assigned To (Sale Staff)" on the detail screen; first audit-trail entry at origination.</div></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="flabel">Report Enquiry</div><div class="ftitle">Same scope incl. exports</div><div class="fbody">Staff → own; manager → subtree; View-All → all (ACP-230, ACP-265/266/268).</div></div>
+      </div>
+    </div>
+
+    <div class="lane">
+      <div class="lane-title"><span class="lane-badge">Stage 5</span> Lifecycle &amp; go-live <span class="ref">AC8 · IA2 · IA4</span></div>
+      <div class="flow">
+        <div class="fbox"><div class="flabel">Deactivate manager</div><div class="ftitle">Blocked — IEM003</div><div class="fbody">Until all direct reports are re-pointed or set to None.</div></div>
+        <div class="fbox"><div class="flabel">Deactivate staff</div><div class="ftitle">Blocked — IEM004</div><div class="fbody">Until open tagged cases are reassigned or reach terminal status.</div></div>
+        <div class="fbox"><div class="flabel">RM change</div><div class="ftitle">Real-time recalculation</div><div class="fbody">After Checker approval; visibility follows the current hierarchy, not the one at creation.</div></div>
+        <div class="fbox navy"><div class="flabel">Go-live</div><div class="ftitle">Grant View-All to all, restrict progressively</div><div class="fbody">Historical cases have no tag; all existing enquiry users keep full visibility, then admins remove it as tagged volume builds.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TAB 2 · WIREFRAMES ══════════ -->
+  <div class="panel" id="t2">
+    <div class="banner">Layouts follow the live Super Portal screenshots. <span class="chip chip-new">NEW — in v4</span>&nbsp;<span class="chip chip-prop">Indicative — screen not in screenshots</span>. All data illustrative (names from the story's own examples).</div>
+
+    <div class="wire-h">W1 · Users Management › Add / Edit User <span class="chip chip-new">AC1 · AC10</span> <span class="chip chip-prop">Indicative layout</span></div>
+    <div class="frame">
+      <div class="pside">
+        <div class="plogo"><span class="pdot"></span> Bank Portal</div>
+        <ul class="pmenu">
+          <li><span class="mi"></span>Channel Management</li><li class="chev"><span class="mi"></span>Communication Setup</li><li class="chev"><span class="mi"></span>Product Setup</li>
+          <li><span class="mi"></span>Conditional Offer</li><li class="chev"><span class="mi"></span>Master List</li><li class="chev"><span class="mi"></span>Credit Decision</li>
+          <li class="chev"><span class="mi"></span>Limit Assignment</li><li><span class="mi"></span>Collateral Management</li><li class="chev"><span class="mi"></span>Enquiry</li>
+          <li class="chev"><span class="mi"></span>Manual Queue</li><li class="open"><span class="mi"></span><b>Users Management</b></li><li class="active-red">User Management</li>
+          <li class="chev"><span class="mi"></span>Assignment Management</li>
+        </ul>
+      </div>
+      <div class="pmain">
+        <div class="ptitle">Edit User</div>
+        <div class="pcrumb">Users &nbsp;›&nbsp; User Management &nbsp;›&nbsp; <b>Edit User</b></div>
+        <div class="pcard">
+          <div class="dgrid two">
+            <div class="dfield"><div class="dl">First Name</div><div class="winput">Alice</div></div>
+            <div class="dfield"><div class="dl">Last Name</div><div class="winput">Rahman</div></div>
+            <div class="dfield"><div class="dl">Email ID</div><div class="winput">alice.rahman@bank.com</div></div>
+            <div class="dfield"><div class="dl">Department</div><div class="winput">Credit Operations</div></div>
+            <div class="dfield"><div class="dl">Staff ID <span class="chip chip-new">NEW</span></div><div class="winput lock">STF-042 &nbsp;🔒 read-only once approved via Maker/Checker</div><div class="err" style="color:#6a6a6a;">Correction path: deactivate user → create new record with the correct Staff ID</div></div>
+            <div class="dfield"><div class="dl">Reporting Manager <span class="chip chip-new">NEW</span></div><div class="winput newf">Jane Smith (Credit Operations) ▾ &nbsp;— type to search active users</div><div class="err">IEM002 — This assignment would create a circular reporting chain</div></div>
+            <div class="dfield"><div class="dl">Role</div><div class="winput">Credit Officer</div></div>
+            <div class="dfield"><div class="dl">Status</div><div class="winput">Active</div></div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;"><span class="pbtn">Cancel</span><span class="pbtn red">Save Changes → Maker request</span></div>
+          <p class="note">On Add User the Staff ID is an editable text input; IEM001 "Staff ID already exists" blocks save (case-insensitive, trimmed). Uniqueness + cycle validation re-run at Checker approval.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="wire-h">W2 · View Details Users <span class="chip chip-new">AC2</span></div>
+        <div class="frame noside"><div class="pmain">
+          <div class="ptitle" style="font-size:14px;">User Details</div>
+          <div class="pcard"><div class="dgrid two">
+            <div class="dfield"><div class="dl">Full Name</div><div class="dv">Alice Rahman</div></div>
+            <div class="dfield"><div class="dl">Department</div><div class="dv">Credit Operations</div></div>
+            <div class="dfield newf"><div class="dl">Staff ID</div><div class="dv"><b>STF-042</b> &nbsp;<span style="color:#6a6a6a;">("—" when not assigned)</span></div></div>
+            <div class="dfield newf"><div class="dl">Reporting Manager</div><div class="dv"><b>Jane Smith</b> &nbsp;<span style="color:#6a6a6a;">("None" when empty)</span></div></div>
+          </div></div>
+        </div></div>
+      </div>
+      <div>
+        <div class="wire-h">W3 · List of Users <span class="chip chip-new">AC3</span></div>
+        <div class="frame noside"><div class="pmain">
+          <div class="psearch"><span class="pselect">Search: name · email · <b>Staff ID</b> · <b>RM</b></span><span class="pbtn">Filter ▾</span><span class="pbtn" style="margin-left:auto;">Export</span></div>
+          <div class="tbl-wrap"><table class="ptable">
+            <thead><tr><th>User Name</th><th>Email</th><th>Department</th><th class="newcol">Staff ID ⇅</th><th class="newcol">Reporting Manager ⇅</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Fatima</td><td>fatima@bank.com</td><td>Sales</td><td class="newcell">STF-001</td><td class="newcell">—</td><td>Active</td></tr>
+              <tr><td>Jane Smith</td><td>jane.smith@bank.com</td><td>Credit Operations</td><td class="newcell">STF-010</td><td class="newcell">Fatima</td><td>Active</td></tr>
+              <tr><td>Alice Rahman</td><td>alice.rahman@bank.com</td><td>Credit Operations</td><td class="newcell">STF-042</td><td class="newcell">Jane Smith</td><td>Active</td></tr>
+              <tr><td>Khalid</td><td>khalid@bank.com</td><td>Sales</td><td class="newcell">—</td><td class="newcell">John Doe</td><td>Active</td></tr>
+            </tbody></table></div>
+          <p class="note">Both columns sortable, in filter panel (text), in search scope and export. Khalid has no Staff ID → excluded from the round-robin pool, sees applications only with View-All.</p>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="wire-h">W4 · Enquiry › Application Enquiry — manager view <span class="chip chip-new">AC5 · AC6 · AC9</span></div>
+    <div class="frame">
+      <div class="pside">
+        <div class="plogo"><span class="pdot"></span> Bank Portal</div>
+        <ul class="pmenu">
+          <li><span class="mi"></span>Channel Management</li><li class="chev"><span class="mi"></span>Communication Setup</li><li class="chev"><span class="mi"></span>Product Setup</li>
+          <li><span class="mi"></span>Conditional Offer</li><li class="chev"><span class="mi"></span>Master List</li><li class="chev"><span class="mi"></span>Credit Decision</li>
+          <li class="chev"><span class="mi"></span>Limit Assignment</li><li><span class="mi"></span>Collateral Management</li><li class="open"><span class="mi"></span><b>Enquiry</b></li><li class="active-red">Application Enquiry</li>
+          <li class="chev"><span class="mi"></span>Manual Queue</li><li class="chev"><span class="mi"></span>Users Management</li><li class="chev"><span class="mi"></span>Assignment Management</li>
+        </ul>
+      </div>
+      <div class="pmain">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
+          <div><div class="ptitle">Application Enquiry</div><div class="pcrumb">Enquiry &nbsp;›&nbsp; <b>Application Enquiry</b></div></div>
+          <span class="scopepill">Logged in: Jane Smith · Manager · subtree (Alice Rahman) + own · 3 of 7 rows</span>
+        </div>
+        <span class="ptab">Mortgage Loan</span>
+        <div class="pcard tabbed">
+          <div class="psearch"><span class="pselect">Application ID ▾</span><span class="pinput">Search</span><span class="pbtn" style="margin-left:auto;">Customized Table</span></div>
+          <div class="tbl-wrap"><table class="ptable">
+            <thead><tr><th>Application ID</th><th>Customer Name</th><th>Application Type</th><th>Relationship Type</th><th>Status</th><th>CIF</th><th>Previous Application Code</th><th>Channel</th><th class="newcol">Assigned To (Sale Staff)</th></tr></thead>
+            <tbody>
+              <tr><td>RAK_APPRO_202600000202</td><td>Customer B</td><td><span class="pchip single">Single</span></td><td>ETB</td><td>In Progress</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Jane Smith</td></tr>
+              <tr><td>RAK_APPRO_202600000203</td><td>Customer C</td><td><span class="pchip single">Single</span></td><td>NTB</td><td>Awaiting Customer Selection</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Alice Rahman</td></tr>
+              <tr><td>RAK_APPRO_202600000204</td><td>Customer D</td><td><span class="pchip joint">Joint(1)</span></td><td>ETB</td><td>Completed</td><td>–</td><td>–</td><td>RAKBANK</td><td class="newcell">Alice Rahman</td></tr>
+            </tbody></table></div>
+          <p class="note">Column default ON for managers and View-All users, OFF for staff (they only see their own). Untagged applications show "—" and appear only for View-All users. Existing actions (e.g. Cancel Application on the detail page) remain available to anyone who can see the row — see Best-Practice item 3.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="wire-h">W5 · Application Details <span class="chip chip-new">AC9</span></div>
+        <div class="frame noside"><div class="pmain">
+          <div class="ptitle" style="font-size:14px;">Application Details</div>
+          <div class="pcrumb">Enquiry › Application Enquiry › <b>Application Details</b></div>
+          <div class="pcard"><div class="dgrid two">
+            <div class="dfield"><div class="dl">Application ID</div><div class="dv">RAK_APPRO_202600000203</div></div>
+            <div class="dfield"><div class="dl">Application Status</div><div class="dv">Awaiting Customer Selection</div></div>
+            <div class="dfield newf"><div class="dl">Assigned To (Sale Staff)</div><div class="dv"><b>Alice Rahman</b></div></div>
+            <div class="dfield"><div class="dl">Product Type</div><div class="dv">Mortgage Loan</div></div>
+          </div></div>
+          <div class="pcard" style="margin-top:8px;"><div style="font-size:10px;font-weight:900;margin-bottom:6px;">Audit trail</div>
+            <div class="tbl-wrap"><table class="ptable"><thead><tr><th>No</th><th>Step</th><th>Step Details</th><th>Action By</th></tr></thead>
+            <tbody><tr><td>1</td><td class="newcell">Assigned to Alice Rahman via UTM</td><td class="newcell">Staff ID STF-042 · origination</td><td>System</td></tr>
+            <tr><td>2</td><td>Finalize Income by ECB</td><td>Finalized Income is success</td><td>System</td></tr></tbody></table></div>
+          </div>
+        </div></div>
+      </div>
+      <div>
+        <div class="wire-h">W6 · Checker Detail — old / new comparison <span class="chip chip-new">AC10</span></div>
+        <div class="frame noside"><div class="pmain">
+          <div class="ptitle" style="font-size:14px;">Checker Queue › Request #RQ-1042</div>
+          <div class="pcrumb">Module: User Management · Type: Update · Status: <b>Pending Review</b> · Updated by: Maker name</div>
+          <div class="pcard"><div class="tbl-wrap"><table class="ptable">
+            <thead><tr><th>Field</th><th>Old Value</th><th>New Value</th></tr></thead>
+            <tbody>
+              <tr><td>First Name</td><td>Alice</td><td>Alice</td></tr>
+              <tr><td>Department</td><td>Credit Operations</td><td>Credit Operations</td></tr>
+              <tr><td class="newcell">Staff ID</td><td class="newcell">—</td><td class="newcell"><b>STF-042</b> (first-time assignment)</td></tr>
+              <tr><td class="newcell">Reporting Manager</td><td class="newcell">Jane Smith</td><td class="newcell"><b>John Doe</b></td></tr>
+            </tbody></table></div>
+            <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;"><span class="pbtn">Reject</span><span class="pbtn dark">Approve → re-validates IEM001 / IEM002</span></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div>
+        <div class="wire-h">W7 · Role Management <span class="chip chip-new">AC7</span> <span class="chip chip-prop">Indicative</span></div>
+        <div class="pcard"><div style="font-size:11px;font-weight:900;color:var(--p-ink);margin-bottom:4px;">Role: Credit Operations · Module: Enquiry</div>
+          <div class="toggle-row">View Application Enquiry <span class="sw on"></span></div>
+          <div class="toggle-row">View Report Enquiry <span class="sw on"></span></div>
+          <div class="toggle-row" style="background:rgba(253,186,35,0.14);font-weight:900;">View All Applications <span class="chip chip-new">NEW</span> <span class="sw on"></span></div>
+          <p class="note">Default off. Bypasses AC5/AC6 on Enquiry screens only. At go-live granted to all existing enquiry users (IA2), then restricted progressively.</p>
+        </div>
+      </div>
+      <div>
+        <div class="wire-h">W8 · Deactivation guard <span class="chip chip-new">AC8</span> <span class="chip chip-prop">Indicative</span></div>
+        <div class="modal"><h4>Cannot deactivate Alice Rahman</h4>
+          <p><b>IEM004</b> — This user has <b>2</b> open tagged application(s). Reassign their cases before deactivating.</p>
+          <p style="margin-top:6px;color:#6a6a6a;">Manager variant — <b>IEM003</b>: This user is the Reporting Manager for [N] active user(s). Reassign their reports before deactivating.</p>
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;"><span class="pbtn">Close</span><span class="pbtn dark">Go to cases</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="wire-h">W9 · Ops alert — unmatched code <span class="chip chip-new">AC4</span> <span class="chip chip-prop">Indicative</span></div>
+        <div class="pcard" style="font-size:10.5px;color:var(--p-ink);line-height:1.6;">
+          <b>Subject:</b> [Bank Portal] Unmatched sales agent code for RAK_APPRO_202600000209<br>
+          <b>To:</b> Queue / Ops admin<br><br>
+          Dear Admin, the salesagentCode <b>"stf-0042"</b> received on 05/09/2026 10:41:12 does not match any active Staff ID. The application remains untagged and is visible to View-All users only. Please investigate.<br>
+          <span class="note">Same ET51 pattern fires when the round-robin pool is empty for the channel/product.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TAB 3 · BEST-PRACTICE CHECK ══════════ -->
+  <div class="panel" id="t3">
+    <div class="banner"><b>Method.</b> Each v4 design decision is compared with how the reference products in the market implement the same concept — Salesforce (role hierarchy, queues, assignment rules, ownership transfer) and Microsoft Dynamics 365 (hierarchy security, assignment rules) — plus banking dual-control norms. Verdicts: <span class="chip chip-al">Aligned</span> follows market practice · <span class="chip chip-con">Consider</span> works, but market handles it more robustly · <span class="chip chip-gap">Gap</span> market-standard capability missing.</div>
+    <div class="doc tbl-wrap">
+    <table>
+      <thead><tr><th style="width:3%;">#</th><th style="width:15%;">Design decision</th><th style="width:22%;">AMP-2548 v4</th><th style="width:27%;">Market practice (documented)</th><th style="width:9%;">Verdict</th><th>PO note</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><b>Ownership key = person</b></td><td>Immutable Staff ID per user; application tagged to one Staff ID</td><td>Salesforce and Dynamics both model access around a single record Owner (user); hierarchy access is derived from the owner.</td><td><span class="chip chip-al">Aligned</span></td><td>Correct foundation. Person-level tag is what makes both visibility and sales reporting work.</td></tr>
+        <tr><td>2</td><td><b>Manager visibility via hierarchy</b></td><td>Full reporting subtree, unlimited depth, real-time</td><td>Salesforce role hierarchy: users see all data owned by users below them (no depth cap). Dynamics manager hierarchy: configurable <b>Depth</b> limits how many levels down a manager sees; Microsoft recommends keeping the effective hierarchy ≤50 users under a manager for performance.</td><td><span class="chip chip-con">Consider</span></td><td>Unlimited depth matches Salesforce, but Dynamics' depth setting exists for a reason — performance and over-exposure at the top of large orgs. Ask dev for a materialized subtree (closure table) and keep a configurable depth cap in the back pocket.</td></tr>
+        <tr><td>3</td><td><b>Read vs act on subordinates' cases</b></td><td>AC9: "existing actions remain unchanged" — anyone who sees a row can use its actions (e.g. Cancel Application on the detail page)</td><td>Dynamics distinguishes: direct reports → Read/Write; non-direct reports deeper in the chain → <b>read-only</b>.</td><td><span class="chip chip-con">Consider</span></td><td>Decide explicitly whether a Head of Sales may cancel a case three levels down. Market default is read-only beyond direct reports; at minimum state the rule in AC9.</td></tr>
+        <tr><td>4</td><td><b>Bypass for operations</b></td><td>"View All Applications" role permission, default off, Enquiry-only</td><td>Salesforce "View All" object permission and Dynamics organization-level access serve exactly this purpose; both are role/profile-level.</td><td><span class="chip chip-al">Aligned</span></td><td>Correct scoping (Enquiry only, no User Management rights).</td></tr>
+        <tr><td>5</td><td><b>Unassigned cases</b></td><td>Untagged → visible to View-All only + alert email to ops</td><td>Salesforce Queues: unassigned records are owned by a <b>queue</b>; queue members and users above them in the hierarchy can view and take ownership. Assignment rules route to a user <i>or a queue</i>.</td><td><span class="chip chip-con">Consider</span></td><td>Market puts unassigned leads where sales can pick them up; v4 parks them with ops. Consider an "Unassigned" sales pool visible to sales managers (queue pattern) — an alert email alone does not convert a lead.</td></tr>
+        <tr><td>6</td><td><b>Auto-assignment method</b></td><td>Load-based: lowest attributed count, A→Z tiebreak, pool per channel/product</td><td>Dynamics 365 Sales assignment rules offer both <b>round robin</b> (turn-based on last assignment) and <b>load balancing</b> (capacity-based), plus availability and capacity flags. Salesforce lead assignment rules route by criteria to users/queues.</td><td><span class="chip chip-al">Aligned</span></td><td>Load-based is a recognised market option. Phase 2 candidates from the market: seller availability (leave) and capacity caps.</td></tr>
+        <tr><td>7</td><td><b>Ownership transfer</b></td><td>Attribution immutable; no reassignment function (AC8 IEM004 nevertheless asks for cases to be "reassigned")</td><td>Salesforce: <b>Change Owner</b> per record and <b>Mass Transfer Records</b>; deactivation guidance is to transfer records owned by the leaving user. Dynamics: Assign action on any owned record.</td><td><span class="chip chip-gap">Gap</span></td><td>The one market-standard capability missing. Ownership transfer with audit is universal in CRM/LOS; needed for leavers, corrections and territory moves. (Known open point — small AC to add.)</td></tr>
+        <tr><td>8</td><td><b>Leaver handling</b></td><td>Deactivation blocked until reports re-pointed (IEM003) and open cases reassigned (IEM004)</td><td>Salesforce lets records stay owned by an inactive user and recommends transferring them; v4 is stricter by design.</td><td><span class="chip chip-al">Aligned</span></td><td>Stricter than market — good for a bank — but only workable once item 7 exists.</td></tr>
+        <tr><td>9</td><td><b>Hierarchy changes are real-time</b></td><td>RM change recalculates visibility immediately; historical cases move with the user</td><td>Salesforce role changes take effect on the user's next access (real-time from a business standpoint); sharing is recalculated by the platform.</td><td><span class="chip chip-al">Aligned</span></td><td>Note for reporting: manager roll-ups shift when the org chart changes. The immutable origination tag already preserves individual sales credit — good.</td></tr>
+        <tr><td>10</td><td><b>Owner visible on list &amp; detail + audit</b></td><td>"Assigned To (Sale Staff)" column (Customize Table), detail field, first audit entry</td><td>Owner column and ownership history are standard on every CRM list and record.</td><td><span class="chip chip-al">Aligned</span></td><td>Default ON for managers/View-All, OFF for staff is a sensible choice.</td></tr>
+        <tr><td>11</td><td><b>Dual control on hierarchy changes</b></td><td>Maker/Checker on Staff ID and RM; validations re-run at Checker approval</td><td>Four-eyes on access-affecting configuration is standard bank control; CRMs rely on admin permissions + audit instead.</td><td><span class="chip chip-al">Aligned</span></td><td>Stronger than CRM norm — appropriate for a bank portal.</td></tr>
+        <tr><td>12</td><td><b>Hierarchy integrity</b></td><td>Self-assignment and cycles at any depth blocked (IEM002)</td><td>Every hierarchy implementation enforces acyclic structure.</td><td><span class="chip chip-al">Aligned</span></td><td>—</td></tr>
+        <tr><td>13</td><td><b>Identifier immutability</b></td><td>Staff ID read-only once approved; correction = deactivate + recreate</td><td>Employee/agent identifiers are normally immutable keys; corrections usually happen via a controlled re-key rather than a new person record.</td><td><span class="chip chip-con">Consider</span></td><td>Recreating a user for a typo is heavy (email uniqueness, lost history). A controlled "correct Staff ID" via Maker/Checker that re-points existing tags would be closer to practice — acceptable to defer.</td></tr>
+        <tr><td>14</td><td><b>Delegation / team coverage</b></td><td>Not in scope — visibility is strictly self + subtree</td><td>Salesforce sharing rules, public groups and territories; Dynamics teams/access teams — peers covering leave or branch-level views are standard.</td><td><span class="chip chip-con">Consider</span></td><td>Sales teams will ask for "cover my cases while I'm on leave" within weeks of go-live. Put delegated access / branch sharing on the phase-2 backlog now.</td></tr>
+        <tr><td>15</td><td><b>Rollout</b></td><td>Grant View-All to all existing enquiry users at go-live, restrict progressively</td><td>Phased tightening is the common pattern for introducing record-level security on a live system.</td><td><span class="chip chip-al">Aligned</span></td><td>Add the restriction criteria and target date (e.g. "remove from staff roles once ≥X% of open cases are tagged") so "progressively" has an owner.</td></tr>
+        <tr><td>16</td><td><b>Capture completeness</b></td><td>Phase 1: UTM + round-robin only (QR/manual deferred)</td><td>Lead capture in market products accepts multiple sources; ADIB's own journeys use QR + manual code too.</td><td><span class="chip chip-con">Consider</span></td><td>Acceptable phase-1 cut; keep QR/manual as the first phase-2 item so assisted branch sales are attributed to the right person.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Score: 9 Aligned · 6 Consider · 1 Gap. Sources: Salesforce Help — Controlling Access Using the Role Hierarchy; Create Queues / Guidelines for Assignment Rules; Mass Transfer Records; Change a Record's Owner. Microsoft Learn — Hierarchy security to control access (Power Platform / Dynamics 365); Understand record distribution in assignment rules (Dynamics 365 Sales). Full links in footer.</p>
+  </div>
+
+  <!-- ══════════ TAB 4 · PO DECISION ══════════ -->
+  <div class="panel" id="t4">
+    <div class="banner banner-navy"><b>Recommendation: Approve for development with three explicit decisions recorded, and a named phase-2 backlog.</b> The design follows market practice on ownership, hierarchy access, ops bypass, assignment, audit and dual control — stronger than CRM norms on governance. The differences are choices, not mistakes, and should be recorded as such.</div>
+    <div class="grid-3">
+      <div class="card card-gold">
+        <h3>Decision 1 — Manager rights beyond read</h3>
+        <p>Can a manager act (e.g. Cancel Application) on cases of indirect reports? Market default: read-only beyond direct reports. State the rule in AC9.</p>
+      </div>
+      <div class="card card-gold">
+        <h3>Decision 2 — Where do unassigned cases live?</h3>
+        <p>Ops alert only (v4) or an "Unassigned" pool visible to sales managers (queue pattern) so leads get worked, not just reported.</p>
+      </div>
+      <div class="card card-navy">
+        <h3>Decision 3 — Ownership transfer</h3>
+        <p>Add the small "Reassign Case (Sale Staff)" AC (permission-gated, maker/checker, audited). It is the only market-standard capability missing and IEM004 already assumes it exists.</p>
+      </div>
+    </div>
+    <h2 class="sec">Phase-2 backlog <span class="accent">(from the market comparison)</span></h2>
+    <div class="grid-2">
+      <div class="card"><h3>Attribution</h3><ul><li>QR / manual staff-code capture for assisted journeys (ADIB pattern)</li><li>Seller availability and capacity awareness in round-robin (Dynamics pattern)</li><li>Controlled Staff ID correction that re-points tags (instead of deactivate + recreate)</li></ul></div>
+      <div class="card"><h3>Visibility &amp; scale</h3><ul><li>Delegated access / leave cover and branch-level sharing</li><li>Configurable hierarchy depth cap + materialized subtree for performance</li><li>Restriction criteria and date for removing View-All from staff roles after go-live</li></ul></div>
+    </div>
+    <p class="note">Everything in this pack is derived from AMP-2548 v4 as published on 05/09/2026 and the market sources listed below. No numbers in this pack are estimates — counts are of design items only.</p>
+  </div>
+
+  <footer>
+    Market sources — Salesforce Help: <a href="https://help.salesforce.com/s/articleView?id=platform.security_controlling_access_using_hierarchies.htm&language=en_US&type=5">Controlling Access Using the Role Hierarchy</a> ·
+    <a href="https://help.salesforce.com/s/articleView?id=users_queue_membership_list.htm&language=en_US&type=5">Create Queues</a> ·
+    <a href="https://help.salesforce.com/s/articleView?id=service.customize_leadrules.htm&language=en_US&type=5">Guidelines for Assignment Rules</a> ·
+    <a href="https://help.salesforce.com/s/articleView?language=en_US&id=platform.admin_transfer.htm&type=5">Mass Transfer Records</a> ·
+    <a href="https://help.salesforce.com/s/articleView?language=en_US&id=xcloud.account_owner.htm&type=5">Change a Record's Owner</a> ·
+    <a href="https://help.salesforce.com/s/articleView?language=en_US&id=platform.users_deactivate_considerations.htm&type=5">Deactivate Users — Considerations</a><br>
+    Microsoft Learn: <a href="https://learn.microsoft.com/en-us/power-platform/admin/hierarchy-security">Hierarchy security to control access</a> ·
+    <a href="https://learn.microsoft.com/en-us/dynamics365/sales/understand-lead-distributions-assignment-rules">Understand record distribution in assignment rules</a> ·
+    <a href="https://learn.microsoft.com/en-us/dynamics365/sales/wa-create-and-activate-assignment-rule">Create and activate assignment rules</a><br>
+    This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains · Appro Onboarding Solutions FZ-LLC · 05/09/2026 · Illustrative data only
+  </footer>
+</div>
+<script>
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(b){b.classList.remove('active');});
+      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.t).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
