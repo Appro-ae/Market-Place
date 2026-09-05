@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP-2548 Tech-Lead Updates Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff; --green:#abf5d1; --red:#ffbdad; --orange:#ff991f; --orange-ink:#b35c00; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Lato',sans-serif;background:var(--lavender);color:var(--navy);padding:0 0 40px;}
+  .classification{font-size:10px;letter-spacing:1px;background:var(--white);padding:6px 28px;border-bottom:1px solid rgba(26,33,77,0.10);font-weight:700;text-transform:uppercase;}
+  .page{max-width:1180px;margin:0 auto;padding:0 24px;}
+  .hdr{background:var(--white);border-radius:16px;margin-top:22px;padding:24px 30px;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;}
+  .hdr h1{font-size:24px;font-weight:900;line-height:1.15;} .hdr h1 .accent{color:var(--blue);}
+  .hdr .sub{font-size:13px;font-weight:700;color:var(--blue);margin-top:6px;}
+  .hdr .meta{font-size:11px;margin-top:10px;line-height:1.6;}
+  .dots{display:flex;gap:6px;margin-top:4px;} .dots span{width:14px;height:14px;border-radius:50%;background:var(--blue);display:inline-block;} .dots span:last-child{margin-left:5px;}
+  .pill-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;color:var(--blue);border:1px solid rgba(59,126,246,0.35);background:rgba(59,126,246,0.09);}
+  h2.sec{font-size:17px;font-weight:900;margin:26px 0 8px;} h2.sec .accent{color:var(--blue);}
+  h3.sub{font-size:13px;font-weight:900;margin:16px 0 6px;color:var(--navy);}
+  .banner{border-radius:12px;padding:14px 20px;margin:12px 0;font-size:13px;line-height:1.55;background:rgba(59,126,246,0.07);border:1px solid rgba(59,126,246,0.25);}
+  .banner-navy{background:var(--navy);border-color:var(--navy);color:var(--white);}
+  .banner-yellow{background:rgba(253,186,35,0.16);border-color:rgba(253,186,35,0.6);}
+  .banner b{font-weight:900;}
+  .ref{font-size:10px;font-weight:900;color:var(--blue);background:rgba(59,126,246,0.10);padding:2px 7px;border-radius:10px;white-space:nowrap;display:inline-block;margin:1px 0;}
+  table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
+  th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
+  td{font-size:11.5px;padding:9px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.55;}
+  tr:nth-child(even) td{background:var(--lavender);}
+  td.st{font-weight:900;text-align:center;white-space:nowrap;}
+  .red{background:var(--red) !important;} .yel{background:var(--yellow) !important;} .grn{background:var(--green) !important;}
+  .tbl-wrap{overflow-x:auto;border-radius:12px;}
+  .note{font-size:11px;opacity:.75;margin-top:8px;line-height:1.5;}
+  code{font-family:Consolas,Menlo,monospace;font-size:10.5px;background:rgba(26,33,77,0.06);padding:1px 4px;border-radius:4px;}
+  .org{color:var(--orange-ink);font-weight:700;background:rgba(255,153,31,0.14);border-radius:3px;padding:0 2px;}
+  .del{color:#7a7f99;text-decoration:line-through;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0;}
+  .kpi{background:var(--white);border-radius:12px;padding:14px 16px;border-top:4px solid var(--blue);}
+  .kpi .v{font-size:22px;font-weight:900;line-height:1;} .kpi .l{font-size:11px;margin-top:6px;line-height:1.4;}
+  .kpi.g{border-top-color:#36b37e;} .kpi.o{border-top-color:var(--orange);} .kpi.y{border-top-color:var(--yellow);}
+  .flow{display:flex;gap:8px;align-items:stretch;margin:10px 0;flex-wrap:wrap;}
+  .step{flex:1 1 170px;background:var(--white);border-radius:12px;padding:12px 12px 12px 14px;border-left:5px solid var(--blue);font-size:11.5px;line-height:1.5;position:relative;}
+  .step .n{font-size:10px;font-weight:900;color:var(--blue);letter-spacing:1px;text-transform:uppercase;}
+  .step.hi{border-left-color:var(--orange);}
+  .step.hi .n{color:var(--orange-ink);}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;}
+  .chip{font-family:Consolas,Menlo,monospace;font-size:11px;padding:5px 10px;border-radius:8px;background:var(--white);border:1px solid rgba(26,33,77,0.12);}
+  .chip.ok{border-color:#36b37e;background:rgba(54,179,126,0.12);} .chip.ko{border-color:#de350b;background:rgba(222,53,11,0.10);}
+  .chip small{display:block;font-family:'Lato',sans-serif;font-size:10px;opacity:.75;margin-top:2px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:820px){.kpis{grid-template-columns:1fr 1fr;} .two{grid-template-columns:1fr;}}
+  ol{padding-left:20px;font-size:12.5px;line-height:1.7;background:var(--white);border-radius:12px;padding:14px 14px 14px 34px;}
+  ul.plain{padding-left:18px;font-size:12px;line-height:1.65;}
+  footer{margin-top:30px;text-align:center;font-size:10px;opacity:.75;line-height:1.6;}
+  .legend{font-size:11px;margin:6px 0 10px;display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+</style>
+</head>
+<body>
+<div class="classification">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+<div class="page">
+  <div class="hdr">
+    <div>
+      <span class="pill-tag">AMP-2548 · Tech-lead updates · Proposal for PO approval</span>
+      <h1 style="margin-top:10px;">Free-text Staff ID and Sales-only visibility — <span class="accent">ADIB has built both</span></h1>
+      <div class="sub">Both tech-lead updates are confirmed by ADIB production stories. AMP-2548 needs 12 targeted edits (orange) — nothing has been changed in Jira yet.</div>
+      <div class="meta">Prepared for Huyen (PO) · 06/09/2026 · Against AMP-2548 v4 (unchanged since 05/09 19:29) and the v5 change note (C1–C7) · Evidence: ADIB-35, ADIB-45, ADIB-6480, ADIB-6681 (+ ADIB-6743 / 6811 / 6718 / 6720), ADIB-5268, ADIB-3755, ADIB-7542, AMP-464, AMP-3583, ACP-546, ACP-550, IH14</div>
+    </div>
+    <div class="dots"><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="banner banner-yellow"><b>Correction to my 05/09 ADIB alignment check.</b> I reported that ADIB has no department-based visibility rule. That was wrong. <b>ADIB-6681</b> "Sales team login and application enquiry changes" (created 03/11/2025, status ADIB Dev Validated) restricts Application Enquiry for users with Department = 'Sale' and explicitly leaves every other department on today's behaviour. My search terms (reporting manager, hierarchy, own applications) missed it; the "sales team" wording found it. The 05/09 matrix is superseded on that row — the rest of it stands.</div>
+
+  <div class="kpis">
+    <div class="kpi g"><div class="v">2 / 2</div><div class="l">Tech-lead updates confirmed by ADIB build evidence</div></div>
+    <div class="kpi o"><div class="v">12</div><div class="l">Edits to AMP-2548 (E1–E12), to be applied in orange on your approval</div></div>
+    <div class="kpi y"><div class="v">4</div><div class="l">ADIB rollout bugs turned into rules so SMBP does not repeat them</div></div>
+    <div class="kpi"><div class="v">5</div><div class="l">Decisions I need from you before touching the US (Section D)</div></div>
+  </div>
+
+  <!-- ============ SECTION A ============ -->
+  <h2 class="sec">A · Tech-lead understanding vs what ADIB built <span class="accent">(double-check)</span></h2>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:4%">#</th><th style="width:19%">Tech-lead update</th><th style="width:36%">What ADIB built — evidence</th><th style="width:9%">Verdict</th><th>Where SMBP must differ</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>TL-1</b></td>
+        <td>Staff ID = Sales Code / Agent Code / Employee ID. Keep it <b>free text</b> because each bank has its own legacy code.</td>
+        <td>
+          <b>ADIB-35</b> Create User: <i>EmployeeID — Input field, mandatory, "Input free text characters. EmployeeID should be unique."</i> No format rule. <b>ADIB-45</b> Edit User does not lock it.<br>
+          Real values in ADIB tickets: <code>916148</code> (ADIB-6681), <code>003364</code> (ADIB-6681 dev test — leading zeros), <code>433546</code> and <code>ADIB001</code> (ADIB-6811 UAT), <code>912396</code> (ADIB-5268), DSA default <code>1355</code> (ADIB-3755). Numeric and alphanumeric, 4–7 characters.<br>
+          ADIB validates the code by <b>existence</b>, not by format — FinnOne <code>REFERRAL.CODE</code> API (ADIB-3755) and the customer-journey check "Code invalid. Try again, or skip this step." (ADIB-5651).<br>
+          <span class="ref">ADIB-35</span> <span class="ref">ADIB-45</span> <span class="ref">ADIB-6681</span> <span class="ref">ADIB-6811</span> <span class="ref">ADIB-5268</span> <span class="ref">ADIB-3755</span>
+        </td>
+        <td class="st grn">Confirmed</td>
+        <td>SMBP has no bank staff API — the existence check runs against the Bank Portal user table (active Staff IDs). Free text must be reconciled with the Referral Code pop-up, whose client strips everything except A–Z 0–9 and caps at 24 (AMP-464 / AMP-3583) — hence the <b>canonical-key rule</b> in Section B. v4's immutability (read-only once approved) is stricter than ADIB — keep it.</td>
+      </tr>
+      <tr>
+        <td><b>TL-2</b></td>
+        <td>Visibility in Application Enquiry and Report Enquiry is restricted for the <b>Sales department only</b>; every other department keeps viewing all applications.</td>
+        <td>
+          <b>ADIB-6681</b> AC1: sales team identified by <i>Department = 'Sale'</i> plus Employee ID in User Management. AC2: Application Enquiry shows <i>only applications where Referral Code = logged-in user's Employee ID</i>; Date/Status filters apply inside that set; clearing filters keeps the restriction. Impact Analysis: <i>"For all other departments, Application Enquiry will continue to function as per current production behavior."</i> A dedicated <b>Sales User Role</b> is created in Role Management.<br>
+          Origin: <b>ADIB-6480</b> (Open) — per-product view-only roles (View Only HF Case / View Only CVC Case) and "cross mapping of Staff IDs and agents" to referral codes.<br>
+          Build: JWT token carries <code>department</code> + <code>employeeId</code> claims; back-office search APIs filter by <code>employeeId</code> when department is Sale (BE estimate 14h).<br>
+          <span class="ref">ADIB-6681</span> <span class="ref">ADIB-6480</span> <span class="ref">ADIB-7542</span>
+        </td>
+        <td class="st grn">Confirmed</td>
+        <td>Four differences: (1) ADIB covers <b>Application Enquiry only</b> — no ADIB ticket extends it to Report Enquiry, so the tech lead's "and Report" is SMBP scope with no reusable estimate; (2) ADIB is <b>flat</b> — no manager subtree; (3) the department name is <b>hardcoded</b> 'Sale' — SMBP serves several banks whose department lists differ (ACP-546 shows the SP list is a configurable master); (4) the scope lives in the <b>login token</b>, which caused the re-login bug below.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">Not found in ADIB (searched again on 06/09 with the ADIB-6681 vocabulary): any reporting-manager hierarchy, any Report Enquiry scoping for sales users, any format rule on Employee ID. ADIB-7542 (User MIS Report) confirms the data model wording: <i>employee_id = "Unique employee identifier in the bank HR system"</i>; Department examples "Credit, Sales, Back office".</div>
+
+  <h3 class="sub">A2 · ADIB rollout bugs → rules for AMP-2548</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:16%">ADIB bug</th><th style="width:40%">What happened</th><th>Rule to write into AMP-2548</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ref">ADIB-6743</span><br>Ready To Clarify</td><td>User Management changes (department / Employee ID) did not apply until the user logged out and in again — the scope was read from the JWT token issued at login. ADIB's own expectation: "changes shall apply instantly".</td><td><b>AC8:</b> visibility scope (department flag, Staff ID, subtree) is evaluated server-side from the user record on every request — never cached in the login token. SMBP already carries the same class of defect: <span class="ref">ACP-550</span> "Deactivated user session is not automatically expired" (Ready To Clarify).</td></tr>
+      <tr><td><span class="ref">ADIB-6811</span><br>ADIB Dev Validated</td><td>On first login sales users saw only the last 30 days; after applying and clearing any filter, all-time results appeared. Expectation: "all applications created with the sale user referral code for all time".</td><td><b>AC5:</b> the department pre-filter is the only additional restriction — no implicit date window, identical default filters for restricted and unrestricted users. Add as an explicit test case.</td></tr>
+      <tr><td><span class="ref">ADIB-5268</span><br>UAT QC Validated</td><td>Two spellings of the same URL parameter in production links (<code>saleAgentCode</code> on CVC, <code>salesagentCode</code> on HF — see the dev URLs in ADIB-6681); the request also mutated the staff ID into "Appro20252025****" and the journey rejected the code.</td><td><b>IA4 / AC4:</b> one parameter name across every channel and product; the raw entered value is stored verbatim next to the resolved Staff ID.</td></tr>
+      <tr><td><span class="ref">ADIB-6718</span> <span class="ref">ADIB-6720</span><br>ADIB Dev Validated</td><td>Referral code from the UTM link did not appear in the customer journey; the Verify Referral Code step showed "Null" in step details.</td><td><b>AC4 / AC9:</b> the resolved Staff ID and its source (UTM / Pop-up / Round-robin) are written to the application audit trail and shown on Application Details; an absent value is displayed as "—", never stored as the string "null".</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ============ SECTION B ============ -->
+  <h2 class="sec">B · Best practice for a free-text Staff Code <span class="accent">(what "free text" should mean)</span></h2>
+  <div class="banner">"Free text" means the bank's legacy value is accepted <b>as issued</b> — it does not mean unvalidated. Every mature system keeps an employee identifier as a bounded, character-restricted text field with a normalised matching key: SAP personnel number is an 8-digit character field, Active Directory <code>employeeID</code> is capped at 16 characters, Salesforce <code>User.EmployeeNumber</code> is Text(20). ADIB itself stores it as free text and controls quality by an <b>existence check</b> against the bank's staff list, not by format.</div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:4%">#</th><th style="width:22%">Rule</th><th style="width:30%">Why</th><th style="width:16%">Reference</th><th>Proposed wording for AMP-2548</th></tr></thead>
+    <tbody>
+      <tr><td><b>B1</b></td><td>Store as <b>text</b>, never as a number</td><td>Leading zeros and letters must survive: <code>003364</code> and <code>ADIB001</code> are both live ADIB codes. A numeric column silently turns 003364 into 3364.</td><td><span class="ref">ADIB-6681</span> <span class="ref">ADIB-6811</span></td><td>"Stored as a text value exactly as entered (after trimming); leading zeros are preserved."</td></tr>
+      <tr><td><b>B2</b></td><td>Allowed characters: letters, digits and the separators <code>-</code> <code>_</code> <code>.</code> <code>/</code>; no spaces, no other symbols</td><td>Legacy codes carry separators (STF-042, DSA/1355); anything beyond that is typo or injection surface — AMP-3583 flagged that the pop-up value is stored without validation today.</td><td><span class="ref">AMP-3583</span></td><td>"Accepted characters: A–Z, a–z, 0–9 and - _ . / . Internal whitespace and any other character are rejected with IEM005."</td></tr>
+      <tr><td><b>B3</b></td><td>Length <b>1–24</b> characters</td><td>Covers every surveyed convention (SAP 8, AD 16, Salesforce 20, ADIB 4–7) and equals the pop-up limit, so any Staff ID can be typed by a customer. v4's 50 exceeds what the pop-up accepts.</td><td><span class="ref">AMP-464</span> SAP Community · Microsoft Q&amp;A · Salesforce Trailblazer</td><td>"Length 1–24 characters."</td></tr>
+      <tr><td><b>B4</b></td><td>Two representations: <b>display value</b> (as entered) and <b>canonical key</b> (uppercase, separators removed)</td><td>The pop-up client strips non-alphanumerics (STF-042 → STF042) and UTM values are stored lowercase (IH14 §3.4). Uniqueness and matching must ignore case and separators or legitimate codes never match.</td><td><span class="ref">AMP-3583</span> <span class="ref">IH14 §3.4</span></td><td>"Uniqueness (IEM001) and all matching use the canonical key = uppercase with separators removed; e.g. STF-042, stf_042 and STF042 are the same Staff ID. The display value is shown as entered."</td></tr>
+      <tr><td><b>B5</b></td><td><b>Server-side</b> validation of pattern and length on the user record and on the pop-up value</td><td>Client-only sanitising is bypassable; the same rule must apply at both entry points or attribution diverges.</td><td><span class="ref">AMP-3583</span> <span class="ref">AMP-3562</span></td><td>"Validation runs server-side at save and at Checker approval; the Referral Code pop-up applies the same rule."</td></tr>
+      <tr><td><b>B6</b></td><td>Quality control is an <b>existence check</b>, not a format check</td><td>ADIB validates every typed code against the bank staff list in real time and lets the customer retry or skip. Format rules cannot catch a wrong-but-valid-looking code.</td><td><span class="ref">ADIB-3755</span> <span class="ref">ADIB-5651</span></td><td>"The pop-up validates the entered value live against active Staff IDs (canonical key). Unknown code: 'Code not recognised — check with your salesperson or continue without.'" (v5 C2)</td></tr>
+      <tr><td><b>B7</b></td><td><b>Mandatory</b> for users in a restricted (Sales) department; optional otherwise</td><td>A Sales user without a Staff ID sees IM005 forever and cannot be in the round-robin pool. ADIB makes Employee ID mandatory for every user.</td><td><span class="ref">ADIB-35</span></td><td>"Mandatory when the user's Department is a restricted department; otherwise optional. Checked at save and at Checker approval, including when a user is moved into a restricted department."</td></tr>
+      <tr><td><b>B8</b></td><td><b>Immutable</b> once approved; corrections via a new record; case moves via Reassign</td><td>The code is the attribution key on every application; editing it silently orphans cases. Keep v4's rule, which is stricter than ADIB-45.</td><td>v4 AC1 · v5 C7</td><td>Unchanged v4 text.</td></tr>
+      <tr><td><b>B9</b></td><td><b>No personal data</b> as the code</td><td>The value travels in URLs, QR codes and audit trails. Emirates ID, phone or e-mail as a Staff ID would leak PII on every link.</td><td>Security hygiene (AMP-3583 review context)</td><td>"Banks must not use national ID, phone or e-mail values as Staff IDs." (guidance note in AC1)</td></tr>
+      <tr><td><b>B10</b></td><td><b>One parameter name</b> in every link: <code>staff_id</code>, carrying the canonical key</td><td>ADIB shipped two spellings and broke production links (ADIB-5268).</td><td><span class="ref">ADIB-5268</span> <span class="ref">IH14 §1.2.1</span></td><td>"UTM parameter name: staff_id (all channels, all products); value = canonical key."</td></tr>
+      <tr><td><b>B11</b></td><td>Guidance for banks issuing <b>new</b> codes (not enforced)</td><td>Codes dictated over the phone or typed from a business card should avoid confusable letters. Crockford's Base32 alphabet drops I, L, O, U for exactly this reason and allows an optional check symbol.</td><td>Crockford Base32 · IETF draft-crockford-davis-base32-for-humans</td><td>"Recommended for new codes: 6–8 characters, digits or letters excluding I, L, O, U." (guidance note)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 class="sub">Worked examples under B1–B4</h3>
+  <div class="chips">
+    <div class="chip ok">003364<small>accepted · key 003364 · zeros kept</small></div>
+    <div class="chip ok">ADIB001<small>accepted · key ADIB001</small></div>
+    <div class="chip ok">STF-042<small>accepted · key STF042 · pop-up entry STF042 matches</small></div>
+    <div class="chip ok">dsa/1355<small>accepted · shown as entered · key DSA1355</small></div>
+    <div class="chip ko">STF 042<small>rejected · internal space</small></div>
+    <div class="chip ko">A*42<small>rejected · symbol</small></div>
+    <div class="chip ko">25+ characters<small>rejected · exceeds 24</small></div>
+    <div class="chip ko">empty, Department = Sales<small>rejected · mandatory (B7)</small></div>
+  </div>
+
+  <!-- ============ SECTION C ============ -->
+  <h2 class="sec">C · Proposed edits to AMP-2548 <span class="accent">(exactly what I will put in Jira, in orange)</span></h2>
+  <div class="legend"><span><span class="org">orange</span> = text inserted or changed in the US</span><span><span class="del">grey strike</span> = v4 text removed</span><span>Driver: <b>TL-1</b> free text · <b>TL-2</b> Sales-only · <b>L</b> ADIB lesson · <b>v5</b> already in the change note (C1–C7)</span></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:4%">Ref</th><th style="width:12%">Section</th><th style="width:26%">v4 today</th><th>Proposed v5 text</th><th style="width:6%">Driver</th></tr></thead>
+    <tbody>
+      <tr><td><b>E1</b></td><td>Context §1–§2</td><td>"Each bank portal user is assigned a Staff ID …" / "Staff-level users see only applications tagged to their Staff ID."</td><td>§1: <span class="org">Staff ID is the bank's existing staff identifier (Sales Code, Agent Code or Employee ID), accepted as free text.</span> §2: <span class="org">Visibility filtering applies only to users whose Department is flagged as a restricted (sales) department. Users in all other departments keep full visibility of all applications, as today.</span></td><td>TL-1 TL-2</td></tr>
+      <tr><td><b>E2</b></td><td>New block after Context: "Restricted department"</td><td>—</td><td><span class="org">Definition: the Department master gains a flag "Sales visibility restriction" (Yes/No), configured per bank in the database at go-live — Yes for the bank's Sales department(s), No for all others. A user is "restricted" when their Department carries the flag and they do not hold the "View All Applications" permission. ADIB precedent: ADIB-6681 (Department = 'Sale', Application Enquiry).</span></td><td>TL-2</td></tr>
+      <tr><td><b>E3</b></td><td>AC1 — Staff ID row</td><td>"Format: Alphanumeric, max 50 characters" · "Mandatory: No" · "Maps to the salesagentCode parameter in Distribution Portal UTM URLs (AMP-3323)"</td><td>Label: Staff ID <span class="org">(Sales Code / Agent Code / Employee ID)</span>. Format: <span class="del">Alphanumeric, max 50 characters</span> <span class="org">Free text, 1–24 characters; letters, digits and - _ . / ; no spaces; stored as text with leading zeros preserved. Invalid format → IEM005 "Staff ID may contain letters, numbers and - _ . / only (max 24 characters)".</span> Normalization: <span class="org">uniqueness (IEM001) and all matching use the canonical key (uppercase, separators removed); the display value is shown as entered.</span> Mandatory: <span class="del">No</span> <span class="org">Yes when Department is a restricted department; otherwise No.</span> <span class="del">Maps to the salesagentCode parameter … (AMP-3323)</span> <span class="org">Matched against the Staff ID carried in the UTM link (staff_id) or typed in the Referral Code pop-up (AMP-464) — see AC4. Guidance: banks must not use national ID, phone or e-mail values; new codes should avoid I, L, O, U.</span></td><td>TL-1 v5-C1 C5</td></tr>
+      <tr><td><b>E4</b></td><td>AC4 — pool and matching</td><td>"Eligible pool: Active users who have a Staff ID assigned, configurable per channel and product type" · match "case-insensitive"</td><td>Eligible pool: active users <span class="org">in a restricted department</span> who have a Staff ID, configurable per channel and product type. Matching: <span class="org">on the canonical key (case- and separator-insensitive).</span> <span class="org">The application stores the raw entered value, the resolved Staff ID and the source (UTM / Pop-up / Round-robin / Backfill).</span> (Precedence at submission and latest-successful-wins remain as in v5 C4.)</td><td>TL-2 L</td></tr>
+      <tr><td><b>E5</b></td><td>AC5 — staff visibility</td><td>"A user with staff-level access sees only applications tagged to their Staff ID."</td><td><span class="org">A restricted user (Department flagged, no View All permission)</span> sees only applications tagged to their Staff ID <span class="org">and to their reporting subtree (AC6). The pre-filter is the only additional restriction: no implicit date window, default filters identical to unrestricted users (ADIB-6811).</span></td><td>TL-2 L</td></tr>
+      <tr><td><b>E6</b></td><td>AC6 — manager visibility</td><td>"A manager sees applications tagged to all users in their reporting subtree …"</td><td><span class="org">A manager in a restricted department</span> sees applications tagged to all users in their reporting subtree plus their own. <span class="org">A manager in an unrestricted department is not filtered (full visibility by department rule).</span> Traversal rule unchanged.</td><td>TL-2</td></tr>
+      <tr><td><b>E7</b></td><td>AC7 — View All Applications</td><td>"… so that operations, credit ops, and admin users retain full application access." · "At migration, grant this permission to all existing enquiry users"</td><td>Purpose: <span class="org">grants full visibility to a user in a restricted department who needs it (e.g. Head of Sales without a complete hierarchy, Sales MIS). Users in unrestricted departments have full visibility by the department rule and do not need this permission.</span> <span class="del">At migration, grant this permission to all existing enquiry users</span> <span class="org">At go-live no bulk grant is required — only restricted-department users are filtered.</span></td><td>TL-2</td></tr>
+      <tr><td><b>E8</b></td><td>AC8 — lifecycle (new rows)</td><td>Rows: circular chain, manager deactivation, staff deactivation, mid-flight RM change</td><td><span class="org">Department change: moving a user into or out of a restricted department takes effect on the next request after Checker approval; the Staff ID mandatory rule is re-checked when moving into a restricted department (IEM003-style block until a Staff ID is set). Visibility scope is evaluated server-side from the user record on every request and is never cached in the login token (ADIB-6743; ACP-550).</span></td><td>TL-2 L</td></tr>
+      <tr><td><b>E9</b></td><td>AC9 — column default &amp; Report Enquiry</td><td>"ON for users with Manager visibility (AC6) or View All (AC7). OFF for staff-level users"</td><td>Default visibility: ON for <span class="org">unrestricted users</span>, managers and View All holders; OFF for <span class="org">restricted staff</span>. Report Enquiry: <span class="org">the same department rule scopes report data and exports (note: ADIB-6681 covers Application Enquiry only — this part has no ADIB build to reuse).</span></td><td>TL-2</td></tr>
+      <tr><td><b>E10</b></td><td>IA2 — historical cases</td><td>"Migration strategy (decided): Grant View All Applications permission to all existing enquiry users at go-live …"</td><td><span class="del">Grant View All Applications permission to all existing enquiry users at go-live</span> <span class="org">(a) Unrestricted departments: no change. (b) Restricted departments: one-off backfill — historical applications whose stored [Referral code] (AMP-464 / AMP-1454) matches an active Staff ID canonical key are tagged to that Staff ID (source = Backfill, audited). Remaining historical cases stay visible to unrestricted users and View All holders only. No round-robin backfill.</span></td><td>TL-2 v5-C6</td></tr>
+      <tr><td><b>E11</b></td><td>IA4 — UTM integration</td><td>"AMP-3323 (UAT Validated) defines the UTM ownership model and salesagentCode parameter"</td><td><span class="del">and salesagentCode parameter</span> <span class="org">AMP-3323 carries no agent code (utm_id / source / medium / campaign only). The Staff ID is added as an optional UTM parameter staff_id via the Super Admin-configurable parameter list (IH14 §1.2.1), one name across all channels and products (ADIB-5268), stored on the application under IH14 §3.4.</span></td><td>v5-C3 L</td></tr>
+      <tr><td><b>E12</b></td><td>Reference Tickets</td><td>List of AMP / ACP baselines</td><td><span class="org">+ ADIB-6681 — Sales team login and application enquiry changes (department-scoped enquiry precedent) · + ADIB-35 — Create User (Employee ID free text, unique) · + AMP-464 — Referral Code pop-up · + ADIB-6743 / ADIB-6811 — rollout lessons.</span></td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">Untouched: AC2, AC3, AC10 (STF-042 remains a valid sample under free text), IA1, IA3. v5 change-note items C2 (pop-up live validation), C4 (submission-time precedence), C6 (zero-untagged, default assignee) and C7 (Reassign function) still apply and are not repeated here.</div>
+
+  <h3 class="sub">C2 · How the request is evaluated after the edits (ADIB-6743 lesson applied)</h3>
+  <div class="flow">
+    <div class="step"><div class="n">1 · Request</div>User opens Application Enquiry or Report Enquiry; every request carries the user id only.</div>
+    <div class="step hi"><div class="n">2 · Read user record</div>Department flag, Staff ID canonical key, View All permission, reporting subtree — read live, not from the login token.</div>
+    <div class="step"><div class="n">3 · Unrestricted?</div>Department flag = No, or View All granted → no pre-filter; today's behaviour.</div>
+    <div class="step hi"><div class="n">4 · Restricted → pre-filter</div>Attributed Staff ID ∈ {own key} ∪ {subtree keys}; no date window added.</div>
+    <div class="step"><div class="n">5 · Existing filters</div>Channel, product, status, search, Customize Table — unchanged; exports follow the same scope.</div>
+  </div>
+
+  <h3 class="sub">C3 · Resulting who-sees-what</h3>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Persona</th><th>Department</th><th>Staff ID</th><th>Reports</th><th>View All</th><th>Sees in Application Enquiry / Report Enquiry</th></tr></thead>
+    <tbody>
+      <tr><td>Alice Rahman</td><td>Sales (restricted)</td><td>STF-042</td><td>none</td><td>no</td><td>Own tagged cases only</td></tr>
+      <tr><td>Jane Smith</td><td>Sales (restricted)</td><td>STF-001</td><td>Alice, 2 others</td><td>no</td><td>Own + full subtree</td></tr>
+      <tr><td>Omar Haddad</td><td>Credit Operations</td><td>—</td><td>none</td><td>no</td><td><b>All applications</b> (department rule) — no permission grant needed</td></tr>
+      <tr><td>Sara Al Ali</td><td>Sales (restricted)</td><td>SLS-MIS1</td><td>none</td><td>yes</td><td>All applications, incl. untagged (AC7 exception)</td></tr>
+      <tr><td>Khalid Noor</td><td>Sales (restricted)</td><td>empty</td><td>none</td><td>no</td><td>Cannot be saved — Staff ID mandatory for restricted departments (B7); today's v4 would show him IM005 forever</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- ============ SECTION D ============ -->
+  <h2 class="sec">D · Decisions I need from you <span class="accent">(then I edit the US)</span></h2>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:4%">#</th><th style="width:30%">Decision</th><th style="width:36%">Options</th><th>My recommendation</th></tr></thead>
+    <tbody>
+      <tr><td><b>D1</b></td><td>Staff ID maximum length</td><td>(a) 24 — equals the Referral Code pop-up limit · (b) keep v4's 50 and raise the pop-up to 50</td><td><b>(a) 24.</b> Every surveyed convention fits (SAP 8, AD 16, Salesforce 20, ADIB 4–7); no DP change to the pop-up.</td></tr>
+      <tr><td><b>D2</b></td><td>How a department becomes "restricted"</td><td>(a) flag on the Department master, DB-configured per bank · (b) hardcode Department name = 'Sales' (ADIB way)</td><td><b>(a) flag.</b> SMBP serves several banks with different department lists (ACP-546); (b) breaks the moment a bank calls it "Direct Sales" or "DSA". If the tech lead wants zero configuration for phase 1, (b) is acceptable with the name stored as a system parameter, not in code.</td></tr>
+      <tr><td><b>D3</b></td><td>Report Enquiry in scope</td><td>(a) yes, as the tech lead stated · (b) Application Enquiry only, like ADIB</td><td><b>(a) yes</b> — the CPO requirement covers reports. Flag to the tech lead that ADIB-6681 gives no estimate for this part.</td></tr>
+      <tr><td><b>D4</b></td><td>Historical cases for Sales users</td><td>(a) one-off backfill by matching the stored [Referral code] to Staff IDs · (b) no backfill, View All only (v4 IA2)</td><td><b>(a) backfill.</b> SMBP already stores the code on every application (AMP-464 / AMP-1454); the match is cheap and gives sales users the all-time view ADIB expects (ADIB-6811). Still no round-robin backfill.</td></tr>
+      <tr><td><b>D5</b></td><td>Staff ID mandatory for restricted-department users</td><td>(a) mandatory (ADIB makes it mandatory for everyone) · (b) optional, as in v4</td><td><b>(a) mandatory.</b> An optional Staff ID in Sales produces a user who sees nothing and receives nothing.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="banner banner-navy"><b>Nothing has been changed in Jira.</b> On your approval (or your strike-outs on E1–E12 / D1–D5), I update the AMP-2548 description in place: changed and inserted text in <b>orange</b>, removed text struck through, everything else untouched, no comment posted unless you ask for one.</div>
+
+  <footer>This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains · Appro Onboarding Solutions FZ-LLC · 06/09/2026 · Jira facts verified on 06/09/2026 against the referenced ADIB / AMP / ACP tickets and the IH14 Confluence page; market references: SAP Community (PERNR), Microsoft Q&amp;A and MS-ADLS (employeeID 16 / employeeNumber 512), Salesforce Trailblazer Community (User.EmployeeNumber Text 20), Crockford Base32 / IETF draft-crockford-davis-base32-for-humans</footer>
+</div>
+</body>
+</html>
