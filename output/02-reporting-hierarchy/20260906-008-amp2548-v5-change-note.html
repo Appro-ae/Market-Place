@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP-2548 v5 Change Note — One Identifier, Zero Untagged</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff; --green:#abf5d1; --red:#ffbdad; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Lato',sans-serif;background:var(--lavender);color:var(--navy);padding:0 0 40px;}
+  .classification{font-size:10px;letter-spacing:1px;background:var(--white);padding:6px 28px;border-bottom:1px solid rgba(26,33,77,0.10);font-weight:700;text-transform:uppercase;}
+  .page{max-width:1180px;margin:0 auto;padding:0 24px;}
+  .hdr{background:var(--white);border-radius:16px;margin-top:22px;padding:24px 30px;display:flex;justify-content:space-between;gap:20px;align-items:flex-start;}
+  .hdr h1{font-size:24px;font-weight:900;line-height:1.15;} .hdr h1 .accent{color:var(--blue);}
+  .hdr .sub{font-size:13px;font-weight:700;color:var(--blue);margin-top:6px;}
+  .hdr .meta{font-size:11px;margin-top:10px;line-height:1.6;}
+  .dots{display:flex;gap:6px;margin-top:4px;} .dots span{width:14px;height:14px;border-radius:50%;background:var(--blue);display:inline-block;} .dots span:last-child{margin-left:5px;}
+  .pill-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;color:var(--blue);border:1px solid rgba(59,126,246,0.35);background:rgba(59,126,246,0.09);}
+  h2.sec{font-size:17px;font-weight:900;margin:24px 0 8px;} h2.sec .accent{color:var(--blue);}
+  .banner{border-radius:12px;padding:14px 20px;margin:12px 0;font-size:13px;line-height:1.55;background:rgba(59,126,246,0.07);border:1px solid rgba(59,126,246,0.25);}
+  .banner-navy{background:var(--navy);border-color:var(--navy);color:var(--white);}
+  .banner b{font-weight:900;}
+  .ref{font-size:10px;font-weight:900;color:var(--blue);background:rgba(59,126,246,0.10);padding:2px 7px;border-radius:10px;white-space:nowrap;}
+  table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
+  th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
+  td{font-size:11.5px;padding:9px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.55;}
+  tr:nth-child(even) td{background:var(--lavender);}
+  td.st{font-weight:900;text-align:center;white-space:nowrap;}
+  .red{background:var(--red) !important;} .yel{background:var(--yellow) !important;} .grn{background:var(--green) !important;}
+  .tbl-wrap{overflow-x:auto;border-radius:12px;}
+  .note{font-size:11px;opacity:.75;margin-top:8px;line-height:1.5;}
+  ol{padding-left:20px;font-size:12.5px;line-height:1.7;background:var(--white);border-radius:12px;padding:14px 14px 14px 34px;}
+  footer{margin-top:30px;text-align:center;font-size:10px;opacity:.75;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="classification">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+<div class="page">
+  <div class="hdr">
+    <div>
+      <span class="pill-tag">AMP-2548 · v5 Change Note · Draft for Kha</span>
+      <h1 style="margin-top:10px;">One identifier, zero untagged — <span class="accent">what v4 must change</span></h1>
+      <div class="sub">PO decision: Staff ID is the single term end to end — carried in the UTM link and typed in the existing Referral Code pop-up; every new case is tagged.</div>
+      <div class="meta">Prepared by Huyen (PO) · 06/09/2026 · Against AMP-2548 v4 (unchanged since 05/09 19:29) · Baselines verified: AMP-464 Referral Code pop-up (UAT Validated), IH14 UTM Management §1.2.1 &amp; §3.4, AMP-3323 (no salesagentCode), AMP-3583 security review, AMP-1454</div>
+    </div>
+    <div class="dots"><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="banner"><b>@Kha Pham Thuc — v5 change note.</b> Two findings drive this round: (1) SMBP already has a customer-entered code — the <b>Referral Code pop-up</b> (AMP-464, UAT Validated, flag-controlled per channel) — so the "no SMBP journey story" reason for dropping manual capture does not hold; (2) <b>AMP-3323 does not define <code>salesagentCode</code></b> — its URL carries utm_id/source/medium/campaign only, so the digital path needs a Distribution Portal change. Design decision: <b>one identifier — Staff ID — everywhere.</b></div>
+
+  <h2 class="sec">A · Changes required in v5 <span class="accent">(all in the current v4 text)</span></h2>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>Ref</th><th>Change</th><th>What v4 says today</th><th>Status</th><th>Required in v5</th><th>Baseline</th><th>Prio</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>C1</b></td><td>One identifier — Staff ID everywhere</td>
+        <td>Staff ID on the user record; <code>salesagentCode</code> as the UTM value; Referral/Promo Code field not mentioned</td>
+        <td class="st yel">Rework</td>
+        <td>Define once: the <b>Staff ID</b> is the value carried in the UTM link parameter <i>and</i> typed in the Referral Code pop-up. Internal term everywhere = Staff ID; customer-facing label stays friendly ("Referral code — ask your salesperson"). Retire "Promo Code" / <code>PROMOTION_CODE_FLAG</code> naming for this field; "Promotions" (AMP-513) is a different, unbuilt marketing feature.</td>
+        <td><span class="ref">AMP-464</span> <span class="ref">AMP-1454</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C2</b></td><td>Reinstate manual capture as a mechanism</td>
+        <td>Mechanism 2 (QR/manual) dropped — "no SMBP journey story"</td>
+        <td class="st red">Not Done</td>
+        <td>Mechanism "Referral Code pop-up" on the AMP-464 baseline: customer types the salesperson's Staff ID; <b>validate live</b> against active Staff IDs so a typo can be corrected in the pop-up ("Code not recognised — check with your salesperson or continue without"); on submit, match exactly like the UTM value. Server-side validation of the field closes AMP-3583 items 1–2 (today the value is stored unvalidated).</td>
+        <td><span class="ref">AMP-464</span> <span class="ref">AMP-3583</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C3</b></td><td>Digital path — DP must carry and store the Staff ID</td>
+        <td>IA4: "AMP-3323 defines the salesagentCode parameter" — it does not</td>
+        <td class="st red">Not Done</td>
+        <td>Correct IA4. Add the Staff ID as an optional UTM parameter via the <b>Super Admin-configurable optional-parameter list</b> (IH14 §1.2.1); value stored on the application under IH14 §3.4; passed to the Bank Portal for matching. Raise as a linked DP story (blocking) or add the ACs here. Confirm with the Channel team: picker list accepts a non-marketing parameter; application payload to BP includes UTM parameters; per-channel Maximum UTM count if one link per agent.</td>
+        <td><span class="ref">IH14 §1.2.1</span> <span class="ref">IH14 §3.4</span> <span class="ref">AMP-3323</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C4</b></td><td>Attribution point and precedence</td>
+        <td>Tag set "at origination"; "first wins"; round-robin also at origination</td>
+        <td class="st yel">Rework</td>
+        <td>Move attribution to <b>submission</b> (ADIB rule — final code written at submission): the customer types the code mid-journey, after the UTM click, so an origination-time round-robin would collide with it. Order at submission: typed Staff ID → UTM Staff ID → round-robin. Rule: <b>latest successful code wins</b>, every attempt written to the audit trail. Immutability applies after submission.</td>
+        <td><span class="ref">ADIB-5651</span> <span class="ref">ADIB-7172</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C5</b></td><td>Staff ID format aligned with the pop-up</td>
+        <td>"Alphanumeric, max 50"; examples like STF-042</td>
+        <td class="st red">Not Done</td>
+        <td>The pop-up accepts 1–24 characters and the client strips everything except A–Z 0–9 — <b>STF-042 becomes STF042 and never matches</b>. Set Staff ID = uppercase alphanumeric, no special characters, ≤24; enforce server-side (<code>@Pattern</code>/<code>@Size</code>, per AMP-3562) on both the user record and the pop-up value. Update the AC10 sample values.</td>
+        <td><span class="ref">AMP-464</span> <span class="ref">AMP-3583</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C6</b></td><td>Zero-untagged guarantee</td>
+        <td>Three paths leave a case untagged: unmatched code (no fallback), empty pool, historical cases</td>
+        <td class="st yel">Rework</td>
+        <td>(a) <b>Unmatched code → fall back to round-robin</b>, keep the raw code on the record + alert for investigation (with live validation in C2, only UTM typos remain). (b) <b>Pool can never be empty</b>: pool configuration mandatory at channel/product onboarding + a default assignee (e.g. the channel's sales lead) when no eligible user exists. (c) <b>Historical cases</b>: keep IA2 (View-All only) — the guarantee applies to every case created from go-live; backfilling old cases by round-robin would hand sales credit for cases nobody sourced.</td>
+        <td><span class="ref">ADIB-7172</span></td><td><b>P1</b></td>
+      </tr>
+      <tr>
+        <td><b>C7</b></td><td>Carried items</td>
+        <td>IEM004 requires reassignment but no reassign function exists; AC9 leaves all actions available to anyone who sees a row</td>
+        <td class="st yel">Open</td>
+        <td>Add "Reassign Case (Sale Staff)" — permission-gated, maker/checker, audit entry — and reword AC4 immutability to "changes only via explicit reassignment". State whether managers may act (e.g. Cancel Application) on indirect reports' cases; market default is read-only beyond direct reports.</td>
+        <td><span class="ref">AC8</span> <span class="ref">AC9</span></td><td>P2</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2 class="sec">B · How the v5 attribution flow reads <span class="accent">(one paragraph for AC4)</span></h2>
+  <ol>
+    <li>A Bank Portal user is created with a <b>Staff ID</b> (uppercase alphanumeric, ≤24, unique, read-only once approved).</li>
+    <li>The Staff ID reaches the application in one of two ways: carried in the UTM link (optional parameter, Distribution Portal) or typed by the customer in the Referral Code pop-up (validated live against active Staff IDs).</li>
+    <li>At <b>submission</b> the system resolves the tag: typed Staff ID → UTM Staff ID → sales round-robin (active users with a Staff ID, per channel/product, lowest attributed count, A→Z; default assignee if the pool is empty). Latest successful code wins; every attempt is audited.</li>
+    <li>Every case created from go-live therefore carries a Staff ID. Unmatched or missing codes fall through to round-robin — nothing is left untagged; the raw code and an alert are kept for ops to investigate.</li>
+    <li>Visibility follows the tag: staff see their own cases, managers their subtree, View-All roles everything; the "Assigned To (Sale Staff)" column, detail field and audit entry show who owns each case.</li>
+  </ol>
+
+  <div class="banner banner-navy"><b>→ Close C1–C6, then this is Ready for Dev.</b> C7 can follow in the same edit or the next. cc @Antofelix Rajan</div>
+
+  <footer>This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains · Appro Onboarding Solutions FZ-LLC · 06/09/2026 · All facts verified against the referenced Jira tickets and the IH14 Confluence page</footer>
+</div>
+</body>
+</html>
