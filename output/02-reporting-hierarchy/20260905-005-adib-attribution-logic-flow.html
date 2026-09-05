@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADIB Attribution Logic — Flow &amp; Alignment Check</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Lato',sans-serif;background:var(--lavender);color:var(--navy);padding:0 0 40px;}
+  .classification{font-size:10px;letter-spacing:1px;color:var(--navy);background:var(--white);
+    padding:6px 28px;border-bottom:1px solid rgba(26,33,77,0.10);font-weight:700;text-transform:uppercase;}
+  .page{max-width:1150px;margin:0 auto;padding:0 24px;}
+  .hdr{background:var(--white);border-radius:16px;margin-top:22px;padding:26px 30px;display:flex;
+    align-items:flex-start;justify-content:space-between;gap:20px;}
+  .hdr h1{font-size:25px;font-weight:900;color:var(--navy);line-height:1.15;}
+  .hdr h1 .accent{color:var(--blue);}
+  .hdr .sub{font-size:13.5px;font-weight:700;color:var(--blue);margin-top:6px;}
+  .hdr .meta{font-size:11px;color:var(--navy);margin-top:10px;line-height:1.6;}
+  .dots{display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .dots span{width:14px;height:14px;border-radius:50%;background:var(--blue);display:inline-block;}
+  .dots span:last-child{margin-left:5px;}
+  .pill-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    padding:4px 12px;border-radius:20px;color:var(--blue);border:1px solid rgba(59,126,246,0.35);background:rgba(59,126,246,0.09);}
+  h2.sec{font-size:18px;font-weight:900;margin:26px 0 4px;color:var(--navy);}
+  h2.sec .accent{color:var(--blue);}
+  .secsub{font-size:12px;color:var(--navy);opacity:.75;margin-bottom:12px;}
+  .ref{font-size:10.5px;font-weight:700;color:var(--blue);}
+  .note{font-size:11px;color:var(--navy);opacity:.75;margin-top:8px;line-height:1.5;}
+  .banner{border-radius:12px;padding:15px 20px;margin:12px 0;font-size:13px;line-height:1.55;
+    background:rgba(59,126,246,0.07);border:1px solid rgba(59,126,246,0.25);color:var(--navy);}
+  .banner-gold{background:rgba(253,186,35,0.10);border:1px solid rgba(253,186,35,0.45);}
+  .banner-navy{background:var(--navy);border:1px solid var(--navy);color:var(--white);}
+  .banner b{font-weight:900;}
+
+  /* flow */
+  .lane{background:var(--white);border-radius:14px;padding:18px;margin-bottom:14px;}
+  .lane-title{font-size:13px;font-weight:900;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+  .lane-badge{font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:12px;
+    background:var(--navy);color:var(--white);}
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;}
+  .fbox{flex:1;min-width:135px;border-radius:12px;padding:12px;background:var(--white);border:1.5px solid rgba(59,126,246,0.30);}
+  .fbox .flabel{font-size:8.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue);margin-bottom:4px;}
+  .fbox .ftitle{font-size:12px;font-weight:900;color:var(--navy);line-height:1.3;}
+  .fbox .fbody{font-size:10.5px;margin-top:5px;line-height:1.5;color:var(--navy);}
+  .fbox.gold{border-color:rgba(253,186,35,0.65);background:rgba(253,186,35,0.09);}
+  .fbox.gold .flabel{color:var(--navy);}
+  .fbox.navy{background:var(--navy);border-color:var(--navy);}
+  .fbox.navy .flabel{color:var(--yellow);}
+  .fbox.navy .ftitle,.fbox.navy .fbody{color:var(--white);}
+  .fbox.lav{background:var(--lavender);border-color:rgba(26,33,77,0.2);}
+  .farrow{align-self:center;font-size:17px;color:rgba(26,33,77,0.30);font-weight:900;}
+  .fdown{text-align:center;font-size:18px;color:rgba(26,33,77,0.30);font-weight:900;margin:6px 0;}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+  /* tables */
+  table{border-collapse:collapse;width:100%;background:var(--white);border-radius:12px;overflow:hidden;}
+  th{background:var(--navy);color:var(--white);font-size:11px;font-weight:700;text-align:left;padding:9px 10px;}
+  td{font-size:11px;padding:8px 10px;border-top:1px solid rgba(26,33,77,0.08);vertical-align:top;line-height:1.5;}
+  tr:nth-child(even) td{background:var(--lavender);}
+  .tbl-wrap{overflow-x:auto;border-radius:12px;}
+  .chip{display:inline-block;font-size:10px;font-weight:900;padding:3px 10px;border-radius:12px;letter-spacing:.4px;white-space:nowrap;}
+  .chip-al{background:var(--blue);color:var(--white);}
+  .chip-dev{background:var(--yellow);color:var(--navy);}
+  .chip-open{background:var(--navy);color:var(--white);}
+
+  /* rotation demo */
+  .rota{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;}
+  .rcode{border:1.5px solid var(--blue);border-radius:10px;padding:7px 12px;font-size:11px;font-weight:900;color:var(--navy);background:var(--white);}
+  .rcode.on{background:var(--blue);color:var(--white);border-color:var(--blue);}
+  .rarrow{font-size:14px;color:rgba(26,33,77,0.35);font-weight:900;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  footer{margin-top:34px;text-align:center;font-size:10px;color:var(--navy);opacity:.75;line-height:1.6;}
+  @media (max-width:860px){ .grid-2,.split{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="classification">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+<div class="page">
+
+  <div class="hdr">
+    <div>
+      <span class="pill-tag">ADIB Reference · AMP-2548 v4 Alignment</span>
+      <h1 style="margin-top:10px;">ADIB Attribution Logic — <span class="accent">Flow &amp; Alignment Check</span></h1>
+      <div class="sub">How ADIB tags every application to a staff code today, and where AMP-2548 v4 follows or deviates</div>
+      <div class="meta">Prepared by Huyen (PO) · 05/09/2026 · Sources verified in Jira: ADIB-6725 (UTM carrier), ADIB-5651 (QR/manual capture), ADIB-7172 (round-robin default), ADIB-7237 (audit), ADIB-7388 (portal display) · AMP-2548 v4 (05/09), ACP-18</div>
+    </div>
+    <div class="dots"><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- ══════════ SECTION 1 · ADIB END-TO-END FLOW ══════════ -->
+  <h2 class="sec">1 · ADIB logic — <span class="accent">every application always gets a staff code</span></h2>
+  <div class="secsub">Purpose in ADIB: the DSA/IFE code is mandatory for FinnOne onboarding and staff-referral reporting — attribution, not visibility.</div>
+
+  <div class="lane">
+    <div class="lane-title"><span class="lane-badge">Step 1</span> Capture — three channels during the customer journey</div>
+    <div class="flow">
+      <div class="fbox">
+        <div class="flabel">Digital</div>
+        <div class="ftitle">UTM link parameter</div>
+        <div class="fbody">URL carries utm_source / medium / campaign + product_type + <b>partnerCode</b> + <b>salesagentCode</b> (optional). Values stored on the Application table.<br><span class="ref">ADIB-6725</span></div>
+      </div>
+      <div class="fbox">
+        <div class="flabel">Assisted</div>
+        <div class="ftitle">QR code scan</div>
+        <div class="fbody">Staff QR decrypts Branch Code, DSU Region, Source Code, <b>Staff Referral Code</b>.<br><span class="ref">ADIB-5651</span></div>
+      </div>
+      <div class="fbox">
+        <div class="flabel">Assisted</div>
+        <div class="ftitle">Manual code input</div>
+        <div class="fbody">"Enter code or scan QR" — real-time validation; customer can re-enter until Confirm.<br><span class="ref">ADIB-5651</span></div>
+      </div>
+    </div>
+    <div class="banner" style="margin:10px 0 0;font-size:11.5px;">
+      <b>Every attempt is logged</b> in a Referral table with timestamp (success and failure), and the <b>latest successful code wins</b> —
+      the final code is written to the Application table at submission. <span class="ref">ADIB-5651</span>
+    </div>
+  </div>
+
+  <div class="fdown">↓ no code captured from any channel?</div>
+
+  <div class="lane">
+    <div class="lane-title"><span class="lane-badge">Step 2</span> Round-robin default — configurable rotation <span class="ref">ADIB-7172</span></div>
+    <div class="grid-2">
+      <div>
+        <div class="fbody" style="font-size:11.5px;line-height:1.6;">
+          Config table drives the rotation — <b>DB-configurable, no hardcoding</b>:<br>
+          · <b>IFE_CODE</b> — the staff referral code<br>
+          · <b>SEQUENCE_ORDER</b> — pick order<br>
+          · <b>LAST_ASSIGNED_FLAG</b> — where the wheel stopped<br>
+          · <b>IS_ACTIVE</b> — enable/disable without deletion<br><br>
+          Strict sequence: next active code in order, loop back after the last.
+          A newly added code is <b>prioritized once</b>, then the sequence resumes.
+        </div>
+      </div>
+      <div>
+        <div class="fbody" style="font-weight:900;font-size:11px;">Rotation example (5 applications, 3 active codes):</div>
+        <div class="rota">
+          <span class="rcode on">App 1 → IFE-001</span><span class="rarrow">→</span>
+          <span class="rcode on">App 2 → IFE-002</span><span class="rarrow">→</span>
+          <span class="rcode on">App 3 → IFE-003</span><span class="rarrow">↺</span>
+          <span class="rcode">App 4 → IFE-001</span><span class="rarrow">→</span>
+          <span class="rcode">App 5 → IFE-002</span>
+        </div>
+        <p class="note">Example from ADIB-7172's own AC. Every auto-assignment is written to the audit trail (ADIB-7237).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="fdown">↓</div>
+
+  <div class="lane">
+    <div class="lane-title"><span class="lane-badge">Step 3</span> Outcome — code stored, visible, reported</div>
+    <div class="flow">
+      <div class="fbox navy">
+        <div class="flabel">Guarantee</div>
+        <div class="ftitle">DSA is ALWAYS populated</div>
+        <div class="fbody">Manual / QR / UTM code if provided, otherwise round-robin — no application leaves without a staff code.<br><span class="ref">ADIB-7172</span></div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox">
+        <div class="flabel">Audit</div>
+        <div class="ftitle">Audit trail entries</div>
+        <div class="fbody">"UTM Sourced application" as first entry (source/medium/campaign/partner in View Details); round-robin assignments audited.<br><span class="ref">ADIB-6725 · ADIB-7237</span></div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox">
+        <div class="flabel">Display</div>
+        <div class="ftitle">Super Portal "Refer code"</div>
+        <div class="fbody">Assigned referral stored in Refer code and shown as staff referral on application details.<br><span class="ref">ADIB-7388</span></div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox">
+        <div class="flabel">Reporting</div>
+        <div class="ftitle">Staff referral report</div>
+        <div class="fbody">Built from the Application table — latest successful code at submission.<br><span class="ref">ADIB-5651 AC4</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION 2 · AMP-2548 v4 FLOW ══════════ -->
+  <h2 class="sec">2 · AMP-2548 v4 — <span class="accent">the same spine, adapted for visibility</span></h2>
+  <div class="secsub">Purpose in SMBP: the Staff ID tag drives who SEES the case (AC5/AC6 hierarchy filters) — attribution AND visibility.</div>
+
+  <div class="lane">
+    <div class="flow">
+      <div class="fbox">
+        <div class="flabel">Mechanism 1</div>
+        <div class="ftitle">UTM salesagentCode</div>
+        <div class="fbody">Code in URL → case-insensitive, trimmed match against active users' Staff IDs → tagged at origination.<br><span class="ref">AC4 · AMP-3323</span></div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox gold">
+        <div class="flabel">If unmatched</div>
+        <div class="ftitle">Untagged + alert</div>
+        <div class="fbody">Typo / leaver → stays untagged (no fallback), ET51-style alert to ops listing code, app ref, timestamp. Visible to View-All only.</div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox">
+        <div class="flabel">Mechanism 2 · no code in URL</div>
+        <div class="ftitle">Sales Round-Robin</div>
+        <div class="fbody">Pool = active users <b>with</b> Staff ID, per channel/product. Lowest attributed count, A→Z tiebreak (ACP-18 mechanics only). Writes the <b>Staff ID attribution</b> — never the queue's Assigned To.</div>
+      </div>
+      <div class="farrow">→</div>
+      <div class="fbox navy">
+        <div class="flabel">Outcome</div>
+        <div class="ftitle">Tag → visibility + display</div>
+        <div class="fbody">Staff sees own (AC5) · manager sees subtree (AC6) · View-All sees everything incl. untagged (AC7) · Assigned To column, details field, first audit entry (AC9).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ SECTION 3 · ALIGNMENT MATRIX ══════════ -->
+  <h2 class="sec">3 · Alignment check — <span class="accent">ADIB logic vs AMP-2548 v4</span></h2>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th style="width:16%;">Dimension</th><th style="width:28%;">ADIB logic</th><th style="width:28%;">AMP-2548 v4</th><th style="width:12%;">Verdict</th><th>Assessment</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Attribution key</b></td>
+        <td>Staff code carried in UTM salesagentCode; person-level</td>
+        <td>Same — Staff ID mapped to salesagentCode</td>
+        <td><span class="chip chip-al">Aligned</span></td>
+        <td>Adopted directly from the ADIB-6725 pattern, as recommended.</td>
+      </tr>
+      <tr>
+        <td><b>Capture channels</b></td>
+        <td>4: UTM + QR + manual + round-robin</td>
+        <td>2: UTM + round-robin (QR/manual dropped for phase 1)</td>
+        <td><span class="chip chip-dev">Deviation</span></td>
+        <td>Deliberate scope cut — no SMBP journey screen exists for QR/manual yet. Aligned in principle; revisit in phase 2.</td>
+      </tr>
+      <tr>
+        <td><b>Precedence</b></td>
+        <td>Latest successful code wins across channels; every attempt logged in a Referral table</td>
+        <td>First wins — single evaluation at origination; no attempt log (final tag + alert only)</td>
+        <td><span class="chip chip-dev">Deviation</span></td>
+        <td>Acceptable for phase 1: with only UTM + fallback there is no second capture event. Must be revisited when QR/manual returns — then ADIB's latest-wins + attempt logging is the proven rule.</td>
+      </tr>
+      <tr>
+        <td><b>Tagging guarantee</b></td>
+        <td>Every application ALWAYS tagged (DSA mandatory; codes stored as-is, no user matching needed)</td>
+        <td>Untagged allowed: unmatched code or empty pool → View-All only + ET51-style alert</td>
+        <td><span class="chip chip-dev">Deviation</span></td>
+        <td>Justified by the different purpose: ADIB's code is pass-through attribution to FinnOne; SMBP's tag grants visibility, so a bad code must not silently assign visibility. The alert closes the operational gap.</td>
+      </tr>
+      <tr>
+        <td><b>Round-robin algorithm</b></td>
+        <td>Strict sequence rotation (SEQUENCE_ORDER + LAST_ASSIGNED_FLAG; new code prioritized once)</td>
+        <td>Load-based: lowest attributed count, A→Z tiebreak (ACP-18 mechanics)</td>
+        <td><span class="chip chip-dev">Deviation</span></td>
+        <td>Different fairness model — rotation gives equal turns, load-based balances volume. Both distribute; confirm with the bank which model sales management expects, then state the choice once in AC4.</td>
+      </tr>
+      <tr>
+        <td><b>Round-robin config</b></td>
+        <td>DB config table, active flag, no hardcoding</td>
+        <td>Pool configurable per channel + product type, active + Staff ID only</td>
+        <td><span class="chip chip-al">Aligned</span></td>
+        <td>Same principle. One open detail: WHERE the pool is configured (screen? maker/checker?) is not yet specified — add to AC4 or a config story.</td>
+      </tr>
+      <tr>
+        <td><b>Audit trail</b></td>
+        <td>First entry "UTM Sourced application"; round-robin assignments audited</td>
+        <td>First entry "Assigned to [Staff] via [UTM / Round-Robin]"</td>
+        <td><span class="chip chip-al">Aligned</span></td>
+        <td>Same pattern, extended with the assignee name.</td>
+      </tr>
+      <tr>
+        <td><b>Portal display</b></td>
+        <td>"Refer code" shown as staff referral in Super Portal</td>
+        <td>"Assigned To (Sale Staff)" column (Customize Table) + details field</td>
+        <td><span class="chip chip-al">Aligned</span></td>
+        <td>Same pattern, richer (customizable column, manager/View-All default ON).</td>
+      </tr>
+      <tr>
+        <td><b>Reporting</b></td>
+        <td>Staff referral report from Application table</td>
+        <td>Report Enquiry scoped by the same tag (AC9)</td>
+        <td><span class="chip chip-al">Aligned</span></td>
+        <td>Same data point drives both.</td>
+      </tr>
+      <tr>
+        <td><b>Correction / lifecycle</b></td>
+        <td>Code finalized at submission; no reassignment concept needed (attribution only)</td>
+        <td>Immutable tag + IEM004 demands reassignment before staff deactivation — but no reassignment function exists</td>
+        <td><span class="chip chip-open">Open — P1-B</span></td>
+        <td>Not an ADIB alignment issue — an internal contradiction still open in v4. The Round-3 comment as posted carried only P1-A, so the BA has not seen this yet. One fix: add a "Reassign Case (Sale Staff)" function (permission-gated, maker/checker, audited) and reword AC4 immutability to "changes only via explicit reassignment."</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="banner banner-navy" style="margin-top:16px;">
+    <b>Verdict:</b> AMP-2548 v4 follows the ADIB spine — person-level staff code, UTM as carrier, configurable round-robin default, audit + portal display + reporting on the same tag.
+    The four deviations are deliberate and defensible (phase-1 scope, visibility-driven untagged rule, load-based selection) — confirm the round-robin fairness model with the bank.
+    <b>One blocker before approval: P1-B</b> — the reassignment function IEM004 depends on does not exist yet.
+  </div>
+
+  <footer>
+    This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains<br>
+    Appro Onboarding Solutions FZ-LLC · Prepared 05/09/2026 · All facts verified against the referenced Jira tickets
+  </footer>
+</div>
+</body>
+</html>
