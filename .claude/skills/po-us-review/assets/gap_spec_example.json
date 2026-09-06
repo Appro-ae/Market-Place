@@ -1,0 +1,42 @@
+{
+  "file": "gap-analysis-example.xlsx",
+  "sheets": [
+    {
+      "name": "Gap Analysis",
+      "title": "Reporting Hierarchy — CPO input requirements vs AMP-2548",
+      "subtitle": "Gap analysis · prepared by Huyen (PO) · 03/09/2026",
+      "meta": "Sources: AMP-2548 v1, ACP-226/227/258, AMP-3323, ADIB-5651/6725/7172. Coverage: 0 Covered · 3 Partially covered · 3 Not covered",
+      "headers": ["Ref", "CPO Input Requirement", "Description", "Where AMP-2548 Covers It", "Coverage", "Gap & Feedback to BA", "Priority"],
+      "widths": [7, 26, 34, 40, 18, 60, 9],
+      "rows": [
+        ["R1", "Staff sees own applications only", "Sale code / staff ID user can view only the applications tagged to them on the Enquiry screens.", "AC4 pre-filter on Assigned To before all existing filters; IM005 empty state; AC6 applies to both enquiry screens.", "Partially covered", "The filter has no data to run on: no AC defines how a case gets Assigned To at origination and the user record has no Staff ID attribute. Add capture ACs + user-record field with uniqueness, maker/checker, audit.", "P1"],
+        ["R2", "Manager sees team applications", "Manager can view all applications tagged to the users under them.", "AC1–AC3 Reporting Manager field; AC5 recursive subtree traversal; AC7 maker/checker.", "Partially covered", "Context says direct reports while AC5 says full subtree; lifecycle rules missing (cycles, deactivating a manager, mid-flight RM change).", "P1"],
+        ["R3", "Case tagging basis — Staff ID or UTM", "Decide the attribution key considering the UTM concept and the precedent's sale/promo code usage.", "Not addressed.", "Not covered", "Decision: tag by Staff ID (person-level). UTM identifies the link/owner and its share model changes visibility dynamically. Staff ID carried in the URL + customer entry + round-robin default.", "P1"],
+        ["R4", "Ops / admin retain full visibility", "Roles that process all applications keep access after the restriction.", "Not addressed — every enquiry user is forced into the filter.", "Not covered", "Add a view-all override (or a department rule) and define who gets it at migration; otherwise the release is a visibility regression for operations.", "P1"],
+        ["R5", "Unassigned & historical cases", "Who sees applications with no staff tag; what happens to existing data at go-live.", "Not addressed — Impact Analysis covers Maker/Checker only.", "Not covered", "Round-robin default from a config table; explicit audience for untagged and historical cases; backfill rule.", "P2"],
+        ["R6", "Report Enquiry follows the same visibility", "Reports and exports scoped to own cases / subtree.", "AC6 Report Enquiry row incl. export scope.", "Partially covered", "Baseline references are broken (ACP-229 does not exist; ACP-228 is cancelled). Point to the correct baseline or descope.", "P2"]
+      ],
+      "status_col": 5,
+      "bold_cols": [1],
+      "row_height": 110,
+      "legend": true
+    },
+    {
+      "name": "Precedent Reference",
+      "title": "How the precedent deployment tags and shows cases today",
+      "subtitle": "ADIB reference · what to reuse for SMBP",
+      "meta": "All rows verified in Jira on the date of the review",
+      "headers": ["Ticket", "Status", "What it does", "What to reuse"],
+      "widths": [14, 18, 70, 60],
+      "rows": [
+        ["ADIB-5651", "Closed", "Staff referral code captured by QR scan or manual entry; every attempt logged; latest successful code wins at submission; real-time validation with retry or skip.", "Capture rule, precedence rule, audit of attempts."],
+        ["ADIB-7172", "Closed", "Round-robin default for DSA / IFE codes from a configuration table (code, sequence, last-assigned flag, active).", "Config table pattern for the sales round-robin pool."],
+        ["ADIB-6681", "ADIB Dev Validated", "Sales-department users see only applications whose referral code equals their Employee ID; other departments unchanged.", "Department-scoped visibility rule; rollout bugs as requirements."]
+      ],
+      "status_col": null,
+      "bold_cols": [1],
+      "row_height": 70,
+      "legend": false
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "skill_name": "po-us-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "CPO input for the next feature: (1) bank checker must be able to return an application to the maker with a mandatory reason, (2) reasons are configurable per bank, (3) the applicant gets an email when returned. Kha wrote the US in AMP-2611. Can you review it like we did for the reporting hierarchy — feedback, gap excel against the input, and tell me if the references are valid? Don't post anything in Jira, give me the files.",
+      "expected_output": "A markdown feedback note with numbered severity-ordered findings and the R1–R3 checklist table, an Appro-branded gap workbook built with build_gap_xlsx.py, every referenced ticket opened and its status stated, nothing posted to Jira, files sent with a short chat summary.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Kha updated https://scvaladdin.atlassian.net/browse/AMP-2611 after my comment yesterday. Check one more round against my checklist and prepare the colourful comment in the same format as before. I will review before you post.",
+      "expected_output": "Description diffed against the previous snapshot, each prior finding mapped to Done / Done — fix required / Not Done, comment ADF built with build_review_comment_adf.py (navy header, coloured status cells, BA mentioned, CPO cc'd), shown to the user and not posted.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Approved the E-list. Update the US AMP-2611 with the changes highlighted so I can review, keep Kha's tables as they are and don't mention SCB anywhere in the story.",
+      "expected_output": "Rendered HTML snapshot fetched, existing colours checked, edits spec written with exact-count finds, ADF rebuilt with build_adf_from_html.py (purple inserted text, grey strikethrough for removed text), description updated via editJiraIssue with contentFormat adf, live rendering verified with verify_description.py, as-applied copy saved, no precedent names in the story text.",
+      "files": []
+    }
+  ]
+}

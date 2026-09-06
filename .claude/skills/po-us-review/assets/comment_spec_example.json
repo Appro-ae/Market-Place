@@ -1,0 +1,24 @@
+{
+  "mention": {"accountId": "712020:0d7bf408-3e87-40f1-b126-0d27b3a64676", "text": "@Kha Pham Thuc"},
+  "title": "Review Round 3 — verification of the v3 update",
+  "intro": [
+    "I verified the v3 changes including reading the referenced tickets end-to-end. **9 of 11 items are closed and verified:** Staff ID immutability + normalization (AC1), unmatched-code decision (AC4), migration decision (IA2), first-wins precedence (AC4), permission separation per portal + ACP-257 (AC7/IA4), checker-time re-validation (AC10.5), Assigned To column/detail/audit entry (AC9), QR dropped for phase 1, mockup renamed.",
+    "**Two P1 blockers remain — both introduced by how the fixes were wired. Not Ready for Dev until these close.**"
+  ],
+  "columns": ["Ref", "Issue", "What the story says today", "Review Status", "Required Fix", "Priority"],
+  "status_column": 3,
+  "rows": [
+    {"cells": ["P1-A", "Round-robin reuses QUEUE assignment — wrong mechanism", "AC4 mechanism 2 + IA2 reuse ACP-18 AC1 as-is. ACP-18 triggers when an application drops into a manual-review queue, its pool is processors, and it writes the queue's Assigned To.", "Not Done", "Sales round-robin is its own mechanism: trigger at origination when no code; pool = active users WITH a Staff ID per channel/product; output = the Staff ID attribution, never the queue's Assigned To. Keep ACP-18 as algorithm precedent only.", "P1"]},
+    {"cells": ["P1-B", "Case reassignment is required but impossible", "AC8 IEM004 blocks deactivation until cases are reassigned, but AC4 declares attribution immutable and no AC defines a reassignment function.", "Done — fix required", "Add a permission-gated, maker/checker \"Reassign Case (Sale Staff)\" function with an audit entry; reword AC4 immutability to \"changes only via explicit reassignment\".", "P1"]}
+  ],
+  "sections": [
+    {"heading": "Minor items to close in the same edit:", "numbered": [
+      "Unmatched-code cases die silently — add an ET51-style alert or an \"Untagged — unmatched code\" report view.",
+      "AC4 preamble says \"first mechanism that produces a valid match\" but an unmatched code still blocks mechanism 2 — reword to match the carve-out.",
+      "AC7 still says \"define which roles receive this permission at migration\" while IA2 grants ALL existing enquiry users — align the two."
+    ]}
+  ],
+  "closing": ["→ Close P1-A and P1-B, then we move this to Ready for Dev."],
+  "cc": [{"accountId": "<CPO accountId from lookupJiraAccountId>", "text": "@Antofelix Rajan"}],
+  "cc_suffix": ""
+}
