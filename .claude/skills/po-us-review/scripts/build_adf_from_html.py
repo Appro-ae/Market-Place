@@ -81,10 +81,11 @@ def apply_edits(html, ops):
 
 # ----------------------------------------------------------------------------- html → adf
 class Converter:
-    def __init__(self, ins_color, del_color, accept=False, allow_image_loss=False):
+    def __init__(self, ins_color, del_color, accept=False, allow_image_loss=False, strip_old=False):
         self.ins = ins_color.lower()
         self.dele = del_color.lower()
         self.accept = accept
+        self.strip_old = strip_old
         self.allow_image_loss = allow_image_loss
         self.images_dropped = 0
 
@@ -132,9 +133,14 @@ class Converter:
         return isinstance(t, Tag) and t.name == "span" and "jira-issue-macro" in (t.get("class") or [])
 
     def removed(self, ctx):
-        """In --accept mode, text that was struck or carries the removal colour is dropped."""
-        return self.accept and (ctx.get("del") or ctx.get("strike")
-                                or (ctx.get("color") or "").lower() == self.dele)
+        """In --accept mode, text that was struck or carries the removal colour is dropped.
+        In --strip-old-strikes mode only pre-existing strikes (earlier rounds) are dropped;
+        this round's <del> runs stay visible."""
+        if self.accept:
+            return ctx.get("del") or ctx.get("strike") or (ctx.get("color") or "").lower() == self.dele
+        if self.strip_old and not ctx.get("del"):
+            return bool(ctx.get("strike")) or (ctx.get("color") or "").lower() == self.dele
+        return False
 
     # --- inline
     def inline(self, children, ctx, out):
@@ -164,7 +170,8 @@ class Converter:
                     key = (c.get("data-jira-key") or (a.get_text(strip=True) if a else "")).strip()
                     # Jira auto-links ticket keys typed as plain text; inside tracked changes
                     # (or text already carrying the highlight colour) keep them as text.
-                    if ctx.get("del") or ctx.get("ins") or (ctx.get("color") or "").lower() == self.ins:
+                    if (ctx.get("del") or ctx.get("ins") or ctx.get("strike")
+                            or (ctx.get("color") or "").lower() in (self.ins, self.dele)):
                         out.append(self.text_node(key, ctx))
                     else:
                         url = a["href"] if a else key
@@ -389,6 +396,9 @@ def main():
     ap.add_argument("--ins-color", default=DEFAULT_INS)
     ap.add_argument("--del-color", default=DEFAULT_DEL)
     ap.add_argument("--accept", action="store_true", help="strip struck text and highlight colour (clean version)")
+    ap.add_argument("--strip-old-strikes", action="store_true",
+                    help="drop text struck in earlier rounds (already reviewed) but keep this round's <del> runs; "
+                         "use when Jira answers CONTENT_LIMIT_EXCEEDED")
     ap.add_argument("--allow-image-loss", action="store_true")
     ap.add_argument("--chunk-size", type=int, default=20000)
     ap.add_argument("--show-edits", action="store_true", help="print the blocks that carry tracked changes")
@@ -406,9 +416,10 @@ def main():
     soup = BeautifulSoup(html, "html.parser")
     # --accept is handled inside the converter: struck / removal-coloured runs are dropped,
     # highlight-coloured runs are emitted without the colour (see Converter.inline/marks_for).
-    conv = Converter(args.ins_color, args.del_color, accept=args.accept, allow_image_loss=args.allow_image_loss)
+    conv = Converter(args.ins_color, args.del_color, accept=args.accept, allow_image_loss=args.allow_image_loss,
+                     strip_old=args.strip_old_strikes)
     doc = conv.convert(soup)
-    if args.accept:
+    if args.accept or args.strip_old_strikes:
         doc = prune_empty(doc)
     validate(doc)
 

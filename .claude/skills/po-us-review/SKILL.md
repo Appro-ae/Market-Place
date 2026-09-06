@@ -138,9 +138,18 @@ tracked changes. Read `references/jira-formatting.md` before the first run.
 5. Read the chunks and pass the document as `fields.description` to `editJiraIssue` with
    `contentFormat: adf`. The whole document must be reproduced verbatim in the tool call; the
    chunk files exist so it can be read back without truncation.
+   If Jira answers `CONTENT_LIMIT_EXCEEDED`, the stored document is too large (the limit is on
+   the compact ADF JSON, roughly 80–90 KB, not on the visible text). Shrink in this order and
+   retry: `scripts/shrink_adf.py v5.adf.json --out v5s.adf.json --strike-only` (merges
+   identical-mark runs, drops the grey colour on struck text); if still too large, rebuild
+   with `--strip-old-strikes` (accepts the previous rounds' deletions, keeps this round's
+   strikethrough) and tell the PO which earlier removals are no longer visible.
 6. Verify the live ticket: fetch rendered HTML again and run `scripts/verify_description.py
-   --live live.html --expected v5.edited.html --phrases "…"`. Structure counts (tables, rows,
-   bullets, headings) must match; colour run counts must match the build output.
+   --live live.html --expected v5.edited.html --summary v5.summary.json --phrases "…"`.
+   Structure counts (tables, rows, bullets, headings) must match; colour run counts must match
+   the build output. After `--strip-old-strikes`, compare against the `.summary.json` counts
+   (the `.edited.html` still holds the struck blocks) and diff the text of the sent ADF against
+   the live rendering, ignoring inline cards and whitespace.
 7. Save the as-applied preview under `output/…` and commit it; report what changed, what was
    struck through, and that removed text is still visible so the PO can revert.
 
@@ -184,7 +193,7 @@ estimate items that have no precedent). Post only on the user's go.
   mark rules, renderer artifacts, comment ADF structure, the chunk-and-paste procedure.
 - `references/worked-example-amp2548.md` — the six-round AMP-2548 cycle with what each round
   found and the lessons that shaped this skill.
-- `scripts/build_adf_from_html.py`, `scripts/verify_description.py`,
+- `scripts/build_adf_from_html.py`, `scripts/shrink_adf.py`, `scripts/verify_description.py`,
   `scripts/build_review_comment_adf.py`, `scripts/build_gap_xlsx.py` — run with `--help`.
 - `assets/edits_example.json`, `assets/comment_spec_example.json`, `assets/gap_spec_example.json`
   — real specs from the AMP-2548 cycle to copy from.

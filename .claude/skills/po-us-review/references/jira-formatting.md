@@ -62,7 +62,11 @@ Check what is already used before choosing: `grep -o '<font color="[^"]*"' snaps
   `\n    ` before a macro and the `\n` after it, keeping the author's own spaces.
 - `<a name="…">` anchors inside headings are noise.
 - Underline renders as `<ins>` and strike as `<del>`; the script renames pre-existing ones to
-  `<u>`/`<s>` before applying edits so they are not confused with tracked changes.
+  `<u>`/`<s>` **before** applying edits so they are not confused with tracked changes. So when
+  a `find` string must match text that is already struck in the snapshot (a second round of
+  edits on top of a first), write it as `<font color="#97a0af"><s>…</s></font>`, not `<del>`.
+- Jira auto-links ticket keys typed as plain text into issue macros on the next render. The
+  script keeps such keys as text when they sit inside highlighted or struck runs.
 
 ## The chunk-and-paste procedure (description update)
 
@@ -74,7 +78,29 @@ Check what is already used before choosing: `grep -o '<font color="[^"]*"' snaps
    text, which step 6 catches.
 5. `getJiraIssue` with `expand: renderedFields` → `live.html`.
 6. `python3 scripts/verify_description.py --live live.html --expected v5.edited.html --summary v5.summary.json --phrases "…"`.
-7. Keep `v5.preview.html` as the as-applied record in the repo.
+7. Keep `v5.preview.html` as the as-applied record in the repo (after `--strip-old-strikes`,
+   wrap the live rendered HTML instead, since the preview still shows the dropped strikes).
+
+## Size limit — `CONTENT_LIMIT_EXCEEDED`
+
+`editJiraIssue` rejects a description whose stored document is too large. The limit is on the
+compact ADF JSON, not on the visible text: measured on AMP-2548, 80 KB (26.5k characters of
+text) was accepted and 92 KB (28.7k characters) was rejected. Tracked changes double the size
+of every edited sentence, so a third round on a long story hits it.
+
+Mitigations, cheapest first:
+
+1. `python3 scripts/shrink_adf.py v5.adf.json --out v5s.adf.json --strike-only` — merges
+   adjacent runs with identical marks, drops empty cell attributes and removes the grey colour
+   from struck text (strikethrough alone still reads as "removed"). Saves 5–10 %.
+2. Rebuild with `build_adf_from_html.py … --strip-old-strikes` — previous rounds' struck text
+   (`<s>` / grey runs in the snapshot) is dropped as if accepted, this round's `<del>` stays,
+   and empty containers are pruned. Saved 11 % on AMP-2548. Tell the PO which earlier removals
+   are no longer visible in the ticket; the earlier as-applied record in the repo keeps them.
+3. Ask the BA to accept the tracked changes before the next round (`--accept` run).
+
+Macros and smart links inside struck or highlighted runs are emitted as plain text keys so a
+removed reference does not resurface as a live card.
 
 ## Comment posting
 

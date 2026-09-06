@@ -1,0 +1,731 @@
+<!-- AMP-2548 description as applied in Jira on 06/09/2026, round 5 (Jira updated 20:03 +04:00): purple = text added or changed by the PO in rounds 4-5 (Department = Sale rule, free-text Staff ID, three attribution mechanisms, untagged cases allowed, no reassignment, multiple Reporting Managers); grey strikethrough = text removed in round 5 (round-4 removals were accepted to stay within Jira's description size limit); orange = PO edits of 06/09; dark orange / blue = BA v4 NEW / CHANGED markers. Source: getJiraIssue expand=renderedFields, cosmetic fixes only (bracket spans, smart-link labels, the (*)Of note paragraph the wiki renderer mangles). -->
+<!doctype html><html><head><meta charset="utf-8"><title>AMP-2548 v5 round 5 as applied</title><style>body{font-family:Arial,sans-serif;font-size:13px;max-width:1100px;margin:20px auto;color:#172b4d} table{border-collapse:collapse;margin:8px 0} td,th{border:1px solid #ccc;padding:5px 8px;vertical-align:top} th{background:#f4f5f7} del{color:#97a0af;text-decoration:line-through} img{display:none} .aui-lozenge{font-size:10px;background:#eee;padding:1px 4px;border-radius:3px} .legend{border:1px solid #dfe1e6;background:#fafbfc;padding:10px 14px;margin-bottom:18px} .legend span{display:inline-block;margin-right:16px}</style></head><body><div class="legend"><b>AMP-2548 — description as applied, round 5 (06/09/2026)</b><br/><span style="color:#6554c0;font-weight:600">purple = added / changed by PO (rounds 4–5)</span><span style="color:#97a0af;text-decoration:line-through">grey strike = removed in round 5</span><span style="color:#ff991f">orange = PO note of 06/09</span><span style="color:#E65100">dark orange = BA v4 NEW</span><span style="color:#1565C0">blue = BA v4 CHANGED</span></div>
+<h2><a name="ContextofBusiness"></a>Context of Business</h2>
+
+<p>Currently, all users with enquiry access see the same pool of applications regardless of team boundaries. This enhancement introduces two capabilities:</p>
+
+<ol>
+	<li><b>Staff ID &amp; Case Attribution:</b> Each bank portal user is assigned a Staff ID that links them to applications originating from the Distribution Portal (via UTM <font color="#6554c0">staff_id</font>, <font color="#6554c0">the Referral Code pop-up</font> or round-robin assignment). This provides the matching key for visibility filtering. <font color="#6554c0">Staff ID is the bank’s existing staff identifier (Sales Code, Agent Code or Employee ID), accepted as free text. Staff ID and Reporting Manager apply to users with Department = Sale only.</font></li>
+	<li><b>Reporting Manager Hierarchy &amp; Visibility Filtering:</b> A Reporting Manager field on the user record establishes a reporting chain. Staff-level users see only applications tagged to their Staff ID. Manager-level users see applications tagged to all users in their reporting subtree (unlimited depth).  <font color="#6554c0">Visibility filtering applies only to users with Department = Sale. Users in any other department see all applications, subject to their existing role permission to view Application Enquiry and Report Enquiry.</font></li>
+</ol>
+
+
+<p>These rules apply across Application Enquiry and Report Enquiry as pre-filters before all existing filters.</p>
+
+<h2><a name=""></a><font color="#6554c0">Department Rule (Department = Sale)</font></h2>
+
+<p><font color="#6554c0">Department = Sale drives this enhancement:</font></p>
+
+<ol>
+	<li><font color="#6554c0">Staff ID and Reporting Manager are shown on Add User / Edit User only when [Department] = Sale.</font></li>
+	<li><font color="#6554c0">The visibility filter (AC5/AC6) applies only to users with Department = Sale.</font></li>
+	<li><font color="#6554c0">Users in all other departments see all applications, provided their role has the View permission for Application Enquiry / Report Enquiry (existing Role Management permissions, no new permission).</font></li>
+</ol>
+
+
+<h2><a name="ReferenceTickets"></a>Reference Tickets</h2>
+
+<ul>
+	<li><b>AMP-2548</b> — Reporting Manager visibility &amp; case assignment (this ticket)</li>
+	<li><b>AMP-3323</b> — UTM with permission control — defines “View All Application Sources” permission pattern</li>
+	<li><font color="#6554c0"><b>AMP-464</b></font><font color="#6554c0"> — Referral Code pop-up (customer-entered Staff ID)</font></li>
+	<li><font color="#6554c0"><b>AMP-1454</b></font><font color="#6554c0"> — Referral/Promo code stored on the application and shown in the audit trail</font></li>
+	<li><b>ACP-258</b> — User Management — Add User / Edit User baseline</li>
+	<li><b>ACP-226/227</b> — Application Enquiry — View List / View Detail baseline</li>
+	<li><b>ACP-230</b> — Report Enquiry baseline</li>
+	<li><b>ACP-265/266/268</b> — Report List (Parts 1–3)</li>
+	<li><b>ACP-245</b> — Maker/Checker — Create request for maker/checker modules</li>
+	<li><b>ACP-248/249</b> — Maker Queue — List &amp; Detail screens</li>
+	<li><b>ACP-250/251</b> — Checker Queue — List &amp; Detail screens</li>
+	<li><b>ACP-257</b> — Role Management — permission assignment pattern</li>
+	<li><b>ACP-18</b> — Queue Assignment Management — Auto-Assign Routing Logic (algorithm precedent for sales round-robin selection mechanics)</li>
+</ul>
+
+
+<h2><a name="MockupReference"></a>Mockup Reference</h2>
+
+<p>An interactive HTML mockup is attached to this ticket. Open the mockup file and use the tabs at the top to navigate between screens. Each AC below references the corresponding mockup tab.</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Mockup Tab</b></th>
+<th class='confluenceTh'><b>Corresponds To</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>Add User</td>
+<td class='confluenceTd'>AC1 — Staff ID &amp; Reporting Manager fields on Add User / Edit User form</td>
+</tr>
+<tr>
+<td class='confluenceTd'>User Details</td>
+<td class='confluenceTd'>AC2 — Staff ID &amp; Reporting Manager on View Details Users (read-only)</td>
+</tr>
+<tr>
+<td class='confluenceTd'>List of Users</td>
+<td class='confluenceTd'>AC3 — New Staff ID &amp; Reporting Manager columns on list screen</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Hierarchy &amp; Visibility</td>
+<td class='confluenceTd'>AC5/AC6/AC7 — Staff, Manager &amp; Admin visibility rules with examples</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Maker/Checker Request</td>
+<td class='confluenceTd'>AC10 — Maker Queue list, Checker Detail old/new comparison</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h2><a name="Navigation"></a>Navigation</h2>
+
+<p>This enhancement touches User Management (for Staff ID &amp; Reporting Manager fields) and the two enquiry screens (for visibility filtering):</p>
+
+<ol>
+	<li><b>User Management:</b> Left menu → Users → User Management → Add User / Edit User</li>
+	<li><b>Application Enquiry:</b> Left menu → Enquiry → Application Enquiry</li>
+	<li><b>Report Enquiry:</b> Left menu → Enquiry → Report Enquiry</li>
+</ol>
+
+
+<h2><a name="UserStory"></a>User Story</h2>
+
+<p><b>As</b> a bank portal administrator,<br/>
+<b>I want to</b> assign a Staff ID and Reporting Manager to each user so the system can tag applications to staff and restrict enquiry screen visibility based on the reporting hierarchy,<br/>
+<b>So that</b> staff members see only their own assigned cases, managers see their reporting subtree’s cases, and operations/admin users retain full visibility across Application Enquiry and Report Enquiry.</p>
+
+<h2><a name="AcceptanceCriteria"></a>Acceptance Criteria</h2>
+
+<h3><a name="AC1.StaffID%26ReportingManagerFields%E2%80%94AddUser%2FEditUser"></a>AC1. Staff ID &amp; Reporting Manager Fields — Add User / Edit User</h3>
+
+<p><b>Mockup:</b> Tab “Add User” — see the Staff ID text input and Reporting Manager searchable dropdown highlighted in green below the Department field.</p>
+
+<p>Two new fields are added to the Add User and Edit User screens.</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Component</b></th>
+<th class='confluenceTh'><b>Component Type</b></th>
+<th class='confluenceTh'><b>Editable</b></th>
+<th class='confluenceTh'><b>Mandatory</b></th>
+<th class='confluenceTh'><b>Default Value / Description</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Staff ID</b></font> <font color="#6554c0">(Sales Code / Agent Code / Employee ID)</font></td>
+<td class='confluenceTd'>Text Input</td>
+<td class='confluenceTd'>Yes (Add User) / Read-only (Edit User, once saved)</td>
+<td class='confluenceTd'><font color="#6554c0">Yes when [Department] = Sale</font></td>
+<td class='confluenceTd'><ul>
+	<li>Displayed after the Department field on the Add User and Edit User screens. <font color="#6554c0">Shown only when [Department] = Sale; hidden for any other department.</font></li>
+	<li><b>Format:</b>  <font color="#6554c0">Free text, 1–24 characters; letters, digits and - _ . / ; no spaces; stored as text with leading zeros preserved. Invalid format → IEM005 “Staff ID may contain letters, numbers and - _ . / only (max 24 characters)”.</font></li>
+	<li><b>Immutability:</b> Once a Staff ID is saved and approved via Maker/Checker, it becomes read-only. The administrator cannot change or clear an existing Staff ID. To correct a mistake, the administrator must deactivate the user and create a new record with the correct Staff ID</li>
+	<li><b>Normalization:</b> The system trims leading/trailing whitespace and performs case-insensitive matching when checking uniqueness and UTM attribution (e.g., “STF-001” and “stf-001” are treated as the same code). <font color="#6554c0">Uniqueness (IEM001) and all matching use the canonical key (uppercase, separators removed); the display value is shown as entered.</font></li>
+	<li><b>Uniqueness:</b> Must be unique across all users in the bank (case-insensitive). The system validates on save and displays IEM001 “Staff ID already exists” if duplicate</li>
+	<li><font color="#6554c0">Matched against the Staff ID carried in the UTM link (staff_id) or typed in the Referral Code pop-up (
+    <span class="jira-issue-macro" data-jira-key="AMP-464" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-464" class="jira-issue-macro-key issue-link"  title="[SMBP. v2][Customer Journey] - Referral Code Pop Up (CC, PL, ML, AL)" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-464
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+), see AC4. Banks must not use national ID, phone or e-mail values as Staff IDs.</font></li>
+	<li><font color="#6554c0">Not applicable to other departments: the field is hidden and those users see all applications per their enquiry permissions.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Reporting Manager</b></font></td>
+<td class='confluenceTd'><del>Searchable Dropdown</del> <font color="#6554c0">Searchable multi-select</font></td>
+<td class='confluenceTd'>Yes</td>
+<td class='confluenceTd'>No</td>
+<td class='confluenceTd'><ul>
+	<li>Displayed after the Staff ID field. <font color="#6554c0">Shown only when [Department] = Sale.</font></li>
+	<li>Shows a searchable list of  <font color="#6554c0">active users with Department = Sale, excluding the user themselves</font>. The administrator types to filter by name. <font color="#6554c0">One or more managers can be selected.</font></li>
+	<li>Each option displays: <b>User Name</b> (Department)</li>
+	<li>When left empty, the user has no upstream manager — they are a standalone or top-level user. Their applications are visible only to themselves  <font color="#6554c0">(and to users in non-Sale departments)</font></li>
+	<li>A user cannot be assigned as their own Reporting Manager</li>
+	<li>The system prevents circular chains: if assigning User A as the Reporting Manager of User B would create a cycle <font color="#6554c0">through any manager edge</font> (e.g., A → B → C → A), the system displays IEM002 “This assignment would create a circular reporting chain” and blocks the save</li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>Legend:</b> <font color="#e65100"><b>▪ NEW</b></font>   ▪ Existing (no change)</p>
+
+<h3><a name="AC2.ViewDetailsUsers%E2%80%94NewFields"></a>AC2. View Details Users — New Fields</h3>
+
+<p><b>Mockup:</b> Tab “User Details” — see the Staff ID and Reporting Manager labels with green left border in the detail grid.</p>
+
+<p>Both new fields are displayed on the View Details Users screen (read-only).</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Component</b></th>
+<th class='confluenceTh'><b>Component Type</b></th>
+<th class='confluenceTh'><b>Editable</b></th>
+<th class='confluenceTh'><b>Mandatory</b></th>
+<th class='confluenceTh'><b>Default Value / Description</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Staff ID</b></font></td>
+<td class='confluenceTd'>Label</td>
+<td class='confluenceTd'>No</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'><ul>
+	<li>Displayed after the Department field. <font color="#6554c0">Displayed only when Department = Sale.</font></li>
+	<li>Shows the Staff ID value. Displays “—” when not assigned</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Reporting Manager</b></font></td>
+<td class='confluenceTd'>Label</td>
+<td class='confluenceTd'>No</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'><ul>
+	<li>Displayed after the Staff ID field. <font color="#6554c0">Displayed only when Department = Sale.</font></li>
+	<li>Shows the full name<font color="#6554c0">s</font> of the assigned Reporting Manager<font color="#6554c0">(s), comma-separated</font></li>
+	<li>Displays “None” when the user has no Reporting Manager assigned</li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h3><a name="AC3.ListofUsers%E2%80%94NewColumns"></a>AC3. List of Users — New Columns</h3>
+
+<p><b>Mockup:</b> Tab “List of Users” — see the Staff ID and Reporting Manager columns highlighted in green with filter chip and search integration.</p>
+
+<p>Two new columns are added to the List of Users screen.</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Column</b></th>
+<th class='confluenceTh'><b>Position</b></th>
+<th class='confluenceTh'><b>Description</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Staff ID</b></font></td>
+<td class='confluenceTd'>After Department</td>
+<td class='confluenceTd'>Displays the user’s Staff ID. Sortable alphabetically. Empty for users with no Staff ID assigned <font color="#6554c0">(all non-Sale users)</font>.</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Reporting Manager</b></font></td>
+<td class='confluenceTd'>After Staff ID</td>
+<td class='confluenceTd'>Displays the full name<font color="#6554c0">(s)</font> of the user’s assigned Reporting Manager<font color="#6554c0">(s), comma-separated</font>. Sortable alphabetically<font color="#6554c0"> by first manager</font>. Empty for users with no Reporting Manager assigned.</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<ul>
+	<li><b>Filter panel:</b> Both Staff ID and Reporting Manager are added to the filter panel as text search filters.</li>
+	<li><b>Search:</b> The existing search bar includes Staff ID and Reporting Manager name in its search scope.</li>
+	<li><b>Export:</b> Both new columns are included in the exported file.</li>
+</ul>
+
+
+<h3><a name="AC4.CaseAttribution%E2%80%94HowApplicationsGetTaggedtoStaff"></a>AC4. Case Attribution — How Applications Get Tagged to Staff</h3>
+
+<p>For the visibility rules in AC5–<font color="#6554c0">AC6</font> to function, each application must be tagged with a Staff ID identifying the assigned staff member. Attribution <del>occurs through two mechanisms with the following precedence</del><font color="#6554c0">is resolved at submission from the codes captured in the journey</font>:</p>
+
+<ul>
+	<li><del>If the application URL contains a salesagentCodestaff_id parameter,</del> <b><del>only UTM attribution (mechanism 1) is attempted</del></b><del>. If the code matches an active Staff ID, the application is tagged. If the code does not match (typo, staff left), the application remains untagged — round-robin is</del> <b><del>not</del></b> <del>evaluated as a fallback.</del></li>
+	<li><del>If the application URL contains</del> <b><del>no</del></b> <del>salesagentCodestaff_id parameter,</del> <b><del>round-robin (mechanism 2) is evaluated</del></b> <del>to auto-assign the application to a staff member.</del></li>
+	<li><font color="#6554c0">Mechanism 1 — UTM: staff_id parameter of the link. Mechanism 2 — Pop-up: Staff ID entered in the Referral Code pop-up (
+    <span class="jira-issue-macro" data-jira-key="AMP-464" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-464" class="jira-issue-macro-key issue-link"  title="[SMBP. v2][Customer Journey] - Referral Code Pop Up (CC, PL, ML, AL)" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-464
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+). Both optional; each capture is audited with source and timestamp.</font></li>
+	<li><font color="#6554c0">Latest captured value matching an active Sale-department Staff ID (canonical key) wins.</font></li>
+	<li><font color="#6554c0">No matching value (no code, typo, inactive user): sales round-robin (mechanism 3) runs if a pool is configured for the channel/product; otherwise the application remains untagged. Unmatched raw value kept; ET51 alert to queue/ops admin.</font></li>
+</ul>
+
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Mechanism</b></th>
+<th class='confluenceTh'><b>How It Works</b></th>
+<th class='confluenceTh'><b>Reference</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>1. UTM Attribution</b> </font><b><del>(first priority)</del></b></td>
+<td class='confluenceTd'><ul>
+	<li>When a customer applies via a Distribution Portal UTM link containing a <font color="#6554c0">staff_id</font> parameter, the system captures the code and performs a  match <font color="#6554c0">on the canonical key (case- and separator-insensitive)</font> against all active bank portal users’ Staff IDs</li>
+	<li>If a match is found, the application is tagged with that user’s Staff ID at <del>origination</del><font color="#6554c0">submission</font></li>
+	<li><b>Unmatched code:</b> If the <font color="#6554c0">staff_id</font> does not match any active Staff ID (typo, staff left the bank, or code never assigned), the application <del>remains</del> <b><del>untagged</del></b><del>. The system does not fall back to round-robin for unmatched codes.</del> <font color="#6554c0">is treated as untagged and goes to sales round-robin (mechanism 3) where a pool is configured.</font> An alert email (ET51 pattern) is sent to the queue/ops admin listing the unmatched code, application reference, and origination timestamp so the mismatch can be investigated</li>
+</ul>
+</td>
+<td class='confluenceTd'>AMP-3323 (UTM ID in generated URL)</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0"><b>2. Referral Code pop-up</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#6554c0">Shown when the channel referral flag is on (
+    <span class="jira-issue-macro" data-jira-key="AMP-464" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-464" class="jira-issue-macro-key issue-link"  title="[SMBP. v2][Customer Journey] - Referral Code Pop Up (CC, PL, ML, AL)" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-464
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+ baseline); the customer enters the Staff ID given by the salesperson.</font></li>
+	<li><font color="#6554c0">Validated live against active Sale-department Staff IDs (canonical key). Unknown value: “Code not recognised — check with your salesperson or continue without”.</font></li>
+	<li><font color="#6554c0">AC1 format rule applied server-side. Stored as raw value + resolved Staff ID + source = Pop-up.</font></li>
+</ul>
+</td>
+<td class='confluenceTd'><font color="#6554c0">
+    <span class="jira-issue-macro" data-jira-key="AMP-464" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-464" class="jira-issue-macro-key issue-link"  title="[SMBP. v2][Customer Journey] - Referral Code Pop Up (CC, PL, ML, AL)" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-464
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+, 
+    <span class="jira-issue-macro" data-jira-key="AMP-1454" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-1454" class="jira-issue-macro-key issue-link"  title="UAT:Referral/Promo Code not stored in DB and not visible in Super Portal audit trail" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10303?size=medium" />
+            AMP-1454
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+</font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><b><del>2.</del></b><font color="#6554c0"><b>3.</b></font><font color="#e65100"> <b>Sales Round-Robin Auto-Assign</b> </font><b><del>(second priority)</del></b><font color="#6554c0"><b>(untagged cases only)</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><b>Trigger:</b> <del>At origination, when the application URL contains no salesagentCodestaff_id parameter (i.e., UTM attribution was not attempted)</del> <font color="#6554c0">At submission, when no captured code matches an active Staff ID and a pool is configured for the channel/product.</font></li>
+	<li><b>Eligible pool:</b> Active users <font color="#6554c0">with Department = Sale</font> who have a Staff ID assigned, configurable per channel and product type. Only users with a Staff ID are eligible — users without a Staff ID are excluded from the pool (their cases would be invisible to them under AC5/AC6 visibility rules)</li>
+	<li><b>Selection algorithm</b> (same mechanics as <a href="https://scvaladdin.atlassian.net/browse/ACP-18" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-18</a> AC1, applied to the sales pool): scan the eligible pool → select the user with the lowest attributed application count → break ties alphabetically by email</li>
+	<li><b>Output:</b> The selected user’s Staff ID is written as the application’s attribution. This is a <b>sales attribution</b>, distinct from the queue’s “Assigned To” which is set separately when the application enters a processing queue</li>
+	<li>If no eligible assignee is found (pool empty or not configured for this channel/product), the application remains untagged and an alert email (ET51 pattern) is sent to the queue/ops admin</li>
+</ul>
+</td>
+<td class='confluenceTd'>ACP-18 AC1 (algorithm precedent only — trigger, pool, and output differ)</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<ul>
+	<li><b>Unattributed applications:</b> If neither mechanism produces a tag (<del>unmatched UTM code, or</del> <font color="#6554c0">no matching code and</font> round-robin pool empty / not configured), the application remains untagged. Untagged applications are visible  <font color="#6554c0">to users in non-Sale departments only</font>. <font color="#6554c0">Not every application carries a Staff ID: both codes are optional.</font></li>
+	<li><b>Attribution is immutable after</b> <b><del>origination</del></b><font color="#6554c0"><b>submission</b></font><b>.</b> <del>The Staff ID tag set at origination does not change, even if the tagged user’s Staff ID is later corrected by creating a new user record (Staff ID is read-only once set per AC1).</del> <font color="#6554c0">No reassignment function: the tag never changes, including on user deactivation or when a replacement user record is created.</font></li>
+	<li><font color="#6554c0">The application stores the raw entered value, the resolved Staff ID and the source (UTM / Pop-up / Round-robin / Backfill).</font></li>
+</ul>
+
+
+<h3><a name="AC5.StaffVisibility%E2%80%94OwnAssignedApplicationsOnly"></a>AC5. Staff Visibility — Own Assigned Applications Only</h3>
+
+<p><b>Mockup:</b> Tab “Hierarchy &amp; Visibility” — see the Case Visibility Comparison section showing which applications each user role can see.</p>
+
+<p>A user  <font color="#6554c0">with Department = Sale</font> sees only applications tagged to their Staff ID <font color="#6554c0">and to their reporting subtree (AC6)</font>. This filter applies as a pre-filter before all existing filters (channel, product type, status, search) on every enquiry screen listed in AC9.</p>
+
+<ul>
+	<li>The system matches the logged-in user’s Staff ID against the application’s attributed Staff ID (set via AC4).</li>
+	<li>Applications tagged to other staff are excluded from the list.</li>
+	<li>If no applications are tagged to the user, the screen displays IM005 “No results found.”</li>
+	<li><font color="#6554c0">The department pre-filter is the only additional restriction: no implicit date window, default filters identical to other users.</font></li>
+</ul>
+
+
+<h3><a name="AC6.ManagerVisibility%E2%80%94FullReportingSubtree%28UnlimitedDepth%29"></a>AC6. Manager Visibility — Full Reporting Subtree (Unlimited Depth)</h3>
+
+<p><b>Mockup:</b> Tab “Hierarchy &amp; Visibility” — see the Organisation Chart showing the reporting subtree traversal and Fatima’s / Khalid’s visibility examples.</p>
+
+<p>A <font color="#6554c0">Sale-department</font> manager sees applications tagged to all users in their reporting subtree, with no depth limit. This filter applies as a pre-filter before all existing filters on every enquiry screen listed in AC9.</p>
+
+<ul>
+	<li>The system traverses the reporting chain downward from the logged-in user recursively with unlimited depth: collects all users whose Reporting Manager <del>=</del><font color="#6554c0">s include</font> the logged-in user (level 1), then all users whose Reporting Manager is one of those users (level 2), and so on until no more reports are found. <font color="#6554c0">A user with several managers appears in each manager’s subtree; an application is listed once.</font></li>
+	<li>The screen displays all applications where the attributed Staff ID matches any user in the subtree, plus the manager’s own tagged applications.</li>
+	<li>If the manager has no reports and no own tagged applications, the screen displays IM005 “No results found.”</li>
+</ul>
+
+
+<h3><a name="AC7.%E2%80%9CViewAllApplications%E2%80%9DPermission"></a>AC7. “View All Applications” Permission <font color="#6554c0">— Removed</font></h3>
+
+<p><font color="#6554c0">Removed. Replaced by the department rule: users with Department ≠ Sale see all applications, including untagged ones, through their existing View permission for Application Enquiry / Report Enquiry. No new permission is created.</font></p>
+
+<h3><a name="AC8.ReportingManagerLifecycleRules"></a>AC8. Reporting Manager Lifecycle Rules</h3>
+
+<p>Edge cases for managing the Reporting Manager field over time.</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Scenario</b></th>
+<th class='confluenceTh'><b>System Behaviour</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Circular chain prevention</b></font></td>
+<td class='confluenceTd'><ul>
+	<li>If assigning User A as the Reporting Manager of User B would create a cycle at any depth <font color="#6554c0">across any manager edge</font> (e.g., A → B → C → A), the system blocks the save and displays IEM002 “This assignment would create a circular reporting chain.”</li>
+	<li>Self-assignment (User A as their own RM) is a special case of this rule and is also blocked.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Deactivating / deleting a manager with reports</b></font></td>
+<td class='confluenceTd'><ul>
+	<li>If a user who is the Reporting Manager for one or more active users is deactivated or deleted, the system displays IEM003 “This user is the Reporting Manager for [N] active user(s). Reassign their reports before deactivating.”</li>
+	<li>The deactivation/deletion is blocked until all direct reports are reassigned to another Reporting Manager or set to None.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Deactivating a staff user with tagged applications</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><del>If a user with a Staff ID who has open tagged applications (applications attributed to their Staff ID that are not in a terminal status) is deactivated, the system displays IEM004 “This user has [N] open tagged application(s). Reassign their cases before deactivating.”</del></li>
+	<li><del>The deactivation is blocked until all open tagged applications are reassigned to another staff member or reach a terminal status.</del></li>
+	<li><font color="#6554c0">Deactivation is allowed. Open applications keep the Staff ID tag and remain visible to the user’s Reporting Manager(s) and to non-Sale users. IEM004 removed.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Mid-flight RM change — visibility is real-time</b></font></td>
+<td class='confluenceTd'><ul>
+	<li>When a user’s Reporting Manager is changed (after Checker approval), the visibility recalculation takes effect immediately.</li>
+	<li>The new manager’s subtree now includes this user and their applications. The old manager’s subtree no longer includes them.</li>
+	<li>Existing applications tagged to the user move with them — visibility follows the current hierarchy, not the hierarchy at the time of application creation.</li>
+	<li><font color="#6554c0">Rules apply per manager edge: adding or removing a manager updates that manager’s subtree in real time.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0"><b>Department changed to Sale</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#6554c0">Staff ID becomes mandatory: the Staff ID and Reporting Manager fields appear on selecting Sale and the save is blocked until a Staff ID is entered.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0"><b>Department changed from Sale to another department</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#6554c0">Blocked while the user is Reporting Manager of active Sale users (IEM003)</font> <del>or has open tagged applications (IEM004)</del><font color="#6554c0">.</font></li>
+	<li><font color="#6554c0">Otherwise Reporting Manager is cleared to None, Staff ID is retained read-only and hidden so historical attribution stays resolvable, and the user sees all applications per their enquiry permissions from the next request.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0"><b>Scope evaluation</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#6554c0">Visibility scope (Department, Staff ID, reporting subtree) is evaluated server-side from the user record on every request, never cached in the login session.</font></li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h3><a name="AC9.AffectedEnquiryScreens"></a>AC9. Affected Enquiry Screens</h3>
+
+<p>The visibility rules from AC5 <font color="#6554c0">and AC6</font> apply to both enquiry screens below. In addition to filtering which rows appear, a new column and detail field are added to show the attribution.</p>
+
+<h4><a name="NewColumn%E2%80%94AssignedTo%28SaleStaff%29"></a>New Column — Assigned To (Sale Staff)</h4>
+
+<p>A new column is added to both enquiry screens via the Customize Table feature:</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Column</b></th>
+<th class='confluenceTh'><b>Default Visibility</b></th>
+<th class='confluenceTh'><b>Value</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Sale Staff</b></font></td>
+<td class='confluenceTd'><font color="#6554c0">Sale Staff: ON by default for all users on the View List (see note). Staff ID: available in Customize Table.</font></td>
+<td class='confluenceTd'>Displays the full name of the staff member whose Staff ID matches the application’s attribution. Displays “—” for untagged applications.</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><font color="#ff991f"><b>(*)Of note: Both Sale Staff and Staff ID needs to be displayed Customized Table option and Sale staff is defaulted to be displayed on the View List</b></font></p>
+
+<h4><a name="ApplicationDetails%E2%80%94NewField"></a>Application Details — New Field</h4>
+
+<p>On the Application Enquiry View Detail screen (<a href="https://scvaladdin.atlassian.net/browse/ACP-227" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-227</a>), a new read-only field is added:</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Field</b></th>
+<th class='confluenceTh'><b>Value</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Sale Staff (Staff ID)</b></font></td>
+<td class='confluenceTd'>Full name of the attributed staff member. Displays “—” for untagged applications. This is also the first entry in the application’s audit trail: “Assigned to [Staff Name] via [UTM / Round-Robin]” at origination time <font color="#6554c0">(source values: UTM / Pop-up / Round-Robin / Backfill)</font>.<br/>
+<font color="#ff991f">For example data to be displayed in Top banner:</font><br/>
+<font color="#ff991f">Famid (ADIB02345), Rachel (ARAB12456)</font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h4><a name="VisibilityImpactperScreen"></a>Visibility Impact per Screen</h4>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Screen</b></th>
+<th class='confluenceTh'><b>Reference</b></th>
+<th class='confluenceTh'><b>Visibility Impact</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>Application Enquiry</td>
+<td class='confluenceTd'>ACP-226/227</td>
+<td class='confluenceTd'><ul>
+	<li>Search results filtered by AC5 (staff), AC6 (manager), or  <font color="#6554c0">unfiltered for non-Sale users</font>.</li>
+	<li>New “<font color="#6554c0">Sale Staff</font>” column and detail field added.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Report Enquiry</td>
+<td class='confluenceTd'>ACP-230, ACP-265/266/268</td>
+<td class='confluenceTd'><ul>
+	<li>Report data scoped by AC5 (staff), AC6 (manager), or unfiltered for  <font color="#6554c0">non-Sale users</font>.</li>
+	<li><font color="#6554c0">Sale staff</font>: reports cover only their own tagged applications.</li>
+	<li><font color="#6554c0">Sale managers</font>: reports cover applications tagged to all users in their reporting subtree.</li>
+	<li>Exported report data follows the same visibility scope.</li>
+	<li><font color="#6554c0">The same department rule scopes report data and exports: users outside Department = Sale are not filtered.</font></li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h3><a name="AC10.SavingRules%26Maker%2FCheckerRequest"></a>AC10. Saving Rules &amp; Maker/Checker Request</h3>
+
+<p><b>Mockup:</b> Tab “Maker/Checker Request” — see the Maker Queue list screen, the Checker Detail screen with old/new comparison, and all request type scenarios.</p>
+
+<ol>
+	<li>The Staff ID and Reporting Manager fields are saved as part of the user record when the administrator clicks “Save” (Add User) or “Save Changes” (Edit User).</li>
+	<li>Both fields follow the standard Maker/Checker flow (<a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-245</a>). A request is created in Maker Queue and routed to Checker Queue per <a href="https://scvaladdin.atlassian.net/browse/ACP-250" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-250</a> authority matching. Changes take effect only after Checker approval.</li>
+	<li>Staff ID uniqueness validation runs at save time (before Maker request creation). If a duplicate is found, the save is blocked and the request is not created. <font color="#6554c0">Staff ID format (IEM005) and the mandatory rule for Department = Sale are validated at the same point and again at Checker approval.</font></li>
+	<li>Circular chain validation (AC8) runs at save time. If a cycle is detected, the save is blocked.</li>
+	<li><b>Checker-time re-validation:</b> The system re-runs Staff ID uniqueness and circular chain validation at Checker approval time (not only at save time). Two concurrent Maker requests may both pass save-time validation but conflict at approval. If the Checker approves request B and Staff ID uniqueness or circular chain validation fails (because request A was approved first), the system blocks the approval and displays the relevant error (IEM001 or IEM002). The Checker must reject the request, and the Maker must re-submit with corrected values.</li>
+</ol>
+
+
+<h4><a name="Maker%2FCheckerRequestDetails"></a>Maker/Checker Request Details</h4>
+
+<p>When a Maker creates or updates a user with Staff ID or Reporting Manager changes, the request appears in both Maker Queue (ACP-248/249) and Checker Queue (ACP-250/251) with the following header fields:</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Field</b></th>
+<th class='confluenceTh'><b>Value</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>Request ID</td>
+<td class='confluenceTd'>Auto-generated</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Module</td>
+<td class='confluenceTd'>User Management</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Request Type</td>
+<td class='confluenceTd'>Create / Update / Delete (depending on action)</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Request Status</td>
+<td class='confluenceTd'>Pending Review</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Updated By</td>
+<td class='confluenceTd'>Maker’s full name and email</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Last Updated</td>
+<td class='confluenceTd'>DD/MM/YYYY HH:MM:SS</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<h4><a name="ApplicationDetails%E2%80%94Old%2FNewValueComparison"></a>Application Details — Old / New Value Comparison</h4>
+
+<p>The Application Details section on the Maker Detail (<a href="https://scvaladdin.atlassian.net/browse/ACP-249" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-249</a>) and Checker Detail (<a href="https://scvaladdin.atlassian.net/browse/ACP-251" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-251</a>) screens displays all User Management fields including the new Staff ID and Reporting Manager fields:</p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Scenario</b></th>
+<th class='confluenceTh'><b>Old Value</b></th>
+<th class='confluenceTh'><b>New Value</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>Create user with Staff ID + RM assigned</td>
+<td class='confluenceTd'>—</td>
+<td class='confluenceTd'>STF-001 / Jane Smith</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Update user — assign Staff ID (was empty, first-time assignment only)</td>
+<td class='confluenceTd'>—</td>
+<td class='confluenceTd'>STF-001</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Update user — assign RM (was empty)</td>
+<td class='confluenceTd'>None</td>
+<td class='confluenceTd'>Jane Smith</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Update user — change RM</td>
+<td class='confluenceTd'>Jane Smith</td>
+<td class='confluenceTd'>John Doe</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0">Update user — add second RM</font></td>
+<td class='confluenceTd'><font color="#6554c0">Jane Smith</font></td>
+<td class='confluenceTd'><font color="#6554c0">Jane Smith, John Doe</font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Update user — remove RM</td>
+<td class='confluenceTd'>Jane Smith</td>
+<td class='confluenceTd'>None</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Delete user</td>
+<td class='confluenceTd'>STF-001 / Jane Smith</td>
+<td class='confluenceTd'>—</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0">Update user — Department changed from Sale to Credit Operations</font></td>
+<td class='confluenceTd'><font color="#6554c0">Sale / STF-001 / Jane Smith</font></td>
+<td class='confluenceTd'><font color="#6554c0">Credit Operations / STF-001 (retained, hidden) / None</font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>Sample Checker Detail Screen — Update User (Change Reporting Manager):</b></p>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Field</b></th>
+<th class='confluenceTh'><b>Old Value</b></th>
+<th class='confluenceTh'><b>New Value</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>First Name</td>
+<td class='confluenceTd'>Alice</td>
+<td class='confluenceTd'>Alice</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Last Name</td>
+<td class='confluenceTd'>Rahman</td>
+<td class='confluenceTd'>Rahman</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Email ID</td>
+<td class='confluenceTd'>alice.rahman@bank.com</td>
+<td class='confluenceTd'>alice.rahman@bank.com</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Department</td>
+<td class='confluenceTd'><font color="#6554c0">Sale</font></td>
+<td class='confluenceTd'><font color="#6554c0">Sale</font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#e65100"><b>Staff ID</b></font></td>
+<td class='confluenceTd'>—</td>
+<td class='confluenceTd'><font color="#e65100"><b>STF-042</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Reporting Manager</b></font></td>
+<td class='confluenceTd'>Jane Smith</td>
+<td class='confluenceTd'><font color="#1565c0"><b>John Doe</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Role</td>
+<td class='confluenceTd'><font color="#6554c0">Sales Officer</font></td>
+<td class='confluenceTd'><font color="#6554c0">Sales Officer</font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Status</td>
+<td class='confluenceTd'>Active</td>
+<td class='confluenceTd'>Active</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>Legend:</b> <font color="#e65100"><b>▪ NEW</b></font> <font color="#1565c0"><b>▪ CHANGED</b></font>   ▪ Existing (no change)</p>
+
+<h2><a name="ImpactAnalysis"></a>Impact Analysis</h2>
+
+<h3><a name="IA1.Maker%2FCheckerQueue%E2%80%94NotAffected"></a>IA1. Maker/Checker Queue — Not Affected</h3>
+
+<ul>
+	<li>Maker/Checker Queue (ACP-245/248/250) handles admin configuration requests, not application processing. The visibility rules do not change Maker/Checker routing. Existing authority set and approval level rules remain unchanged.</li>
+</ul>
+
+
+<h3><a name="IA2.Unassigned%26HistoricalCases"></a>IA2. Unassigned &amp; Historical Cases</h3>
+
+<ul>
+	<li><b>Pre-existing applications:</b> All applications created before this enhancement have no Staff ID attribution. These applications are visible  <font color="#6554c0">to non-Sale users only</font>.</li>
+	<li><b>Migration strategy (decided):</b>  <font color="#6554c0">(a) Non-Sale departments: no change. (b) Existing users with Department = Sale: Staff ID must be assigned via Edit User (Maker/Checker) at go-live; until then the user sees no applications (IM005). (c) One-off backfill: historical applications whose stored [Referral code] (
+    <span class="jira-issue-macro" data-jira-key="AMP-464" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-464" class="jira-issue-macro-key issue-link"  title="[SMBP. v2][Customer Journey] - Referral Code Pop Up (CC, PL, ML, AL)" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-464
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+ / 
+    <span class="jira-issue-macro" data-jira-key="AMP-1454" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-1454" class="jira-issue-macro-key issue-link"  title="UAT:Referral/Promo Code not stored in DB and not visible in Super Portal audit trail" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10303?size=medium" />
+            AMP-1454
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+) matches an active Staff ID canonical key are tagged to that Staff ID (source = Backfill, audited). Other historical cases remain visible to non-Sale users only. No round-robin backfill.</font></li>
+	<li><b>Round-robin for ongoing applications:</b> Applications with no <del>UTM</del><font color="#6554c0">matching</font> attribution are auto-assigned via the sales round-robin mechanism defined in AC4 mechanism <del>2</del><font color="#6554c0">3, where a pool is configured</font>. The sales round-robin uses the same selection algorithm as <a href="https://scvaladdin.atlassian.net/browse/ACP-18" title="smart-link" class="external-link" rel="nofollow noreferrer">ACP-18</a> AC1 (lowest count → alphabetical tiebreak) but with a different trigger (at origination, not at queue entry), a different pool (active users <font color="#6554c0">with Department = Sale and</font> with a Staff ID, per channel/product), and a different output (Staff ID attribution, not queue Assigned To). No separate ticket is required — the mechanism is fully defined in AC4.</li>
+</ul>
+
+
+<h3><a name="IA3.EmailNotifications"></a>IA3. Email Notifications</h3>
+
+<ul>
+	<li>If existing email notifications are sent to the assigned staff member (e.g., case assignment, status change, document upload), evaluate whether the Reporting Manager should be CC’d on these notifications.</li>
+	<li>This requires an audit of all notification templates that reference the assigned user. If CC is needed, a separate enhancement ticket should define which notification types include the Reporting Manager.</li>
+</ul>
+
+
+<h3><a name="IA4.UTMIntegration%28DistributionPortal%29"></a>IA4. UTM Integration (Distribution Portal)</h3>
+
+<ul>
+	<li><a href="https://scvaladdin.atlassian.net/browse/AMP-3323" title="smart-link" class="external-link" rel="nofollow noreferrer">AMP-3323</a> (UAT Validated) defines the UTM ownership model  in the Distribution Portal. <font color="#6554c0">
+    <span class="jira-issue-macro" data-jira-key="AMP-3323" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-3323" class="jira-issue-macro-key issue-link"  title="UTM with permission control" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-3323
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">UAT Validated</span>
+            </span>
+ carries no agent code (utm_id / source / medium / campaign only). Staff ID is added as an optional UTM parameter staff_id via the Super Admin-configurable parameter list (IH14 §1.2.1), one name across all channels and products, stored on the application under IH14 §3.4.</font> The Staff ID field in this story provides the Bank Portal side of the link.</li>
+	<li>The Distribution Portal captures <font color="#6554c0">staff_id</font> from the UTM URL and stores it with the application. The Bank Portal matches this code ( <font color="#6554c0">canonical key: uppercase, separators removed</font>) to a user’s Staff ID for visibility filtering.</li>
+	<li><b>Permission separation:</b> AMP-3323’s “View All Application Sources” is a Distribution Portal permission that bypasses UTM ownership filters.  <font color="#6554c0">This story creates no Bank Portal permission; visibility follows the department rule.</font></li>
+</ul>
+
+
+</body></html>
