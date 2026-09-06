@@ -24,6 +24,8 @@ other stories.
 | 06/09 | Concept check | Staff ID vs agent code vs UTM vs referral code: SMBP's UTM (AMP-3323, IH14) carries no agent code; SMBP already has a customer-entered Referral Code pop-up (AMP-464) that the BA had dropped as "no SMBP story"; ADIB uses one identifier validated by a bank API. PO decided: one term = Staff ID everywhere. | v5 change note C1–C7 (one identifier, pop-up reinstated, DP change, submission-time precedence, format alignment, zero-untagged rules, reassign function). |
 | 06/09 | Tech-lead updates | Staff ID free text (banks have legacy codes); visibility restricted for the Sales department only. ADIB double-check found ADIB-6681 (Department = 'Sale' enquiry filter) — correcting the day-before statement that no such precedent existed — plus four rollout bugs turned into rules. | Proposal E1–E12 + D1–D5 (HTML), then brought into chat; PO direction: no external references in the US, fields only when Department = Sale, other departments see all through existing permissions → E1–E13 revised; approved. |
 | 06/09 | Apply | Description rebuilt as ADF from rendered HTML; 13 edits applied in purple with grey strikethrough; the PO's own orange AC9 edits and the BA's markers preserved; verified structure counts (13 tables, 62 rows, 99 bullets, 27 headings). | As-applied copy committed; handover comment drafted for the next go. |
+| 06/09 | Round 4 (PO table) | Re-review against R1–R7 with the PO's own table: R1 still lacked the Referral Code pop-up and the submission-time precedence; R5 still allowed untagged cases with no rule. | The PO chose to write the residual items into the description herself instead of sending them back — and corrected the draft: no reassignment function, untagged cases are normal (both codes optional), one user can report to several managers, keep the wording short and technical. |
+| 06/09 | Round 5 (apply + approval) | Round-5 edits (27 ops) hit `CONTENT_LIMIT_EXCEEDED` at 92 KB: shrunk with `shrink_adf.py --strike-only`, then rebuilt with `--strip-old-strikes` (round-4 removals accepted, round-5 removals still struck) → 75 KB accepted. Live check: 12 tables, 59 rows, 104 bullets, 8 cards, 107 purple runs, 29 strikes; ADF text = live text apart from renderer artifacts. | Approval comment posted on the user's "post": R1–R7 Done (R7 flagged), two tickets to raise (Distribution Portal `staff_id` dependency, notification audit), mockup updates; status left for the PO to transition. |
 
 ## Lessons that shaped the skill
 
@@ -37,7 +39,9 @@ other stories.
 4. **A reuse claim can be a wrong mechanism.** "Reuse ACP-18" sounded economical and would
    have tagged sales credit from queue routing. Check trigger, pool and output of anything
    "reused".
-5. **Immutability needs a correction path** or the lifecycle guards cannot be satisfied.
+5. **Immutability needs a correction path, or the guards that assume one must go.** The PO's
+   final call was the latter: no reassignment function, cases keep their tag when the staff
+   member is deactivated, IEM004 removed. Present both options; the PO decides.
 6. **The PO's edits to your draft can drop a P1.** Re-read what was actually posted.
 7. **Deliver files, not chat** — and when the user says "bring it in the chat", do exactly that.
 8. **Never edit the description through markdown.** Rebuild from rendered HTML; keep removed
