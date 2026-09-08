@@ -8,8 +8,18 @@ const F = 'Lato';
 const noShadow = () => ({ type: 'none' });
 const img = (n) => path.join(__dirname, n + '.png');
 const sizes = JSON.parse(fs.readFileSync(path.join(__dirname, 'sizes.json'), 'utf8'));
-const LOGO = process.env.APPRO_LOGO_DARK && fs.existsSync(process.env.APPRO_LOGO_DARK) ? process.env.APPRO_LOGO_DARK : null;
-const LOGO_W = process.env.APPRO_LOGO_WHITE && fs.existsSync(process.env.APPRO_LOGO_WHITE) ? process.env.APPRO_LOGO_WHITE : null;
+const pickLogo = (env, local) => {
+  const p = process.env[env];
+  if (p && fs.existsSync(p)) return p;
+  const l = path.join(__dirname, local);
+  return fs.existsSync(l) ? l : null;
+};
+const LOGO = pickLogo('APPRO_LOGO_DARK', 'logo-dark.png');
+const LOGO_W = pickLogo('APPRO_LOGO_WHITE', 'logo-white.png');
+// Native proportion of the official wordmark — height is always derived from it, never guessed.
+const LOGO_RATIO = fs.existsSync(path.join(__dirname, 'logo.json'))
+  ? JSON.parse(fs.readFileSync(path.join(__dirname, 'logo.json'), 'utf8')).ratio
+  : 3.4483;
 
 // Content that sits in the top band (y < 2.4") must end at x <= 11.8" to stay clear of the navy corner circle.
 const RIGHT_TOP = 11.8;
@@ -35,7 +45,7 @@ function addBrandIcon(slide, x, y, color, sz = 0.18) {
 // otherwise a stand-in: "appro" wordmark + 4-circle icon in the brand colour.
 function addLogo(slide, x, y, w, variant) {
   const file = variant === 'white' ? LOGO_W : LOGO;
-  if (file) { slide.addImage({ path: file, x, y, w }); return; }
+  if (file) { slide.addImage({ path: file, x, y, w, h: w / LOGO_RATIO }); return; }
   const color = variant === 'white' ? WHITE : NAVY;
   const h = w / 3.45;
   const fsz = Math.round(w * 13.5);
@@ -48,7 +58,7 @@ function chrome(slide, t1, t2) {
   slide.background = { color: WHITE };
   slide.addShape(pptx.ShapeType.ellipse, { x: 11.5, y: -2.2, w: 4.5, h: 4.5, fill: { color: NAVY }, line: { type: 'none' }, shadow: noShadow() });
   slide.addText(HEADER, { x: 0.25, y: 0.04, w: 11.0, h: 0.18, fontFace: F, fontSize: 7, color: NAVY, align: 'left', valign: 'middle', margin: 0, isTextBox: true });
-  addLogo(slide, 11.55, 0.34, 1.5, 'white');
+  addLogo(slide, 11.70, 0.30, 1.45, 'white'); // sits fully inside the navy corner circle
   slide.addShape(pptx.ShapeType.roundRect, { x: 0.25, y: 0.54, w: 1.794, h: 0.30, fill: { color: YELLOW }, line: { type: 'none' }, rectRadius: 0.08, shadow: noShadow() });
   slide.addText([
     { text: t1, options: { color: NAVY, bold: true } },
@@ -242,41 +252,30 @@ section('2 · Screens & Features', 'Portal-faithful wireframes of the approved s
 
 const CX = 8.5, CW = RIGHT_TOP - 8.5; // callout column, clear of the corner circle
 
-// ---------- 7. add / edit user ----------
+// ---------- 7. user management (add/edit + list + details on one slide) ----------
 {
   const s = pptx.addSlide();
-  chrome(s, 'Add / Edit', ' User · Sale-only fields');
-  const h = frameFit(s, 'w1', 0.55, 1.25, 7.55);
-  table(s, 0.55, 1.25 + h + 0.3, [1.55, 1.35, 1.55, 3.1], [
-    ['Field', 'Type', 'Mandatory', 'Rules'],
-    ['Sale Agent Code', 'Text input, 1–24 characters', 'Yes when Department = Sale', 'Unique in the bank (IEM001), matched on a canonical key, read-only once approved; a mistake is corrected by deactivating and re-creating the user'],
-    ['Reporting Manager', 'Searchable multi-select', 'No', 'Active Sale users only, never yourself, no circular chain at any depth (IEM002); visibility recalculates on the next request'],
-  ], [0.4, 0.95, 0.85], 10);
+  chrome(s, 'User', ' Management · Sale-only fields, list and details');
+  // Add / Edit User across the full column
+  frameFit(s, 'w1', 0.55, 1.25, 7.55);
+  // List of Users and User Details side by side underneath
+  const cap = (x, w, text) => s.addText(text, { x, y: 4.09, w, h: 0.26, fontFace: F, fontSize: 10, bold: true, color: NAVY, valign: 'middle', margin: 0, isTextBox: true });
+  cap(0.55, 3.65, 'List of Users — new columns');
+  cap(4.45, 3.65, 'User Details — read-only');
+  frameFit(s, 'w3', 0.55, 4.47, 3.65);
+  frameFit(s, 'w2', 4.45, 4.47, 3.65);
+  banner(s, 0.55, 6.20, 7.55, 0.70, 'Both fields appear only for Department = Sale. Sale Agent Code is free text, 1–24 characters, unique in the bank; Reporting Manager takes one or more active Sale users. Non-Sale users show "—" and keep full visibility.', 'gold', 10.5);
   callouts(s, CX, 1.2, CW, [
-    { t: 'Shown only when Department = Sale', b: 'Any other department never sees the two fields; those users keep full visibility.' },
-    { t: 'Sale Agent Code', b: 'The bank\'s own Sales Code / Agent Code / Employee ID. Free text, unique in the bank, read-only once approved.' },
-    { t: 'Reporting Manager, one or more', b: 'Multi-select of active Sale users. A circular chain is blocked at any depth.' },
-    { t: 'Bank-grade control', b: 'Every change is a Maker/Checker request; uniqueness, format and cycle checks re-run at approval.' },
+    { t: 'Shown only when Department = Sale', b: 'Any other department never sees the two fields and keeps full visibility.' },
+    { t: 'Sale Agent Code', b: 'The bank\'s own Sales Code / Agent Code / Employee ID. Free text, unique, read-only once approved (IEM001).' },
+    { t: 'Reporting Manager, one or more', b: 'Multi-select of active Sale users; a circular chain is blocked at any depth (IEM002).' },
+    { t: 'Two new columns', b: 'Sale Agent Code and Reporting Manager after Department: sortable, filterable, searchable, exported.' },
+    { t: 'Read-only details, full control', b: 'View Details shows the code and the manager list; "None" when empty. Every change is Maker/Checker.' },
   ]);
-  s.addNotes('Wireframe on the live portal layout. Point out the lock on the code and the multi-select manager field.');
+  s.addNotes('One slide for the whole User Management module: Add / Edit User on top, then the list and the read-only detail view. Point out the lock on the code and the multi-select manager field.');
 }
 
-// ---------- 8. list + details ----------
-{
-  const s = pptx.addSlide();
-  chrome(s, 'User List', ' & Details · new columns, same screens');
-  const h1 = frameFit(s, 'w3', 0.55, 1.25, 7.0);
-  frameFit(s, 'w2', 0.55, 1.25 + h1 + 0.3, 7.0);
-  callouts(s, CX, 1.2, CW, [
-    { t: 'Two new columns', b: 'Sale Agent Code and Reporting Manager after Department: sortable, in the filter panel, in the search scope and in the export.' },
-    { t: 'Non-Sale users show "—"', b: 'They keep seeing every application through the permissions they already have.' },
-    { t: 'Read-only details', b: 'View Details shows the code and the manager list, comma-separated; "None" when empty.' },
-    { t: 'Two managers, one user', b: 'Alice Rahman reports to Jane Smith and John Doe; both managers see her cases.' },
-  ]);
-  s.addNotes('Same screens the admins use today, two columns richer.');
-}
-
-// ---------- 9. application enquiry ----------
+// ---------- 8. application enquiry ----------
 {
   const s = pptx.addSlide();
   chrome(s, 'Application', ' Enquiry · the manager view');
@@ -296,7 +295,7 @@ const CX = 8.5, CW = RIGHT_TOP - 8.5; // callout column, clear of the corner cir
   s.addNotes('The scope pill at the top of the wireframe explains what the logged-in manager sees.');
 }
 
-// ---------- 10. details + checker ----------
+// ---------- 9. details + checker ----------
 {
   const s = pptx.addSlide();
   chrome(s, 'Details', ' & Checker · audit and approval');
@@ -317,7 +316,7 @@ const CX = 8.5, CW = RIGHT_TOP - 8.5; // callout column, clear of the corner cir
   s.addNotes('Left: what a sales manager or ops user sees on the case. Right: what the Checker approves.');
 }
 
-// ---------- 11. pop-up + guardrails ----------
+// ---------- 10. pop-up + guardrails ----------
 {
   const s = pptx.addSlide();
   chrome(s, 'Customer', ' Pop-up & Guardrails');
@@ -332,10 +331,10 @@ const CX = 8.5, CW = RIGHT_TOP - 8.5; // callout column, clear of the corner cir
   s.addNotes('Customer side, admin side, operations side: the three edges of the feature.');
 }
 
-// ---------- 12. section 3 ----------
+// ---------- 11. section 3 ----------
 section('3 · Why It Sells', 'Six things a bank gets on day one');
 
-// ---------- 13. best selling points ----------
+// ---------- 12. best selling points ----------
 {
   const s = pptx.addSlide();
   chrome(s, 'Best Selling', ' Points · what a bank gets');
@@ -355,7 +354,7 @@ section('3 · Why It Sells', 'Six things a bank gets on day one');
   s.addNotes('Lead with the benefit on each card; the proof line underneath comes straight from the approved acceptance criteria.');
 }
 
-// ---------- 14. go-live readiness ----------
+// ---------- 13. go-live readiness ----------
 {
   const s = pptx.addSlide();
   chrome(s, 'Go-Live', ' Readiness · data, dependencies, next steps');
@@ -371,7 +370,7 @@ section('3 · Why It Sells', 'Six things a bank gets on day one');
   s.addNotes('Two tickets to raise before development starts; the rest is configuration.');
 }
 
-// ---------- 15. closing ----------
+// ---------- 14. closing ----------
 {
   pageNo += 1;
   const s = pptx.addSlide();
