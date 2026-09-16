@@ -6,23 +6,21 @@ const {
   PageNumber, VerticalAlign, LevelFormat, ImageRun,
 } = require('docx');
 
-/* ---------- Appro palette ---------- */
-const DARK   = '0C1931';
-const DENIM  = '1A2D52';
-const BLUE   = '3B7EF6';
-const INK100 = 'F2F5FA';
-const INK200 = 'D9E0EA';
-const INK500 = '5A6B85';
-const AMBER_BG = 'FFF7E6';
-const AMBER_TX = '9A6206';
+/* ---------- Appro brand palette — the ONLY permitted values ---------- */
+const NAVY     = '1A214D';   // Primary  — titles, body text, table headers
+const BLUE     = '3B7EF6';   // Primary  — H1 headings, accents
+const YELLOW   = 'FDBA23';   // Secondary— rules under H1, callout accent
+const LAVENDER = 'EDF2FF';   // Secondary— alternating rows, container fills
+const WHITE    = 'FFFFFF';
+const GRAY     = '666666';   // cover classification label / prepared-by, per brand DOCX spec
 
-const FONT = 'Calibri';
-const CONTENT_W = 9638;
+const FONT = 'Lato';
+const CONTENT_W = 9026;      // A4 (11906) minus 2 x 1440 margins
 const DIR = __dirname;
 
 /* ---------- inline **bold** / *italic* parser ---------- */
 function runs(text, opts = {}) {
-  const base = { font: FONT, size: opts.size || 20, color: opts.color || '1F2937' };
+  const base = { font: FONT, size: opts.size || 22, color: opts.color || NAVY };
   const out = [];
   for (const part of String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g)) {
     if (!part) continue;
@@ -45,29 +43,40 @@ const p = (text, o = {}) => new Paragraph({
 
 const spacer = (h = 120) => new Paragraph({ children: [], spacing: { after: h } });
 
-function h1(text) {
+function rule(color, after) {
   return new Paragraph({
-    heading: HeadingLevel.HEADING_1,
-    spacing: { before: 320, after: 160 },
-    border: { bottom: { style: BorderStyle.SINGLE, size: 8, color: BLUE, space: 6 } },
-    children: [new TextRun({ text: text.toUpperCase(), bold: true, size: 26, color: DARK, font: FONT })],
+    children: [],
+    border: { bottom: { style: BorderStyle.SINGLE, size: 8, color, space: 1 } },
+    spacing: { after },
   });
 }
+/* H1 — 16pt Bold Blue, always followed by a yellow rule */
+function h1(text) {
+  return [
+    new Paragraph({
+      heading: HeadingLevel.HEADING_1,
+      spacing: { before: 320, after: 80 },
+      children: [new TextRun({ text: text.toUpperCase(), bold: true, size: 32, color: BLUE, font: FONT })],
+    }),
+    rule(YELLOW, 120),
+  ];
+}
+/* H2 — 14pt Bold Navy, no rule */
 function h2(text) {
   return new Paragraph({
     heading: HeadingLevel.HEADING_2,
-    spacing: { before: 280, after: 130 },
-    children: [new TextRun({ text, bold: true, size: 23, color: DENIM, font: FONT })],
+    spacing: { before: 280, after: 120 },
+    children: [new TextRun({ text, bold: true, size: 28, color: NAVY, font: FONT })],
   });
 }
+/* H3 — 12pt Bold Navy */
 function h3(text) {
   return new Paragraph({
     heading: HeadingLevel.HEADING_3,
-    spacing: { before: 220, after: 110 },
-    children: [new TextRun({ text, bold: true, size: 21, color: DENIM, font: FONT })],
+    spacing: { before: 220, after: 100 },
+    children: [new TextRun({ text, bold: true, size: 24, color: NAVY, font: FONT })],
   });
 }
-
 const bullet = (text) => new Paragraph({
   children: runs(text),
   bullet: { level: 0 },
@@ -86,23 +95,23 @@ function tbc(text) {
     columnWidths: [CONTENT_W],
     width: { size: CONTENT_W, type: WidthType.DXA },
     borders: {
-      top:    { style: BorderStyle.SINGLE, size: 2, color: 'E8C97A' },
-      bottom: { style: BorderStyle.SINGLE, size: 2, color: 'E8C97A' },
-      left:   { style: BorderStyle.SINGLE, size: 18, color: 'D99A0B' },
-      right:  { style: BorderStyle.SINGLE, size: 2, color: 'E8C97A' },
+      top:    { style: BorderStyle.SINGLE, size: 2, color: YELLOW },
+      bottom: { style: BorderStyle.SINGLE, size: 2, color: YELLOW },
+      left:   { style: BorderStyle.SINGLE, size: 18, color: YELLOW },
+      right:  { style: BorderStyle.SINGLE, size: 2, color: YELLOW },
       insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'auto' },
       insideVertical:   { style: BorderStyle.NONE, size: 0, color: 'auto' },
     },
     rows: [new TableRow({
       children: [new TableCell({
         width: { size: CONTENT_W, type: WidthType.DXA },
-        shading: { type: ShadingType.CLEAR, fill: AMBER_BG, color: 'auto' },
+        shading: { type: ShadingType.CLEAR, fill: LAVENDER, color: 'auto' },
         margins: { top: 110, bottom: 110, left: 170, right: 140 },
         children: [new Paragraph({
           spacing: { before: 0, after: 0, line: 264 },
           children: [
-            new TextRun({ text: 'TBC   ', bold: true, size: 19, color: AMBER_TX, font: FONT }),
-            ...runs(text, { size: 19, color: '5C4708' }),
+            new TextRun({ text: 'TBC   ', bold: true, size: 20, color: NAVY, font: FONT }),
+            ...runs(text, { size: 20, color: NAVY }),
           ],
         })],
       })],
@@ -120,7 +129,7 @@ function tbl(headers, rows, weights, opts = {}) {
     width: { size: widths[i], type: WidthType.DXA },
     shading: {
       type: ShadingType.CLEAR,
-      fill: isHeader ? DARK : (rowIdx % 2 ? INK100 : 'FFFFFF'),
+      fill: isHeader ? NAVY : (rowIdx % 2 ? LAVENDER : WHITE),
       color: 'auto',
     },
     margins: { top: 90, bottom: 90, left: 95, right: 95 },
@@ -128,8 +137,8 @@ function tbl(headers, rows, weights, opts = {}) {
     children: [new Paragraph({
       spacing: { before: 0, after: 0, line: 252 },
       children: isHeader
-        ? [new TextRun({ text: String(text ?? ''), bold: true, size: 18, color: 'FFFFFF', font: FONT })]
-        : runs(String(text ?? ''), { size: 18, allBold: !!opts.boldFirstCol && i === 0 }),
+        ? [new TextRun({ text: String(text ?? ''), bold: true, size: 19, color: WHITE, font: FONT })]
+        : runs(String(text ?? ''), { size: 19, allBold: !!opts.boldFirstCol && i === 0 }),
     })],
   });
 
@@ -137,12 +146,12 @@ function tbl(headers, rows, weights, opts = {}) {
     columnWidths: widths,
     width: { size: CONTENT_W, type: WidthType.DXA },
     borders: {
-      top:    { style: BorderStyle.SINGLE, size: 4, color: INK200 },
-      bottom: { style: BorderStyle.SINGLE, size: 4, color: INK200 },
-      left:   { style: BorderStyle.SINGLE, size: 4, color: INK200 },
-      right:  { style: BorderStyle.SINGLE, size: 4, color: INK200 },
-      insideHorizontal: { style: BorderStyle.SINGLE, size: 4, color: INK200 },
-      insideVertical:   { style: BorderStyle.SINGLE, size: 4, color: INK200 },
+      top:    { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+      bottom: { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+      left:   { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+      right:  { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+      insideHorizontal: { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+      insideVertical:   { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
     },
     rows: [
       new TableRow({ tableHeader: true, cantSplit: true, children: headers.map((hd, i) => cell(hd, i, true, 0)) }),
@@ -166,38 +175,42 @@ function screen(file, w, h, caption) {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { before: 0, after: 200 },
-      children: [new TextRun({ text: caption, italics: true, size: 18, color: INK500, font: FONT })],
+      children: [new TextRun({ text: caption, italics: true, size: 19, color: GRAY, font: FONT })],
     }),
   ];
 }
 /* ================= DOCUMENT CONTENT ================= */
 const body = [];
-const P = (...a) => body.push(...a);
+const P = (...a) => body.push(...a.flat());
 const BREAK = () => new Paragraph({ children: [new PageBreak()] });
 
-/* ---- Cover ---- */
+/* ---- Cover block — brand DOCX spec ---- */
 P(
-  spacer(1500),
+  spacer(900),
+  new Paragraph({ spacing: { after: 40 },
+    children: [new TextRun({ text: 'INTERNAL | CONFIDENTIAL', bold: true, size: 18, color: GRAY, font: FONT })] }),
+  rule(YELLOW, 240),
+  new Paragraph({ spacing: { after: 80 },
+    children: [new TextRun({ text: 'Application Revert in Super Portal', bold: true, size: 52, color: NAVY, font: FONT })] }),
+  new Paragraph({ spacing: { after: 200 },
+    children: [new TextRun({ text: 'Reem Bank — Super Portal', bold: true, size: 32, color: BLUE, font: FONT })] }),
   new Paragraph({ spacing: { after: 60 },
-    children: [new TextRun({ text: 'appro', bold: true, size: 44, color: BLUE, font: FONT })] }),
-  new Paragraph({ spacing: { after: 700 },
-    children: [new TextRun({ text: 'REEM BANK   ·   BUSINESS REQUIREMENTS DOCUMENT', size: 18, color: INK500, font: FONT })] }),
-  new Paragraph({ spacing: { after: 100 },
-    children: [new TextRun({ text: 'Application Revert in', bold: true, size: 58, color: DARK, font: FONT })] }),
-  new Paragraph({ spacing: { after: 320 },
-    children: [new TextRun({ text: 'Super Portal', bold: true, size: 58, color: DARK, font: FONT })] }),
-  new Paragraph({ spacing: { after: 900 },
-    border: { top: { style: BorderStyle.SINGLE, size: 12, color: BLUE, space: 10 } },
-    children: [new TextRun({ text: 'V2.0', bold: true, size: 34, color: BLUE, font: FONT })] }),
-  p('This is not a legally binding document.', { size: 19, color: INK500 }),
-  p('Highly confidential not to be shared without written consent.', { size: 19, color: INK500 }),
+    children: [new TextRun({ text: 'Appro Onboarding Solutions FZ-LLC', size: 22, color: NAVY, font: FONT })] }),
+  new Paragraph({ spacing: { after: 60 },
+    children: [new TextRun({ text: 'Prepared by: Hailey — Product Owner, Appro', size: 22, color: GRAY, font: FONT })] }),
+  new Paragraph({ spacing: { after: 60 },
+    children: [new TextRun({ text: 'Date: 16-09-2026', size: 22, color: GRAY, font: FONT })] }),
+  new Paragraph({ spacing: { after: 60 },
+    children: [new TextRun({ text: 'Version: V2.1', size: 22, color: GRAY, font: FONT })] }),
+  rule(NAVY, 320),
+  p('This is not a legally binding document. Highly confidential not to be shared without written consent.', { size: 19, color: GRAY }),
   BREAK(),
 );
 
 /* ---- Feature overview ---- */
 P(
   new Paragraph({ spacing: { before: 0, after: 180 },
-    children: [new TextRun({ text: 'APPLICATION REVERT IN SUPER PORTAL', bold: true, size: 24, color: DENIM, font: FONT })] }),
+    children: [new TextRun({ text: 'APPLICATION REVERT IN SUPER PORTAL', bold: true, size: 24, color: NAVY, font: FONT })] }),
   h1('Feature Overview'),
   p('This document describes the Super Portal **Application Revert** capability, which allows authorised bank staff to return a **rejected** application to the queue and approval level it was rejected from, so the case can be re-assessed without the customer having to reapply. It complements the existing **Cancel Application** capability: where Cancel terminates an application, Revert reopens one.'),
   spacer(40),
@@ -256,13 +269,13 @@ P(
   bullet('The permission is granted **per product**, in the form `[Product] Revert Application`, following the established Role Management model of Menu → Sub-Menu → Product → Action.'),
   ...screen('sc1.png', 620, 349, "SC1: Add Role — Enquiry > Application Enquiry > '[Product] Revert Application'"),
   tbl(
-    ['Permission', 'Component Type', 'Editable', 'Mandatory', 'Description'],
+    ['Permission', 'Type', 'Editable', 'Mandatory', 'Description'],
     [
       ['[Credit Card] Revert Application', 'Check box', 'Y', 'NA', 'Grants the right to request a revert on a rejected Credit Card application from Application Enquiry.'],
       ['[Personal Loan] Revert Application', 'Check box', 'Y', 'NA', 'Grants the right to request a revert on a rejected Personal Loan application from Application Enquiry.'],
       ['[Casa] Revert Application', 'Check box', 'Y', 'NA', 'Grants the right to request a revert on a rejected CASA application from Application Enquiry.'],
     ],
-    [26, 13, 10, 11, 40], { boldFirstCol: true },
+    [26, 11, 12, 13, 38], { boldFirstCol: true },
   ),
   spacer(140),
   p('**Permission behaviour:**'),
@@ -291,7 +304,7 @@ P(
 
 P(
   tbl(
-    ['Component', 'Component Type', 'Mandatory', 'Editable', 'Description'],
+    ['Component', 'Type', 'Mandatory', 'Editable', 'Description'],
     [
       ['Revert Button', 'Button', 'N/A', 'N/A', "Visible only to users holding '[Product] Revert Application'. Enabled only for a revertible rejected application with no request already pending. Initiates the revert request."],
       ['Revert Confirmation Popup', 'Modal Popup', 'N/A', 'N/A', 'Presented when Revert is clicked. Requires the user to confirm and provide a Revert Reason before the request is submitted.'],
@@ -301,7 +314,7 @@ P(
       ['Yes, Revert Button', 'Button', 'N/A', 'N/A', 'Confirms the request and sends the application to the Revert Queue.'],
       ['Back Button', 'Button', 'N/A', 'N/A', 'Dismisses the popup. Returns the user to Application Details. No change to the application.'],
     ],
-    [17, 13, 11, 10, 49], { boldFirstCol: true },
+    [19, 11, 13, 14, 43], { boldFirstCol: true },
   ),
 );
 
@@ -413,7 +426,7 @@ P(
   bullet('The Checker view is **read-only apart from the decision**. Edit, FTS Retrigger, Refetch ECB, Send Application and Override are **not** offered here — the Checker decides only whether the case returns to its queue; any change to the case is made afterwards by the queue owner.'),
   ...screen('sc6.png', 620, 364, "SC6: Revert Queue — Application Details showing the Maker's reason and the Approve / Reject actions"),
   tbl(
-    ['Component', 'Component Type', 'Editable', 'Mandatory', 'Description'],
+    ['Component', 'Type', 'Editable', 'Mandatory', 'Description'],
     [
       ['Application Detail', 'Label', 'N/A', 'N/A', 'Default value is "Application Detail".'],
       ['Link navigate', 'Label', 'N/A', 'N/A', 'Default value is "Queue > Revert Queue > Application Details".'],
@@ -459,7 +472,6 @@ P(
 );
 
 P(
-  BREAK(),
   h3('4.5  Reject revert'),
   p("When a user with '[Product] Evaluate Application' = TRUE clicks **'Reject'**:"),
   bullet("System displays confirmation popup: **'Are you sure you want to Reject the application revert?'**"),
@@ -765,22 +777,24 @@ P(
   ),
 );
 
-/* ---- Thank you ---- */
+/* ---- Closing ---- */
 P(
   BREAK(),
-  spacer(2600),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 300 },
-    children: [new TextRun({ text: 'THANK YOU', bold: true, size: 44, color: DARK, font: FONT })] }),
+  spacer(2400),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 160 },
+    children: [new TextRun({ text: 'Thank you', bold: true, size: 60, color: NAVY, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 320 },
+    children: [new TextRun({ text: '\u25CF\u25CF\u25CF  \u25CF', size: 44, color: YELLOW, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 40 },
+    children: [new TextRun({ text: 'Appro Onboarding Solutions FZ-LLC', size: 22, color: NAVY, font: FONT })] }),
   new Paragraph({ alignment: AlignmentType.CENTER,
-    children: [new TextRun({ text: 'This is not a legally binding document', size: 18, color: INK500, font: FONT })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER,
-    children: [new TextRun({ text: 'Highly confidential not to be shared without written consent', size: 18, color: INK500, font: FONT })] }),
+    children: [new TextRun({ text: 'This is not a legally binding document. Highly confidential not to be shared without written consent.', size: 18, color: GRAY, font: FONT })] }),
 );
 
 /* ================= ASSEMBLE ================= */
 const doc = new Document({
   creator: 'Appro',
-  title: 'Application Revert in Super Portal V2.0',
+  title: 'Application Revert in Super Portal V2.1',
   description: 'Business Requirements Document — Reem Finance',
   numbering: {
     config: [{
@@ -791,12 +805,12 @@ const doc = new Document({
       }],
     }],
   },
-  styles: { default: { document: { run: { font: FONT, size: 20, color: '1F2937' } } } },
+  styles: { default: { document: { run: { font: FONT, size: 22, color: NAVY } } } },
   sections: [{
     properties: {
       page: {
         size: { width: 11906, height: 16838 },
-        margin: { top: 1300, right: 1134, bottom: 1134, left: 1134, header: 560, footer: 560 },
+        margin: { top: 1440, right: 1440, bottom: 1440, left: 1440, header: 620, footer: 560 },
       },
     },
     headers: {
@@ -804,25 +818,48 @@ const doc = new Document({
         children: [
           new Paragraph({
             spacing: { after: 0 },
-            children: [new TextRun({ text: 'Confidential', bold: true, size: 15, color: INK500, font: FONT })],
-          }),
-          new Paragraph({
-            spacing: { after: 0 },
-            border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: INK200, space: 4 } },
-            children: [new TextRun({ text: 'This is not a legally binding document  ·  Highly confidential not to be shared without written consent', size: 14, color: INK500, font: FONT })],
+            border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: LAVENDER, space: 4 } },
+            children: [new TextRun({
+              text: 'APPRO \u2013 INTERNAL & APPROVED DOMAINS | Controlled Distribution',
+              size: 14, color: NAVY, font: FONT })],
           }),
         ],
       }),
     },
     footers: {
       default: new Footer({
-        children: [new Paragraph({
-          alignment: AlignmentType.CENTER,
-          border: { top: { style: BorderStyle.SINGLE, size: 4, color: INK200, space: 6 } },
-          children: [
-            new TextRun({ text: 'Application Revert in Super Portal   ·   V2.0   ·   ', size: 14, color: INK500, font: FONT }),
-            new TextRun({ children: [PageNumber.CURRENT], size: 14, color: INK500, font: FONT, bold: true }),
-          ],
+        children: [new Table({
+          columnWidths: [Math.round(CONTENT_W * 0.62), Math.round(CONTENT_W * 0.20), CONTENT_W - Math.round(CONTENT_W * 0.62) - Math.round(CONTENT_W * 0.20)],
+          width: { size: CONTENT_W, type: WidthType.DXA },
+          borders: {
+            top:    { style: BorderStyle.SINGLE, size: 4, color: LAVENDER },
+            bottom: { style: BorderStyle.NONE, size: 0, color: 'auto' },
+            left:   { style: BorderStyle.NONE, size: 0, color: 'auto' },
+            right:  { style: BorderStyle.NONE, size: 0, color: 'auto' },
+            insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'auto' },
+            insideVertical:   { style: BorderStyle.NONE, size: 0, color: 'auto' },
+          },
+          rows: [new TableRow({ children: [
+            new TableCell({
+              width: { size: Math.round(CONTENT_W * 0.62), type: WidthType.DXA },
+              margins: { top: 60, bottom: 0, left: 0, right: 60 },
+              children: [new Paragraph({ spacing: { before: 0, after: 0 }, children: [new TextRun({
+                text: 'This is not a legally binding document. Highly confidential not to be shared without written consent',
+                size: 13, color: GRAY, font: FONT })] })],
+            }),
+            new TableCell({
+              width: { size: Math.round(CONTENT_W * 0.20), type: WidthType.DXA },
+              margins: { top: 60, bottom: 0, left: 0, right: 0 },
+              children: [new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 0 }, children: [
+                new TextRun({ children: [PageNumber.CURRENT], size: 15, color: NAVY, font: FONT, bold: true })] })],
+            }),
+            new TableCell({
+              width: { size: CONTENT_W - Math.round(CONTENT_W * 0.62) - Math.round(CONTENT_W * 0.20), type: WidthType.DXA },
+              margins: { top: 60, bottom: 0, left: 0, right: 0 },
+              children: [new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: 0, after: 0 }, children: [
+                new TextRun({ text: '\u25CF\u25CF\u25CF  \u25CF', size: 16, color: BLUE, font: FONT })] })],
+            }),
+          ] })],
         })],
       }),
     },
@@ -831,7 +868,7 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buf => {
-  const out = process.argv[2] || path.join(DIR, 'Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx');
+  const out = process.argv[2] || path.join(DIR, 'Appro_RF_Application_Revert_in_Super_Portal_v2.1.docx');
   fs.writeFileSync(out, buf);
   console.log('WROTE', out, buf.length, 'bytes');
 });

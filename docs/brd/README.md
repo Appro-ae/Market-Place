@@ -7,7 +7,9 @@ Structured to match the Application Cancellation in Super Portal BRD: cover → 
 Overview → End-to-End Flow (numbered sections) → Impact Analysis → Out of Scope → Open
 Questions → Summary → Thank You. No Jira ticket references appear in the document.
 
-**V2.0** is a redesign against the project knowledge pack and the live UAT build
+**V2.1** applies the Appro brandbook — Navy `#1a214d`, Blue `#3b7ef6`, Yellow `#fdba23`, Lavender `#edf2ff`, White only; Lato throughout; blue H1 with a yellow rule; navy table headers with alternating lavender rows; the classification header, confidentiality footer and 4-circle brand icon. **The Appro logo is not embedded** — the brand skill ships only `SKILL.md`, not its `assets/` folder, and the brandbook forbids redrawing the logo. Send `logo-dark.png` (or the `docx-template.docx`) and it drops straight onto the cover and into the header.
+
+**V2.0** was the redesign against the project knowledge pack and the live UAT build
 (`super-portal-container.rfpilot.dev`, 15–16 September 2026). What changed from V1.1:
 
 | Area | V1.1 | V2.0 |
@@ -24,8 +26,8 @@ Questions → Summary → Thank You. No Jira ticket references appear in the doc
 
 | File | Purpose |
 |---|---|
-| `Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx` | The deliverable — editable Word document |
-| `Appro_RF_Application_Revert_in_Super_Portal_v2.0.pdf` | Read-only copy for review and circulation |
+| `Appro_RF_Application_Revert_in_Super_Portal_v2.1.docx` | The deliverable — editable Word document |
+| `Appro_RF_Application_Revert_in_Super_Portal_v2.1.pdf` | Read-only copy for review and circulation |
 | `build_brd.js` | Generator — the source of truth for the document content |
 | `portal.css`, `shell.js` | Shared styling and sidebar for the screen mockups |
 | `s1_role_enquiry.html` → `sc1.png` | SC1 — Enquiry › Application Enquiry › `[Product] Revert Application` |
@@ -43,8 +45,8 @@ Edit `build_brd.js` rather than the Word file, so the two do not drift apart.
 
 ```bash
 npm install docx
-node build_brd.js Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx
-soffice --headless --convert-to pdf --outdir . Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx
+node build_brd.js Appro_RF_Application_Revert_in_Super_Portal_v2.1.docx
+soffice --headless --convert-to pdf --outdir . Appro_RF_Application_Revert_in_Super_Portal_v2.1.docx
 ```
 
 Screen mockups (needs `playwright`; regenerate `sc2_clean.png` before `sc3.png`):
