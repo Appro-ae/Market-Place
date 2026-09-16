@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="portal.css">
+<style>
+  body{height:940px}
+  .cols2{flex:1;display:flex;gap:16px;min-height:0}
+  .left{flex:1.5;padding:18px 20px;min-width:0}
+  .right{flex:1;display:flex;flex-direction:column;min-width:0}
+  .pill.rej{background:#FDE7EE;color:#A81745;border-color:#F3BCCD}
+</style></head><body>
+<script src="shell.js" data-active="7"></script>
+<div class="page">
+  <div class="phead">
+    <h1>Application Details</h1>
+    <div class="crumb">Queue <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg> Revert Queue
+      <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg> <b>Application Details</b></div>
+  </div>
+  <div class="body">
+    <div class="card detailcard">
+      <h3>Details</h3>
+      <div class="grid3">
+        <div class="f"><div class="k">Application ID</div><div class="v">: APP_RB_15092600001292</div></div>
+        <div class="f"><div class="k">Application Source</div><div class="v">: APP</div></div>
+        <div class="f"><div class="k">Product Type</div><div class="v">: CREDIT CARD</div></div>
+        <div class="f"><div class="k">Relationship Status</div><div class="v">: NTB</div></div>
+        <div class="f"><div class="k">Application Status</div><div class="v">: <span class="pill rej">REJECTED</span></div></div>
+        <div class="f"><div class="k">Rejected From</div><div class="v">: CREDIT QUEUE L1</div></div>
+        <div class="f"><div class="k">Revert Requested By</div><div class="v">: feras.matar@rf.ae</div></div>
+        <div class="f"><div class="k">Requested On</div><div class="v">: 16/09/2026 10:42</div></div>
+        <div class="f"><div class="k">Target Status</div><div class="v">: AWAITING CREDIT APPROVAL</div></div>
+      </div>
+    </div>
+
+    <div class="cols2">
+      <div class="card left">
+        <div class="acc">
+          <div class="arow"><span>Cross-Application Identifier Match</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Failed Reasons</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Rule Engine Result</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Approve Limit Result</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Customer Due Diligence Information</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Application Details</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Liability Info</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+          <div class="arow"><span>Credit Indicator</span><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+        </div>
+      </div>
+
+      <div class="card right">
+        <div class="tabs"><div class="tab on">Comments</div><div class="tab">Documents</div></div>
+        <div class="cmt">
+          <div class="ct">Feras Matar &nbsp;<em>Credit</em></div>
+          <div class="cb"><b>REVERT REASON:</b> Salary certificate received after decisioning. Finalised income
+            understated — the same obligation was counted twice in the DBR. Requesting revert to Credit Queue L1
+            to re-assess with corrected figures.</div>
+          <div class="cf">10:42 AM | 16 09 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actbar">
+    <div></div>
+    <div class="r mark">
+      <div class="btn red">Reject</div>
+      <div class="btn pri">Approve<span class="newbadge">NEW</span></div>
+    </div>
+  </div>
+</div>
+</body></html>

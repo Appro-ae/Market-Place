@@ -1,31 +1,41 @@
-# BRD — Application Revert in Super Portal (Reem Finance)
+# BRD — Application Revert in Super Portal (Reem Bank)
 
-Business Requirements Document for the **Revert** function added to the Super Portal
-Application Enquiry screen, alongside the existing Cancel Application capability.
+Business Requirements Document for the **Revert** function on the Super Portal Application
+Enquiry screen, alongside the existing Cancel Application capability.
 
-Structured to match the Application Cancellation in Super Portal BRD: cover →
-Feature Overview (applicable products, restricted scenarios) → End-to-End Flow
-(numbered sections 1–8) → Thank You. No Jira ticket references appear in the document.
+Structured to match the Application Cancellation in Super Portal BRD: cover → Feature
+Overview → End-to-End Flow (numbered sections) → Impact Analysis → Out of Scope → Open
+Questions → Summary → Thank You. No Jira ticket references appear in the document.
 
-**V1.1** adds the maker-checker governance layer, modelled on the delivered
-Application Cancellation flow: the requester is the Maker, the application is held in a
-new `User Initiated Revert` status, and a Checker approves or rejects the request in a new
-Revert Queue before the application is returned to its previous status.
+**V2.0** is a redesign against the project knowledge pack and the live UAT build
+(`super-portal-container.rfpilot.dev`, 15–16 September 2026). What changed from V1.1:
+
+| Area | V1.1 | V2.0 |
+|---|---|---|
+| Holding state | New `User Initiated Revert` application status | **`Revert_App` flag**, status stays `Rejected` — no mobile-app impact |
+| Permissions | One `Revert Application` permission | **Nine**, granted per product tab, matching the real Role Management tree |
+| Target status | Queue only | Queue **and approval level** the application was rejected from |
+| Auto-rejections | Three treated as designed | R4 designed; **R5/R6 flagged for verification** — the drop-point matrix and the limit-assignment rule contradict each other |
+| DBR naming | Open question | **Financial DBR** identified as the safety-net rule; `Existing DBR` confirmed as a different term |
+| Impact analysis | Short section | **Full IA1–IA12**, covering product, language, permission, audit, queue, status, notification, documents, services, resume, reporting and message impacts |
+| Screens | 3 generic mockups | **7 screens** rebuilt against the real portal UI |
 
 ## Files
 
 | File | Purpose |
 |---|---|
-| `Appro_RF_Application_Revert_in_Super_Portal_v1.1.docx` | The deliverable — editable Word document |
-| `Appro_RF_Application_Revert_in_Super_Portal_v1.1.pdf` | Read-only copy for review and circulation |
-| `build_brd.js` | Generator script — the source of truth for the document content |
-| `mock_role.html` → `sc1.png` | SC1 — Add Role, Enquiry > Application Enquiry > 'Revert Application' (Maker) |
-| `mock_screen.html` → `sc2.png` | SC2 — Application Enquiry with Revert beside Cancel Application |
-| `mock_popup.html` → `sc3.png` | SC3 — Revert confirmation popup with the Revert Reason |
-| `mock_queue_role.html` → `sc4.png` | SC4 — Add Role, Manually Queue > Revert Queue (Checker) |
-| `mock_queue_detail.html` → `sc5.png` | SC5 — Revert Queue application details with Approve / Reject |
-| `mock_decision.html` → `sc6.png` | SC6 — Approve and Reject confirmation popups |
-| `sc_clean.png` | Un-annotated screen used as the backdrop behind the SC3 popup |
+| `Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx` | The deliverable — editable Word document |
+| `Appro_RF_Application_Revert_in_Super_Portal_v2.0.pdf` | Read-only copy for review and circulation |
+| `build_brd.js` | Generator — the source of truth for the document content |
+| `portal.css`, `shell.js` | Shared styling and sidebar for the screen mockups |
+| `s1_role_enquiry.html` → `sc1.png` | SC1 — Enquiry › Application Enquiry › `[Product] Revert Application` |
+| `s2_enquiry_revert.html` → `sc2.png` | SC2 — Application Enquiry with Revert beside Cancel Application |
+| `s3_popup.html` → `sc3.png` | SC3 — Revert confirmation popup |
+| `s4_role_queue.html` → `sc4.png` | SC4 — Manually Queue › Revert Queue permissions, per product |
+| `s5_queue_list.html` → `sc5.png` | SC5 — Revert Queue list view |
+| `s6_queue_detail.html` → `sc6.png` | SC6 — Revert Queue application details with Approve / Reject |
+| `s7_decision.html` → `sc7.png` | SC7 — Approve and Reject confirmation popups |
+| `sc2_clean.png` | Un-annotated SC2, used as the backdrop behind the SC3 popup |
 
 ## Regenerating
 
@@ -33,55 +43,43 @@ Edit `build_brd.js` rather than the Word file, so the two do not drift apart.
 
 ```bash
 npm install docx
-node build_brd.js Appro_RF_Application_Revert_in_Super_Portal_v1.1.docx
-
-# refresh the PDF copy
-soffice --headless --convert-to pdf --outdir . \
-  Appro_RF_Application_Revert_in_Super_Portal_v1.1.docx
+node build_brd.js Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx
+soffice --headless --convert-to pdf --outdir . Appro_RF_Application_Revert_in_Super_Portal_v2.0.docx
 ```
 
-Regenerating the screen mockups (needs `playwright`):
+Screen mockups (needs `playwright`; regenerate `sc2_clean.png` before `sc3.png`):
 
 ```bash
 node -e "const{chromium}=require('playwright');(async()=>{
   const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium'});
   const p=await b.newPage({deviceScaleFactor:2});
-  for(const [f,o,h] of [['mock_screen.html','sc2.png',940],['mock_screen.html#clean','sc_clean.png',940],
-                        ['mock_popup.html','sc3.png',940],['mock_role.html','sc1.png',800],
-                        ['mock_queue_role.html','sc4.png',800],['mock_queue_detail.html','sc5.png',940],
-                        ['mock_decision.html','sc6.png',560]]){
+  for(const [f,o,h] of [['s1_role_enquiry.html','sc1.png',900],['s4_role_queue.html','sc4.png',900],
+                        ['s2_enquiry_revert.html','sc2.png',940],['s2_enquiry_revert.html#clean','sc2_clean.png',940],
+                        ['s3_popup.html','sc3.png',940],['s5_queue_list.html','sc5.png',720],
+                        ['s6_queue_detail.html','sc6.png',940],['s7_decision.html','sc7.png',560]]){
     await p.setViewportSize({width:1600,height:h});
     await p.goto('file://'+process.cwd()+'/'+f); await p.waitForTimeout(450);
     await p.screenshot({path:o});
   } await b.close();})()"
 ```
 
-`sc3.png` uses `sc_clean.png` as its background, so regenerate `sc_clean.png` first.
+## The business case, in one line
 
-## Scope summary
+A rejection blocks the customer from reapplying for 30 days — and that block has reached
+across products. When Credit rejects on a parameter that was wrong or has since been
+corrected, Revert is the only remedy inside that window.
 
-Revert returns a **Rejected** application to the queue status it held immediately before
-the rejection — subject to Checker approval. Eligibility and the target status are derived
-from the audit trail step written at the point of rejection:
+## The three questions that gate the estimate
 
-- Credit / Compliance / Risk queue rejections revert to their own queue status.
-- Credit-driven system auto-rejections (DBR safety net, failed all segmentations,
-  approved limit below Min Boundary) revert to **Awaiting Credit Approval**.
-- Pre-dedupe failures, "no applicable product" terminations and AML rejections are
-  **not** revertible — no owning queue exists to return them to.
+1. **Can a terminated Camunda process instance be resumed**, or must a new one be started at
+   the queue task? Everything else in this change is a screen, a permission, a flag and an
+   audit entry — this one decides whether it is small or significant.
+2. **Do the segmentation and Min-Boundary failures terminate outright, or already drop to
+   Credit Queue L1?** The drop-point matrix and the limit-assignment rule disagree. If they
+   already queue, they need no rule here and scope reduces to the DBR case alone.
+3. **Is the rule to re-route the Financial DBR safety net?** The agreed scope says "Existing
+   DBR", which is a different defined term — an input to the DBR Room calculation, not a
+   rejection trigger.
 
-Section 6 also covers a change to the decisioning flow: the DBR safety-net rule routes to
-the Credit Queue instead of auto-rejecting, so the decision has a named owner and becomes
-revertible under the standard rule.
-
-### Where Revert deliberately differs from Cancellation
-
-The cancellation timeout **auto-approves** — an un-actioned request ends in the
-cancellation the requester asked for. The revert timeout is proposed to do the opposite
-and let the request **lapse**, leaving the application Rejected, because auto-approving
-would reopen a rejected case without the second pair of eyes the Checker exists to
-provide. This is flagged in section 4.6 for confirmation.
-
-Other open points are flagged inline as TBC callouts throughout the document, including a
-terminology check on whether the "Existing DBR" in the agreed scope is the delivered
-**Finance DBR** safety net.
+Fifteen open questions are listed in the document; these three are the ones that change the
+shape of the work.

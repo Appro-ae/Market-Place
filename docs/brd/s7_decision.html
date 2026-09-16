@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;width:1600px;height:560px;
+       background:#12344F;display:flex;align-items:center;justify-content:center;gap:66px}
+  .m{width:610px;background:#fff;border-radius:14px;padding:34px 38px 30px;box-shadow:0 24px 60px rgba(4,16,30,.45)}
+  .ic{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+  .ic.ok{background:#E4F1F7}.ic.no{background:#FDEAF0}
+  .ic svg{width:28px;height:28px;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .ic.ok svg{stroke:#0F7FA1}.ic.no svg{stroke:#E0326A}
+  h2{font-size:18.5px;color:#0B2C4E;text-align:center;line-height:1.45;font-weight:700;margin-bottom:10px}
+  .sub{font-size:13px;color:#6A7C8F;text-align:center;line-height:1.6;margin-bottom:26px}
+  .sub b{color:#0B2C4E}
+  .btns{display:flex;gap:13px}
+  .b{flex:1;text-align:center;border-radius:9px;font-size:14px;font-weight:700;padding:13px 0}
+  .b.out{background:#fff;color:#0F7FA1;border:1.7px solid #0F7FA1}
+  .b.pri{background:#0F7FA1;color:#fff}
+  .b.no{background:#E0326A;color:#fff}
+</style></head><body>
+  <div class="m">
+    <div class="ic ok"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+    <h2>Are you sure you want to Approve the application revert?</h2>
+    <div class="sub">The application returns to <b>Awaiting Credit Approval</b><br>and re-enters <b>Credit Queue L1</b>.</div>
+    <div class="btns"><div class="b out">Cancel</div><div class="b pri">Yes, Approve</div></div>
+  </div>
+  <div class="m">
+    <div class="ic no"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+    <h2>Are you sure you want to Reject the application revert?</h2>
+    <div class="sub">The revert request is rejected and the application<br>remains <b>Rejected</b>.</div>
+    <div class="btns"><div class="b out">Cancel</div><div class="b no">Yes, Reject</div></div>
+  </div>
+</body></html>

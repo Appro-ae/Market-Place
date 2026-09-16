@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+       width:1600px;height:940px;position:relative;overflow:hidden}
+  .bg{position:absolute;inset:0;background:url('sc2_clean.png') no-repeat center/cover}
+  .dim{position:absolute;inset:0;background:rgba(8,32,56,.55)}
+  .modal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:660px;background:#fff;
+         border-radius:14px;padding:36px 40px 32px;box-shadow:0 26px 64px rgba(4,20,38,.42)}
+  .ic{width:60px;height:60px;border-radius:50%;background:#E4F1F7;display:flex;align-items:center;
+      justify-content:center;margin:0 auto 20px}
+  .ic svg{width:29px;height:29px;stroke:#0F7FA1;stroke-width:2.1;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  h2{font-size:20px;color:#0B2C4E;text-align:center;line-height:1.45;font-weight:700;margin-bottom:10px}
+  .sub{font-size:13.5px;color:#6A7C8F;text-align:center;line-height:1.6;margin-bottom:24px}
+  .sub b{color:#0B2C4E}
+  label{display:block;font-size:13px;font-weight:700;color:#0B2C4E;margin-bottom:8px}
+  label i{color:#E0326A;font-style:normal}
+  .input{border:1.6px solid #CFDCE7;border-radius:9px;padding:13px 15px;font-size:13.5px;color:#9AACBC;height:92px}
+  .hint{font-size:11.5px;color:#7E8FA0;margin-top:8px}
+  .btns{display:flex;gap:14px;margin-top:28px}
+  .b{flex:1;text-align:center;border-radius:9px;font-size:14px;font-weight:700;padding:14px 0}
+  .b.out{background:#fff;color:#0F7FA1;border:1.7px solid #0F7FA1}
+  .b.pri{background:#0F7FA1;color:#fff}
+</style></head><body>
+  <div class="bg"></div><div class="dim"></div>
+  <div class="modal">
+    <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+    <h2>Are you sure you want to revert this Application?</h2>
+    <div class="sub">The request will be sent to the <b>Revert Queue</b> for Checker approval.<br>
+      If approved, the application returns to <b>Awaiting Credit Approval</b> in <b>Credit Queue L1</b>.</div>
+    <label>Revert Reason <i>*</i></label>
+    <div class="input">Enter your comment</div>
+    <div class="hint">A reason is mandatory and is shown to the Checker for approval.</div>
+    <div class="btns"><div class="b out">Back</div><div class="b pri">Yes, Revert</div></div>
+  </div>
+</body></html>

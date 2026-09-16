@@ -1,0 +1,76 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="portal.css">
+<style>
+  body{height:900px}
+  .modcard{padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+  .modhdr{background:var(--teal);color:#fff;border-radius:9px;padding:16px 22px;display:flex;
+          justify-content:space-between;align-items:center;font-size:14.5px;font-weight:700}
+  .modhdr svg{width:15px;height:15px;stroke:#fff;stroke-width:2.4;fill:none}
+  .modrow{background:var(--tealbg);border-radius:9px;padding:16px 22px;display:flex;
+          justify-content:space-between;align-items:center;font-size:14.5px;font-weight:700;color:var(--ink)}
+  .modrow svg{width:15px;height:15px;stroke:#3C6D93;stroke-width:2.4;fill:none}
+  .split{display:flex;gap:26px;padding:4px 0 14px}
+  .submenu{width:300px;display:flex;flex-direction:column;gap:11px;flex-shrink:0}
+  .sm{padding:15px 20px;border-radius:9px;font-size:13.5px;font-weight:600;color:#2B4058;
+      display:flex;justify-content:space-between;align-items:center}
+  .sm.on{background:var(--teal);color:#fff}
+  .sm svg{width:13px;height:13px;stroke:currentColor;stroke-width:2.4;fill:none}
+  .perms{flex:1}
+  .selall{display:flex;align-items:center;gap:13px;padding:0 0 16px;border-bottom:1px solid #EDF3F8;margin-bottom:16px}
+  .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+  .col{padding:0 22px;border-right:1px solid #EDF3F8}
+  .col:last-child{border-right:none}
+  .chk{display:flex;align-items:center;gap:13px;margin-bottom:17px}
+  .bx{width:19px;height:19px;border-radius:4px;border:1.7px solid #B8C6D6;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;background:#fff}
+  .bx.t{background:var(--teal);border-color:var(--teal)}
+  .bx.t svg{width:11px;height:11px;stroke:#fff;stroke-width:3;fill:none}
+  .chk .t{font-size:13px;color:#2B4058}
+  .chk.hi .t{font-weight:700;color:var(--ink)}
+</style></head><body>
+<script src="shell.js" data-active="8"></script>
+<div class="page">
+  <div class="phead">
+    <h1>Role Management</h1>
+    <div class="crumb">Users <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg> Role Management
+      <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg> <b>Add Role</b></div>
+  </div>
+  <div class="body">
+    <div class="card modcard">
+      <div class="modrow">Enquiry <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+
+      <div class="modhdr">Manually Queue <svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg></div>
+      <div class="split">
+        <div class="submenu">
+          <div class="sm">Credit Queue L1 <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+          <div class="sm">Compliance Queue L1 <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+          <div class="sm">Transaction Posting <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+          <div class="sm">Termination Queue <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+          <div class="sm on">Revert Queue <span class="newbadge">NEW</span><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+        </div>
+        <div class="perms">
+          <div class="selall"><div class="bx"></div><div class="t" style="font-size:13px;color:#2B4058">Select All</div></div>
+          <div class="cols">
+            <div class="col">
+              <div class="chk"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Credit Card] View Application</div></div>
+              <div class="chk hi mark"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Credit Card] Evaluate Application</div></div>
+            </div>
+            <div class="col">
+              <div class="chk"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Casa] View Application</div></div>
+              <div class="chk hi mark"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Casa] Evaluate Application</div></div>
+            </div>
+            <div class="col">
+              <div class="chk"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Personal Loan] View Application</div></div>
+              <div class="chk hi mark"><div class="bx t"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"/></svg></div><div class="t">[Personal Loan] Evaluate Application</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modrow">Users Management <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
+    </div>
+  </div>
+  <div class="actbar" style="justify-content:flex-end">
+    <div class="r"><div class="btn out">Cancel</div><div class="btn pri">Add Role</div></div>
+  </div>
+</div>
+</body></html>
