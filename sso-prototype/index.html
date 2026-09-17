@@ -155,6 +155,13 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 .form .in select{flex:1;border:0;outline:none;background:transparent;color:var(--ink)}
 .field-err{display:flex;gap:8px;align-items:flex-start;color:var(--red);font-size:13px;font-weight:600;margin-top:8px;line-height:1.45}
 @media (max-width:900px){.grid3{grid-template-columns:1fr}.tbl{font-size:13px}.tbl th,.tbl td{padding:10px 8px}}
+/* v8: switch */
+.sw{display:inline-flex;align-items:center;width:46px;height:26px;border-radius:13px;background:#c5cbd9;position:relative;cursor:pointer;transition:background .15s;flex-shrink:0;border:0;padding:0}
+.sw.on{background:var(--blue)}
+.sw .knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+.sw.on .knob{left:23px}
+.sw.dis{opacity:.5;cursor:not-allowed}
+.sw:focus-visible{outline:3px solid rgba(59,126,246,.45);outline-offset:2px}
 </style></head><body style="margin:0">
 
 <!-- ===================== LOGIN ===================== -->
@@ -280,7 +287,7 @@ function renderPrimary(){
 }
 let deb;u.addEventListener('input',()=>{clearTimeout(deb);deb=setTimeout(renderPrimary,180)});
 p.addEventListener('input',()=>{pwdMsg.innerHTML='';$('#pwdFi').classList.remove('err');renderPrimary()});
-$('#eye').addEventListener('click',()=>{S.showPwd=!S.showPwd;p.type=S.showPwd?'text':'password'});
+$('#eye').addEventListener('click',()=>{S.showPwd=!S.showPwd;p.type=S.showPwd?'text':'password';$('#eye').innerHTML=S.showPwd?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A10.4 10.4 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.8 8.6 2 12 2 12s4 7 10 7c1.5 0 2.9-.3 4.1-.8"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';});
 $('#changeUser').addEventListener('click',()=>{ $('#stepPwd').classList.add('hidden');$('#stepUser').classList.remove('hidden');$('#noteBox').classList.add('hidden');$('#sub').textContent='Enter your username to access your account';p.value='';pwdMsg.innerHTML='';$('#pwdFi').classList.remove('err');renderPrimary();u.focus()});
 $('#forgot').addEventListener('click',()=>{const acc=USERS[u.value.trim().toLowerCase()];if(usesSso(acc)){toast('Your organisation manages your sign-in. Use Login with SSO.')}else{toast('If this username exists, a reset email has been sent.')}});
 $('#loginCard').addEventListener('submit',()=>{
@@ -351,14 +358,14 @@ function renderSettings(c){
     <ul class="log" style="margin-bottom:14px">${S.log.slice(0,6).map(l=>`<li><span class="ts">${l.ts}</span><span>${l.t}</span></li>`).join('')}</ul>
   </section>
   <section class="panel" id="connPanel"></section>`;
-  $('#ssoRow').innerHTML=pill(on?'p-blue':'p-navy',on?'On':'Off')+
-    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span><button class="btn soft" disabled>${on?'Turn off':'Turn on'}</button>`
-         :`<span class="small muted">Since ${S.since||'01/09/2026'} · approved by longlh@appro.ae</span><button class="btn ghost" id="toggleSso">${on?'Turn off':'Turn on'}</button>`);
+  $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
+    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span>`
+         :`<span class="small muted">Since ${S.since||'01/09/2026'} · approved by longlh@appro.ae</span>`);
   $('#syncRow').innerHTML= on?`<span class="small muted" id="lastSync">Last synced ${S.lastSync}</span><button class="btn" id="syncNow">⟳ Sync now</button>`
                              :`<span class="small muted">Paused while single sign-on is off</span><button class="btn soft" disabled>Sync now</button>`;
   if(S.syncResult){const r=S.syncResult;$('#syncBanner').innerHTML=`<div class="info ${r.conflicts.length?'warn':'ok'}">${r.conflicts.length?WARN:OK}<div><b>Sync completed ${r.ts}</b> · ${r.updated} users updated${r.provisioned.length?` · <b>${r.provisioned.length} provisioned</b> (${r.provisioned.join(', ')})`:''}${r.ready.length?` · <b>${r.ready.length} marked SSO-ready</b> (${r.ready.map(e=>`<span class="lnk" data-user="${e}" style="cursor:pointer;text-decoration:underline">${e}</span>`).join(', ')} — converts at the first successful single sign-on)`:''}${r.conflicts.length?` · <b>${r.conflicts.length} conflict</b>: ${r.conflicts.map(e=>`<span class="lnk" data-user="${e}" style="cursor:pointer;text-decoration:underline">${e}</span>`).join(', ')} is a break-glass account — kept password-based, not converted. Logged to the audit trail.`:''}</div></div>`}
   renderConn();
-  const t=$('#toggleSso');if(t)t.onclick=()=>openModal(on?'off':'on');
+  const t=$('#ssoSwitch');if(t&&!pend)t.onclick=()=>openModal(on?'off':'on');
   const s=$('#syncNow');if(s)s.onclick=()=>{s.disabled=true;s.textContent='Syncing…';setTimeout(runSync,1200)};
   document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>go('user',x.dataset.user));
 }
@@ -452,12 +459,12 @@ function renderConn(){
         <div class="f"><label>Tenant ID</label><div class="in ro">${V.tenant}</div></div>
         <div class="f"><label>Client ID</label><div class="in ro">${V.client}</div></div>
         <div class="f" style="grid-column:1/-1"><label>Redirect URI</label><div class="in ro">${V.redirect}</div></div>
-        <div class="f" style="grid-column:1/-1"><label>Client secret <b>*</b></label><div class="in"><input id="secretInput" type="password" placeholder="Enter client secret" autocomplete="new-password" aria-label="Client secret"><button type="button" class="eye" id="secretEye" aria-label="Show">👁</button></div><div class="help">Minimum 8 characters. Replaces the current secret after Checker approval.</div></div>
+        <div class="f" style="grid-column:1/-1"><label>Client secret <b>*</b></label><div class="in"><input id="secretInput" type="password" placeholder="Enter client secret" autocomplete="new-password" aria-label="Client secret"><button type="button" class="eye" id="secretEye" aria-label="Show"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="help">Minimum 8 characters. Replaces the current secret after Checker approval.</div></div>
       </div>
       <div class="actions"><button class="btn ghost" id="connCancel">Cancel</button><button class="btn" id="connSubmit" disabled>Submit for approval</button></div>`;
     const i=$('#secretInput'),b=$('#connSubmit');
     i.oninput=()=>{b.disabled=i.value.trim().length<8};
-    $('#secretEye').onclick=()=>{i.type=i.type==='password'?'text':'password'};
+    $('#secretEye').onclick=()=>{const show=i.type==='password';i.type=show?'text':'password';$('#secretEye').innerHTML=show?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A10.4 10.4 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.8 8.6 2 12 2 12s4 7 10 7c1.5 0 2.9-.3 4.1-.8"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';};
     $('#connCancel').onclick=()=>{S.connMode='view';renderConn()};
     b.onclick=()=>{S.secretPending='CHK-2026-0931';S.connMode='view';logAdd(`Client secret replacement requested by ${S.user} · CHK-2026-0931 · awaiting Checker`);renderPortal();toast('Your request for updated information is created successfully!')};
     i.focus();
