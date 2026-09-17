@@ -121,11 +121,40 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 .demo .acct:hover{border-color:var(--blue)}
 .demo .acct code{font-size:12px}
 .demo .tag{font-size:11px;font-weight:800;padding:3px 8px;border-radius:10px;background:var(--lav)}
-.demo .tag.d{background:#dbe7ff;color:#1e4fbf}.demo .tag.x{background:var(--redbg);color:var(--red)}
+.demo .tag.d{background:#dbe7ff;color:#1e4fbf}.demo .tag.x{background:var(--redbg);color:var(--red)}.demo .tag.g{background:#fff3d6;color:#8a5a00}.demo .tag.y{background:#fff3d6;color:#8a5a00}
 .demo .dbtn{border:1.5px solid var(--ink);border-radius:10px;padding:8px 10px;font-weight:800}
 .demo .dbtn.p{background:var(--navy);color:#fff}
 @media (max-width:900px){#login .art{display:none}.sb{display:none}.kv{grid-template-columns:1fr}.kv .a{justify-content:flex-end}}
 @media (prefers-reduced-motion:reduce){.spin{animation:none}.pb,.fi{transition:none}}
+/* v7: user management */
+.tbl{width:100%;border-collapse:collapse;font-size:14px;margin:6px 0 14px}
+.tbl th{text-align:left;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7a8099;padding:12px 12px;border-bottom:1.5px solid var(--lav);white-space:nowrap}
+.tbl td{padding:13px 12px;border-bottom:1.5px solid var(--lav);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr.hl td{background:#fff8e6}
+.tbl code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.p-gold{background:#fff3d6;color:#8a5a00}.p-red{background:var(--redbg);color:var(--red)}
+.p-outline{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.info{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:14px 18px;font-size:14px;line-height:1.5;margin:16px 0 6px;background:var(--lav)}
+.info.warn{background:#fff3d6}
+.info.ok{background:#d7f3e3}
+.info svg{flex-shrink:0;margin-top:2px}
+.ud{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:6px 0 18px;border-bottom:1.5px solid var(--lav);flex-wrap:wrap}
+.ud .av{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#3b7ef6,#1a214d);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800}
+.ud .nm{font-size:22px;font-weight:800}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 30px;padding:6px 0 18px}
+.grid3 .lbl{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#7a8099;margin-bottom:6px}
+.grid3 .val{font-weight:800;font-size:15px;line-height:1.4}
+.h4{font-size:16px;font-weight:800;margin:18px 0 10px}
+.log{list-style:none;margin:0;padding:0;font-size:13.5px}
+.log li{display:flex;gap:12px;padding:9px 0;border-bottom:1.5px solid var(--lav)}
+.log li:last-child{border-bottom:0}
+.log .ts{color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums;min-width:120px}
+.form .in.err{border-color:var(--red);background:#fff5f5}
+.form .in input.txt,.form .in select{font-family:inherit;font-size:14.5px}
+.form .in select{flex:1;border:0;outline:none;background:transparent;color:var(--ink)}
+.field-err{display:flex;gap:8px;align-items:flex-start;color:var(--red);font-size:13px;font-weight:600;margin-top:8px;line-height:1.45}
+@media (max-width:900px){.grid3{grid-template-columns:1fr}.tbl{font-size:13px}.tbl th,.tbl td{padding:10px 8px}}
 </style></head><body style="margin:0">
 
 <!-- ===================== LOGIN ===================== -->
@@ -181,24 +210,10 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
   </nav>
   <div class="main">
     <div class="hdr">
-      <div><h2>Sign-in Settings</h2><div class="crumb">Users <span style="margin:0 8px">›</span> <b>Sign-in Settings</b></div></div>
-      <div class="small muted" id="whoami"></div>
+      <div><h2 id="pageTitle">Sign-in Settings</h2><div class="crumb" id="pageCrumb">Users <span style="margin:0 8px">›</span> <b>Sign-in Settings</b></div></div>
+      <div style="display:flex;align-items:center;gap:16px"><div id="hdrAction"></div><div class="small muted" id="whoami"></div></div>
     </div>
-    <div class="content">
-      <section class="panel">
-        <div class="ph"><div><h3>Sign-in Settings</h3><div class="desc muted">Portal accounts (username + password) always work. Single sign-on lets staff in your organisation’s directory log in with their own credentials.</div></div></div>
-        <div class="row">
-          <div class="t"><h4>Single sign-on</h4><p>Turning it on or off requires Checker approval.</p></div>
-          <div class="r" id="ssoRow"></div>
-        </div>
-        <div class="row">
-          <div class="t"><h4>Sync roles to single sign-on</h4><p>Publishes portal roles and role assignments to your organisation’s sign-in system.</p></div>
-          <div class="r" id="syncRow"></div>
-        </div>
-      </section>
-
-      <section class="panel" id="connPanel"></section>
-    </div>
+    <div class="content" id="content"></div>
   </div>
 </div>
 
@@ -213,27 +228,42 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 <script>
 (function(){
 const $=s=>document.querySelector(s);
+/* ---------- DATA ---------- */
+// src: 'Directory' (signs in with SSO, no password) | 'Portal' (password). breakGlass: the two seeded accounts, never converted.
+// ssoReady: a Portal user whose email the bank directory has claimed at sync → converted at the first successful SSO login.
 const USERS={
- 'huyen@appro.ae':{src:'Directory',name:'Huyen'},
- 'kha@appro.ae':{src:'Directory',name:'Kha'},
- 'admin@appro.ae':{src:'Portal',name:'Admin',bootstrap:true},
- 'nizar.maane@mal.ai':{src:'Portal',name:'Nizar'},
- 'ashish.gohel@mal.ai':{src:'Portal',name:'Ashish',expired:true},
+ 'huyen@appro.ae':      {name:'Huyen',        src:'Portal',    role:'Admin',       dept:'Credit',        pwd:'expired', ssoReady:true,  since:'12/05/2026', last:'02/09/2026 08:40 · password'},
+ 'kha@appro.ae':        {name:'Kha',          src:'Directory', role:'Maker',       dept:'Credit',        pwd:null, converted:'01/09/2026 09:12 · at first single sign-on', last:'16/09/2026 17:05 · single sign-on'},
+ 'admin@appro.ae':      {name:'Bank Admin',   src:'Portal',    role:'Super Admin', dept:'IT Operations', pwd:'valid',   breakGlass:true, inDirectory:true, last:'17/09/2026 08:02 · password'},
+ 'checker@appro.ae':    {name:'Bank Checker', src:'Portal',    role:'Checker',     dept:'IT Operations', pwd:'valid',   breakGlass:true, last:'15/09/2026 11:30 · password'},
+ 'nizar.maane@mal.ai':  {name:'Nizar',        src:'Portal',    role:'Maker',       dept:'Operations',    pwd:'valid',   last:'16/09/2026 09:15 · password'},
+ 'ashish.gohel@mal.ai': {name:'Ashish',       src:'Portal',    role:'Maker',       dept:'Operations',    pwd:'expired', last:'20/08/2026 14:12 · password'},
 };
-const S={sso:'on',pending:null,lastSync:'03/09/2026 09:41 · by huyen@appro.ae',secret:null,secretPending:null,user:null,showPwd:false};
+// what the bank directory contains for the portal role (what a sync would see)
+const DIRECTORY=['huyen@appro.ae','kha@appro.ae','admin@appro.ae','long.le@appro.ae'];
+const S={sso:'on',pending:null,lastSync:'03/09/2026 09:41 · by admin@appro.ae',secret:{on:'03/09/2026',by:'admin@appro.ae'},secretPending:null,user:null,showPwd:false,page:'settings',viewUser:null,syncResult:null,hl:null,
+ log:[{ts:'03/09/2026 09:41',t:'Sync completed · 11 users updated · 0 conflicts · by admin@appro.ae'},{ts:'01/09/2026 09:12',t:'kha@appro.ae converted to single sign-on at first single sign-on · portal password removed'},{ts:'01/09/2026 08:30',t:'Single sign-on turned On · approved by longlh@appro.ae (CHK-2026-0871)'}]};
 const KEY='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.85 12.15 19 4l2 2-3 3-2-2-2 2 2 2-2 2"/></svg>';
 const ALERT='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c62828" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>';
+const INFO='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
+const WARN='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a5a00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18.1A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.9L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
+const OK='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e7f4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>';
 const now=()=>{const d=new Date();const p=n=>String(n).padStart(2,'0');return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`};
-function toast(msg,ms=2600){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+function toast(msg,ms=3200){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+function logAdd(t){S.log.unshift({ts:now(),t})}
 const valid=e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+const usesSso=a=>a&&!a.breakGlass&&(a.src==='Directory'||a.ssoReady);
 
 /* ---------- LOGIN ---------- */
 const u=$('#username'),p=$('#password'),primary=$('#primary'),hint=$('#primaryHint'),userMsg=$('#userMsg'),pwdMsg=$('#pwdMsg');
-let mode='idle'; // idle|sso|pwd|ssooff|password-step
+let mode='idle';
 function route(email){
   const acc=USERS[email.toLowerCase()];
-  if(acc&&acc.src==='Directory') return S.sso==='on'?'sso':'ssooff';
-  return 'pwd'; // portal account or unknown: never reveal
+  if(!acc) return 'pwd';                                  // unknown: never reveal
+  if(acc.breakGlass) return 'pwd';                        // Rule C
+  if(acc.src==='Directory') return S.sso==='on'?'sso':'ssooff';
+  if(acc.ssoReady && S.sso==='on') return 'sso';          // Rule B: directory claimed the email
+  return 'pwd';
 }
 function renderPrimary(){
   const e=u.value.trim();
@@ -252,18 +282,19 @@ let deb;u.addEventListener('input',()=>{clearTimeout(deb);deb=setTimeout(renderP
 p.addEventListener('input',()=>{pwdMsg.innerHTML='';$('#pwdFi').classList.remove('err');renderPrimary()});
 $('#eye').addEventListener('click',()=>{S.showPwd=!S.showPwd;p.type=S.showPwd?'text':'password'});
 $('#changeUser').addEventListener('click',()=>{ $('#stepPwd').classList.add('hidden');$('#stepUser').classList.remove('hidden');$('#noteBox').classList.add('hidden');$('#sub').textContent='Enter your username to access your account';p.value='';pwdMsg.innerHTML='';$('#pwdFi').classList.remove('err');renderPrimary();u.focus()});
-$('#forgot').addEventListener('click',()=>{const acc=USERS[u.value.trim().toLowerCase()];if(acc&&acc.src==='Directory'){toast('Your organisation manages your sign-in. Use Login with SSO.')}else{toast('If this username exists, a reset email has been sent.')}});
+$('#forgot').addEventListener('click',()=>{const acc=USERS[u.value.trim().toLowerCase()];if(usesSso(acc)){toast('Your organisation manages your sign-in. Use Login with SSO.')}else{toast('If this username exists, a reset email has been sent.')}});
 $('#loginCard').addEventListener('submit',()=>{
   const e=u.value.trim().toLowerCase();
   if(mode==='sso'){ssoRedirect(e);return}
-  if(mode==='pwd'){ // reveal password step
+  if(mode==='pwd'){
     $('#stepUser').classList.add('hidden');$('#stepPwd').classList.remove('hidden');$('#noteBox').classList.remove('hidden');
     $('#chipUser').innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'+e;
     $('#sub').textContent='Enter your password to access your account';mode='password-step';renderPrimary();p.focus();return}
   if(mode==='password-step'){
     const acc=USERS[e];
     if(!acc||acc.src!=='Portal'||p.value==='wrong'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=`<div class="inline-err">${ALERT}<span>Invalid username or password.</span></div>`;return}
-    if(acc.expired){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=`<div class="inline-err">${ALERT}<span><b>Your password has expired.</b> Reset it using “Forgot password?” to continue.</span></div>`;return}
+    if(acc.pwd==='expired'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=`<div class="inline-err">${ALERT}<span><b>Your password has expired.</b> Reset it using “Forgot password?” to continue.</span></div>`;return}
+    if(acc.pwd==='notset'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=`<div class="inline-err">${ALERT}<span>No password has been set yet. Check your email for the invitation link.</span></div>`;return}
     signIn(e,'password');
   }
 });
@@ -271,38 +302,147 @@ function ssoRedirect(e){
   $('#overlay').innerHTML=`<div class="redir"><div class="box"><div class="spin"></div><div style="font-weight:800;font-size:17px">Redirecting to your organisation’s sign-in…</div><div class="muted" style="margin-top:6px;font-size:13.5px">You will be brought back to Super Portal automatically.</div></div></div>`;
   setTimeout(()=>{$('#overlay').innerHTML='';signIn(e,'sso')},1500);
 }
-function signIn(e,how){S.user=e;$('#login').classList.add('hidden');$('#portal').classList.remove('hidden');$('#whoami').textContent=e+(how==='sso'?' · single sign-on':' · portal account');renderPortal();toast(how==='sso'?'Signed in with single sign-on':'Signed in');}
-$('#logout').addEventListener('click',()=>{S.user=null;$('#portal').classList.add('hidden');$('#login').classList.remove('hidden');u.value='';$('#changeUser').click();});
+function signIn(e,how){
+  const acc=USERS[e]; let converted=false;
+  if(how==='sso'&&acc.src==='Portal'&&acc.ssoReady){            // Rule B: conversion at first successful SSO login
+    acc.src='Directory';acc.pwd=null;acc.ssoReady=false;acc.converted=now()+' · at first single sign-on';converted=true;
+    logAdd(`${e} converted to single sign-on at first single sign-on · portal password removed · roles and entitlements kept`);
+  }
+  acc.last=now()+(how==='sso'?' · single sign-on':' · password');
+  S.user=e;$('#login').classList.add('hidden');$('#portal').classList.remove('hidden');
+  $('#whoami').textContent=e+(how==='sso'?' · single sign-on':acc.breakGlass?' · portal account · break-glass':' · portal account');
+  if(converted){S.page='user';S.viewUser=e;S.hl=e;toast('Signed in with single sign-on · your portal password has been removed — you now sign in with SSO only',5200)}
+  else {S.page='settings';toast(how==='sso'?'Signed in with single sign-on':'Signed in')}
+  renderPortal();
+}
+$('#logout').addEventListener('click',()=>{S.user=null;S.page='settings';S.viewUser=null;$('#portal').classList.add('hidden');$('#login').classList.remove('hidden');u.value='';$('#changeUser').click();renderDemo()});
+
+/* ---------- NAV ---------- */
+function go(page,arg){S.page=page;if(page==='user')S.viewUser=arg;renderPortal();$('#content').scrollTop=0}
+document.querySelectorAll('.subnav').forEach(b=>{const t=b.textContent.trim();if(t==='User Management')b.onclick=()=>go('users');if(t==='Sign-in Settings')b.onclick=()=>go('settings')});
+function setNav(){document.querySelectorAll('.subnav').forEach(b=>{const t=b.textContent.trim();b.classList.toggle('on',(t==='Sign-in Settings'&&S.page==='settings')||(t==='User Management'&&S.page!=='settings'))})}
+const pill=(cls,t)=>`<span class="pill ${cls}">${t}</span>`;
+const srcPill=a=>a.breakGlass?pill('p-navy','Portal')+' '+pill('p-gold','Break-glass'):a.src==='Directory'?pill('p-blue','Directory'):pill('p-navy','Portal');
+const pwdPill=a=>a.src==='Directory'?pill('p-lav','None'+(a.converted?' — removed '+a.converted.slice(0,10):'')):a.pwd==='expired'?pill('p-red','Expired'):a.pwd==='notset'?pill('p-lav','Not set · invite sent'):pill('p-green','Set');
+const method=a=>usesSso(a)&&a.src==='Directory'?'Single sign-on':a.ssoReady?'Password → SSO at next login':'Password';
 
 /* ---------- PORTAL ---------- */
 function renderPortal(){
-  const on=S.sso==='on';
-  const pend=S.pending;
-  $('#ssoRow').innerHTML=
-    `<span class="pill ${on?'p-blue':'p-navy'}">${on?'On':'Off'}</span>`+
-    (pend?`<span class="small muted"><span class="pill p-yel">Pending Checker approval · ${pend.id}</span></span><button class="btn soft" disabled>${on?'Turn off':'Turn on'}</button>`
+  setNav();const c=$('#content'),hdr=$('#hdrAction');hdr.innerHTML='';
+  const title={settings:'Sign-in Settings',users:'User Management',user:'User Details',adduser:'Add User'}[S.page];
+  $('#pageTitle').textContent=title;
+  $('#pageCrumb').innerHTML=S.page==='settings'?'Users <span style="margin:0 8px">›</span> <b>Sign-in Settings</b>':'Users <span style="margin:0 8px">›</span> '+(S.page==='users'?'<b>User Management</b>':'<span class="lnk" style="cursor:pointer" id="crumbUsers">User Management</span> <span style="margin:0 8px">›</span> <b>'+(S.page==='user'?'View User Details':'Add User')+'</b>');
+  if(S.page==='settings')renderSettings(c);
+  else if(S.page==='users')renderUsers(c);
+  else if(S.page==='user')renderUser(c);
+  else renderAddUser(c);
+  const cu=$('#crumbUsers');if(cu)cu.onclick=()=>go('users');
+  renderDemo();
+}
+/* Sign-in Settings */
+function renderSettings(c){
+  const on=S.sso==='on',pend=S.pending;
+  c.innerHTML=`<section class="panel">
+    <div class="ph"><div><h3>Sign-in Settings</h3><div class="desc muted">Portal accounts (username + password) always work. Single sign-on lets staff in your organisation’s directory log in with their own credentials.</div></div></div>
+    <div class="row"><div class="t"><h4>Single sign-on</h4><p>Turning it on or off requires Checker approval.</p></div><div class="r" id="ssoRow"></div></div>
+    <div class="row"><div class="t"><h4>Sync roles to single sign-on</h4><p>Publishes portal roles and role assignments to your organisation’s sign-in system, and reads back which staff hold the portal role.</p></div><div class="r" id="syncRow"></div></div>
+    <div id="syncBanner"></div>
+    <div class="h4" style="margin-top:14px">Sign-in audit trail</div>
+    <ul class="log" style="margin-bottom:14px">${S.log.slice(0,6).map(l=>`<li><span class="ts">${l.ts}</span><span>${l.t}</span></li>`).join('')}</ul>
+  </section>
+  <section class="panel" id="connPanel"></section>`;
+  $('#ssoRow').innerHTML=pill(on?'p-blue':'p-navy',on?'On':'Off')+
+    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span><button class="btn soft" disabled>${on?'Turn off':'Turn on'}</button>`
          :`<span class="small muted">Since ${S.since||'01/09/2026'} · approved by longlh@appro.ae</span><button class="btn ghost" id="toggleSso">${on?'Turn off':'Turn on'}</button>`);
   $('#syncRow').innerHTML= on?`<span class="small muted" id="lastSync">Last synced ${S.lastSync}</span><button class="btn" id="syncNow">⟳ Sync now</button>`
                              :`<span class="small muted">Paused while single sign-on is off</span><button class="btn soft" disabled>Sync now</button>`;
-    renderConn();
+  if(S.syncResult){const r=S.syncResult;$('#syncBanner').innerHTML=`<div class="info ${r.conflicts.length?'warn':'ok'}">${r.conflicts.length?WARN:OK}<div><b>Sync completed ${r.ts}</b> · ${r.updated} users updated${r.provisioned.length?` · <b>${r.provisioned.length} provisioned</b> (${r.provisioned.join(', ')})`:''}${r.ready.length?` · <b>${r.ready.length} marked SSO-ready</b> (${r.ready.map(e=>`<span class="lnk" data-user="${e}" style="cursor:pointer;text-decoration:underline">${e}</span>`).join(', ')} — converts at the first successful single sign-on)`:''}${r.conflicts.length?` · <b>${r.conflicts.length} conflict</b>: ${r.conflicts.map(e=>`<span class="lnk" data-user="${e}" style="cursor:pointer;text-decoration:underline">${e}</span>`).join(', ')} is a break-glass account — kept password-based, not converted. Logged to the audit trail.`:''}</div></div>`}
+  renderConn();
   const t=$('#toggleSso');if(t)t.onclick=()=>openModal(on?'off':'on');
-  const s=$('#syncNow');if(s)s.onclick=()=>{s.disabled=true;s.textContent='Syncing…';setTimeout(()=>{S.lastSync=now()+' · by '+S.user;renderPortal();toast('Roles synced to single sign-on')},1200)};
-  document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>{const v=$('#'+b.dataset.copy).textContent;navigator.clipboard&&navigator.clipboard.writeText(v).catch(()=>{});toast('Copied')});
-  renderDemo();
+  const s=$('#syncNow');if(s)s.onclick=()=>{s.disabled=true;s.textContent='Syncing…';setTimeout(runSync,1200)};
+  document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>go('user',x.dataset.user));
 }
+function runSync(){
+  const r={ts:now(),updated:0,provisioned:[],ready:[],conflicts:[]};
+  DIRECTORY.forEach(e=>{const a=USERS[e];
+    if(!a){USERS[e]={name:e.split('@')[0].split('.').map(w=>w[0].toUpperCase()+w.slice(1)).join(' '),src:'Directory',role:'Maker',dept:'Credit',pwd:null,provisioned:r.ts+' · by sync',last:'—'};r.provisioned.push(e);logAdd(`${e} provisioned from the directory · single sign-on · no portal password`)}
+    else if(a.breakGlass){r.conflicts.push(e);logAdd(`Conflict: ${e} found in the directory but is a break-glass account · kept password-based · not converted`)}
+    else if(a.src==='Portal'){if(!a.ssoReady){a.ssoReady=true;logAdd(`${e} marked SSO-ready · converts at the first successful single sign-on`)}r.ready.push(e)}
+    else r.updated++;});
+  r.updated=Object.values(USERS).filter(a=>a.src==='Directory').length;
+  S.lastSync=r.ts+' · by '+S.user;S.syncResult=r;logAdd(`Sync completed · ${r.updated} users updated · ${r.conflicts.length} conflict${r.conflicts.length===1?'':'s'} · by ${S.user}`);
+  renderPortal();toast('Sync completed'+(r.conflicts.length?' with '+r.conflicts.length+' conflict':''));
+}
+/* User Management list */
+function renderUsers(c){
+  $('#hdrAction').innerHTML=`<button class="btn" id="addUserBtn">+ Add User</button>`;$('#addUserBtn').onclick=()=>go('adduser');
+  c.innerHTML=`<section class="panel"><div class="ph"><div><h3>Users</h3><div class="desc muted">One email = one user = one sign-in method. Directory users sign in with single sign-on and hold no portal password.</div></div></div>
+  <table class="tbl"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Source</th><th>Sign-in method</th><th>Portal password</th><th>Status</th><th></th></tr></thead><tbody>
+  ${Object.entries(USERS).map(([e,a])=>`<tr class="${S.hl===e?'hl':''}"><td><b>${a.name}</b></td><td><code>${e}</code></td><td>${a.role}</td><td>${srcPill(a)}</td><td>${method(a)}</td><td>${pwdPill(a)}</td><td>${pill('p-green','Active')}</td><td><button class="btn ghost" style="height:36px;padding:0 14px;font-size:13px" data-user="${e}">View</button></td></tr>`).join('')}
+  </tbody></table></section>`;
+  document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>go('user',x.dataset.user));S.hl=null;
+}
+/* User Details */
+function renderUser(c){
+  const e=S.viewUser,a=USERS[e];if(!a){go('users');return}
+  $('#hdrAction').innerHTML=`<button class="btn ghost" id="backUsers">‹ Back</button>`;$('#backUsers').onclick=()=>go('users');
+  const banner=a.breakGlass?`<div class="info">${INFO}<div>This is a <b>break-glass account</b>. It always signs in with a portal password — even when the organisation’s directory contains the same email — so the bank can never be locked out of the portal.</div></div>`
+    :a.src==='Directory'?`<div class="info">${INFO}<div>This user signs in with <b>single sign-on</b>. Identity fields are managed by the organisation’s directory${a.converted?'; the portal password was removed when they first signed in with single sign-on':''}.</div></div>`
+    :a.ssoReady?`<div class="info warn">${WARN}<div>The organisation’s directory has claimed this email. At the user’s <b>first successful single sign-on</b> the portal password is removed and the account converts to single sign-on. Until then the password rules still apply${a.pwd==='expired'?' (password currently expired — single sign-on is not affected)':''}.</div></div>`
+    :`<div class="info">${INFO}<div>This user signs in with a <b>portal password</b>. The portal password policy applies (expiry, complexity, lockout).</div></div>`;
+  const third=a.breakGlass?['Directory sync',a.inDirectory?`<span style="color:#8a5a00">${(S.syncResult&&S.syncResult.conflicts.includes(e))?S.syncResult.ts:'17/09/2026 10:14'} · conflict logged, kept password-based</span>`:'Not in directory']
+    :a.converted?['Converted to single sign-on',a.converted]:a.provisioned?['Provisioned',a.provisioned]:a.ssoReady?['SSO-ready since',(S.syncResult?S.syncResult.ts:'03/09/2026 09:41')+' · directory sync']:['Created',a.since||'—'];
+  c.innerHTML=`<section class="panel">
+    <div class="ud"><div style="display:flex;align-items:center;gap:16px"><div class="av">${a.name[0]}</div><div><div class="nm">${a.name}</div><div class="muted small">${e}</div></div></div>
+      <div style="display:flex;gap:12px;align-items:center">${pill('p-green','Active')} ${srcPill(a)}</div></div>
+    ${banner}
+    <div class="h4">Basic Details</div>
+    <div class="grid3">
+      <div><div class="lbl">Account name</div><div class="val">${a.name}</div></div><div><div class="lbl">Email</div><div class="val">${e}</div></div><div><div class="lbl">Department</div><div class="val">${a.dept}</div></div>
+      <div><div class="lbl">User role</div><div class="val">${a.role}</div></div><div><div class="lbl">Source</div><div class="val">${a.breakGlass?pill('p-navy','Portal · Break-glass'):a.src==='Directory'?pill('p-blue','Directory'):pill('p-navy','Portal')}</div></div><div><div class="lbl">Sign-in method</div><div class="val">${method(a)}</div></div>
+      <div><div class="lbl">Portal password</div><div class="val">${pwdPill(a)}</div></div><div><div class="lbl">${third[0]}</div><div class="val">${third[1]}</div></div><div><div class="lbl">Last login</div><div class="val">${a.last||'—'}</div></div>
+    </div></section>`;
+}
+/* Add User */
+function renderAddUser(c){
+  $('#hdrAction').innerHTML='';
+  c.innerHTML=`<section class="panel"><div class="ph"><div><h3>Add User</h3><div class="desc muted">Creates a portal account (username + password). Staff in your organisation’s directory are provisioned by sync and sign in with single sign-on instead.</div></div></div>
+  <div class="form">
+    <div class="f"><label>Name <b>*</b></label><div class="in"><input class="txt" id="auName" placeholder="Full name"></div></div>
+    <div class="f"><label>Email <b>*</b></label><div class="in" id="auEmailIn"><input class="txt" id="auEmail" type="email" placeholder="name@bank.ae"></div><div id="auEmailMsg"></div></div>
+    <div class="f"><label>User role <b>*</b></label><div class="in"><select id="auRole"><option value="">Select role</option><option>Maker</option><option>Checker</option><option>Admin</option></select></div></div>
+    <div class="f"><label>Department</label><div class="in"><select id="auDept"><option value="">Select department</option><option>Credit</option><option>Operations</option><option>IT Operations</option></select></div></div>
+  </div>
+  <div class="actions"><button class="btn ghost" id="auCancel">Cancel</button><button class="btn" id="auSubmit" disabled>Submit for approval</button></div></section>`;
+  const n=$('#auName'),em=$('#auEmail'),r=$('#auRole'),sub=$('#auSubmit'),msg=$('#auEmailMsg'),box=$('#auEmailIn');let emailOk=false;
+  function check(){const e=em.value.trim().toLowerCase();msg.innerHTML='';box.classList.remove('err');emailOk=false;
+    if(!e){}
+    else if(!valid(e)){box.classList.add('err');msg.innerHTML=`<div class="field-err">${ALERT}<span>Enter a valid email address.</span></div>`}
+    else if(USERS[e]&&usesSso(USERS[e])){box.classList.add('err');msg.innerHTML=`<div class="field-err">${ALERT}<span>This email already signs in with single sign-on. A portal password cannot be created for it.</span></div>`}
+    else if(USERS[e]){box.classList.add('err');msg.innerHTML=`<div class="field-err">${ALERT}<span>A portal account with this email already exists.</span></div>`}
+    else if(DIRECTORY.includes(e)){box.classList.add('err');msg.innerHTML=`<div class="field-err">${ALERT}<span>This email exists in your organisation’s directory. Run <b>Sync</b> in Sign-in Settings — the user will be provisioned with single sign-on.</span></div>`}
+    else emailOk=true;
+    sub.disabled=!(emailOk&&n.value.trim()&&r.value)}
+  [n,em,r].forEach(x=>x.addEventListener('input',check));r.addEventListener('change',check);
+  $('#auCancel').onclick=()=>go('users');
+  sub.onclick=()=>{const e=em.value.trim().toLowerCase();USERS[e]={name:n.value.trim(),src:'Portal',role:r.value,dept:$('#auDept').value||'—',pwd:'notset',since:now().slice(0,10),last:'—'};logAdd(`${e} created as a portal account by ${S.user} · pending Checker approval`);S.hl=e;toast('Your request for updated information is created successfully!');go('users')};
+  n.focus();
+}
+/* Connection details */
 function renderConn(){
-  const on=S.sso==='on', p=$('#connPanel'), mode=S.connMode||'view';
-  const status = S.secretPending ? '<span class="pill p-yel">Pending Checker approval · '+S.secretPending+'</span>' : (on?'<span class="pill p-green">Connected</span>':'<span class="pill p-lav">Paused</span>');
+  const on=S.sso==='on', p=$('#connPanel'), mode=S.connMode||'view';if(!p)return;
+  const status = S.secretPending ? pill('p-yel','Pending Checker approval · '+S.secretPending) : (on?pill('p-green','Connected'):pill('p-lav','Paused'));
   const canEdit = !S.secretPending && !S.pending;
   const V={tenant:'66c411d1-c09b-49ab-9b29-f248657f0a31',client:'85387034-2b03-476c-a1ef-afc2d8922616',redirect:'https://portal.appro.ae/bank-authen-service/auth/sso/callback'};
-  const secretView = S.secret ? '•••••••••••••••••••• <span class="muted small" style="font-weight:600">set '+S.secret.on+' by '+S.secret.by+'</span>' : '<span class="pill p-lav">Not set</span>';
+  const CP=id=>`<button class="copy" data-copy="${id}" aria-label="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>`;
+  const secretView = S.secret ? '•••••••••••••••••••• <span class="muted small" style="font-weight:600">set '+S.secret.on+' by '+S.secret.by+'</span>' : pill('p-lav','Not set');
   if(mode==='view'){
     p.innerHTML=`<div class="ph"><div><h3>Connection details</h3><div class="desc muted">Values your organisation’s IT team needs to connect single sign-on. Only the client secret can be changed here.</div></div>
       <div style="display:flex;gap:12px;align-items:center">${status}<button class="btn" id="connEdit" ${canEdit?'':'disabled'}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg> Edit</button></div></div>
       <div class="kvgrid">
-        <div><div class="lbl">Tenant ID</div><div class="val"><code id="tenant">${V.tenant}</code><button class="copy" data-copy="tenant" aria-label="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div></div>
-        <div><div class="lbl">Client ID</div><div class="val"><code id="clientid">${V.client}</code><button class="copy" data-copy="clientid" aria-label="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div></div>
-        <div><div class="lbl">Redirect URI</div><div class="val"><code id="redirect">${V.redirect}</code><button class="copy" data-copy="redirect" aria-label="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button></div></div>
+        <div><div class="lbl">Tenant ID</div><div class="val"><code id="tenant">${V.tenant}</code>${CP('tenant')}</div></div>
+        <div><div class="lbl">Client ID</div><div class="val"><code id="clientid">${V.client}</code>${CP('clientid')}</div></div>
+        <div><div class="lbl">Redirect URI</div><div class="val"><code id="redirect">${V.redirect}</code>${CP('redirect')}</div></div>
         <div><div class="lbl">Client secret</div><div class="val">${secretView}</div></div>
       </div>`;
     const e=$('#connEdit'); if(e) e.onclick=()=>{S.connMode='edit';renderConn()};
@@ -319,25 +459,27 @@ function renderConn(){
     i.oninput=()=>{b.disabled=i.value.trim().length<8};
     $('#secretEye').onclick=()=>{i.type=i.type==='password'?'text':'password'};
     $('#connCancel').onclick=()=>{S.connMode='view';renderConn()};
-    b.onclick=()=>{S.secretPending='CHK-2026-0931';S.connMode='view';renderConn();toast('Your request for updated information is created successfully!');renderDemo()};
+    b.onclick=()=>{S.secretPending='CHK-2026-0931';S.connMode='view';logAdd(`Client secret replacement requested by ${S.user} · CHK-2026-0931 · awaiting Checker`);renderPortal();toast('Your request for updated information is created successfully!')};
     i.focus();
   }
   document.querySelectorAll('[data-copy]').forEach(x=>x.onclick=()=>{const v=$('#'+x.dataset.copy).textContent;navigator.clipboard&&navigator.clipboard.writeText(v).catch(()=>{});toast('Copied')});
 }
 function openModal(to){
-  $('#overlay').innerHTML=`<div class="modal"><div class="box"><h3>Turn ${to} single sign-on?</h3><div class="muted" style="font-size:14.5px;line-height:1.5">The change takes effect after Checker approval.</div>
+  $('#overlay').innerHTML=`<div class="modal"><div class="box"><h3>Turn ${to} single sign-on?</h3><div class="muted" style="font-size:14.5px;line-height:1.5">The change takes effect after Checker approval.${to==='off'?' Directory users will not be able to sign in until it is turned on again; break-glass accounts are not affected.':''}</div>
    <p class="lb" style="margin-top:18px">Reason (optional)</p><textarea class="ta" id="reason" placeholder="Add a note for the Checker"></textarea>
    <div class="actions"><button class="btn ghost" id="mCancel">Cancel</button><button class="btn" id="mSubmit">Submit for approval</button></div></div></div>`;
   $('#mCancel').onclick=()=>$('#overlay').innerHTML='';
-  $('#mSubmit').onclick=()=>{S.pending={to,id:'CHK-2026-0912'};$('#overlay').innerHTML='';renderPortal();toast('Your request for updated information is created successfully!')};
+  $('#mSubmit').onclick=()=>{S.pending={to,id:'CHK-2026-0912'};$('#overlay').innerHTML='';logAdd(`Turn-${to} request submitted by ${S.user} · CHK-2026-0912 · awaiting Checker`);renderPortal();toast('Your request for updated information is created successfully!')};
 }
 
 /* ---------- DEMO PANEL ---------- */
+function tagFor(a){if(a.breakGlass)return['Break-glass · password','g'];if(a.src==='Directory')return['SSO','d'];if(a.ssoReady)return[a.pwd==='expired'?'Expired pwd · SSO-ready':'SSO-ready','y'];if(a.pwd==='expired')return['Expired','x'];if(a.pwd==='notset')return['Invite sent',''];return['Local','']}
 function renderDemo(){
   const b=$('#demoBody');
   if(!S.user){
     b.innerHTML=`<div class="muted">Click an account to fill the username. Any password works unless marked.</div>`+
-      Object.entries(USERS).map(([e,a])=>`<button class="acct" type="button" data-acct="${e}"><code>${e}</code><span class="tag ${a.src==='Directory'?'d':''} ${a.expired?'x':''}">${a.src==='Directory'?'SSO':a.expired?'Expired':a.bootstrap?'Local · bootstrap':'Local'}</span></button>`).join('')+
+      Object.entries(USERS).map(([e,a])=>{const t=tagFor(a);return`<button class="acct" type="button" data-acct="${e}"><code>${e}</code><span class="tag ${t[1]}">${t[0]}</span></button>`}).join('')+
+      `<div class="muted" style="font-size:12px;line-height:1.45"><b>Try:</b> huyen@appro.ae — expired portal password but the directory has claimed her email → “Login with SSO” → converted on first SSO login. admin@appro.ae — break-glass, always password.</div>`+
       `<div style="display:flex;gap:8px;align-items:center;justify-content:space-between"><span>Single sign-on for the bank</span><button class="dbtn" type="button" id="dSso">${S.sso==='on'?'On → turn off':'Off → turn on'}</button></div>`;
     document.querySelectorAll('[data-acct]').forEach(x=>x.onclick=()=>{u.value=x.dataset.acct;$('#changeUser').click();renderPrimary();u.focus()});
     $('#dSso').onclick=()=>{S.sso=S.sso==='on'?'off':'on';renderDemo();renderPrimary()};
@@ -346,10 +488,11 @@ function renderDemo(){
       (S.pending?`<div><b>Turn-${S.pending.to} request ${S.pending.id}</b><div style="display:flex;gap:8px;margin-top:6px"><button class="dbtn p" type="button" id="dApprove">Approve</button><button class="dbtn" type="button" id="dReject">Reject</button></div></div>`:'')+
       (S.secretPending?`<div><b>Client secret request ${S.secretPending}</b><div style="display:flex;gap:8px;margin-top:6px"><button class="dbtn p" type="button" id="dApproveS">Approve</button><button class="dbtn" type="button" id="dRejectS">Reject</button></div></div>`:'')+
       (!S.pending&&!S.secretPending?`<div class="muted">No requests waiting.</div>`:'')+
+      `<div class="muted" style="font-size:12px;line-height:1.45"><b>Try:</b> Sign-in Settings → Sync now (see the break-glass conflict) · User Management → Add User with kha@appro.ae (refused).</div>`+
       `<button class="dbtn" type="button" id="dReset">Reset prototype</button>`;
-    const A=$('#dApprove');if(A)A.onclick=()=>{S.sso=S.pending.to;S.since=now().slice(0,10);S.pending=null;renderPortal();toast('Checker approved · single sign-on is now '+S.sso)};
-    const R=$('#dReject');if(R)R.onclick=()=>{S.pending=null;renderPortal();toast('Checker rejected the request')};
-    const AS=$('#dApproveS');if(AS)AS.onclick=()=>{S.secret={on:now().slice(0,10),by:S.user};S.secretPending=null;S.connMode='view';renderPortal();toast('Checker approved · client secret updated')};
+    const A=$('#dApprove');if(A)A.onclick=()=>{S.sso=S.pending.to;S.since=now().slice(0,10);logAdd(`Single sign-on turned ${S.sso==='on'?'On':'Off'} · approved by longlh@appro.ae (${S.pending.id})`);S.pending=null;renderPortal();toast('Checker approved · single sign-on is now '+S.sso)};
+    const R=$('#dReject');if(R)R.onclick=()=>{logAdd(`Turn-${S.pending.to} request ${S.pending.id} rejected by longlh@appro.ae`);S.pending=null;renderPortal();toast('Checker rejected the request')};
+    const AS=$('#dApproveS');if(AS)AS.onclick=()=>{S.secret={on:now().slice(0,10),by:S.user};logAdd(`Client secret replaced · approved by longlh@appro.ae (${S.secretPending})`);S.secretPending=null;S.connMode='view';renderPortal();toast('Checker approved · client secret updated')};
     const RS=$('#dRejectS');if(RS)RS.onclick=()=>{S.secretPending=null;renderPortal();toast('Checker rejected the request')};
     $('#dReset').onclick=()=>location.reload();
   }
