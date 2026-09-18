@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face{font-family:'Plus Jakarta Sans';src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2') format('woff2');font-weight:400}
+@font-face{font-family:'Plus Jakarta Sans';src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');font-weight:500}
+@font-face{font-family:'Plus Jakarta Sans';src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');font-weight:600}
+@font-face{font-family:'Plus Jakarta Sans';src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#fff}
+body{font-family:'Plus Jakarta Sans',sans-serif;position:relative}
+#base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}
+/* overlay covering the card's interior module list */
+#ov{position:absolute;left:156px;top:124px;width:1724px;height:736px;background:#ffffff}
+.abs{position:absolute}
+/* module rows (relative to #ov: subtract 156 / 124) */
+.row{left:21px;width:1682px;height:59px;border-radius:8px;display:flex;align-items:center;padding-left:16px}
+.row.collapsed{background:#E6F1F8}
+.row.expanded{background:#008AAB}
+.rowtitle{font-size:17px;font-weight:600;color:#0D0D0D;letter-spacing:0}
+.row.expanded .rowtitle{color:#fff}
+.rowchev{position:absolute;left:1645px;top:50%;transform:translateY(-50%)}
+.rowchev.up{top:calc(50% - 1px)}
+/* submenu items */
+.sub{left:21px;width:283px;height:57px;display:flex;align-items:center;padding-left:16px;border-radius:8px}
+.sub .txt{font-size:15px;font-weight:600;color:#0D0D0D}
+.sub.sel{background:#008AAB}
+.sub.sel .txt{color:#fff}
+.subchev{position:absolute;right:23px;top:50%;transform:translateY(-50%)}
+/* checkboxes */
+.cb{width:20px;height:20px;border:1px solid #5A5D60;border-radius:5px;background:#fff}
+.cbc{width:20px;height:20px;border-radius:4px;background:#008AAB;display:flex;align-items:center;justify-content:center}
+.lbl{font-size:13px;font-weight:400;color:#0D0D0D;white-space:nowrap}
+.hdiv{left:328px;top:222px;width:1351px;height:1px;background:#E6F1F8}
+.vdiv{left:767px;top:239px;width:1px;height:107.5px;background:#E6F1F8}
+</style>
+</head>
+<body>
+<img id="base" src="file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/shots/screenshots/43-add-role-permissions-scrolled.png">
+<div id="ov">
+  <!-- Collapsed: Collateral Management (page y124 -> rel 0) -->
+  <div class="abs row collapsed" style="top:0px">
+    <span class="rowtitle">Collateral Management</span>
+    <svg class="rowchev" width="17.5" height="10" viewBox="0 0 17.5 10" fill="none"><path d="M1.5 2.0 L8.75 8.0 L16.0 2.0" stroke="#0D0D0D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- Expanded: Enquiry (page y207 -> rel 83) -->
+  <div class="abs row expanded" style="top:83px">
+    <span class="rowtitle">Enquiry</span>
+    <svg class="rowchev up" width="17.5" height="10" viewBox="0 0 17.5 10" fill="none"><path d="M1.2 8.2 L8.75 1.8 L16.3 8.2" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- Submenu: Report Enquiry (plain)  page y282 -> rel 158 -->
+  <div class="abs sub" style="top:158px">
+    <span class="txt">Report Enquiry</span>
+    <svg class="subchev" width="9" height="18" viewBox="0 0 9 18" fill="none"><path d="M1.2 1.5 L7.4 9 L1.2 16.5" stroke="#0D0D0D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- Submenu: Application Enquiry (selected pill)  page y348 -> rel 224 -->
+  <div class="abs sub sel" style="top:224px">
+    <span class="txt">Application Enquiry</span>
+    <svg class="subchev" width="9" height="18" viewBox="0 0 9 18" fill="none"><path d="M1.2 1.5 L7.4 9 L1.2 16.5" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- Select All  (box page x486,y308 -> rel 330,184) -->
+  <div class="abs cb" style="left:330px;top:184px"></div>
+  <div class="abs lbl" style="left:368px;top:183px;height:20px;display:flex;align-items:center">Select All</div>
+  <!-- divider under Select All (page 484,346 -> rel 328,222) -->
+  <div class="abs hdiv"></div>
+  <!-- vertical divider between the two product columns (page x923,y363 -> rel 767,239) -->
+  <div class="abs vdiv"></div>
+  <!-- Column 1: Credit Card (box x486 -> rel 330; labels x524 -> rel 368) ; rows page y365/413/461 -> rel 241/289/337 -->
+  <div class="abs cbc" style="left:330px;top:241px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:368px;top:240px;height:20px;display:flex;align-items:center">[Credit Card] View Application</div>
+  <div class="abs cbc" style="left:330px;top:289px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:368px;top:288px;height:20px;display:flex;align-items:center">[Credit Card] Cancel Application</div>
+  <div class="abs cbc" style="left:330px;top:337px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:368px;top:336px;height:20px;display:flex;align-items:center">[Credit Card] Revert Application</div>
+  <!-- Column 2: Personal Loan (box x958 -> rel 802; labels x996 -> rel 840) -->
+  <div class="abs cbc" style="left:802px;top:241px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:840px;top:240px;height:20px;display:flex;align-items:center">[Personal Loan] View Application</div>
+  <div class="abs cbc" style="left:802px;top:289px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:840px;top:288px;height:20px;display:flex;align-items:center">[Personal Loan] Cancel Application</div>
+  <div class="abs cbc" style="left:802px;top:337px"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.6 7.4 L5.6 10.4 L11.4 3.6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="abs lbl" style="left:840px;top:336px;height:20px;display:flex;align-items:center">[Personal Loan] Revert Application</div>
+  <!-- Collapsed: Manually Queue (page y547 -> rel 423) -->
+  <div class="abs row collapsed" style="top:423px">
+    <span class="rowtitle">Manually Queue</span>
+    <svg class="rowchev" width="17.5" height="10" viewBox="0 0 17.5 10" fill="none"><path d="M1.5 2.0 L8.75 8.0 L16.0 2.0" stroke="#0D0D0D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- Collapsed: Users Management (page y630 -> rel 506) -->
+  <div class="abs row collapsed" style="top:506px">
+    <span class="rowtitle">Users Management</span>
+    <svg class="rowchev" width="17.5" height="10" viewBox="0 0 17.5 10" fill="none"><path d="M1.5 2.0 L8.75 8.0 L16.0 2.0" stroke="#0D0D0D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</div>
+</body>
+</html>
