@@ -186,7 +186,6 @@ P(
 
 /* ---- End-to-end flow ---- */
 P(
-  BREAK(),
   h1('End-to-End Application Revert Flow from Super Portal'),
   h2('1. Role Management: Revert Application Permission'),
   bullet("Bank users must only be able to request a revert if they have been explicitly granted the 'Revert Application' permission within their Super Portal role."),
@@ -287,8 +286,8 @@ P(
   sub('Email notification is sent to the bank user who requested the revert to inform them of the outcome.'),
   tbl(
     ['Type', 'Subject', 'Content', 'Trigger'],
-    [['Email', '[Super Portal] - Application %%APPLICATION_ID%% revert is approved.', "Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application status has changed from 'Rejected' to 'Awaiting Credit Approval' and the application has been returned to Credit Queue. Best Regards, Reem Bank", 'One time – send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout']],
-    [11, 25, 41, 23],
+    [['Email (Bank)', '[Super Portal] - Application %%APPLICATION_ID%% revert is approved.', "Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application status has changed from 'Rejected' to 'Awaiting Credit Approval' and the application has been returned to Credit Queue. Best Regards, Reem Bank", 'One time – send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout']],
+    [15, 22, 40, 23],
   ),
   spacer(200),
   h2('4.4. Reject Revert'),
@@ -302,8 +301,8 @@ P(
   sub('Email notification is sent to the bank user who requested the revert to inform them of the outcome.'),
   tbl(
     ['Type', 'Subject', 'Content', 'Trigger'],
-    [['Email', '[Super Portal] - Application %%APPLICATION_ID%% revert is not approved.', 'Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% is rejected. The application remains Rejected. Best Regards, Reem Bank', 'One time – send immediately when the revert request is rejected by Checker in Revert Queue']],
-    [11, 25, 41, 23],
+    [['Email (Bank)', '[Super Portal] - Application %%APPLICATION_ID%% revert is not approved.', 'Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% is rejected. The application remains Rejected. Best Regards, Reem Bank', 'One time – send immediately when the revert request is rejected by Checker in Revert Queue']],
+    [15, 22, 40, 23],
   ),
 );
 
@@ -383,7 +382,7 @@ P(
       ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view.'],
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.'],
       ['Audit trail', "Three new audit steps — 'Manual revert process', 'Revert Queue', 'Auto Revert Approval on timeout' (mirroring cancellation's 'Auto Cancellation on timeout') — each writing the full standard field set. The original rejection record is never modified."],
-      ['Communication Setup', 'Two new Bank-type email templates per product (revert approved / not approved) plus one new Customer-type template — approval after re-assessment, mirroring the standard approval message (section 6). English, banking tone, signing off as Reem Bank. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.'],
+      ['Communication Setup', '**Three templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and one **Email (Customer)** template (approval after re-assessment, mirroring the standard approval message — section 6). English, banking tone, signing off as Reem Bank. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.'],
       ['Reporting / MIS', 'WIP, Exception, Policy Exception, E2E and Approved Transactions reports must handle reopened cases: rejection counts become mutable, E2E must not double-count the second pass, and an approval after revert should be identifiable as such.'],
       ['Services', 'backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job) and work-flow-service. The workflow engine is the key estimation item: a rejected application’s process instance has ended, and reverting requires resuming it or re-instantiating at the queue task.'],
       ['Credit policy versioning', 'Post-revert re-decisioning evaluates against the currently published Strategy / Score Check / Income Multiplier versions — which is the point of the feature — and the audit trail should record which published version was applied.'],

@@ -80,7 +80,7 @@ When user submits the revert request:
   * [State] = "Rejected"
   * [Start Time] / [End Time] = yyyy-MM-dd HH:mm:ss
   * [Step Status] = "Successful"
-  * [Step Detail] = "Revert requested by %Username% to \<TARGET_QUEUE\>. Revert reason is \<REVERT_REASON AC1.1\>"
+  * [Step Detail] = "Revert requested by %Username% to Credit Queue. Revert reason is \<REVERT_REASON AC1.1\>"
   * [Action by] = \<user email id\>
 
 **AC2.2: Landing the revert request into Revert Queue (Checker)**
@@ -125,8 +125,8 @@ Mirrors RF-2365 AC2.3 (Automatic Application Termination Post Cancellation Timeo
 
 | Type | Subject | Content | Trigger |
 | --- | --- | --- | --- |
-| Email | [Super Portal] - Application %%APPLICATION_ID%% revert is approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application status has changed from 'Rejected' to 'Awaiting Credit Approval' and the application has been returned to Credit Queue. Best Regards, Reem Bank | One time — send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout |
-| Email | [Super Portal] - Application %%APPLICATION_ID%% revert is not approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% is rejected. The application remains Rejected. Best Regards, Reem Bank | One time — send immediately when the revert is rejected by Checker in Revert Queue |
+| Email (Bank) | [Super Portal] - Application %%APPLICATION_ID%% revert is approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application status has changed from 'Rejected' to 'Awaiting Credit Approval' and the application has been returned to Credit Queue. Best Regards, Reem Bank | One time — send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout |
+| Email (Bank) | [Super Portal] - Application %%APPLICATION_ID%% revert is not approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% is rejected. The application remains Rejected. Best Regards, Reem Bank | One time — send immediately when the revert is rejected by Checker in Revert Queue |
 
 * **New Customer-type template — approval after re-assessment** (the customer is informed only at final confirmation, per AC4; mirrors the standard approval message):
 
@@ -171,7 +171,7 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 | Queue model / drop points | New **Revert Queue** in the Queue menu and the Manually Queue role section. Drop-points matrix: approved revert → **Credit Queue L1**; parking of **both DBR safety nets** (Existing DBR > 50%, Gross DBR > 100%) → Credit Queue L1 — **volume increases for every breach**, not only reverted cases. Parked cases carry the completed Rule Engine + Limit Assignment results into the queue view. |
 | Status model / mobile app | No new Application Status (**Revert_App flag** only) → **no mobile app change**; avoids status-not-reflecting-reality defects. |
 | Audit trail | 3 new steps — "Manual revert process", "Revert Queue", "Auto Revert Approval on timeout" (mirrors cancellation's "Auto Cancellation on timeout"). The original rejection record is never modified. |
-| Communication Setup | 2 new **Bank-type** templates per product (revert approved / not approved) + 1 new **Customer-type** template (approval after re-assessment, mirrors the standard approval message — AC3). Compliance / Risk reject confirmation texts stay as-is (those rejections remain non-revertible). |
+| Communication Setup | **Three templates newly added in Communication Setup:** 2 **Email (Bank)** templates per product (revert approved / not approved) + 1 **Email (Customer)** template (approval after re-assessment, mirrors the standard approval message — AC3). Compliance / Risk reject confirmation texts stay as-is (those rejections remain non-revertible). |
 | Reporting / MIS | WIP, Exception, Policy Exception, E2E and Approved Transactions must handle reopened cases (rejection counts become mutable; E2E must not double-count) — walk through with the reporting owner during refinement. |
 | Services | backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job), **work-flow-service (Camunda — the key estimation item: resume the terminated process instance vs re-instantiate at the queue task)**. |
 | Credit policy / re-decisioning | Post-revert re-runs evaluate against the **currently published** strategy / score check / income multiplier versions; the audit trail records which version applied. |
