@@ -15,19 +15,27 @@
 * The existing **Application Enquiry** module in the Super Portal will be utilized to support the bank's requirement for reverting rejected applications — mirroring the entry point of RF-2365.
 * **Scope: Credit Card and Personal Loan only.** CASA is excluded (no credit decisioning); Mortgage Loan and Auto Loan are not yet part of the platform scope.
 * This story carries the three parts of the cancellation set in one ticket — Enquiry screen (≈RF-2365), Role Management (≈RF-2366) and the checker queue (≈RF-2367). Split into companion stories at refinement if preferred.
-* Screens: **SC1–SC5 + flow** — attached to this ticket as `rc1.png` (SC1 Role Management > Application Enquiry permissions), `rc2.png` (SC2 Application Enquiry with Revert button), `rc3.png` (SC3 Revert confirmation popup), `rc4.png` (SC4 Queue menu with Revert Queue), `rc5.png` (SC5 Role Management > Manually Queue > Revert Queue), `rcflow.png` (end-to-end flow). The same images are embedded in the BRD. Figma: ⚠ **TBC** — to be produced by design; SC images are build-accurate composites over the live UAT portal in the interim.
+* Screens: **SC1–SC5 + flow** — attached to this ticket as `rc1.png` (SC1 Role Management > Application Enquiry permissions), `rc2.png` (SC2 Application Enquiry with Revert button), `rc3.png` (SC3 Revert confirmation popup), `rc4.png` (SC4 Queue menu with Revert Queue), `rc5.png` (SC5 Role Management > Manually Queue > Revert Queue), `rcflow.png` (end-to-end flow). The same images are embedded in the BRD. Figma to follow from design; SC images are build-accurate composites over the live UAT portal in the interim.
+
+### End-to-end flow
+
+![Flow — revert request, Revert Queue decision, auto-approve on timeout](rcflow.png)
 
 ## Acceptance Criteria
 
 ### AC1: Application Revert Screen Description
 
-| **SC2 – Application Enquiry > Application Details screen** | **SC3 – Revert Confirmation Popup** |
-| --- | --- |
-| 📎 attachment: `rc2.png` | 📎 attachment: `rc3.png` |
+**SC2 – Application Enquiry > Application Details screen** (`rc2.png`)
+
+![SC2 – Application Enquiry with the Revert button beside Cancel Application](rc2.png)
+
+**SC3 – Revert Confirmation Popup** (`rc3.png`)
+
+![SC3 – Revert confirmation popup with mandatory Revert Reason](rc3.png)
 
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
-| Revert Button | Button | NA | NA | User with "[Product] Revert Application" role permission should be able to view the "Revert" button on the Application Details screen, next to the existing "Cancel Application" button. **Enabled only when Application Status = "Rejected" AND the rejection origin is revertible per AC5 AND no revert request is already pending (Revert_App = FALSE) AND no cancellation is pending (Cancel_App = FALSE).** Disabled (greyed) otherwise. |
+| Revert Button | Button | NA | NA | User with "[Product] Revert Application" role permission should be able to view the "Revert" button on the Application Details screen, next to the existing "Cancel Application" button. **Enabled only when Application Status = "Rejected" AND the rejection origin is revertible per AC5 AND no revert request is already pending (Revert_App = FALSE).** Disabled (greyed) otherwise. |
 | Revert confirmation (Are you sure you want to revert the Application) | Modal popup | NA | NA | SC3: User should confirm the revert request. Sub-text: "The request will be sent to the Revert Queue for Checker approval." Click on **Yes, Revert** to submit the request and enter the Revert Reason for approval from Checker (see AC1.1). Click on **Back** to close the popup with no change. |
 
 | Product Type | Applicable Status for Revert in Super Portal |
@@ -39,9 +47,8 @@ The revert shall be restricted in below scenarios:
 
 | Scenario | Condition / Application Status |
 | --- | --- |
-| Bank users already initiated revert | Revert_App = TRUE (request pending in Revert Queue) |
-| Bank users already initiated cancellation | Application Status = 'User Initiated Cancellation' OR Cancel_App = TRUE |
-| Application is not rejected | Any Application Status other than 'Rejected' (Lead, In Progress, Awaiting * , Approval In Principle, Completed, …) |
+| Bank users already initiated revert | Revert_App = TRUE (revert request pending in Revert Queue) |
+| Application is not rejected | Any Application Status other than 'Rejected' (Lead, In Progress, Awaiting * , Approval In Principle, User Initiated Cancellation, Completed, …) |
 | Application terminated for another reason | Invalidate \| Insufficient Data \| Declined \| Cancelled \| Failed by Minimum Income \| Expired \| Blocked \| Failed By EFR |
 | Rejection origin is not revertible | Pre-dedupe check failure (Step 7.1) \| No applicable product ({Pre-Fetch Applicable Product}) \| AML blacklisted / AML callback rejected \| geo-fencing, EID-scan or EFR liveness terminations |
 
@@ -76,8 +83,15 @@ When user submits the revert request:
 
 **AC2.2: Landing the revert request into Revert Queue (Checker)**
 
-* A new queue, **'Revert Queue'**, appears in the Queue menu alongside the existing queues (📎 `rc4.png`), and under the **Manually Queue** section in Role Management (Add Role screen) with two role permissions per product — **View Application** and **Evaluate Application** ([Credit Card] / [Personal Loan]) (📎 `rc5.png`).
-* Role Management also gains **'[Credit Card] Revert Application'** and **'[Personal Loan] Revert Application'** under **Enquiry > Application Enquiry** (Maker permission — mirrors RF-2366) (📎 `rc1.png`). These are distinct permissions, kept separate from Cancel Application and from Evaluate Application (RF-2781 / RF-2785 precedent).
+* A new queue, **'Revert Queue'**, appears in the Queue menu alongside the existing queues (SC4, `rc4.png`), and under the **Manually Queue** section in Role Management (Add Role screen) with two role permissions per product — **View Application** and **Evaluate Application** ([Credit Card] / [Personal Loan]) (SC5, `rc5.png`).
+
+![SC4 – Queue menu with the new Revert Queue entry](rc4.png)
+
+![SC5 – Role Management > Manually Queue > Revert Queue permissions](rc5.png)
+
+* Role Management also gains **'[Credit Card] Revert Application'** and **'[Personal Loan] Revert Application'** under **Enquiry > Application Enquiry** (Maker permission — mirrors RF-2366) (SC1, `rc1.png`). These are distinct permissions, kept separate from Cancel Application and from Evaluate Application (RF-2781 / RF-2785 precedent).
+
+![SC1 – Add Role: Enquiry > Application Enquiry > Revert Application permissions](rc1.png)
 * Revert Queue details view = same layout as Termination Queue details (RF-2367): application detail sections, **Comments tab selected by default** (so the REVERT REASON comment is the first thing the Checker sees), Documents tab. The Checker view is read-only apart from the decision — no Edit / Override / Send / FTS Retrigger here.
 * **Approve** ('Are you sure you want to Approve the application revert?' → Yes, Approve):
   * Application Status = \<TARGET_STATUS\> and the application re-enters \<TARGET_QUEUE\> **at Level 1**; Revert_App = FALSE
@@ -116,8 +130,8 @@ A configurable timeout period of [X] days begins when the revert request is subm
 
 * **While the request is pending:** nothing changes for the customer — the application is still Rejected and the 30-day pre-dedupe block continues to apply.
 * **After an approved revert:** the application is in-flight again in a queue; the pre-dedupe *in-progress application* check blocks a new same-product application (correct). Resuming the journey must land the customer at the correct point — regression on resume behaviour (RF-3271-type gaps).
-* **If the application is rejected again after a revert:** the 30-day re-application window shall run from the **latest** rejection — ⚠ TBC.
-* No customer notification of the reopen in v1 (the customer already received the rejection email ET8/ET12) — ⚠ TBC.
+* **If the application is rejected again after a revert:** the 30-day re-application window shall run from the **latest** rejection.
+* No customer notification of the reopen in v1 (the customer already received the rejection email ET8/ET12); the customer hears again only when the re-decision completes.
 
 ### AC5: Revert trigger points and target status determination
 
@@ -128,13 +142,13 @@ The status the application returns to is derived from **how it became Rejected**
 | {Rejected in Credit Queue [Level]} | Credit user rejects in Credit Queue L1–L3 | Yes | Awaiting Credit Approval — Credit Queue **L1** |
 | Compliance Reject | Compliance user rejects in Compliance Queue L1–L2 | Yes | Awaiting Compliance Review — Compliance Queue **L1** |
 | Risk Reject | Risk user rejects in Risk Queue L1–L3 | Yes | Awaiting Risk Review — Risk Queue **L1** |
-| Sale Reject | Sales user rejects in Sale Queue | ⚠ TBC | Awaiting Sales Response |
+| Sale Reject | Sales user rejects in Sale Queue | No — out of scope for v1 | — |
 | {Safety net for Finance DBR} | System auto-reject — Existing DBR > 50% after calculation | Via parking change below | Awaiting Credit Approval — Credit Queue L1 |
 | {Fail Strategies Check} | System auto-reject — application fails all segmentations (rejection logic unchanged) | Yes | Awaiting Credit Approval — Credit Queue L1 |
 | Approval Limit Result = "Failed" | System auto-reject — approved limit < Min Boundary with no deviation (rejection logic unchanged) | Yes | Awaiting Credit Approval — Credit Queue L1 |
 | {Pre-Fetch Applicable Product} / pre-dedupe steps / AML | System terminations before any queue ownership | **No** | — |
 
-* **System change — DBR parking (confirmed):** today, Existing DBR > 50% after calculation auto-rejects the application with [Action by] = \<system\> (RF-1041 safety net), leaving no previous status to restore. The system shall instead **park the case into Credit Queue L1** ('Awaiting Credit Approval'): the **Failed Reason continues to show the same message** as the current auto-rejection, and the system shall **complete the Rule Engine run and Limit Assignment** so the RE result and limit-assignment result are available in the Credit Queue view — the Credit user must have enough information to decide. A subsequent Credit rejection then reverts under the standard rule. This parking applies to every DBR breach, not only cases later reverted — Credit Queue volume impact to be sized during estimation. *(The companion **Gross DBR > 100%** safety net: in or out — ⚠ TBC.)*
+* **System change — DBR parking (confirmed):** today, Existing DBR > 50% after calculation auto-rejects the application with [Action by] = \<system\> (RF-1041 safety net), leaving no previous status to restore. The system shall instead **park the case into Credit Queue L1** ('Awaiting Credit Approval'): the **Failed Reason continues to show the same message** as the current auto-rejection, and the system shall **complete the Rule Engine run and Limit Assignment** so the RE result and limit-assignment result are available in the Credit Queue view — the Credit user must have enough information to decide. A subsequent Credit rejection then reverts under the standard rule. This parking applies to every DBR breach, not only cases later reverted — Credit Queue volume impact to be sized during estimation. *(The companion **Gross DBR > 100%** safety net remains a hard auto-rejection — out of scope for v1.)*
 * **No change to the other auto-rejections (confirmed):** "fails all segmentations" and "approved limit < Min Boundary" keep their current auto-rejection logic — no parking is introduced for them. A revert of such a case returns it to Awaiting Credit Approval — Credit Queue L1, where a Credit user takes ownership of the re-decision.
 
 ## Impact Analysis
@@ -144,14 +158,14 @@ The status the application returns to is derived from **how it became Rejected**
 * **Status model:** no new Application Status (Revert_App flag only) → **no mobile app change**; avoids status-not-reflecting-reality defects.
 * **Audit trail:** 3 new steps — "Manual revert process", "Revert Queue", "Auto Revert Approval on timeout".
 * **Communication Setup:** 2 new Bank-type templates × 2 products. Existing queue reject confirmations must be re-worded where rejection becomes revertible — Compliance currently says *"This action can not be revert"*, Risk says *"the application will be terminated after you reject it!"*.
-* **Reporting/MIS:** WIP, Exception, Policy Exception, E2E and Approved Transactions must handle reopened cases (rejection counts become mutable; E2E must not double-count) — ⚠ TBC with reporting owner.
+* **Reporting/MIS:** WIP, Exception, Policy Exception, E2E and Approved Transactions must handle reopened cases (rejection counts become mutable; E2E must not double-count) — walk through with the reporting owner during refinement.
 * **Services:** backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job), **work-flow-service (Camunda — the key estimation item: resume the terminated process instance vs re-instantiate at the queue task)**.
-* **Re-decisioning:** post-revert re-runs evaluate against the **currently published** strategy / score check / income multiplier versions; audit which version applied — ⚠ TBC.
+* **Re-decisioning:** post-revert re-runs evaluate against the **currently published** strategy / score check / income multiplier versions; the audit trail records which version applied.
 
 ## Out of scope
 
 * CASA (no credit decisioning), Mortgage Loan, Auto Loan.
-* Sale Queue rejections (pending decision), pre-decision terminations (geo-fencing, EID scan, EFR liveness, pre-dedupe, no applicable product, AML).
+* Sale Queue rejections (v1); the Gross DBR > 100% safety net (remains a hard auto-rejection); pre-decision terminations (geo-fencing, EID scan, EFR liveness, pre-dedupe, no applicable product, AML).
 * Post-offer stages: AIP expiry, KFS/DDA signature stages, any application where a core-banking API has been triggered.
 * Bulk revert; editing the application inside the Revert Queue; SLA/TAT on the Revert Queue (module not yet delivered — timeout is a scheduler job); reversal of a Checker decision; customer notification of the reopen (v1).
 
@@ -164,14 +178,4 @@ The status the application returns to is derived from **how it became Rejected**
 * Re-entry level: **always L1**.
 * Workflow-engine resumption question parked for engineering (technical).
 
-## Open Questions
-
-1. Workflow engine (technical — for engineering estimation): can the terminated process instance be resumed, or must a new instance start at the queue task?
-2. Is the **Gross DBR > 100%** safety net also in scope for parking to Credit Queue, or does it remain a hard auto-rejection? (Existing DBR > 50% parking is confirmed.)
-3. Confirm **Revert_App flag with status remaining "Rejected"** in preference to a new 'User Initiated Revert' status (no mobile impact).
-4. Are **Sale Queue** rejections revertible to 'Awaiting Sales Response', or excluded?
-5. Confirm the timeout period [X] — 5 days proposed, configurable in database, same as cancellation.
-6. Should the customer be notified when an application is reopened? (Rejection email ET8/ET12 already sent.)
-7. Does the 30-day re-application window restart from the **latest** rejection after a re-reject?
-8. Should the number of reverts per application, or a revert time window (e.g. within 30 days of rejection), be capped?
-9. Confirm the revised wording for the Compliance / Risk reject confirmation messages once rejection becomes revertible.
+*Remaining clarifications are being handled directly with the PO; confirmed positions are folded into the acceptance criteria above.*

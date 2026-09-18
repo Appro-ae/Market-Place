@@ -174,9 +174,8 @@ P(
   tbl(
     ['Scenario', 'Condition / Application Status'],
     [
-      ['Bank users already initiated revert', 'Revert_App = TRUE (a request is already pending in the Revert Queue)'],
-      ['Bank users already initiated cancellation', "Application Status = 'User Initiated Cancellation' OR Cancel_App = TRUE"],
-      ['Application is not rejected', "Any Application Status other than 'Rejected' — Lead | In Progress | Awaiting Compliance Review | Awaiting Risk Review | Awaiting Sales Response | Awaiting Credit Approval | Approval In Principle | Awaiting Cooling Off Period | Awaiting Signature | KFS Signature | Completed"],
+      ['Bank users already initiated revert', 'Revert_App = TRUE (a revert request is already pending in the Revert Queue)'],
+      ['Application is not rejected', "Any Application Status other than 'Rejected' — Lead | In Progress | Awaiting Compliance Review | Awaiting Risk Review | Awaiting Sales Response | Awaiting Credit Approval | Approval In Principle | Awaiting Cooling Off Period | Awaiting Signature | KFS Signature | User Initiated Cancellation | Completed"],
       ['Application already terminated for another reason', 'Invalidate | Insufficient Data | Declined | Cancelled | Failed by Minimum Income | Expired | Blocked | Failed By EFR'],
       ['Rejection trigger point is not revertible', 'Pre-dedupe check failure (Step 7.1) | No applicable product found ({Pre-Fetch Applicable Product}) | AML blacklisted or AML callback decision = rejected | geo-fencing, EID-scan or EFR liveness terminations. These failures occur before any queue takes ownership of the case, so there is no previous queue status to return the application to.'],
     ],
@@ -219,7 +218,7 @@ P(
 P(
   h2('2. Application Revert from Application Enquiry view'),
   bullet("The existing Application Enquiry module in the Super Portal is the entry point for the revert process. Bank users with the 'Revert Application' permission above can initiate a revert request from the Application Details screen."),
-  bullet("The **'Revert'** button is placed in the action bar next to the existing 'Cancel Application' button, and is enabled only when Application Status = 'Rejected', the rejection trigger point is revertible (section 5), and no revert or cancellation request is already pending."),
+  bullet("The **'Revert'** button is placed in the action bar next to the existing 'Cancel Application' button, and is enabled only when Application Status = 'Rejected', the rejection trigger point is revertible (section 5), and no revert request is already pending."),
   spacer(60),
   screenTable([
     ["SC2 – Application Enquiry – “Revert” button for the revert request", 'rc2.png', 440, 248],
