@@ -16,7 +16,7 @@
 * **Scope: Credit Card and Personal Loan only.** CASA is excluded (no credit decisioning); Mortgage Loan and Auto Loan are not yet part of the platform scope.
 * **Scope rule — Credit root cause only:** revertible rejections are those **rejected by Credit** in Credit Queue, or **auto-rejected by the System for credit reasons** (DBR safety nets, segmentation failure, approved limit below Min Boundary). Compliance, Risk and Sale queue rejections are **out of scope**.
 * This story carries the three parts of the cancellation set in one ticket — Enquiry screen (≈RF-2365), Role Management (≈RF-2366) and the checker queue (≈RF-2367). Split into companion stories at refinement if preferred.
-* Screens: **SC1–SC5 + flow** — attached to this ticket as `SC1_Role_Permission_Application_Enquiry.png` (SC1 Role Management > Application Enquiry permissions), `SC2_Application_Enquiry_Revert_Button.png` (SC2 Application Enquiry with Revert button), `SC3_Revert_Confirmation_Popup.png` (SC3 Revert confirmation popup), `SC4_Queue_Menu_Revert_Queue.png` (SC4 Queue menu with Revert Queue), `SC5_Role_Permission_Revert_Queue.png` (SC5 Role Management > Manually Queue > Revert Queue), `Flow_Application_Revert.png` (end-to-end flow). The same images are embedded in the BRD. Figma to follow from design; SC images are build-accurate composites over the live UAT portal in the interim.
+* Screens: **SC1–SC6 + flow** — attached to this ticket as `SC1_Role_Permission_Application_Enquiry.png` (SC1 Role Management > Application Enquiry permissions), `SC2_Application_Enquiry_Revert_Button.png` (SC2 Application Enquiry with Revert button), `SC3_Revert_Confirmation_Popup.png` (SC3 Revert confirmation popup), `SC4_Queue_Menu_Revert_Queue.png` (SC4 Queue menu with Revert Queue), `SC5_Role_Permission_Revert_Queue.png` (SC5 Role Management > Manually Queue > Revert Queue), `SC6_Revert_Queue_Approve_Reject.png` (SC6 Revert Queue application details with Approve / Reject), `Flow_Application_Revert.png` (end-to-end flow). The same images are embedded in the BRD. Figma to follow from design; SC images are build-accurate composites over the live UAT portal in the interim.
 
 ### End-to-end flow
 
@@ -94,11 +94,13 @@ When user submits the revert request:
 * Role Management also gains **'[Credit Card] Revert Application'** and **'[Personal Loan] Revert Application'** under **Enquiry > Application Enquiry** (Maker permission — mirrors RF-2366) (SC1, `SC1_Role_Permission_Application_Enquiry.png`). These are distinct permissions, kept separate from Cancel Application and from Evaluate Application (RF-2781 / RF-2785 precedent).
 
 ![SC1 – Add Role: Enquiry > Application Enquiry > Revert Application permissions](SC1_Role_Permission_Application_Enquiry.png)
-* Revert Queue details view = same layout as Termination Queue details (RF-2367): application detail sections, **Comments tab selected by default** (so the REVERT REASON comment is the first thing the Checker sees), Documents tab. The Checker view is read-only apart from the decision — no Edit / Override / Send / FTS Retrigger here.
+* Revert Queue details view (SC6, `SC6_Revert_Queue_Approve_Reject.png`) = same layout as Termination Queue details (RF-2367): application detail sections, **Comments tab selected by default** (so the REVERT REASON comment is the first thing the Checker sees), Documents tab. The Checker view is read-only apart from the decision — no Edit / Override / Send / FTS Retrigger here.
+
+![SC6 – Revert Queue: Application Details with Approve / Reject](SC6_Revert_Queue_Approve_Reject.png)
 * **Approve** ('Are you sure you want to Approve the application revert?' → Yes, Approve):
-  * Application Status = \<TARGET_STATUS\> and the application re-enters \<TARGET_QUEUE\> **at Level 1**; Revert_App = FALSE
+  * Application Status changes from "Rejected" to **"Awaiting Credit Approval"** and the application re-enters **Credit Queue at Level 1**; Revert_App = FALSE
   * Toaster: "Revert of \<Application ID\> is approved"; update [Revert Queue] = 'APPROVED' → remove from queue
-  * Audit: [Step] = "Revert Queue", [State] = \<TARGET_STATUS\>, [Step Detail] = 'Application revert requested by "%Username%" and approved by "%Username%". Application returned to \<TARGET_QUEUE\>', [Action by] = \<System\>
+  * Audit: [Step] = "Revert Queue", [State] = "Awaiting Credit Approval", [Step Detail] = 'Application revert requested by "%Username%" and approved by "%Username%". Application returned to Credit Queue L1', [Action by] = \<System\>
   * Email notification per AC3 to the requesting bank user
 * **Reject** ('Are you sure you want to Reject the application revert?' → Yes, Reject):
   * Application Status remains "Rejected"; Revert_App = FALSE (a fresh request may be raised later)
@@ -107,15 +109,15 @@ When user submits the revert request:
   * Email notification per AC3
 * Maker–checker segregation follows the **same model as Application Cancellation** — no additional restriction is introduced (PO decision).
 
-**AC2.3: Timeout scenario if no decision taken in the Revert Queue**
+**AC2.3: Automatic Revert Approval Post Revert Timeout**
 
-A configurable timeout period of [X] days begins when the revert request is submitted (proposed default: 5 days, configurable in database, matching cancellation):
+Mirrors RF-2365 AC2.3 (Automatic Application Termination Post Cancellation Timeout). When the bank user initiates the revert of an application, a predefined time period [X] days will begin ([X] is configurable in database; the cancellation timeout is currently set to **5 days**):
 
 | Scenario | Outcome |
 | --- | --- |
-| Request APPROVED within [X] days | Per AC2.2 Approve |
-| Request REJECTED within [X] days | Per AC2.2 Reject |
-| No decision within [X] days | The request is **auto-approved by the System** the next day after timeout — **same behaviour as the cancellation timeout**: Application Status = \<TARGET_STATUS\>, application re-enters \<TARGET_QUEUE\> at Level 1, Revert_App = FALSE, removed from Revert Queue, email as per AC3 (approved). Audit: [Step] = "Auto Revert Approval on timeout", [State] = \<TARGET_STATUS\>, [Step Detail] = 'Application revert requested by "%Username%" and approved by System, as per approval timeout configuration of [X] days. Application returned to \<TARGET_QUEUE\>', [Action by] = \<System\> |
+| Request APPROVED in Revert Queue within [X] days | Per AC2.2 Approve — status changes from "Rejected" to "Awaiting Credit Approval", application re-enters Credit Queue L1 |
+| Request REJECTED in Revert Queue within [X] days | Per AC2.2 Reject — application remains "Rejected" |
+| No decision within [X] days | The request is **auto-approved by the System** the next day after timeout — same behaviour as the cancellation timeout: Application Status changes from "Rejected" to **"Awaiting Credit Approval"**, the application re-enters **Credit Queue at Level 1**, Revert_App = FALSE, removed from Revert Queue, email as per AC3 (approved). Audit: [Step] = "Auto Revert Approval on timeout" (mirrors "Auto Cancellation on timeout"), [State] = "Awaiting Credit Approval", [Step Detail] = 'Application revert requested by "%Username%" and approved by System, as per approval timeout configuration of [X] days. Application returned to Credit Queue L1', [Action by] = \<System\> |
 
 ### AC3: Sending Email Notification
 
@@ -123,7 +125,7 @@ A configurable timeout period of [X] days begins when the revert request is subm
 
 | Type | Subject | Content | Trigger |
 | --- | --- | --- | --- |
-| Email | [Super Portal] - Application %%APPLICATION_ID%% revert is approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application has been returned to %%TARGET_STATUS%%. Best Regards, Reem Bank | One time — send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout |
+| Email | [Super Portal] - Application %%APPLICATION_ID%% revert is approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% has been approved. The application status has changed from 'Rejected' to 'Awaiting Credit Approval' and the application has been returned to Credit Queue. Best Regards, Reem Bank | One time — send immediately when the revert is approved in Revert Queue, or auto-approved by System on timeout |
 | Email | [Super Portal] - Application %%APPLICATION_ID%% revert is not approved. | Dear %%USER_NAME%%, Please be informed that your request to revert the application %%APPLICATION_ID%% is rejected. The application remains Rejected. Best Regards, Reem Bank | One time — send immediately when the revert is rejected by Checker in Revert Queue |
 
 * **New Customer-type template — approval after re-assessment** (the customer is informed only at final confirmation, per AC4; mirrors the standard approval message):
@@ -168,7 +170,7 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 | Role Management / Permission Matrix | **6 new permissions, per product:** [CC]/[PL] × Revert Application (Enquiry > Application Enquiry); [CC]/[PL] × View Application + Evaluate Application (Manually Queue > Revert Queue). Permission Matrix page to be updated. Distinct rights — never bundled. |
 | Queue model / drop points | New **Revert Queue** in the Queue menu and the Manually Queue role section. Drop-points matrix: approved revert → **Credit Queue L1**; parking of **both DBR safety nets** (Existing DBR > 50%, Gross DBR > 100%) → Credit Queue L1 — **volume increases for every breach**, not only reverted cases. Parked cases carry the completed Rule Engine + Limit Assignment results into the queue view. |
 | Status model / mobile app | No new Application Status (**Revert_App flag** only) → **no mobile app change**; avoids status-not-reflecting-reality defects. |
-| Audit trail | 3 new steps — "Manual revert process", "Revert Queue", "Auto Revert Approval on timeout". The original rejection record is never modified. |
+| Audit trail | 3 new steps — "Manual revert process", "Revert Queue", "Auto Revert Approval on timeout" (mirrors cancellation's "Auto Cancellation on timeout"). The original rejection record is never modified. |
 | Communication Setup | 2 new **Bank-type** templates per product (revert approved / not approved) + 1 new **Customer-type** template (approval after re-assessment, mirrors the standard approval message — AC3). Compliance / Risk reject confirmation texts stay as-is (those rejections remain non-revertible). |
 | Reporting / MIS | WIP, Exception, Policy Exception, E2E and Approved Transactions must handle reopened cases (rejection counts become mutable; E2E must not double-count) — walk through with the reporting owner during refinement. |
 | Services | backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job), **work-flow-service (Camunda — the key estimation item: resume the terminated process instance vs re-instantiate at the queue task)**. |
@@ -179,4 +181,4 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 * CASA (no credit decisioning), Mortgage Loan, Auto Loan.
 * Rejections with no Credit root cause: **Compliance Queue, Risk Queue and Sale Queue rejections**; pre-decision terminations (geo-fencing, EID scan, EFR liveness, pre-dedupe, no applicable product, AML).
 * Post-offer stages: AIP expiry, KFS/DDA signature stages, any application where a core-banking API has been triggered.
-* Bulk revert; a cap on the number of reverts per application; editing the application inside the Revert Queue; SLA/TAT on the Revert Queue (module not yet delivered — timeout is a scheduler job); reversal of a Checker decision; customer notification at the point of reopen (final confirmation only — AC4).
+* Bulk revert; a cap on the number of reverts per application; editing the application inside the Revert Queue; SLA/TAT on the Revert Queue (the AC2.3 timeout is a scheduler job, not an SLA); reversal of a Checker decision; customer notification at the point of reopen (final confirmation only — AC4).

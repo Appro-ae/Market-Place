@@ -29,6 +29,7 @@ into **RF-3305**; `RF-3305_US_Application_Revert.md` is the source text.
 | `rc3.html` → `SC3_Revert_Confirmation_Popup.png` | SC3 — Revert confirmation popup with mandatory Revert Reason |
 | `rc4.html` → `SC4_Queue_Menu_Revert_Queue.png` | SC4 — Queue menu with the new Revert Queue entry |
 | `rc5.html` → `SC5_Role_Permission_Revert_Queue.png` | SC5 — Add Role: Manually Queue › Revert Queue permissions |
+| `rc6.html` → `SC6_Revert_Queue_Approve_Reject.png` | SC6 — Revert Queue application details with Approve / Reject |
 | `rcflow.html` → `Flow_Application_Revert.png` | Feature-overview flow diagram (draw.io style) |
 
 The `rc*` screens are composites over **real UAT portal captures**
@@ -56,6 +57,7 @@ node -e "const{chromium}=require('playwright');(async()=>{
       ['rc3','SC3_Revert_Confirmation_Popup',760,560],
       ['rc4','SC4_Queue_Menu_Revert_Queue',470,430],
       ['rc5','SC5_Role_Permission_Revert_Queue',1920,1080],
+      ['rc6','SC6_Revert_Queue_Approve_Reject',1920,1080],
       ['rcflow','Flow_Application_Revert',1400,520]]){
     const p=await b.newPage({viewport:{width:w,height:h},deviceScaleFactor:2});
     await p.goto('file://'+process.cwd()+'/'+f+'.html');await p.waitForTimeout(500);
