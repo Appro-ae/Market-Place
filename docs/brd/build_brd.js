@@ -113,6 +113,40 @@ function screenTable(rows) {
   });
 }
 
+/* Impact table with a reference-screen column (visual-first rule) */
+function impactTable(rows) {
+  const weights = [19, 45, 36];
+  const total = weights.reduce((a, b) => a + b, 0);
+  const widths = weights.map(w => Math.round(CONTENT_W * w / total));
+  widths[2] = CONTENT_W - widths[0] - widths[1];
+  const txtCell = (txt, i, isH) => new TableCell({
+    width: { size: widths[i], type: WidthType.DXA },
+    shading: { type: ShadingType.CLEAR, fill: isH ? TEAL : 'FFFFFF', color: 'auto' },
+    margins: { top: 90, bottom: 90, left: 110, right: 110 }, verticalAlign: VerticalAlign.TOP,
+    children: [new Paragraph({ spacing: { before: 0, after: 0, line: 252 },
+      children: isH ? [new TextRun({ text: txt, bold: true, size: 21, color: 'FFFFFF', font: FONT })] : runs(txt, { size: 21 }) })],
+  });
+  const imgCell = ([file, iw, ih, cap]) => {
+    const w = 190, h = Math.round(w * ih / iw);
+    return new TableCell({
+      width: { size: widths[2], type: WidthType.DXA },
+      margins: { top: 90, bottom: 90, left: 110, right: 110 }, verticalAlign: VerticalAlign.CENTER,
+      children: [
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 40 }, children: [img('assets/' + file, w, h)] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 0 }, children: [new TextRun({ text: cap, size: 17, color: GREY, font: FONT })] }),
+      ],
+    });
+  };
+  return new Table({
+    columnWidths: widths, width: { size: CONTENT_W, type: WidthType.DXA },
+    borders: { top: B, bottom: B, left: B, right: B, insideHorizontal: B, insideVertical: B },
+    rows: [
+      new TableRow({ tableHeader: true, cantSplit: true, children: [txtCell('Area', 0, true), txtCell('Impact', 1, true), txtCell('Screen', 2, true)] }),
+      ...rows.map(r => new TableRow({ cantSplit: true, children: [txtCell(r[0], 0, false), txtCell(r[1], 1, false), imgCell(r[2])] })),
+    ],
+  });
+}
+
 /* ================= CONTENT ================= */
 const body = [];
 const P = (...a) => body.push(...a.flat());
@@ -382,20 +416,16 @@ P(
   BREAK(),
   h1('Additional Impact Analysis'),
   p('Beyond the direct scope above, the following areas of the Reem Bank platform are impacted and must be carried into estimation and test scope:'),
-  tbl(
-    ['Area', 'Impact'],
-    [
-      ['Role Management / Permission Matrix', "Six new permission entries, per product: [CC]/[PL] × 'Revert Application' (Enquiry > Application Enquiry) and [CC]/[PL] × View / Evaluate Application (Manually Queue > Revert Queue). Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated."],
-      ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.'],
-      ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.'],
-      ['Audit trail', "Three new audit steps — 'Manual revert process', 'Revert Queue', 'Auto Revert Approval on timeout' (mirroring cancellation's 'Auto Cancellation on timeout') — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it."],
-      ['Communication Setup', '**Three templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and one **Email (Client)** template (approval after re-assessment, mirroring the standard approval message — section 6). English, banking tone, signing off as Reem Bank. **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.'],
-      ['Reporting / MIS', 'WIP, Exception, Policy Exception, E2E and Approved Transactions reports must handle reopened cases: rejection counts become mutable, E2E must not double-count the second pass, and an approval after revert should be identifiable as such.'],
-      ['Services', 'backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job) and work-flow-service. The workflow engine is the key estimation item: a rejected application’s process instance has ended, and reverting requires resuming it or re-instantiating at the queue task.'],
-      ['Credit policy versioning', 'Post-revert re-decisioning evaluates against the currently published Strategy / Score Check / Income Multiplier versions — which is the point of the feature — and the audit trail should record which published version was applied.'],
-    ],
-    [22, 78],
-  ),
+  impactTable([
+      ['Role Management / Permission Matrix', "Six new permission entries, per product: [CC]/[PL] × 'Revert Application' (Enquiry > Application Enquiry) and [CC]/[PL] × View / Evaluate Application (Manually Queue > Revert Queue). Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
+      ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.', ['ia_queue.png', 940, 430, 'Queue menu — Revert Queue (SC4)']],
+      ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
+      ['Audit trail', "Three new audit steps — 'Manual revert process', 'Revert Queue', 'Auto Revert Approval on timeout' (mirroring cancellation's 'Auto Cancellation on timeout') — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
+      ['Communication Setup', '**Three templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and one **Email (Client)** template (approval after re-assessment, mirroring the standard approval message — section 6). English, banking tone, signing off as Reem Bank. **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.', ['ia_comm.png', 2000, 770, 'Communication Setup › Email Templates — Type: Client / Bank']],
+      ['Reporting / MIS', 'WIP, Exception, Policy Exception, E2E and Approved Transactions reports must handle reopened cases: rejection counts become mutable, E2E must not double-count the second pass, and an approval after revert should be identifiable as such.', ['ia_reporting.png', 2400, 600, 'Enquiry › Report Enquiry']],
+      ['Services', 'backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job) and work-flow-service. The workflow engine is the key estimation item: a rejected application’s process instance has ended, and reverting requires resuming it or re-instantiating at the queue task.', ['ia_services.png', 1160, 520, 'Services touched — workflow engine is the key item']],
+      ['Credit policy versioning', 'Post-revert re-decisioning evaluates against the currently published Strategy / Score Check / Income Multiplier versions — which is the point of the feature — and the audit trail should record which published version was applied.', ['ia_policy.png', 1132, 635, 'Strategies › Versions / Audit Trails menu']],
+  ]),
 );
 
 /* ---- Open questions ---- */

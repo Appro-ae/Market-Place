@@ -281,4 +281,6 @@ never overwrite her manual edits (surgical Jira deltas only); decisions go
 into the relevant AC, not meta-sections; open questions asked in chat as a
 numbered list with defaults; dated covers; Email (Bank)/(Client) labels;
 enumerate in-scope scenarios; screenshots = real-capture composites named by
-mapping and zipped.
+mapping and zipped; **visual-first** — every described area carries its
+screenshot beside it (the Impact Analysis is an Area | Impact | Screen
+table; per-area reference crops live in `docs/brd/assets/ia_*.png`).

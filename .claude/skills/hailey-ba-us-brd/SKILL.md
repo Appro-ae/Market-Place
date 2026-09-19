@@ -33,7 +33,16 @@ requested or corrected explicitly.
    AND the date on the cover (e.g. "V1.0 / 19 September 2026") so copies
    are distinguishable. Word (.docx) is the editable deliverable, PDF the
    circulation copy; regenerate both together from the generator script.
-4. **Ask open questions in chat, not in the ticket.** Number them, give a
+4. **Visual-first — a screenshot next to everything described.** Whenever
+   an area is described, put its screen beside the words: the Impact
+   Analysis is a three-column **Area | Impact | Screen** table with a
+   reference crop + small caption per row (crop the real capture of that
+   module — Role Management, queue menu, email-template list, Report
+   Enquiry, Strategies/Versions menu; render a small portal-styled
+   diagram only where no screen exists, e.g. a status-transition pill or
+   a services map). Same rule in the US. Words alone are "hard to
+   imagine" — never ship a wall of text.
+5. **Ask open questions in chat, not in the ticket.** Number them, give a
    recommended default for each so she can answer "all defaults fine" or
    by number. Fold her answers into the spec the same day. The US carries
    no Open Questions section and no "PO decisions" meta-section —
