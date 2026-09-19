@@ -138,7 +138,7 @@ Mirrors RF-2365 AC2.3 (Automatic Application Termination Post Cancellation Timeo
 
 | Type | Subject | Content | Trigger |
 | --- | --- | --- | --- |
-| Email (Customer) | Reem Bank — Update on your application %%APPLICATION_ID%% | Dear %%CUSTOMER_NAME%%, Following a further review of your %%PRODUCT_TYPE%% application %%APPLICATION_ID%%, we are pleased to inform you that your application has been approved. No action is required from your side — we will be in touch with the next steps to complete your application. Thank you for choosing Reem Bank. Best Regards, Reem Bank | One time — when an application reopened via an approved revert is approved after re-assessment. Exactly one client email per re-assessment decision (on a repeat rejection, the standard rejection notification is sent instead — one email either way) |
+| Email (Client) | Reem Bank — Update on your application %%APPLICATION_ID%% | Dear %%CUSTOMER_NAME%%, Following a further review of your %%PRODUCT_TYPE%% application %%APPLICATION_ID%%, we are pleased to inform you that your application has been approved. No action is required from your side — we will be in touch with the next steps to complete your application. Thank you for choosing Reem Bank. Best Regards, Reem Bank | One time — when an application reopened via an approved revert is approved after re-assessment. Exactly one client email per re-assessment decision (on a repeat rejection, the standard rejection notification is sent instead — one email either way) |
 
 * All merge fields must resolve before dispatch; templates sign off as **Reem Bank** (not Reem Finance).
 
@@ -147,7 +147,7 @@ Mirrors RF-2365 AC2.3 (Automatic Application Termination Post Cancellation Timeo
 * **While the request is pending:** nothing changes for the customer — the application is still Rejected and the 30-day pre-dedupe block continues to apply.
 * **After an approved revert:** the application is in-flight again in a queue; the pre-dedupe *in-progress application* check blocks a new same-product application (correct). Resuming the journey must land the customer at the correct point — regression on resume behaviour (RF-3271-type gaps).
 * **If the application is rejected again after a revert:** the 30-day re-application window **restarts from the latest rejection** — the countdown begins again at the new rejection date.
-* **Customer communication — final confirmation only, exactly one email (Credit User note):** the customer is **not** notified of the reopen (the rejection notification ET8/ET12 was already sent at the point of decision). When the re-assessment completes, the system sends the client **exactly one email**, whether the outcome is Approve or Reject: on approval, the Email (Customer) template in AC3; on a repeat rejection, the standard rejection notification, and the 30-day window restarts. The reopened run must **not** double-send decision notifications to the client.
+* **Customer communication — final confirmation only, exactly one email (Credit User note):** the customer is **not** notified of the reopen (the rejection notification ET8/ET12 was already sent at the point of decision). When the re-assessment completes, the system sends the client **exactly one email**, whether the outcome is Approve or Reject: on approval, the Email (Client) template in AC3; on a repeat rejection, the standard rejection notification, and the 30-day window restarts. The reopened run must **not** double-send decision notifications to the client.
 * **No cap** on the number of reverts per application in v1.
 
 ### AC5: Revert trigger points and target status determination
@@ -177,10 +177,29 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 | Queue model / drop points | New **Revert Queue** in the Queue menu and the Manually Queue role section. Drop-points matrix: approved revert → **Credit Queue L1**; parking of **both DBR safety nets** (Existing DBR > 50%, Gross DBR > 100%) → Credit Queue L1 — **volume increases for every breach**, not only reverted cases. Parked cases carry the completed Rule Engine + Limit Assignment results into the queue view. |
 | Status model / mobile app | No new Application Status (**Revert_App flag** only) → **no mobile app change**; avoids status-not-reflecting-reality defects. |
 | Audit trail | 3 new steps — "Manual revert process", "Revert Queue", "Auto Revert Approval on timeout" (mirrors cancellation's "Auto Cancellation on timeout"). The original rejection record is never modified. |
-| Communication Setup | **Three templates newly added in Communication Setup:** 2 **Email (Bank)** templates per product (revert approved / not approved) + 1 **Email (Customer)** template (approval after re-assessment, mirrors the standard approval message — AC3). **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. Compliance / Risk reject confirmation texts stay as-is (those rejections remain non-revertible). |
+| Communication Setup | **Three templates newly added in Communication Setup:** 2 **Email (Bank)** templates per product (revert approved / not approved) + 1 **Email (Client)** template (approval after re-assessment, mirrors the standard approval message — AC3). **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. Compliance / Risk reject confirmation texts stay as-is (those rejections remain non-revertible). |
 | Reporting / MIS | WIP, Exception, Policy Exception, E2E and Approved Transactions must handle reopened cases (rejection counts become mutable; E2E must not double-count) — walk through with the reporting owner during refinement. |
 | Services | backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job), **work-flow-service (Camunda — the key estimation item: resume the terminated process instance vs re-instantiate at the queue task)**. |
 | Credit policy / re-decisioning | Post-revert re-runs evaluate against the **currently published** strategy / score check / income multiplier versions; the audit trail records which version applied. |
+
+## Dependencies & related in-flight tickets (RF board scan 19/09)
+
+| Ticket | Status | Relevance to Revert |
+| --- | --- | --- |
+| RF-3317 | DEV IN PROGRESS | [BE] Revert rejection case — backend subtask of this story. |
+| RF-3101 | READY IN SIT | Wrong audit trail saved when app rejected due to high Financial DBR — **dependency**: AC5 derives revertibility from the rejection audit step, so this fix must land first. |
+| RF-3138 | READY IN UAT | [BE Logic] new drop points + Failed Reason (Updates 2) — **coordinate**: the DBR parking adds drop points to the same matrix. |
+| RF-2710 | DEV IN PROGRESS | [BE] two-DBR calculation logic update — **coordinate**: R2/R3 thresholds (Existing DBR > 50%, Gross DBR > 100%) must be evaluated on the updated calculation. |
+| RF-3268 | CLARIFY | Rejection email wrongly sent alongside due diligence notification — precedent for the **one client email** control in AC4; regression together. |
+| RF-3067 | CLARIFY | Email not triggered when PL drops to Credit Queue — parked DBR cases inherit standard drop-to-queue notifications once fixed. |
+| RF-2797 | READY IN UAT | Email Notification list gains an **Email Type (Client/Bank)** column — the AC3 template labels follow this classification. |
+| RF-2772 | READY IN UAT | Maker not receiving email when checker rejects — same maker-notification path AC3 relies on. |
+| RF-2428 | READY IN SIT | Enhanced Failed Reasons display in Application Enquiry — same screen as SC2; parked cases show the unchanged Failed Reason there. |
+| RF-3178 / RF-3182 | READY IN SIT | Failed Reason / PRE-2 code display for 30-day re-application rejections — related to the AC4 30-day restart. |
+| RF-3093 | READY IN SIT | Limit equal to product minimum wrongly rejected — boundary of R5 ("**below** Min Boundary" is strict). |
+| RF-2265 / RF-2268 / RF-2304 | READY FOR APPROVE | Queue Assignment Management TAT view + notification/escalation emails — when delivered, the Revert Queue needs its TAT configuration row (out of scope here). |
+| RF-3276 | DEV IN PROGRESS | [Mobile] new screen for INITIATED_CANCELLATION status — confirms the cost of new statuses and the rationale for the Revert_App flag (no mobile change). |
+| RF-3309 | Open | Credit Queue — Employer Name edit with ALOC & RE re-run — same module the post-revert re-assessment relies on. |
 
 ## Out of scope
 
