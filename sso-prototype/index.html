@@ -347,7 +347,8 @@ $('#eye').addEventListener('click',()=>{S.showPwd=!S.showPwd;p.type=S.showPwd?'t
 $('#forgot').addEventListener('click',()=>{toast('If this username exists, a reset email has been sent.')});
 $('#loginCard').addEventListener('submit',()=>{
   const e=u.value.trim().toLowerCase(),acc=USERS[e];clearMsgs();
-  if(usesSso(acc)||!acc||acc.src!=='Portal'||p.value==='wrong'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('Your Email or Password is incorrect!');return}
+  if(usesSso(acc)){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr(S.sso==='on'?'<b>This account now signs in with single sign-on.</b> Select “Login with SSO” to continue.':'Single sign-on is currently switched off for your organisation. Please contact your administrator.');return}
+  if(!acc||acc.src!=='Portal'||p.value==='wrong'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('Your Email or Password is incorrect!');return}
   if(acc.pwd==='expired'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('<b>Your password has expired.</b> Reset it using “Forgot password?” to continue.');return}
   if(acc.pwd==='notset'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('No password has been set yet. Check your email for the invitation link.');return}
   signIn(e,'password');
