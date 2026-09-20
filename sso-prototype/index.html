@@ -171,6 +171,9 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 .idpav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3b7ef6,#1a214d);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
 .idpn{display:block;font-weight:800;font-size:14.5px}
 .idpe{display:block;font-size:13px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis}
+.sect{border-top:1.5px solid var(--lav);margin-top:2px;padding-top:10px}
+.panel{padding-bottom:18px}
+.content{justify-content:flex-start}
 </style></head><body style="margin:0">
 
 <!-- ===================== LOGIN ===================== -->
@@ -237,7 +240,7 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 
 <!-- demo panel -->
 <aside class="demo" id="demo" aria-label="Prototype controls">
-  <div class="dh"><span>Prototype controls · build 11 · 20 Sep</span><button type="button" id="demoToggle" aria-label="Expand">+ test accounts</button></div>
+  <div class="dh"><span>Prototype controls · build 12 · 20 Sep</span><button type="button" id="demoToggle" aria-label="Expand">+ test accounts</button></div>
   <div class="db hidden" id="demoBody"></div>
 </aside>
 
@@ -359,15 +362,12 @@ function renderSettings(c){
   const on=S.sso==='on',pend=S.pending;
   c.innerHTML=`<section class="panel">
     <div class="ph"><div><h3>Sign-in Settings</h3><div class="desc muted">Portal accounts (username + password) always work. Single sign-on lets staff in your organisation’s directory log in with their own credentials.</div></div></div>
-    <div class="row"><div class="t"><h4>Single sign-on</h4></div><div class="r" id="ssoRow"></div></div>
-    <div class="row"><div class="t"><h4>Directory sync</h4><p>Roles and users sync automatically with your organisation’s directory.</p></div><div class="r" id="syncRow"></div></div>
-  </section>
-  <section class="panel" id="connPanel"></section>`;
+    <div class="row" style="border-bottom:0"><div class="t"><h4>Single sign-on</h4></div><div class="r" id="ssoRow"></div></div>
+    <div id="connPanel" class="sect"></div>
+  </section>`;
   $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
     (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span>`
          :`<span class="small muted">Last updated by ${S.updatedBy||'longlh@appro.ae'} · ${S.since||'01/09/2026'}</span>`);
-  $('#syncRow').innerHTML= on?`<span class="pill p-green">Automatic</span><span class="small muted">Last sync ${S.lastSync}</span>`
-                             :`<span class="pill p-lav">Paused</span><span class="small muted">Resumes when single sign-on is turned on</span>`;
   renderConn();
   const t=$('#ssoSwitch');if(t&&!pend)t.onclick=()=>openModal(on?'off':'on');
   document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>go('user',x.dataset.user));
