@@ -337,11 +337,10 @@ function renderPrimary(){
 u.addEventListener('input',()=>{clearMsgs();renderPrimary()});
 p.addEventListener('input',()=>{clearMsgs();renderPrimary()});
 $('#eye').addEventListener('click',()=>{S.showPwd=!S.showPwd;p.type=S.showPwd?'text':'password';$('#eye').innerHTML=S.showPwd?EYEOFF:EYE});
-$('#forgot').addEventListener('click',()=>{const acc=USERS[u.value.trim().toLowerCase()];if(usesSso(acc)){toast('Your organisation manages your sign-in. Use “Login with SSO”.')}else{toast('If this username exists, a reset email has been sent.')}});
+$('#forgot').addEventListener('click',()=>{toast('If this username exists, a reset email has been sent.')});
 $('#loginCard').addEventListener('submit',()=>{
   const e=u.value.trim().toLowerCase(),acc=USERS[e];clearMsgs();
-  if(acc&&acc.src==='Directory'){$('#userFi').classList.add('err');userMsg.innerHTML=inlineErr('Your organisation manages your sign-in. Use “Login with SSO”.');return}
-  if(!acc||acc.src!=='Portal'||p.value==='wrong'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('Invalid username or password.');return}
+  if(usesSso(acc)||!acc||acc.src!=='Portal'||p.value==='wrong'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('Your Email or Password is incorrect!');return}
   if(acc.pwd==='expired'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('<b>Your password has expired.</b> Reset it using “Forgot password?” to continue.');return}
   if(acc.pwd==='notset'){$('#pwdFi').classList.add('err');pwdMsg.innerHTML=inlineErr('No password has been set yet. Check your email for the invitation link.');return}
   signIn(e,'password');
