@@ -287,13 +287,13 @@ P(
   bullet('The Revert Reason is saved as a Comment against the Application details with details as **“REVERT REASON: <reason inputted by user>”** (comment title <<User’s name>> <<Department name>>, footer <<Posted Date time>> hh:mm AM/PM | DD MM YYYY).'),
   bullet('**Revert_App = TRUE** is set on the application (a new flag mirroring the existing Cancel_App flag). **Application Status remains “Rejected”** — no new application status is introduced, so the mobile application is unaffected and the customer sees no change while the request is pending.'),
   bullet("The **target queue and status** are resolved per section 5 at submission time and stored on the request — in this scope always **'Awaiting Credit Approval' — Credit Queue Level 1**."),
-  bullet("Audit trail is captured with: Step = **'Revert Initiated'**, State = 'Rejected' *(State reflects the live Application Status, which changes only when the revert is approved — section 4.3)*, Step Status = 'Successful', Step Details = **'Revert requested by %Username% to Credit Queue. Revert reason is <REVERT_REASON captured above>'**, Action by = <user email id>. The application history in Application Enquiry therefore shows a **'Revert Initiated'** step while the status column still reads 'Rejected'."),
+  bullet("Audit trail is captured with: Step = **'Manually initiate revert'**, State = **'User Initiated Revert'**, Step Status = 'Successful', Step Details = **'Revert requested by %Username% to Credit Queue. Revert reason is <REVERT_REASON captured above>'**, Action by = <user email id>."),
   bullet('The application is automatically dropped into the **Revert Queue** for further review and approval upon submission of the revert request.'),
 );
 
 P(
   h2('4. Revert Queue'),
-  p('The Revert Queue is a new queue within the Super Portal that allows users to review and make decisions on applications that have been submitted for revert. It provides governance and an approval layer before a rejection is reopened — mirroring the Termination Queue used for manual cancellation. The Checker view is read-only apart from the decision: no Edit, Override, Send Application or FTS Retrigger is offered there.'),
+  p('The Revert Queue is a new queue within the Super Portal that allows users to review and make decisions on applications that have been submitted for revert. It provides governance and an approval layer before a rejection is reopened.'),
   h2('4.1. Revert Queue Menu'),
   p("'Revert Queue' shall appear as an entry in the Queue menu of the Super Portal, alongside existing queues (e.g. Transaction Post Queue, Checker Queue, Termination Queue, etc.)."),
   imgP('SC4_Queue_Menu_Revert_Queue.png', 285, 261),
@@ -430,26 +430,12 @@ P(
       ['Role Management / Permission Matrix', "Six new permission entries, per product: [CC]/[PL] × 'Revert Application' (Enquiry > Application Enquiry) and [CC]/[PL] × View / Evaluate Application (Manually Queue > Revert Queue). Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
       ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.', ['ia_queue.png', 940, 430, 'Queue menu — Revert Queue (SC4)']],
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
-      ['Audit trail', "Three new audit steps — 'Revert Initiated', 'Revert Queue', 'Auto Revert Approval on timeout' (mirroring cancellation's 'Auto Cancellation on timeout') — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
+      ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
       ['Communication Setup','**Four templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and two **Email (Client)** templates — approval after re-assessment and rejection after re-assessment, both mentioning the further review (section 6). English, banking tone, signing off as Reem Bank. **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.', ['ia_comm.png', 2000, 770, 'Communication Setup › Email Templates — Type: Client / Bank']],
-      ['Reporting / MIS', 'WIP, Exception, Policy Exception, E2E and Approved Transactions reports must handle reopened cases: rejection counts become mutable, E2E must not double-count the second pass, and an approval after revert should be identifiable as such.', ['ia_reporting.png', 2400, 600, 'Enquiry › Report Enquiry']],
-      ['Services', 'backoffice-service, application-service, queue-service, user-service, audit-trail-service, notification-service, scheduler-service (timeout job) and work-flow-service. The workflow engine is the key estimation item: a rejected application’s process instance has ended, and reverting requires resuming it or re-instantiating at the queue task.', ['ia_services.png', 1160, 520, 'Services touched — workflow engine is the key item']],
-      ['Credit policy versioning', 'Post-revert re-decisioning evaluates against the currently published Strategy / Score Check / Income Multiplier versions — which is the point of the feature — and the audit trail should record which published version was applied.', ['ia_policy.png', 1132, 635, 'Strategies › Versions / Audit Trails menu']],
   ]),
 );
 
 /* ---- Open questions ---- */
-P(
-  h1('Open Questions'),
-  tbl(
-    ['#', 'Question'],
-    [
-      ['1', 'Workflow engine (technical — parked for engineering estimation): can the terminated process instance be resumed, or must a new instance start at the queue task?'],
-      ['2', 'Confirm the timeout period [X] — 5 days proposed, configurable in database, same as the cancellation timeout (RF source: currently set to 5 days).'],
-    ],
-    [6, 94],
-  ),
-);
 
 /* ---- Thank you ---- */
 P(
