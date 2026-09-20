@@ -361,8 +361,6 @@ function renderSettings(c){
     <div class="ph"><div><h3>Sign-in Settings</h3><div class="desc muted">Portal accounts (username + password) always work. Single sign-on lets staff in your organisation’s directory log in with their own credentials.</div></div></div>
     <div class="row"><div class="t"><h4>Single sign-on</h4><p>Turning it on or off requires Checker approval.</p></div><div class="r" id="ssoRow"></div></div>
     <div class="row"><div class="t"><h4>Directory sync</h4><p>Roles and users sync automatically with your organisation’s directory. No manual action is needed.</p></div><div class="r" id="syncRow"></div></div>
-    <div class="h4" style="margin-top:14px">Sign-in audit trail</div>
-    <ul class="log" style="margin-bottom:14px">${S.log.slice(0,6).map(l=>`<li><span class="ts">${l.ts}</span><span>${l.t}</span></li>`).join('')}</ul>
   </section>
   <section class="panel" id="connPanel"></section>`;
   $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
