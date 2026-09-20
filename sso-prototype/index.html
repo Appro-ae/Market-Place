@@ -326,15 +326,15 @@ function signIn(e,how){
   acc.last=now()+(how==='sso'?' · single sign-on':' · password');
   S.user=e;$('#login').classList.add('hidden');$('#portal').classList.remove('hidden');
   $('#whoami').textContent=e+(how==='sso'?' · single sign-on':acc.breakGlass?' · portal account · break-glass':' · portal account');
-  if(converted){S.page='user';S.viewUser=e;S.hl=e;toast('Signed in with single sign-on · your portal password has been removed — you now sign in with SSO only',5200)}
-  else {S.page='settings';toast(how==='sso'?'Signed in with single sign-on':'Signed in')}
+  S.page='settings';
+  toast(converted?'Signed in with single sign-on · your portal password has been removed — you now sign in with SSO only':(how==='sso'?'Signed in with single sign-on':'Signed in'),converted?5200:3200);
   renderPortal();
 }
 $('#logout').addEventListener('click',()=>{S.user=null;S.page='settings';S.viewUser=null;$('#portal').classList.add('hidden');$('#login').classList.remove('hidden');u.value='';p.value='';clearMsgs();renderPrimary();renderDemo()});
 
 /* ---------- NAV ---------- */
 function go(page,arg){S.page=page;if(page==='user')S.viewUser=arg;renderPortal();$('#content').scrollTop=0}
-document.querySelectorAll('.subnav').forEach(b=>{const t=b.textContent.trim();if(t==='User Management')b.onclick=()=>go('users');if(t==='Sign-in Settings')b.onclick=()=>go('settings')});
+document.querySelectorAll('.subnav').forEach(b=>{if(b.textContent.trim()==='Sign-in Settings')b.onclick=()=>go('settings')});
 function setNav(){document.querySelectorAll('.subnav').forEach(b=>{const t=b.textContent.trim();b.classList.toggle('on',(t==='Sign-in Settings'&&S.page==='settings')||(t==='User Management'&&S.page!=='settings'))})}
 const pill=(cls,t)=>`<span class="pill ${cls}">${t}</span>`;
 const srcPill=a=>a.breakGlass?pill('p-navy','Portal')+' '+pill('p-gold','Break-glass'):a.src==='Directory'?pill('p-blue','Directory'):pill('p-navy','Portal');
@@ -487,7 +487,7 @@ function renderDemo(){
       (S.pending?`<div><b>Turn-${S.pending.to} request ${S.pending.id}</b><div style="display:flex;gap:8px;margin-top:6px"><button class="dbtn p" type="button" id="dApprove">Approve</button><button class="dbtn" type="button" id="dReject">Reject</button></div></div>`:'')+
       (S.secretPending?`<div><b>Client secret request ${S.secretPending}</b><div style="display:flex;gap:8px;margin-top:6px"><button class="dbtn p" type="button" id="dApproveS">Approve</button><button class="dbtn" type="button" id="dRejectS">Reject</button></div></div>`:'')+
       (!S.pending&&!S.secretPending?`<div class="muted">No requests waiting.</div>`:'')+
-      `<div class="muted" style="font-size:12px;line-height:1.45"><b>Try:</b> Sign-in Settings → audit trail (automatic sync, break-glass conflict) · User Management → Add User with kha@appro.ae (refused).</div>`+
+      `<div class="muted" style="font-size:12px;line-height:1.45"><b>Try:</b> Turn single sign-on off, approve it as the Checker, then log out — the <b>Login with SSO</b> button is gone.</div>`+
       `<button class="dbtn" type="button" id="dReset">Reset prototype</button>`;
     const A=$('#dApprove');if(A)A.onclick=()=>{S.sso=S.pending.to;S.since=now().slice(0,10);S.updatedBy=S.user;logAdd(`Single sign-on turned ${S.sso==='on'?'On':'Off'} · approved by longlh@appro.ae (${S.pending.id})`);S.pending=null;renderPortal();toast('Checker approved · single sign-on is now '+S.sso)};
     const R=$('#dReject');if(R)R.onclick=()=>{logAdd(`Turn-${S.pending.to} request ${S.pending.id} rejected by longlh@appro.ae`);S.pending=null;renderPortal();toast('Checker rejected the request')};
