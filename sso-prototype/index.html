@@ -397,7 +397,7 @@ function renderSettings(c){
     <div id="connPanel" class="sect"></div>
   </section>`;
   $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
-    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span>`
+    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval')}</span>`
          :`<span class="small muted">Last updated by ${S.updatedBy||'longlh@appro.ae'} · ${S.since||'01/09/2026'}</span>`);
   renderConn();
   const t=$('#ssoSwitch');if(t&&!pend)t.onclick=()=>openModal(on?'off':'on');
@@ -461,7 +461,7 @@ function renderAddUser(c){
 /* Connection details */
 function renderConn(){
   const on=S.sso==='on', p=$('#connPanel'), mode=S.connMode||'view';if(!p)return;
-  const status = S.secretPending ? pill('p-yel','Pending Checker approval · '+S.secretPending) : (on?pill('p-green','Connected'):pill('p-lav','Paused'));
+  const status = S.secretPending ? pill('p-yel','Pending Checker approval') : (on?pill('p-green','Connected'):pill('p-lav','Paused'));
   const canEdit = !S.secretPending && !S.pending;
   const V={tenant:'66c411d1-c09b-49ab-9b29-f248657f0a31',client:'85387034-2b03-476c-a1ef-afc2d8922616',redirect:'https://portal.appro.ae/bank-authen-service/auth/sso/callback'};
   const CP=id=>`<button class="copy" data-copy="${id}" aria-label="Copy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a214d" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>`;
