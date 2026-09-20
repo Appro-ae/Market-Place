@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PO Review — AMP-3710 / AMP-3711 Passport journey (CF 1.16 / 1.18)</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#1a214d;--blue:#3b7ef6;--yellow:#fdba23;--lav:#edf2ff;--white:#ffffff;--green:#abf5d1;--red:#ffbdad;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lato',sans-serif;background:var(--lav);color:var(--navy);font-size:14px;line-height:1.5}
+.strip{background:var(--navy);color:var(--white);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;text-align:center;padding:7px 16px;font-weight:700}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 40px}
+.card{background:var(--white);border-radius:16px;padding:28px 32px;margin-bottom:22px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.pill{display:inline-block;background:var(--yellow);color:var(--navy);font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+h1{font-weight:900;font-size:28px;line-height:1.2;color:var(--navy);margin-bottom:10px}
+h1 span{color:var(--blue)}
+.verdict{font-weight:700;color:var(--blue);font-size:16px;margin-bottom:10px}
+.meta{font-size:12px;color:var(--navy);opacity:.85}
+.logo{width:120px;display:block}
+.dots{display:flex;gap:6px;align-items:center;margin-top:16px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--blue);display:block}
+.dots i:last-child{margin-left:6px}
+h2{font-weight:900;font-size:20px;margin:0 0 6px;color:var(--navy)}
+h2 small{font-weight:700;color:var(--blue);font-size:13px;letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:4px}
+h3{font-weight:700;font-size:15px;color:var(--blue);margin:18px 0 6px}
+p{margin:6px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.kpi{background:var(--lav);border-radius:14px;padding:16px 18px}
+.kpi b{display:block;font-size:30px;font-weight:900;color:var(--blue);line-height:1}
+.kpi span{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.tw{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{background:var(--navy);color:var(--white);text-align:left;padding:9px 10px;font-weight:700;vertical-align:top}
+td{padding:9px 10px;vertical-align:top;border-bottom:1px solid var(--lav)}
+tr:nth-child(even) td{background:var(--lav)}
+td.ok{background:var(--green)!important;font-weight:700}
+td.warn{background:var(--yellow)!important;font-weight:700}
+td.bad{background:var(--red)!important;font-weight:700}
+.ref{display:inline-block;background:var(--lav);border:1px solid var(--blue);color:var(--navy);border-radius:12px;padding:0 8px;font-size:11px;font-weight:700;white-space:nowrap;margin:1px 2px 1px 0}
+.p1,.p2,.p3{display:inline-block;border-radius:12px;padding:1px 10px;font-size:11px;font-weight:900;letter-spacing:1px}
+.p1{background:var(--red)}.p2{background:var(--yellow)}.p3{background:var(--green)}
+.finding{border-left:4px solid var(--blue);background:var(--lav);border-radius:0 14px 14px 0;padding:14px 18px;margin:12px 0}
+.finding.p1b{border-left-color:#ffbdad}.finding.p2b{border-left-color:var(--yellow)}
+.finding h4{font-size:15px;font-weight:900;margin-bottom:6px}
+.finding dl{display:grid;grid-template-columns:120px 1fr;gap:4px 12px;font-size:13px}
+.finding dt{font-weight:700;color:var(--blue)}
+.flow{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;margin-top:12px}
+.step{flex:1 1 130px;background:var(--lav);border:1px solid var(--blue);border-radius:12px;padding:10px 12px;font-size:12px;min-width:130px}
+.step b{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.step.new{background:var(--white);border-color:var(--yellow)}
+.banner{background:var(--navy);color:var(--white);border-radius:16px;padding:22px 28px;font-size:15px;font-weight:700;margin-bottom:22px}
+.banner small{display:block;font-weight:400;font-size:13px;margin-top:6px;opacity:.85}
+.note{background:var(--white);border:1px solid var(--yellow);border-radius:14px;padding:16px 20px;margin-top:12px}
+pre{white-space:pre-wrap;font-family:'Lato',sans-serif;font-size:13px;background:var(--lav);border-radius:12px;padding:16px;line-height:1.5}
+.foot{font-size:11px;color:var(--navy);opacity:.8;text-align:center;padding:10px 0 4px}
+@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}.finding dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="strip">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+<div class="wrap">
+
+<div class="card">
+  <div class="head">
+    <div style="flex:1 1 640px">
+      <div class="pill">AMP-3710 · AMP-3711 · PO review · Round 1 · for BA Kha Pham Thuc</div>
+      <h1>Passport journey CF 1.16 / 1.18 — <span>review against the EFR 1.2 / 1.12 baseline</span></h1>
+      <div class="verdict">Not Ready for Dev. Five P1 items: the two stories, the Confluence design page and the bilingual screen copy describe three different flows (settle / no settle, 7 vs 2 validation groups, two field-name contracts).</div>
+      <div class="meta">Prepared for: Huyen (PO) · Date: 20 Sep 2026 · Reviewed version: AMP-3710 and AMP-3711 as last updated 18 Sep 2026 14:06 (status Ready To Clarify, reporter Kha Pham Thuc) · Input requirement: "Replicate flow 1.2 and flow 1.12 — 1.16 = 1.2, 1.18 = 1.12. Keep the same scanning." · Evidence opened: Confluence 761954749 (EFR 1.2 / 1.12), 2122317829 (EFR 1.16 / 1.18), 728531010 (1.5.4 Customer Journey Detail Description), 755696228 (1.5.7 Error List); RF-186, RF-6, RF-16, AMP-2651, IB-348, AMP-3705, AMP-1783, RF-2831, AMP-1641.</div>
+      <div class="dots"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <img class="logo" alt="Appro" src="data:image/svg+xml;base64,PHN2ZyBzdHlsZT0iY29sb3I6IzNCN0VGNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNDIyIiBoZWlnaHQ9IjEyMyIgdmlld0JveD0iMCAwIDQyMiAxMjMiIGZpbGw9ImN1cnJlbnRDb2xvciI+CiAgPHBhdGggZD0iTSAxOTMuMzAxIDQ3LjUwOSBMIDE5MC42MzMgNDcuNjI0IEwgMTk1Ljk3MiA0Ny40ODQgTCAxOTMuMzAxIDQ3LjUwOSBaIE0gMTkzLjI2NCA0My41MDYgTCAxOTUuOTM1IDQzLjQ4MSBMIDE5MC41OTMgNDMuNTA2IEwgMTkzLjI2NCA0My41MDYgWiBNIDE5My4zMDEgNTAuNTAyIEwgMTkwLjYzMyA1MC42MzQgTCAxOTUuOTcxIDUwLjQ1NCBMIDE5My4zMDEgNTAuNTAyIFogTSAxOTMuMjgyIDQ5LjQ3MyBMIDE5NS45NTMgNDkuNDI1IEwgMTkwLjYxMiA0OS40NzUgTCAxOTMuMjgyIDQ5LjQ3MyBaIE0gMTkzLjMzOCAxMjAuMzI2IEwgMTkwLjY2NyAxMjAuMzI4IEwgMTkwLjY2OSAxMjMgTCAxOTMuMzM4IDEyMyBMIDE5My4zMzggMTIwLjMyNiBaIE0gMTk2LjM4MiAxMjAuMzI2IEwgMTk2LjM4MiAxMjMgTCAxOTkuMDU1IDEyMyBMIDE5OS4wNTMgMTIwLjMyNCBMIDE5Ni4zODIgMTIwLjMyNiBaIE0gMTk2LjM0NSA1OC43ODggTCAxOTkuMDE2IDU4Ljc4NiBMIDE5OS4wMTYgNTguNTE4IEwgMTk4Ljk2MyA1OC4yNTUgTCAxOTYuMzQ1IDU4Ljc4OCBaIE0gMTk1Ljg2MyA1Ni40MTIgTCAxOTguMzU4IDU1LjQ1OSBMIDE5My4yNDUgNTYuOTQ1IEwgMTk1Ljg2MyA1Ni40MTIgWiBNIDgyLjA3OCA0My4wMDEgTCA3OS40MDggNDMuMDAxIEwgNzkuNDA4IDQzLjQwMSBMIDc5LjUyNCA0My43ODMgTCA4Mi4wNzggNDMuMDAxIFogTSA3OS4xMjcgNTcuMzY2IEwgODEuNzk4IDU3LjM2NCBMIDgxLjc4OCA0My44NTkgTCA3Ni42NTcgNTYuMzQ5IEwgNzkuMTI3IDU3LjM2NiBaIE0gNzkuMTQ2IDgyLjU2MSBMIDc2LjQ3NSA4Mi41NjMgTCA3Ni40NzcgODUuMjM1IEwgNzkuMTQ2IDg1LjIzNSBMIDc5LjE0NiA4Mi41NjEgWiBNIDgyLjE5IDgyLjU2MSBMIDgyLjE5IDg1LjIzNSBMIDg0Ljg2MyA4NS4yMzUgTCA4NC44NjEgODIuNTU5IEwgODIuMTkgODIuNTYxIFogTSA4Mi4xNTMgNDMuMjQ0IEwgODQuODI0IDQzLjI0MiBMIDg0LjgyMyA0Mi44NDQgTCA4NC43MDcgNDIuNDYzIEwgODIuMTUzIDQzLjI0NCBaIE0gMjg4Ljg5NCA4Mi4wMTkgTCAyODYuMjIzIDgyLjAyMyBMIDI4Ni4yMjggODQuNjkzIEwgMjg4Ljg5NCA4NC42OTMgTCAyODguODk0IDgyLjAxOSBaIE0gMjkxLjkzOSA4Mi4wMTkgTCAyOTEuOTM5IDg0LjY5MyBMIDI5NC42MTIgODQuNjkzIEwgMjk0LjYwOSA4Mi4wMTUgTCAyOTEuOTM5IDgyLjAxOSBaIE0gMzI4LjU2MiA3LjI1NyBMIDMyOC41NjIgOS45MyBMIDMzMS4yMzMgOS45MyBMIDMzMS4yMzMgNy4yNTcgTCAzMjguNTYyIDcuMjU3IFogTSAzMjguNTYyIDQuMjA4IEwgMzMxLjIzMyA0LjIwOCBMIDMzMS4yMzMgMS41MzQgTCAzMjguNTYyIDEuNTM0IEwgMzI4LjU2MiA0LjIwOCBaIE0gOTguMjA5IDQ3LjUwOSBMIDk1LjU0MSA0Ny42MjQgTCAxMDAuODggNDcuNDg0IEwgOTguMjA5IDQ3LjUwOSBaIE0gOTguMTcyIDQzLjUwNiBMIDEwMC44NDMgNDMuNDgxIEwgOTUuNTAxIDQzLjUwNiBMIDk4LjE3MiA0My41MDYgWiBNIDk4LjIwOSA1MC41MDIgTCA5NS41NDEgNTAuNjM0IEwgMTAwLjg3OSA1MC40NTMgTCA5OC4yMDkgNTAuNTAyIFogTSA5OC4xOSA0OS40NzMgTCAxMDAuODYxIDQ5LjQyNSBMIDk1LjUxOSA0OS40NzUgTCA5OC4xOSA0OS40NzMgWiBNIDk4LjI0NiAxMjAuMzI2IEwgOTUuNTc1IDEyMC4zMjggTCA5NS41NzcgMTIzIEwgOTguMjQ2IDEyMyBMIDk4LjI0NiAxMjAuMzI2IFogTSAxMDEuMjkgMTIwLjMyNiBMIDEwMS4yOSAxMjMgTCAxMDMuOTYzIDEyMyBMIDEwMy45NjEgMTIwLjMyNCBMIDEwMS4yOSAxMjAuMzI2IFogTSAxMDEuMjUzIDU4Ljc4OCBMIDEwMy45MjQgNTguNzg2IEwgMTAzLjkyNCA1OC41MTggTCAxMDMuODcgNTguMjU1IEwgMTAxLjI1MyA1OC43ODggWiBNIDEwMC43NyA1Ni40MTIgTCAxMDMuMjY2IDU1LjQ1OSBMIDk4LjE1MyA1Ni45NDUgTCAxMDAuNzcgNTYuNDEyIFogTSAyMzIuOTY4IDAgQyAyMDkuNTk1IDAgMTkwLjU5MyAxOC45NjEgMTkwLjU5MyA0Mi4zNDYgTCAxOTUuOTM1IDQyLjM0NiBDIDE5NS45MzUgMjEuOTI2IDIxMi41MzQgNS4zNDggMjMyLjk2OCA1LjM0OCBMIDIzMi45NjggMCBaIE0gMTkwLjU5MyA0Mi4zNDYgQyAxOTAuNTkzIDQyLjc1NyAxOTAuNjExIDQ3LjEyIDE5MC42MzMgNDcuNjI0IEwgMTk1Ljk3IDQ3LjM5NCBDIDE5NS45NyA0Ny4zOTggMTk1Ljk2OSA0Ny4zODEgMTk1Ljk2OCA0Ny4zMjkgQyAxOTUuOTY3IDQ3LjI4MiAxOTUuOTY2IDQ3LjIyIDE5NS45NjUgNDcuMTQzIEMgMTk1Ljk2MyA0Ni45OTEgMTk1Ljk2MSA0Ni43OTIgMTk1Ljk1OCA0Ni41NTkgQyAxOTUuOTU0IDQ2LjA5NSAxOTUuOTUgNDUuNTA4IDE5NS45NDYgNDQuOTE5IEMgMTk1LjkzOSA0My43MzcgMTk1LjkzNSA0Mi41NjIgMTk1LjkzNSA0Mi4zNDYgTCAxOTAuNTkzIDQyLjM0NiBaIE0gMTk1Ljk3MiA0Ny40ODQgTCAxOTUuOTM1IDQzLjQ4MSBMIDE5MC41OTMgNDMuNTMxIEwgMTkwLjYzIDQ3LjUzNCBMIDE5NS45NzIgNDcuNDg0IFogTSAxOTAuNTkzIDQzLjUwNiBDIDE5MC41OTMgNDMuODIgMTkwLjYxMSA1MC4xNzMgMTkwLjYzMyA1MC42MzQgTCAxOTUuOTY5IDUwLjM2OSBDIDE5NS45NyA1MC4zODcgMTk1Ljk2NyA1MC4zMTQgMTk1Ljk2NSA1MC4wNzkgQyAxOTUuOTYzIDQ5Ljg3OCAxOTUuOTYxIDQ5LjYwNiAxOTUuOTU4IDQ5LjI4NSBDIDE5NS45NTQgNDguNjQ1IDE5NS45NSA0Ny44MiAxOTUuOTQ2IDQ2Ljk5MyBDIDE5NS45MzkgNDUuMzM2IDE5NS45MzUgNDMuNjg3IDE5NS45MzUgNDMuNTA2IEwgMTkwLjU5MyA0My41MDYgWiBNIDE5NS45NzEgNTAuNDU0IEwgMTk1Ljk1MyA0OS40MjUgTCAxOTAuNjEyIDQ5LjUyMSBMIDE5MC42MzEgNTAuNTUgTCAxOTUuOTcxIDUwLjQ1NCBaIE0gMTkwLjYxMiA0OS40NzUgTCAxOTAuNjY3IDEyMC4zMjggTCAxOTYuMDA5IDEyMC4zMjQgTCAxOTUuOTUzIDQ5LjQ3MSBMIDE5MC42MTIgNDkuNDc1IFogTSAxOTMuMzM4IDEyMyBMIDE5Ni4zODIgMTIzIEwgMTk2LjM4MiAxMTcuNjUyIEwgMTkzLjMzOCAxMTcuNjUyIEwgMTkzLjMzOCAxMjMgWiBNIDE5OS4wNTMgMTIwLjMyNCBMIDE5OS4wMTYgNTguNzg2IEwgMTkzLjY3NCA1OC43ODkgTCAxOTMuNzExIDEyMC4zMjggTCAxOTkuMDUzIDEyMC4zMjQgWiBNIDE5OC45NjMgNTguMjU1IEwgMTk4LjQ4IDU1Ljg3OSBMIDE5My4yNDUgNTYuOTQ1IEwgMTkzLjcyOCA1OS4zMjEgTCAxOTguOTYzIDU4LjI1NSBaIE0gMTkzLjM2NyA1Ny4zNjYgQyAxOTkuNDQ4IDczLjMxMiAyMTQuODk1IDg0LjY3NCAyMzIuOTg2IDg0LjY3NCBMIDIzMi45ODYgNzkuMzI2IEMgMjE3LjE4NCA3OS4zMjYgMjAzLjY3NSA2OS40MDIgMTk4LjM1OCA1NS40NTkgTCAxOTMuMzY3IDU3LjM2NiBaIE0gMjMyLjk4NiA4NC42NzQgQyAyNTYuMzU5IDg0LjY3NCAyNzUuMzYgNjUuNzEzIDI3NS4zNiA0Mi4zMjggTCAyNzAuMDE5IDQyLjMyOCBDIDI3MC4wMTkgNjIuNzQ4IDI1My40MiA3OS4zMjYgMjMyLjk4NiA3OS4zMjYgTCAyMzIuOTg2IDg0LjY3NCBaIE0gMjc1LjM2IDQyLjMyOCBDIDI3NS4zNiAxOC45MzkgMjU2LjMzNyAwIDIzMi45NjggMCBMIDIzMi45NjggNS4zNDggQyAyNTMuNDA1IDUuMzQ4IDI3MC4wMTkgMjEuOTEgMjcwLjAxOSA0Mi4zMjggTCAyNzUuMzYgNDIuMzI4IFogTSAyMzIuOTY4IDc2LjI5NiBDIDIxNC4xNjggNzYuMjk2IDE5OC45NzkgNjEuMTAyIDE5OC45NzkgNDIuMzY1IEwgMTkzLjYzNyA0Mi4zNjUgQyAxOTMuNjM3IDY0LjA2NyAyMTEuMjI5IDgxLjY0NCAyMzIuOTY4IDgxLjY0NCBMIDIzMi45NjggNzYuMjk2IFogTSAxOTguOTc5IDQyLjM2NSBDIDE5OC45NzkgMjMuNjA4IDIxNC4xNjggOC40MTUgMjMyLjk2OCA4LjQxNSBMIDIzMi45NjggMy4wNjggQyAyMTEuMjI4IDMuMDY4IDE5My42MzcgMjAuNjQ1IDE5My42MzcgNDIuMzY1IEwgMTk4Ljk3OSA0Mi4zNjUgWiBNIDIzMi45NjggOC40MTUgQyAyNTEuNzY3IDguNDE1IDI2Ni45NTcgMjMuNjA4IDI2Ni45NTcgNDIuMzY1IEwgMjcyLjI5OSA0Mi4zNjUgQyAyNzIuMjk5IDIwLjY0NSAyNTQuNzA4IDMuMDY4IDIzMi45NjggMy4wNjggTCAyMzIuOTY4IDguNDE1IFogTSAyNjYuOTU3IDQyLjM2NSBDIDI2Ni45NTcgNjEuMTAyIDI1MS43NjggNzYuMjk2IDIzMi45NjggNzYuMjk2IEwgMjMyLjk2OCA4MS42NDQgQyAyNTQuNzA3IDgxLjY0NCAyNzIuMjk5IDY0LjA2NyAyNzIuMjk5IDQyLjM2NSBMIDI2Ni45NTcgNDIuMzY1IFogTSA4NC43NDkgNDMuMDAxIEMgODQuNzQ5IDQyLjk1NiA4NC43NTEgNDIuOTA1IDg0Ljc1NiA0Mi43ODkgQyA4NC43NjEgNDIuNjkgODQuNzY4IDQyLjUyNSA4NC43NjggNDIuMzQ2IEwgNzkuNDI2IDQyLjM0NiBDIDc5LjQyNiA0Mi4zOTIgNzkuNDI0IDQyLjQ0MyA3OS40MTkgNDIuNTU4IEMgNzkuNDE1IDQyLjY1OCA3OS40MDggNDIuODIyIDc5LjQwOCA0My4wMDEgTCA4NC43NDkgNDMuMDAxIFogTSA4NC43NjggNDIuMzQ2IEMgODQuNzY4IDE4Ljk1OSA2NS43NDUgMCA0Mi4zNzUgMCBMIDQyLjM3NSA1LjM0OCBDIDYyLjgxIDUuMzQ4IDc5LjQyNiAyMS45MjcgNzkuNDI2IDQyLjM0NiBMIDg0Ljc2OCA0Mi4zNDYgWiBNIDQyLjM3NSAwIEMgMTkuMDAyIDAgMCAxOC45NjEgMCA0Mi4zNDYgTCA1LjM0MiA0Mi4zNDYgQyA1LjM0MiAyMS45MjYgMjEuOTQxIDUuMzQ4IDQyLjM3NSA1LjM0OCBMIDQyLjM3NSAwIFogTSAwIDQyLjM0NiBDIDAgNjUuNzMyIDE5LjAwMiA4NC42OTMgNDIuMzc1IDg0LjY5MyBMIDQyLjM3NSA3OS4zNDUgQyAyMS45NDEgNzkuMzQ1IDUuMzQyIDYyLjc2NyA1LjM0MiA0Mi4zNDYgTCAwIDQyLjM0NiBaIE0gNDIuMzc1IDg0LjY5MyBDIDYwLjA4OSA4NC42OTMgNzUuMjYgNzMuODA5IDgxLjU5NyA1OC4zODMgTCA3Ni42NTcgNTYuMzQ5IEMgNzEuMTE0IDY5Ljg0MSA1Ny44NDkgNzkuMzQ1IDQyLjM3NSA3OS4zNDUgTCA0Mi4zNzUgODQuNjkzIFogTSA3Ni40NTYgNTcuMzY4IEwgNzYuNDc1IDgyLjU2MyBMIDgxLjgxNyA4Mi41NTkgTCA4MS43OTggNTcuMzY0IEwgNzYuNDU2IDU3LjM2OCBaIE0gNzkuMTQ2IDg1LjIzNSBMIDgyLjE5IDg1LjIzNSBMIDgyLjE5IDc5Ljg4NyBMIDc5LjE0NiA3OS44ODcgTCA3OS4xNDYgODUuMjM1IFogTSA4NC44NjEgODIuNTU5IEwgODQuODI0IDQzLjI0MiBMIDc5LjQ4MiA0My4yNDcgTCA3OS41MTkgODIuNTY0IEwgODQuODYxIDgyLjU1OSBaIE0gODQuNzA3IDQyLjQ2MyBMIDg0LjYzMyA0Mi4yMTkgTCA3OS41MjQgNDMuNzgzIEwgNzkuNTk5IDQ0LjAyNiBMIDg0LjcwNyA0Mi40NjMgWiBNIDQyLjM3NSA3Ni4yOTYgQyAyMy41NzUgNzYuMjk2IDguMzg2IDYxLjEwMiA4LjM4NiA0Mi4zNjUgTCAzLjA0NCA0Mi4zNjUgQyAzLjA0NCA2NC4wNjcgMjAuNjM2IDgxLjY0NCA0Mi4zNzUgODEuNjQ0IEwgNDIuMzc1IDc2LjI5NiBaIE0gOC4zODYgNDIuMzY1IEMgOC4zODYgMjMuNjA4IDIzLjU3NSA4LjQxNSA0Mi4zNzUgOC40MTUgTCA0Mi4zNzUgMy4wNjggQyAyMC42MzUgMy4wNjggMy4wNDQgMjAuNjQ1IDMuMDQ0IDQyLjM2NSBMIDguMzg2IDQyLjM2NSBaIE0gNDIuMzc1IDguNDE1IEMgNjEuMTc0IDguNDE1IDc2LjM2NCAyMy42MDggNzYuMzY0IDQyLjM2NSBMIDgxLjcwNSA0Mi4zNjUgQyA4MS43MDUgMjAuNjQ1IDY0LjExNSAzLjA2OCA0Mi4zNzUgMy4wNjggTCA0Mi4zNzUgOC40MTUgWiBNIDc2LjM2NCA0Mi4zNjUgQyA3Ni4zODEgNjEuMDk5IDYxLjE5NSA3Ni4yOTYgNDIuMzc1IDc2LjI5NiBMIDQyLjM3NSA4MS42NDQgQyA2NC4xMzEgODEuNjQ0IDgxLjcyNSA2NC4wNyA4MS43MDUgNDIuMzY1IEwgNzYuMzY0IDQyLjM2NSBaIE0gMjg2LjE4NSA0My44OCBDIDI4Ni4xODUgNDkuMTE5IDI4Ni4xOTYgNTguNjU1IDI4Ni4yMDQgNjYuODgxIEMgMjg2LjIwOSA3MC45OTMgMjg2LjIxNSA3NC43NzkgMjg2LjIxNyA3Ny41MzYgQyAyODYuMjIgNzguOTE1IDI4Ni4yMiA4MC4wMzYgMjg2LjIyMyA4MC44MTMgQyAyODYuMjIzIDgxLjIwMiAyODYuMjIzIDgxLjUwNCAyODYuMjIzIDgxLjcwOSBDIDI4Ni4yMjMgODEuODEyIDI4Ni4yMjMgODEuODkgMjg2LjIyMyA4MS45NDMgQyAyODYuMjIzIDgxLjk2OSAyODYuMjIzIDgxLjk4OSAyODYuMjIzIDgyLjAwMiBDIDI4Ni4yMjMgODIuMDA5IDI4Ni4yMjMgODIuMDE0IDI4Ni4yMjMgODIuMDE3IEMgMjg2LjIyMyA4Mi4wMTkgMjg2LjIyMyA4Mi4wMjIgMjg2LjIyMyA4Mi4wMjMgQyAyODYuMjIzIDgyLjAyMiAyODYuMjIzIDgyLjAyMyAyODYuMjIzIDgyLjAyMyBDIDI4Ni4yMjMgODIuMDIzIDI4Ni4yMjMgODIuMDIzIDI4OC44OTQgODIuMDE5IEMgMjkxLjU2NSA4Mi4wMTUgMjkxLjU2NSA4Mi4wMTUgMjkxLjU2NSA4Mi4wMTUgQyAyOTEuNTY1IDgyLjAxNiAyOTEuNTY1IDgyLjAxNSAyOTEuNTY1IDgyLjAxNSBDIDI5MS41NjUgODIuMDE0IDI5MS41NjUgODIuMDEyIDI5MS41NjUgODIuMDEgQyAyOTEuNTY1IDgyLjAwNyAyOTEuNTY1IDgyLjAwMiAyOTEuNTY1IDgxLjk5NSBDIDI5MS41NjUgODEuOTgyIDI5MS41NjUgODEuOTYyIDI5MS41NjUgODEuOTM2IEMgMjkxLjU2NSA4MS44ODMgMjkxLjU2NSA4MS44MDUgMjkxLjU2NSA4MS43MDIgQyAyOTEuNTY1IDgxLjQ5NyAyOTEuNTY1IDgxLjE5NSAyOTEuNTY1IDgwLjgwNiBDIDI5MS41NjIgODAuMDI5IDI5MS41NjIgNzguOTA4IDI5MS41NTkgNzcuNTI5IEMgMjkxLjU1NyA3NC43NzIgMjkxLjU1MSA3MC45ODcgMjkxLjU0NiA2Ni44NzUgQyAyOTEuNTM4IDU4LjY0OSAyOTEuNTI3IDQ5LjExNiAyOTEuNTI3IDQzLjg4IEwgMjg2LjE4NSA0My44OCBaIE0gMjg4Ljg5NCA4NC42OTMgTCAyOTEuOTM5IDg0LjY5MyBMIDI5MS45MzkgNzkuMzQ1IEwgMjg4Ljg5NCA3OS4zNDUgTCAyODguODk0IDg0LjY5MyBaIE0gMjkxLjkzOSA4Mi4wMTkgQyAyOTQuNjA5IDgyLjAxNSAyOTQuNjA5IDgyLjAxNiAyOTQuNjA5IDgyLjAxNSBDIDI5NC42MDkgODIuMDE2IDI5NC42MDkgODIuMDE1IDI5NC42MDkgODIuMDE1IEMgMjk0LjYwOSA4Mi4wMTUgMjk0LjYwOSA4Mi4wMTIgMjk0LjYwOSA4Mi4wMSBDIDI5NC42MDkgODIuMDA3IDI5NC42MDkgODIuMDAyIDI5NC42MDkgODEuOTk1IEMgMjk0LjYwOSA4MS45ODIgMjk0LjYwOSA4MS45NjIgMjk0LjYwOSA4MS45MzYgQyAyOTQuNjA5IDgxLjg4MyAyOTQuNjA5IDgxLjgwNSAyOTQuNjA5IDgxLjcwMiBDIDI5NC42MDkgODEuNDk3IDI5NC42MDkgODEuMTk1IDI5NC42MDkgODAuODA2IEMgMjk0LjYwNyA4MC4wMjkgMjk0LjYwNyA3OC45MDggMjk0LjYwNCA3Ny41MjkgQyAyOTQuNjAxIDc0Ljc3MiAyOTQuNTk2IDcwLjk4NyAyOTQuNTkxIDY2Ljg3NSBDIDI5NC41ODMgNTguNjQ5IDI5NC41NzIgNDkuMTE2IDI5NC41NzIgNDMuODggTCAyODkuMjMgNDMuODggQyAyODkuMjMgNDkuMTE5IDI4OS4yNDEgNTguNjU1IDI4OS4yNDkgNjYuODgxIEMgMjg5LjI1NCA3MC45OTMgMjg5LjI2IDc0Ljc3OSAyODkuMjYyIDc3LjUzNiBDIDI4OS4yNjUgNzguOTE1IDI4OS4yNjUgODAuMDM2IDI4OS4yNjggODAuODEzIEMgMjg5LjI2OCA4MS4yMDIgMjg5LjI2OCA4MS41MDQgMjg5LjI2OCA4MS43MDkgQyAyODkuMjY4IDgxLjgxMiAyODkuMjY4IDgxLjg5IDI4OS4yNjggODEuOTQzIEMgMjg5LjI2OCA4MS45NjkgMjg5LjI2OCA4MS45ODkgMjg5LjI2OCA4Mi4wMDIgQyAyODkuMjY4IDgyLjAwOSAyODkuMjY4IDgyLjAxNCAyODkuMjY4IDgyLjAxNyBDIDI4OS4yNjggODIuMDE5IDI4OS4yNjggODIuMDIgMjg5LjI2OCA4Mi4wMjEgQyAyODkuMjY4IDgyLjAyMSAyODkuMjY4IDgyLjAyMiAyODkuMjY4IDgyLjAyMSBDIDI4OS4yNjggODIuMDIxIDI4OS4yNjggODIuMDIzIDI5MS45MzkgODIuMDE5IFogTSAyOTQuNTcyIDQzLjg4IEMgMjk0LjU3MiAyNS4xMjMgMzA5Ljc2MSA5LjkzIDMyOC41NjIgOS45MyBMIDMyOC41NjIgNC41ODMgQyAzMDYuODIxIDQuNTgzIDI4OS4yMyAyMi4xNiAyODkuMjMgNDMuODggTCAyOTQuNTcyIDQzLjg4IFogTSAzMzEuMjMzIDcuMjU3IEwgMzMxLjIzMyA0LjIwOCBMIDMyNS44OTEgNC4yMDggTCAzMjUuODkxIDcuMjU3IEwgMzMxLjIzMyA3LjI1NyBaIE0gMzI4LjU2MiAxLjUzNCBDIDMwNS4xODkgMS41MzQgMjg2LjE4NSAyMC40OTUgMjg2LjE4NSA0My44OCBMIDI5MS41MjcgNDMuODggQyAyOTEuNTI3IDIzLjQ1OSAzMDguMTI3IDYuODgyIDMyOC41NjIgNi44ODIgTCAzMjguNTYyIDEuNTM0IFogTSAzNzkuNjI2IDAgQyAzNTYuMjUzIDAgMzM3LjI1IDE4Ljk2MSAzMzcuMjUgNDIuMzQ2IEwgMzQyLjU5MiA0Mi4zNDYgQyAzNDIuNTkyIDIxLjkyNiAzNTkuMTkxIDUuMzQ4IDM3OS42MjYgNS4zNDggTCAzNzkuNjI2IDAgWiBNIDMzNy4yNSA0Mi4zNDYgQyAzMzcuMjUgNjUuNzMyIDM1Ni4yNTMgODQuNjkzIDM3OS42MjYgODQuNjkzIEwgMzc5LjYyNiA3OS4zNDUgQyAzNTkuMTkxIDc5LjM0NSAzNDIuNTkyIDYyLjc2NyAzNDIuNTkyIDQyLjM0NiBMIDMzNy4yNSA0Mi4zNDYgWiBNIDM3OS42MjYgODQuNjkzIEMgNDAyLjk5NyA4NC42OTMgNDIyIDY1LjczMiA0MjIgNDIuMzQ2IEwgNDE2LjY1OCA0Mi4zNDYgQyA0MTYuNjU4IDYyLjc2NyA0MDAuMDU5IDc5LjM0NSAzNzkuNjI2IDc5LjM0NSBMIDM3OS42MjYgODQuNjkzIFogTSA0MjIgNDIuMzQ2IEMgNDIyIDE4Ljk2MSA0MDIuOTk3IDAgMzc5LjYyNiAwIEwgMzc5LjYyNiA1LjM0OCBDIDQwMC4wNTkgNS4zNDggNDE2LjY1OCAyMS45MjYgNDE2LjY1OCA0Mi4zNDYgTCA0MjIgNDIuMzQ2IFogTSAzNzkuNjI2IDc2LjI5NiBDIDM2MC44MjYgNzYuMjk2IDM0NS42MzcgNjEuMTAyIDM0NS42MzcgNDIuMzY1IEwgMzQwLjI5NSA0Mi4zNjUgQyAzNDAuMjk1IDY0LjA2NyAzNTcuODg1IDgxLjY0NCAzNzkuNjI2IDgxLjY0NCBMIDM3OS42MjYgNzYuMjk2IFogTSAzNDUuNjM3IDQyLjM2NSBDIDM0NS42MzcgMjMuNjA4IDM2MC44MjYgOC40MTUgMzc5LjYyNiA4LjQxNSBMIDM3OS42MjYgMy4wNjggQyAzNTcuODg1IDMuMDY4IDM0MC4yOTUgMjAuNjQ1IDM0MC4yOTUgNDIuMzY1IEwgMzQ1LjYzNyA0Mi4zNjUgWiBNIDM3OS42MjYgOC40MTUgQyAzOTguNDI0IDguNDE1IDQxMy42MTMgMjMuNjA4IDQxMy42MTMgNDIuMzY1IEwgNDE4Ljk1NSA0Mi4zNjUgQyA0MTguOTU1IDIwLjY0NSA0MDEuMzY1IDMuMDY4IDM3OS42MjYgMy4wNjggTCAzNzkuNjI2IDguNDE1IFogTSA0MTMuNjEzIDQyLjM2NSBDIDQxMy42MzIgNjEuMDk5IDM5OC40NDUgNzYuMjk2IDM3OS42MjYgNzYuMjk2IEwgMzc5LjYyNiA4MS42NDQgQyA0MDEuMzgxIDgxLjY0NCA0MTguOTc3IDY0LjA3IDQxOC45NTUgNDIuMzY1IEwgNDEzLjYxMyA0Mi4zNjUgWiBNIDEzNy44NzYgMCBDIDExNC41MDMgMCA5NS41MDEgMTguOTYxIDk1LjUwMSA0Mi4zNDYgTCAxMDAuODQzIDQyLjM0NiBDIDEwMC44NDMgMjEuOTI2IDExNy40NDIgNS4zNDggMTM3Ljg3NiA1LjM0OCBMIDEzNy44NzYgMCBaIE0gOTUuNTAxIDQyLjM0NiBDIDk1LjUwMSA0Mi43NTggOTUuNTE5IDQ3LjEyIDk1LjU0MSA0Ny42MjQgTCAxMDAuODc3IDQ3LjM5NCBDIDEwMC44NzcgNDcuMzk4IDEwMC44NzcgNDcuMzgxIDEwMC44NzYgNDcuMzI5IEMgMTAwLjg3NSA0Ny4yODIgMTAwLjg3NCA0Ny4yMiAxMDAuODczIDQ3LjE0MyBDIDEwMC44NyA0Ni45OTEgMTAwLjg2OCA0Ni43OTIgMTAwLjg2NiA0Ni41NTkgQyAxMDAuODYyIDQ2LjA5NSAxMDAuODU4IDQ1LjUwOCAxMDAuODU0IDQ0LjkxOSBDIDEwMC44NDcgNDMuNzM3IDEwMC44NDMgNDIuNTYyIDEwMC44NDMgNDIuMzQ2IEwgOTUuNTAxIDQyLjM0NiBaIE0gMTAwLjg4IDQ3LjQ4NCBMIDEwMC44NDMgNDMuNDgxIEwgOTUuNTAxIDQzLjUzMSBMIDk1LjUzOCA0Ny41MzQgTCAxMDAuODggNDcuNDg0IFogTSA5NS41MDEgNDMuNTA2IEMgOTUuNTAxIDQzLjgyIDk1LjUxOCA1MC4xNzMgOTUuNTQxIDUwLjYzNCBMIDEwMC44NzYgNTAuMzY5IEMgMTAwLjg3OCA1MC4zODcgMTAwLjg3NSA1MC4zMTQgMTAwLjg3MyA1MC4wNzkgQyAxMDAuODcxIDQ5Ljg3OCAxMDAuODY4IDQ5LjYwNiAxMDAuODY2IDQ5LjI4NSBDIDEwMC44NjIgNDguNjQ1IDEwMC44NTggNDcuODIgMTAwLjg1NCA0Ni45OTMgQyAxMDAuODQ3IDQ1LjMzNiAxMDAuODQzIDQzLjY4NyAxMDAuODQzIDQzLjUwNiBMIDk1LjUwMSA0My41MDYgWiBNIDEwMC44NzkgNTAuNDUzIEwgMTAwLjg2MSA0OS40MjUgTCA5NS41MiA0OS41MjEgTCA5NS41MzggNTAuNTUgTCAxMDAuODc5IDUwLjQ1MyBaIE0gOTUuNTE5IDQ5LjQ3NSBMIDk1LjU3NSAxMjAuMzI4IEwgMTAwLjkxNyAxMjAuMzI0IEwgMTAwLjg2MSA0OS40NzEgTCA5NS41MTkgNDkuNDc1IFogTSA5OC4yNDYgMTIzIEwgMTAxLjI5IDEyMyBMIDEwMS4yOSAxMTcuNjUyIEwgOTguMjQ2IDExNy42NTIgTCA5OC4yNDYgMTIzIFogTSAxMDMuOTYxIDEyMC4zMjQgTCAxMDMuOTI0IDU4Ljc4NiBMIDk4LjU4MiA1OC43ODkgTCA5OC42MTkgMTIwLjMyOCBMIDEwMy45NjEgMTIwLjMyNCBaIE0gMTAzLjg3IDU4LjI1NSBMIDEwMy4zODggNTUuODc5IEwgOTguMTUzIDU2Ljk0NSBMIDk4LjYzNiA1OS4zMjEgTCAxMDMuODcgNTguMjU1IFogTSA5OC4yNzUgNTcuMzY2IEMgMTA0LjM1NiA3My4zMTIgMTE5LjgwMyA4NC42NzQgMTM3Ljg5NCA4NC42NzQgTCAxMzcuODk0IDc5LjMyNiBDIDEyMi4wOTIgNzkuMzI2IDEwOC41ODIgNjkuNDAyIDEwMy4yNjYgNTUuNDU5IEwgOTguMjc1IDU3LjM2NiBaIE0gMTM3Ljg5NCA4NC42NzQgQyAxNjEuMjY2IDg0LjY3NCAxODAuMjY5IDY1LjcxMyAxODAuMjY5IDQyLjMyOCBMIDE3NC45MjcgNDIuMzI4IEMgMTc0LjkyNyA2Mi43NDggMTU4LjMyOCA3OS4zMjYgMTM3Ljg5NCA3OS4zMjYgTCAxMzcuODk0IDg0LjY3NCBaIE0gMTgwLjI2OSA0Mi4zMjggQyAxODAuMjY5IDE4LjkzOSAxNjEuMjQ1IDAgMTM3Ljg3NiAwIEwgMTM3Ljg3NiA1LjM0OCBDIDE1OC4zMTIgNS4zNDggMTc0LjkyNyAyMS45MSAxNzQuOTI3IDQyLjMyOCBMIDE4MC4yNjkgNDIuMzI4IFogTSAxMzcuODc2IDc2LjI5NiBDIDExOS4wNzUgNzYuMjk2IDEwMy44ODcgNjEuMTAyIDEwMy44ODcgNDIuMzY1IEwgOTguNTQ1IDQyLjM2NSBDIDk4LjU0NSA2NC4wNjcgMTE2LjEzNyA4MS42NDQgMTM3Ljg3NiA4MS42NDQgTCAxMzcuODc2IDc2LjI5NiBaIE0gMTAzLjg4NyA0Mi4zNjUgQyAxMDMuODg3IDIzLjYwOCAxMTkuMDc2IDguNDE1IDEzNy44NzYgOC40MTUgTCAxMzcuODc2IDMuMDY4IEMgMTE2LjEzNiAzLjA2OCA5OC41NDUgMjAuNjQ1IDk4LjU0NSA0Mi4zNjUgTCAxMDMuODg3IDQyLjM2NSBaIE0gMTM3Ljg3NiA4LjQxNSBDIDE1Ni42NzUgOC40MTUgMTcxLjg2NCAyMy42MDggMTcxLjg2NCA0Mi4zNjUgTCAxNzcuMjA2IDQyLjM2NSBDIDE3Ny4yMDYgMjAuNjQ1IDE1OS42MTUgMy4wNjggMTM3Ljg3NiAzLjA2OCBMIDEzNy44NzYgOC40MTUgWiBNIDE3MS44NjQgNDIuMzY1IEMgMTcxLjg2NCA2MS4xMDIgMTU2LjY3NiA3Ni4yOTYgMTM3Ljg3NiA3Ni4yOTYgTCAxMzcuODc2IDgxLjY0NCBDIDE1OS42MTUgODEuNjQ0IDE3Ny4yMDYgNjQuMDY3IDE3Ny4yMDYgNDIuMzY1IEwgMTcxLjg2NCA0Mi4zNjUgWiIgZmlsbD0iY3VycmVudENvbG9yIiBmaWxsLXJ1bGU9Im5vbnplcm8iPjwvcGF0aD4KPC9zdmc+">
+  </div>
+  <div class="kpis">
+    <div class="kpi"><b>0 / 3 / 1</b><span>R-items Covered / Partially / Not covered</span></div>
+    <div class="kpi"><b>5</b><span>P1 — block Ready for Dev</span></div>
+    <div class="kpi"><b>6</b><span>P2 — close before dev starts</span></div>
+    <div class="kpi"><b>5</b><span>Decisions for the PO (D1–D5)</span></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2><small>Section A</small>Requirement checklist — what "replicate 1.2 / 1.12, keep the scanning" means and where the stories cover it</h2>
+  <div class="tw"><table>
+    <tr><th style="width:40px">Ref</th><th style="width:170px">Requirement</th><th>Description of the expectation</th><th style="width:170px">Where the stories cover it</th><th style="width:110px">Coverage</th><th>Gap &amp; feedback to BA</th><th style="width:50px">Prio</th></tr>
+    <tr><td>R1</td><td>CF 1.16 replicates CF 1.2</td><td>Same shape as the EID rightful-holder step on 761954749: request built from scan + face, result codes saved the same way (MATCH → save GUID and continue; not MATCH → Declined + Terminate screen), same 30 s / 5-retry rule (IB-348 AC4), and the identity ends up <em>settled</em> in EFR as it does in 1.2 Part B.</td><td>AMP-3710 AC4, AC5.1–5.11, AC6, AC7</td><td class="warn">Partially covered</td><td>Request/result-code tables mirror 1.2 well. The settlement half of 1.2 is missing: 1.2 is called with an Account ID and settles in the same call; the story calls 1.16 without one and never settles (F1). Status vocabulary differs from the baseline and from the Confluence page (F2).</td><td><span class="p1">P1</span></td></tr>
+    <tr><td>R2</td><td>CF 1.18 replicates CF 1.12</td><td>Called with the GUID after the identity step, all validation groups stored, 403 / 412 / 5xx handled as in 1.12, report + PDF + signature stored, and the 1.12 derivations reused where the input exists.</td><td>AMP-3711 AC1–AC9</td><td class="warn">Partially covered</td><td>Keyed on the GUID and stores the report — good. But AC3.2 keeps only 2 of the 7 validation groups and uses field names that do not match the Confluence contract (F4); NO MATCH and 403 outcomes have no destination (F3); the trigger skips the settle step the design page requires (F1).</td><td><span class="p1">P1</span></td></tr>
+    <tr><td>R3</td><td>Keep the same scanning</td><td>Reuse the RF-186 pattern exactly: [EFR scan] ON → EFR SDK, OFF → Microblink; face liveness by EFR SDK; RF-6 / RF-16 retry rules; only difference is one data-page image instead of front + back.</td><td>AMP-3710 AC2.1, AC2.2, AC2.3, AC3, AC4</td><td class="warn">Partially covered</td><td>Camera path is the RF-186 pattern. The new "Upload Passport" option is not "the same scanning": it is a third document type on PP-01 that never satisfies the AC2 trigger, and no AC says which engine OCRs an uploaded JPEG (F5). RF-6 / RF-16 retry rules are referenced on the Confluence page but not in the story.</td><td><span class="p1">P1</span></td></tr>
+    <tr><td>R4</td><td>Plugs into the existing journey</td><td>Passport applications must move through the same status list (1.5.4), the same Error List codes (1.5.7), the same queues, and be visible in the Bank Portal like EID applications.</td><td>AMP-3710 IA1–IA3, AMP-3711 IA1–IA4, AC9</td><td class="bad">Not covered</td><td>No end-to-end step table for the passport applicant (what happens to Pre-dedupe, T24 dedupe, Kiya, AECB, IC1.1, Additional Info, OTP after PP-09 — F10). Statuses "Cancelled", "Declined", "EFR Sub-Reason" are not in 1.5.4; 1.5.7 has no 1.16 / 1.18 codes although every audit trail points to it (F2, F11). No Bank Portal impact (F12).</td><td><span class="p2">P2</span></td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2><small>Section B</small>Findings — ordered by severity (P1 first)</h2>
+
+  <div class="finding p1b">
+    <h4>F1 <span class="p1">P1</span> The stories drop the settle step (CF 1.3) that the design page and the screen copy still contain — the flow is undefined between MATCH and CF 1.18</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>Confluence 2122317829 decides D1/D2: "CF 1.16 is called WITHOUT ENQ DE 2 … the onboarding is settled in a separate step via CF 1.3" and PP-08 triggers on "PP-06 settle completed (result code 1 or 2)". AMP-3710 (Context, AC5.11, IA1) says "on MATCH … proceeds directly to CF 1.18"; its journey table has no PP-06; AMP-3711's pre-condition is "CF 1.16 … result code 1 (MATCH)" with no settlement. The bilingual copy posted in the comments still has "PP-06 — Account Settled: Account Created / Account ID" and PP-05 "Check 3: Account ID generated". Three documents, three flows.</dd>
+      <dt>Why it matters</dt><dd>In the EID journey, 1.2 is called with the Account ID and the identity is settled in the same call (761954749 Part B; AMP-2651 now generates the 9-digit ID for it). Per PP-06 on the design page, after a 1.16 MATCH the onboarding "is held in EFR's temporary store under the intermediary GUID" until CF 1.3. Without settling, no Rightful Holder account exists for the passport applicant: IC1.1 (income, IB-348) and the account-level CF 1.19 have nothing to key on, and the temporary GUID has a lifetime nobody has written down. "1.16 = 1.2" is only true if the identity ends up settled.</dd>
+      <dt>What to update</dt><dd>Take decision D1 (Section C). If D1 = settle: add AC5.12 "Generate Account ID and settle via CF 1.3" to AMP-3710 (or a linked story) using the AMP-2651 generator, set AMP-3711 pre-condition to "settle completed with result 1 or 2", and align AC5.11 / IA1 / the journey table / PP-05 and PP-06 screen copy. If D1 = no settle: write that decision into both stories with the EFR confirmation that the GUID stays valid for 1.18 and what its expiry is, and remove PP-06 and "Account ID generated" from the screen copy.</dd>
+      <dt>Ref</dt><dd><span class="ref">2122317829 D1 D2 PP-06 PP-08</span> <span class="ref">761954749 Part B</span> <span class="ref">AMP-2651 UAT Validated</span> <span class="ref">IB-348 SIT Deployed</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p1b">
+    <h4>F2 <span class="p1">P1</span> Three application-status vocabularies for the same outcomes, and a new attribute "EFR Sub-Reason" that exists nowhere</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3710 uses Declined / Cancelled / In Progress + "EFR Sub-Reason" (Routed_to_EID, Existing_Customer, Failed_by_EFR, EFR_Scan_Exhausted, EFR_Timeout …). AMP-3711 uses Cancelled for every failure and Awaiting Credit Approval on success. The design page uses Referred, Insufficient Data, Routed_to_EID, Existing_Customer, Failed_by_EFR as the <em>Application Status</em> itself. The baseline status list (1.5.4) knows Lead, In-progress, Awaiting Compliance Review, Awaiting Credit Approval, Rejected, Blocked, Expired, Approval in Principle …; "Declined" appears only in the EFR 1.2 saving rule on 761954749; "Cancelled" and "Referred" appear in neither.</dd>
+      <dt>Why it matters</dt><dd>Funnel reporting (AMP-3710 IA2), the manual-review routing (F3) and the Bank Portal enquiry all filter on status. A sub-reason that is not a field cannot be reported, shown or audited. The BA's own rule "Routed_to_EID must not be counted as a decline" cannot be implemented without knowing which column carries it.</dd>
+      <dt>What to update</dt><dd>One status table for both stories, every value taken from 1.5.4 (add rows there for the passport steps). Define [EFR Sub-Reason] as an attribute of {Application Detail}: value list, where it is set, shown in Application Enquiry and in the audit-trail [Step Detail]. Decision D5.</dd>
+      <dt>Ref</dt><dd><span class="ref">728531010</span> <span class="ref">761954749 saving rules</span> <span class="ref">2122317829 PP-05 AC2.2</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p1b">
+    <h4>F3 <span class="p1">P1</span> "Route to manual review" and HTTP 403 have no destination; AMP-3711 AC5.2 contradicts itself</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3711 AC5.2: "Do not terminate the journey on HTTP 403. Log the forbidden reason and cancel automatically" — cancel is termination for the customer. The design page says "route to manual review" for the same case. AC3.3: "Any field code = 0 (NO MATCH): route to manual review with the mismatched fields flagged" — no queue, no status, no persona, no screen for the customer who is mid-journey. The same fraud signal (used portrait image) is "Terminate, flag for review" in AMP-3710 AC5.5 code 303 and "Cancelled" with no flag in AMP-3711 AC5.2 code -3.</dd>
+      <dt>Why it matters</dt><dd>The EID baseline is explicit: 1.12 403 codes are Failed (1.5.7 1.12_403.x), IC1.1 403 continues the journey with WPS = 0 (IB-348 AC3). "Manual review" has two real queues in 1.5.4 (Compliance Queue = Awaiting Compliance Review; Credit Queue = Awaiting Credit Approval). A NO MATCH on date of birth is a compliance question, not a credit one.</dd>
+      <dt>What to update</dt><dd>For each of: any field NO MATCH, any field NO RECORD, 403 code 0 / -1 / -2 / -3 / -4 — state status, queue, what the customer sees next, and whether the journey continues (as IC1.1 does) or stops. Remove "cancel automatically" from AC5.2 or remove "do not terminate"; they cannot both stand. Make code 303 (3710) and code -3 (3711) behave the same.</dd>
+      <dt>Ref</dt><dd><span class="ref">755696228 1.12_403</span> <span class="ref">IB-348 AC3</span> <span class="ref">728531010 queues</span> <span class="ref">2122317829 PP-08 AC5</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p1b">
+    <h4>F4 <span class="p1">P1</span> Two API contracts: the stories' field names and the design page's samples do not match, and AMP-3711 keeps 2 of 7 validation groups</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3710 AC5.1 sends <code>Faces[0].Data</code>, <code>Passport.DataPageScan</code>, <code>Passport.MRZ.Line1</code>, <code>Passport.Details.DocCode</code>. The design page sample (spec 1.15.2.B) sends <code>liveCaptureFacialImages[0].liveCaptureFacialImage</code>, <code>passport.passportDataPageDigitization</code>, <code>passport.machineReadableZone.upperMrzLine</code>, <code>passport.passportDetails.documentCode</code>. AMP-3711 AC2 sends <code>intermediaryAccountId</code>, <code>passport.docCode</code>, <code>passport.issueDate</code>; the design page sends <code>intermediaryAccountIdentifierNumber</code>, <code>passportDetails.passportType / passportCode / dateOfIssuance</code>. AMP-3711 AC3.2 lists only <code>passportValidationResult</code> (5 fields) and <code>personalDetailsValidationResult</code> (dateOfBirth); the design page and AMP-3711's own AC8 audit trail describe 7 groups (passport, visa, personal, contact, professional, sponsor, inhabitant). AMP-3711 reads <code>data.reportData / data.pdfCertificate</code>; the sample returns <code>data.dataReport / pdfReport</code>. The design page's PP-08 request table is itself shifted by one row (ENQ DE 2.1 Passport Code → <code>passportDetails.passportType</code>, 2.2 → <code>passportCode</code> …). Both documents claim to be "verified against actual samples".</dd>
+      <dt>Why it matters</dt><dd>Dev will build against one of the two and SIT will fail against the other. If the 2-group contract is the real one, then ENQ DE 3–8 (visa, contact, professional, sponsor, inhabitant) are not validated at all and AC4 / AC9 / IA2 lose their inputs. <code>passportType</code> is in the spec sample and absent from the story. RF-2831 (SIT completed) made passport issue date mandatory in T24 — ENQ DE 2.4 is visual-OCR only (AC3.3 of 3710) and is "Conditional" in 3711: say what happens when it is empty.</dd>
+      <dt>What to update</dt><dd>One contract, pasted from the EFR Postman collection into both stories and the design page (request, 200, 400, 403, 500), with the ENQ/RESP DE numbering next to each JSON path. Fix the shifted rows on the design page. Restore the 7 groups in AC3.2 or state in AC2 which ENQ DE are dropped for Release 1 and why. Add a rule for empty Date of Issuance.</dd>
+      <dt>Ref</dt><dd><span class="ref">2122317829 PP-05 / PP-08 samples</span> <span class="ref">RF-2831 SIT Testing Completed</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p1b">
+    <h4>F5 <span class="p1">P1</span> "Upload Passport" is not the same scanning: it is modelled as a third identity document type, never reaches the AC2 trigger, and has no OCR path</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AC1 saves [Identity Document Type] = the selected option, and the third option is "Upload Passport". AC2 triggers only when [Identity Document Type] = "Passport", so an upload applicant never enters AC2. AC3 runs OCR "when [EFR scan] = ON and the user scans a passport" via the EFR SDK camera flow; no AC says what produces <code>mrz</code>, <code>documentNumber</code>, <code>outputImages.front</code> from a gallery JPEG. The design page PP-01 has two options, not three. RF-186 / RF-6 / RF-16 have no upload path — the EID scan is live SDK capture only.</dd>
+      <dt>Why it matters</dt><dd>A gallery image is a tamper vector the EID flow deliberately does not accept (screen photo, edited image); the only defence is MRZ check-digit validation, which is not specified anywhere. Blur / glare "SDK-level check" (AC2.1b row 4) names no SDK.</dd>
+      <dt>What to update</dt><dd>Decision D2. If upload stays: make it a capture method inside "Passport" (AC2 method 2 already says so — AC1 must not save it as a document type), name the engine that OCRs an uploaded image and returns the same envelope as AC3.1, add MRZ check-digit validation and the fraud rule, and count it in the same 5-attempt limit. If not: remove option 3, AC2.1b, the upload copy and the upload error table from Release 1 and keep the RF-186 scanning as asked.</dd>
+      <dt>Ref</dt><dd><span class="ref">RF-186 SIT Testing Completed</span> <span class="ref">RF-6 / RF-16 SIT Testing Completed</span> <span class="ref">2122317829 PP-01 / PP-02</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F6 <span class="p2">P2</span> Service error and timeout exhaustion cancel the application — a technical fault becomes a customer-terminal outcome</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3710 AC5.7 / AC5.8 and AMP-3711 AC5.4 / AC6 / AC7: after 5 retries on 5xx or timeout → [Application Status] = Cancelled. The design page (PP-05 AC2.3) says "400 and 5xx are recoverable and must not produce an adverse decision against the customer" and routes exhaustion to Insufficient Data + manual review; the story deleted that sentence. 1.5.4 has the Transaction Posting Queue for exactly this: "if there is an Exception issue / System issue with 3rd parties … applications can be placed in this queue", with the Retrigger pattern (1.5.7 codes 1100–1102). AMP-3711 AC5.1 also says a 400 at CF 1.18 leads to "re-scan or re-capture" — PP-08 is a backend step with no screen and the 400 can come from declared contact / professional data that no scan will fix.</dd>
+      <dt>What to update</dt><dd>Decision D4. Exhaustion on 5xx / timeout → Step Status Exceptional Case, application to Transaction Posting Queue with retrigger, status unchanged; no notification to the customer that the application is cancelled. For 400 at 1.18: per error field, either correct the declared field (screen) or route to review; re-scan only for passport-field errors.</dd>
+      <dt>Ref</dt><dd><span class="ref">728531010 Transaction Posting Queue</span> <span class="ref">755696228 1100–1102</span> <span class="ref">IB-348 AC4</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F7 <span class="p2">P2</span> Result code -12 "Existing customer" is terminated, which is the opposite of what the EID flow does with the same person</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3710 AC7.2: -12 → Declined, journey ends, "contact the branch". In the EID journey the same person gets "SETTLED INTO EXISTING ACCOUNT HOLDER IDENTIFIER" at 1.2 Part B and continues; ETB applicants are a normal case of Dedupe check in 1.5.4 ("ETB and active" continues). "Replicate 1.2" means -12 continues to 1.18, not terminate. AC7.2 also says "exact screen copy deferred to UI phase" while the comment of 18 Sep 13:47 already publishes the PP-10 copy.</dd>
+      <dt>What to update</dt><dd>Decision D3. Recommended: -12 → save GUID, continue to settle / 1.18 like code 1, [Relationship Status] = ETB, no termination screen; keep -13 Blocked as the only termination in AC7. If Business insists on termination, write the reason and the branch/support path in the AC and remove "deferred".</dd>
+      <dt>Ref</dt><dd><span class="ref">761954749 Part B</span> <span class="ref">728531010 Dedupe check</span> <span class="ref">2122317829 PP-10 AC3</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F8 <span class="p2">P2</span> Result code -11 "route to EID journey" depends on a mid-flight handoff nobody has raised</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AC6.2 navigates to {Scan EID} and retains "face-print where the SDK permits"; AC6.3 reuses the face-print "where the temporary key remains valid"; IA3 admits the EID journey must "accept a mid-flight handoff" — no ticket, no owner. The preserved GUID (AC6.1) is orphaned: the EID journey calls 1.2 with an Account ID and settles a new identity.</dd>
+      <dt>What to update</dt><dd>Release 1: show PP-07, set [Identity Document Type] = "Emirates ID", restart eKYC at Scan EID with a fresh face capture (no reuse), do not keep the passport GUID. Raise the handoff / reuse as a separate linked story if wanted later. Drop AC6.3 or give it the temporary-key validity value.</dd>
+      <dt>Ref</dt><dd><span class="ref">2122317829 PP-07</span> <span class="ref">RF-186</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F9 <span class="p2">P2</span> The "pre-configured window" for omitting the face image is an undefined parameter, and the face image has no storage rule</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3711 AC2.1 omits ENQ DE 1 "if called within the pre-configured window after CF 1.16" — no name, no value, no owner. If settle (F1) and any review step sit between 1.16 and 1.18, the window is likely exceeded, so the 250 KB face image and its hash must be stored between PP-04 and PP-08: where, how long, encrypted or not, purged when.</dd>
+      <dt>What to update</dt><dd>Add [EFR face grace window] to the configuration list with its default and the rule "store face-print + hash in {Application Detail} until CF 1.18 returns 200, then purge"; audit the purge.</dd>
+      <dt>Ref</dt><dd><span class="ref">2122317829 PP-08 AC2</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F10 <span class="p2">P2</span> The passport applicant's journey after PP-09 is not written: every EID step that keys on the Emirates ID is silently undefined</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>AMP-3711 AC9.2 sends every passport application to Awaiting Credit Approval straight after CF 1.18. In 1.5.4 the EID applicant passes Pre-dedupe (Rosette, keyed on name / EID), Dedupe (T24 by Emirates ID — error E-124540 "No Customer Found on this Emirates Id"), Freeze &amp; Block, Kiya, AECB, IC1.1 (needs Account ID + Registrant Number), Input Additional Info, Marketing consent + T&amp;C, OTP, Lexis Nexis before any queue. IA3 covers only AECB. AC9.3's audit trail lists "derived fields: income, employment, age, residency status" that AC9.1 says are not derivable.</dd>
+      <dt>What to update</dt><dd>A step table for the passport journey in the format of 1.5.4: for each EID step — same / skipped (why) / replaced by. Then AC9.2 can name the real next step. Fix AC9.3 to list only what is derived.</dd>
+      <dt>Ref</dt><dd><span class="ref">728531010</span> <span class="ref">IB-348</span> <span class="ref">755696228 1002–1010</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding p2b">
+    <h4>F11 <span class="p2">P2</span> Bank Portal impact is absent although both stories sit under the Bank Portal epics</h4>
+    <dl>
+      <dt>What is wrong</dt><dd>Parent AMP-1783 "SMBP V3 – Bank Portal" and link AMP-3705 "[PROD] Release 5 of Bank Portal" (both To Do). Neither story states what Application Enquiry shows for a passport applicant: [Identity Document Type], passport fields in place of EID fields, the 1.16 result (today the portal shows "EID Authenticity &amp; Rightful Holder" — AMP-1641), the 1.18 validation results, PDF certificate download, and the new sub-reasons.</dd>
+      <dt>What to update</dt><dd>Add IA "Bank Portal – Application Enquiry / Audit trail" to both stories with the list of new or relabelled fields, or link the portal story that carries them.</dd>
+      <dt>Ref</dt><dd><span class="ref">AMP-1783 To Do</span> <span class="ref">AMP-3705 To Do</span> <span class="ref">AMP-1641 UAT Validated</span></dd>
+    </dl>
+  </div>
+
+  <div class="finding">
+    <h4>F12 <span class="p3">P3</span> Story hygiene</h4>
+    <dl>
+      <dt>Items</dt><dd>
+        (a) AMP-3710 AC2.4, AC3.5 and AC4.4 "Integration trigger" are empty headings.
+        (b) "Phase 1 → Phase 2 → Phase 4 → Phase 5": there is no Phase 3.
+        (c) AC8.2 bilingual table lives only in two comments (one titled AC9.2, one AC8.2) and includes PP-06 and "Account ID generated" that the description removed; move the final table into the description.
+        (d) "US-EFR-01 / US-EFR-02" should be the Jira keys AMP-3710 / AMP-3711.
+        (e) 1.5.7 Error List has no 1.16_ / 1.18_ rows, yet every audit trail says "[Step Detail] = refer to Error List"; extend the page with the AC5.3–5.7 and AC5.x codes before dev.
+        (f) AMP-3711 AC5.4 lists -1400 / -1500 which are not in AMP-3710 AC5.7; use one service-error list.
+        (g) Spec version reads "Sep 2026" in the stories and "Release 1.15.2.B (22 Sep 2025)" on the design page.
+        (h) AMP-3710 AC5.3 code 2 UNCERTAIN → re-capture ×5 differs from the 1.2 baseline where UNCERTAIN is Failed (1.5.7 1.2_200.2); fine if intended, say so.
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<div class="card">
+  <h2><small>Section C</small>Decisions for the PO — options with one recommendation each</h2>
+  <div class="tw"><table>
+    <tr><th style="width:40px">#</th><th style="width:220px">Decision</th><th>Options</th><th style="width:300px">Recommendation</th></tr>
+    <tr><td>D1</td><td>Settle the passport identity or not (F1)</td><td>(a) 1.16 without Account ID → generate ID (AMP-2651) → CF 1.3 settle → 1.18 with GUID — the design page's D1/D2. (b) 1.16 <em>with</em> a generated Account ID exactly like 1.2, then account-level CF 1.19 instead of 1.18. (c) 1.16 → 1.18 with no settlement (current stories).</td><td><b>(a)</b> — it is the closest to "1.16 = 1.2" (identity ends up settled, GUID reused for the data-element step as 1.12 does) and it is already agreed on the design page.</td></tr>
+    <tr><td>D2</td><td>"Upload Passport" in Release 1 (F5)</td><td>(a) Defer; camera scan only, same as RF-186. (b) Keep as a capture method under Passport with a named OCR engine for images, MRZ check-digit validation and the same 5-attempt limit.</td><td><b>(a)</b> — "keep the same scanning" was the requirement; upload has no engine and no fraud rule today.</td></tr>
+    <tr><td>D3</td><td>Result code -12 existing customer (F7)</td><td>(a) Continue as ETB → settle / 1.18, like 1.2 Part B code 6. (b) Terminate with PP-10 (current).</td><td><b>(a)</b> — same person, same outcome as the EID flow; termination loses an identified customer.</td></tr>
+    <tr><td>D4</td><td>5xx / timeout exhaustion (F6)</td><td>(a) Exceptional Case → Transaction Posting Queue + retrigger, status unchanged. (b) Cancelled (current).</td><td><b>(a)</b> — matches 1.5.4 and the design page's "no adverse decision" rule.</td></tr>
+    <tr><td>D5</td><td>Status vocabulary (F2)</td><td>(a) Statuses from 1.5.4 only + new attribute [EFR Sub-Reason] on {Application Detail}, shown in Enquiry. (b) New statuses Referred / Insufficient Data / Cancelled added to the status model.</td><td><b>(a)</b> — no new status means no change to enquiry filters, reports and Camunda; the sub-reason gives reporting what IA2 asks for.</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2><small>Section D</small>How the flow should read after D1–D5 — and the 1.2 / 1.12 mirror</h2>
+  <div class="flow">
+    <div class="step"><b>PP-01</b>Select document = Passport (2 options)</div>
+    <div class="step"><b>PP-02 / 03</b>Scan data page — EFR SDK ([EFR scan] ON) or Microblink; OCR, D7 source rule</div>
+    <div class="step"><b>PP-04</b>Face capture — EFR SDK, CF 1.8 key</div>
+    <div class="step"><b>PP-05</b>CF 1.16 without Account ID → GUID</div>
+    <div class="step new"><b>PP-06 (add)</b>Generate 9-digit ID (AMP-2651) → CF 1.3 settle</div>
+    <div class="step"><b>PP-08</b>CF 1.18 with GUID — 7 groups, report + PDF + signature</div>
+    <div class="step"><b>PP-09</b>Derivation where held → next journey step per step table</div>
+  </div>
+  <div class="tw"><table>
+    <tr><th style="width:230px">EID journey (761954749)</th><th>Passport equivalent</th><th style="width:150px">Status in the stories</th></tr>
+    <tr><td>Scan EID front + back (RF-186)</td><td>Scan data page, one image (AC2, AC3)</td><td class="ok">Mirrored</td></tr>
+    <tr><td>Face liveness, EFR SDK</td><td>AC4 — same SDK, same DE 1.1 / 1.2 / 1.3</td><td class="ok">Mirrored</td></tr>
+    <tr><td>1.2 with Account ID (AMP-2651) → MATCH saves GUID, settled in the same call</td><td>1.16 without Account ID → GUID; settle via CF 1.3</td><td class="bad">Settle missing (F1)</td></tr>
+    <tr><td>Not MATCH → Declined + Terminate screen</td><td>0 / -1 / 4 → Declined + terminate (AC5.3)</td><td class="ok">Mirrored</td></tr>
+    <tr><td>Settled into existing holder → continue (ETB)</td><td>-12 → Declined + PP-10</td><td class="bad">Opposite (F7)</td></tr>
+    <tr><td>5xx / timeout ×5 → continue / Transaction Posting Queue</td><td>→ Cancelled</td><td class="warn">Diverges (F6)</td></tr>
+    <tr><td>1.12 with GUID → 55 data points stored, IP-in-UAE check</td><td>1.18 with GUID → 7 validation groups + report</td><td class="warn">2 of 7 groups (F4)</td></tr>
+    <tr><td>1.12 403 → Failed (1.5.7)</td><td>403 → "do not terminate … cancel"</td><td class="bad">Undefined (F3)</td></tr>
+    <tr><td>Derivations 1–3, Length of Service, NTC flag</td><td>Only where 1.18 holds visa / sponsor / inhabitant; manual underwriting</td><td class="warn">By design — needs step table (F10)</td></tr>
+  </table></div>
+</div>
+
+<div class="card">
+  <h2><small>Section E</small>Feedback note — ready to paste as a Jira comment (not posted; needs your go)</h2>
+  <div class="note">
+<pre>@Kha Pham Thuc  Feedbacks on AMP-3710 / AMP-3711 (review against EFR 1.2 / 1.12 — 761954749)
+
+1. Settle step missing. The design page (2122317829 D1/D2, PP-06) settles the identity via CF 1.3 after a 1.16 MATCH; both stories go straight to 1.18 and the bilingual copy still shows "Account Settled / Account ID generated". Decide settle vs no settle, then align AC5.11, IA1, AMP-3711 pre-condition and the PP-05/PP-06 copy. Ref: 761954749 Part B, AMP-2651.
+2. Status vocabulary. Declined / Cancelled / In Progress + "EFR Sub-Reason" (3710), Cancelled everywhere (3711), Referred / Insufficient Data (design page) — one table, values from 1.5.4 (728531010), and define [EFR Sub-Reason] as a field of {Application Detail} shown in Enquiry.
+3. Manual review and 403. AMP-3711 AC5.2 says "do not terminate" and "cancel automatically" in the same AC. For NO MATCH, NO RECORD and each 403 code: status, queue (Compliance / Credit), customer screen, journey continues or stops. Code 303 (3710) and -3 (3711) must behave the same. Ref: 1.5.7 1.12_403, IB-348 AC3.
+4. One API contract. Field paths in 3710 AC5.1 / 3711 AC2 differ from the design-page samples; 3711 AC3.2 keeps 2 of 7 validation groups while AC8 audits 7; reportData/pdfCertificate vs dataReport/pdfReport. Paste the Postman request/response into both stories and fix the shifted PP-08 table. Add the rule for empty Date of Issuance (RF-2831 made it mandatory in T24).
+5. Upload Passport. It is saved as a third document type (AC1) so it never meets the AC2 trigger ("= Passport"), and no AC says which engine OCRs an uploaded JPEG. Either defer to keep the RF-186 scanning, or model it as a capture method with engine, MRZ check-digit validation and fraud rule.
+6. 5xx / timeout exhaustion → Cancelled contradicts "no adverse decision" and 1.5.4's Transaction Posting Queue + retrigger. Also a 400 at 1.18 cannot be fixed by "re-scan" — it is a backend step.
+7. -12 existing customer is terminated; in 1.2 Part B the same person is settled into the existing holder and continues. Recommend continue as ETB.
+8. -11 route to EID needs a handoff story; for Release 1 restart at Scan EID without reusing face-print or GUID. Drop AC6.3 or give the temporary-key validity.
+9. "Pre-configured window" in 3711 AC2.1 has no name or value; define it and the face-image storage/purge rule.
+10. Journey after PP-09: step table in the 1.5.4 format (Pre-dedupe, T24 dedupe, Kiya, AECB, IC1.1, Additional Info, OTP …) — same / skipped / replaced. Fix AC9.3 (lists derived fields AC9.1 says do not exist).
+11. Bank Portal impact (AMP-1783 / AMP-3705): Application Enquiry fields for passport, 1.16/1.18 results, PDF download, sub-reasons.
+12. Hygiene: empty AC2.4 / AC3.5 / AC4.4; no Phase 3; AC8.2 table only in comments; US-EFR-01/02 → keys; extend 1.5.7 with 1.16_/1.18_ codes; one service-error list; spec version date.
+
+| Ref | Requirement | Mapping | Coverage | Gap | Prio |
+| R1 | 1.16 replicates 1.2 | AC4–AC7 | Partially covered | settle missing, status vocabulary | P1 |
+| R2 | 1.18 replicates 1.12 | 3711 AC1–AC9 | Partially covered | 2/7 groups, contract mismatch, no destination for NO MATCH / 403 | P1 |
+| R3 | Same scanning | AC2–AC4 | Partially covered | upload path undefined, RF-6/16 not referenced | P1 |
+| R4 | Fits the journey | IA1–IA4, AC9 | Not covered | no step table, statuses not in 1.5.4, no portal impact | P2 |
+
+→ Close 1–5 first, then we move both to Ready for Dev.
+cc: @CPO</pre>
+  </div>
+</div>
+
+<div class="banner">Next action: take D1–D5, then the BA closes F1–F5 in one pass and re-labels the statuses; I re-review against a fresh snapshot before either story goes to Ready for Dev.<small>Nothing has been written to Jira. Say "post it" for the Section E comment, or name the items to change first.</small></div>
+
+<div class="card foot">Verification: AMP-3710 and AMP-3711 read in full (descriptions, comments of 18 Sep 2026, links); Confluence 761954749, 2122317829, 728531010, 755696228 read in full; RF-186 (SIT Testing Completed), RF-6 / RF-16 (SIT Testing Completed), AMP-2651 (UAT Validated), IB-348 (SIT Deployed), AMP-3705 / AMP-1783 (To Do), RF-2831 (SIT Testing Completed), AMP-1641 (UAT Validated) opened on 20 Sep 2026. Precedent search ran with three vocabularies (passport / 1.16 / 1.18 / settle; rightful / EFR 1.2 / EFR 1.12 / face liveness / GUID); no passport-journey precedent exists in AMP, ADIB, RF, IB or ACP.</div>
+
+</div>
+<div class="strip">This document is classified as INTERNAL &amp; WHITELISTED | Sharing allowed only with approved external domains</div>
+</body>
+</html>
