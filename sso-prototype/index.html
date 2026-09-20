@@ -224,6 +224,13 @@ h1{margin:0;text-align:center;font-size:clamp(22px,4vw,30px);font-weight:800;tex
 /* v16c */
 .form .in.ro code,.form .in.ro{word-break:break-all;line-height:1.45}
 .form .in.ro{min-height:56px;display:flex;align-items:center}
+
+/* v18: toggle anchored right; audit trail / pending badge sits directly under it */
+.row .r{flex-wrap:nowrap;justify-content:flex-end}
+.row .r .swcol{display:inline-flex;flex-direction:column;align-items:flex-end;gap:6px}
+.row .r .meta{text-align:right;white-space:nowrap}
+.row .r .swgrp{display:inline-flex;align-items:center;gap:12px;flex:0 0 auto;width:92px;justify-content:flex-start}
+.row .r .swlab{font-weight:800}
 </style></head><body style="margin:0">
 
 <!-- ===================== LOGIN ===================== -->
@@ -414,9 +421,11 @@ function renderSettings(c){
     <div class="row" style="border-bottom:0"><div class="t"><h4>Single sign-on</h4></div><div class="r" id="ssoRow"></div></div>
     <div id="connPanel" class="sect"></div>
   </section>`;
-  $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
-    (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval')}</span>`
-         :`<span class="small muted">Last updated by ${S.updatedBy||'longlh@appro.ae'} · ${S.since||'01/09/2026 09:14'}</span>`);
+  $('#ssoRow').innerHTML=
+    `<span class="swcol"><span class="swgrp"><button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small swlab">${on?'On':'Off'}</span></span>`+
+    (pend?`<span class="small muted meta">${pill('p-yel','Pending Checker approval')}</span>`
+         :`<span class="small muted meta">Last updated by ${S.updatedBy||'longlh@appro.ae'} · ${S.since||'01/09/2026 09:14'}</span>`)+
+    `</span>`;
   renderConn();
   const t=$('#ssoSwitch');if(t&&!pend)t.onclick=()=>openModal(on?'off':'on');
   document.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>go('user',x.dataset.user));
