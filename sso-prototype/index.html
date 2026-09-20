@@ -258,7 +258,7 @@ const USERS={
 };
 // what the bank directory contains for the portal role (what a sync would see)
 const DIRECTORY=['huyen@appro.ae','kha@appro.ae','admin@appro.ae','long.le@appro.ae'];
-const S={sso:'on',pending:null,lastSync:'18/09/2026 09:12 · 12 users updated · 1 conflict',secret:{on:'03/09/2026',by:'admin@appro.ae'},secretPending:null,user:null,showPwd:false,page:'settings',viewUser:null,syncResult:null,hl:null,
+const S={sso:'on',pending:null,lastSync:'18/09/2026 09:12',secret:{on:'03/09/2026',by:'admin@appro.ae'},secretPending:null,user:null,showPwd:false,page:'settings',viewUser:null,syncResult:null,hl:null,
  log:[{ts:'18/09/2026 09:12',t:'Automatic sync completed · 12 users updated · 1 conflict'},{ts:'18/09/2026 09:12',t:'Conflict: admin@appro.ae found in the directory but is a break-glass account · kept password-based · not converted'},{ts:'18/09/2026 09:12',t:'long.le@appro.ae provisioned from the directory · single sign-on · no portal password'},{ts:'18/09/2026 09:12',t:'huyen@appro.ae marked SSO-ready · converts at the first successful single sign-on'},{ts:'01/09/2026 09:12',t:'kha@appro.ae converted to single sign-on at first single sign-on · portal password removed'},{ts:'01/09/2026 08:30',t:'Single sign-on turned On · approved by longlh@appro.ae (CHK-2026-0871)'}]};
 const EYE='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
 const EYEOFF='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8099" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 5.2A10.4 10.4 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.8 8.6 2 12 2 12s4 7 10 7c1.5 0 2.9-.3 4.1-.8"/></svg>';
@@ -359,8 +359,8 @@ function renderSettings(c){
   const on=S.sso==='on',pend=S.pending;
   c.innerHTML=`<section class="panel">
     <div class="ph"><div><h3>Sign-in Settings</h3><div class="desc muted">Portal accounts (username + password) always work. Single sign-on lets staff in your organisation’s directory log in with their own credentials.</div></div></div>
-    <div class="row"><div class="t"><h4>Single sign-on</h4><p>Turning it on or off requires Checker approval.</p></div><div class="r" id="ssoRow"></div></div>
-    <div class="row"><div class="t"><h4>Directory sync</h4><p>Roles and users sync automatically with your organisation’s directory. No manual action is needed.</p></div><div class="r" id="syncRow"></div></div>
+    <div class="row"><div class="t"><h4>Single sign-on</h4></div><div class="r" id="ssoRow"></div></div>
+    <div class="row"><div class="t"><h4>Directory sync</h4><p>Roles and users sync automatically with your organisation’s directory.</p></div><div class="r" id="syncRow"></div></div>
   </section>
   <section class="panel" id="connPanel"></section>`;
   $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
