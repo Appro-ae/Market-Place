@@ -365,7 +365,7 @@ function renderSettings(c){
   <section class="panel" id="connPanel"></section>`;
   $('#ssoRow').innerHTML=`<button type="button" class="sw ${on?'on':''} ${pend?'dis':''}" id="ssoSwitch" role="switch" aria-checked="${on}" aria-label="Single sign-on" ${pend?'disabled':''}><span class="knob"></span></button><span class="small" style="font-weight:800;min-width:26px">${on?'On':'Off'}</span>`+
     (pend?`<span class="small muted">${pill('p-yel','Pending Checker approval · '+pend.id)}</span>`
-         :`<span class="small muted">Since ${S.since||'01/09/2026'} · approved by longlh@appro.ae</span>`);
+         :`<span class="small muted">Last updated by ${S.updatedBy||'longlh@appro.ae'} · ${S.since||'01/09/2026'}</span>`);
   $('#syncRow').innerHTML= on?`<span class="pill p-green">Automatic</span><span class="small muted">Last sync ${S.lastSync}</span>`
                              :`<span class="pill p-lav">Paused</span><span class="small muted">Resumes when single sign-on is turned on</span>`;
   renderConn();
@@ -489,7 +489,7 @@ function renderDemo(){
       (!S.pending&&!S.secretPending?`<div class="muted">No requests waiting.</div>`:'')+
       `<div class="muted" style="font-size:12px;line-height:1.45"><b>Try:</b> Sign-in Settings → audit trail (automatic sync, break-glass conflict) · User Management → Add User with kha@appro.ae (refused).</div>`+
       `<button class="dbtn" type="button" id="dReset">Reset prototype</button>`;
-    const A=$('#dApprove');if(A)A.onclick=()=>{S.sso=S.pending.to;S.since=now().slice(0,10);logAdd(`Single sign-on turned ${S.sso==='on'?'On':'Off'} · approved by longlh@appro.ae (${S.pending.id})`);S.pending=null;renderPortal();toast('Checker approved · single sign-on is now '+S.sso)};
+    const A=$('#dApprove');if(A)A.onclick=()=>{S.sso=S.pending.to;S.since=now().slice(0,10);S.updatedBy=S.user;logAdd(`Single sign-on turned ${S.sso==='on'?'On':'Off'} · approved by longlh@appro.ae (${S.pending.id})`);S.pending=null;renderPortal();toast('Checker approved · single sign-on is now '+S.sso)};
     const R=$('#dReject');if(R)R.onclick=()=>{logAdd(`Turn-${S.pending.to} request ${S.pending.id} rejected by longlh@appro.ae`);S.pending=null;renderPortal();toast('Checker rejected the request')};
     const AS=$('#dApproveS');if(AS)AS.onclick=()=>{S.secret={on:now().slice(0,10),by:S.user};logAdd(`Client secret replaced · approved by longlh@appro.ae (${S.secretPending})`);S.secretPending=null;S.connMode='view';renderPortal();toast('Checker approved · client secret updated')};
     const RS=$('#dRejectS');if(RS)RS.onclick=()=>{S.secretPending=null;renderPortal();toast('Checker rejected the request')};
