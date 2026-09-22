@@ -4,10 +4,13 @@ description: >-
   Hailey BA skill — Set 1 (US/BRD). Produce Reem Bank (RF project) user
   stories and BRDs the way Hailey (Huyen, Appro PO) works: mimic the
   cancellation-house template, composite screenshots over the real portal,
-  update decisions directly into the relevant AC, and never overwrite her
-  manual edits. Use whenever drafting, updating or reviewing an RF user
-  story, BRD, acceptance criteria, screen set or Jira description for the
-  Reem Bank Super Portal / customer journey.
+  update decisions directly into the relevant AC, never overwrite her
+  manual edits, mark post-review changes in purple, and answer bank
+  stakeholder feedback with classified, precedent-backed positions. Use
+  whenever drafting, updating or reviewing an RF user story, BRD,
+  acceptance criteria, screen set, Jira description, or a response to
+  bank-side requirements for the Reem Bank Super Portal / customer
+  journey.
 ---
 
 # Hailey BA skill — Set 1 (US/BRD)
@@ -22,7 +25,10 @@ requested or corrected explicitly.
    Hailey asks for something that contradicts the actual reference (a
    ticket like RF-2365, a knowledge-pack rule, live portal behaviour),
    say so with the evidence FIRST, then act on her call. Never silently
-   comply with an instruction that the source contradicts.
+   comply with an instruction that the source contradicts. The same rule
+   applies in reverse to stakeholder feedback that contradicts her
+   approved decisions — flag it to her with the source before anything
+   changes (see "Bank stakeholder feedback").
 2. **Never overwrite her manual edits.** A Jira description update
    replaces the whole description — it wipes screenshots she placed
    inline and any text she edited. Once she has touched a ticket: fetch
@@ -47,6 +53,17 @@ requested or corrected explicitly.
    by number. Fold her answers into the spec the same day. The US carries
    no Open Questions section and no "PO decisions" meta-section —
    decisions are written directly into the AC they govern.
+6. **Post-review changes go purple.** Once she has personally reviewed a
+   version, every later change to the ticket is highlighted in purple
+   (`#6554C0`) with an italic intro note — "Updated DD/MM — changes since
+   the last review are highlighted in purple." — and the dev lead is
+   tagged in a comment summarising the deltas, calling out anything that
+   touches their subtask. A screen referenced in text but not yet
+   attached is labelled honestly ("in the latest screens zip").
+7. **Stakeholder feedback never rewrites the baseline by itself.**
+   Bank-management feedback is acknowledged, classified and answered —
+   but the PO decides what enters the BRD/US/ticket. Hold all document
+   edits until she directs which items land.
 
 ## BRD recipe
 
@@ -91,6 +108,61 @@ Out of scope. Maker–checker mirrors the cancellation trilogy
 bundled (RF-2781/2785 precedent), checker view read-only except the
 decision, Comments tab default so the reason is seen first.
 
+## Jira description updates (ADF mechanics)
+
+- Markdown cannot express colour, and a full-description rewrite destroys
+  inline media — so a post-review update is built as a **complete ADF
+  document** pushed with `contentFormat: "adf"`.
+- **Fetch the live description first** and carry over, verbatim and in
+  her exact positions: every media node (`type: "file"`, its `id`,
+  `collection: ""`, `width`/`height` — the ids are extractable from the
+  blob URLs in a markdown fetch) and every text edit she made.
+- **ADF mark rule:** `code` combines only with `link`. A `code` +
+  `textColor` combination makes Jira reject the ENTIRE edit with a bare
+  `INVALID_INPUT` — purple filenames drop the code mark and keep the
+  colour. Before pushing, census the mark combinations and media nodes
+  in the payload; after pushing, verify sentinels (key phrases, media
+  count) in the response.
+- Comments that tag people use an ADF `mention` node with the person's
+  real `accountId` (look it up — never guess), e.g. the dev-lead delta
+  summary of rule 6. Jira comments carry no attribution footers.
+- The Atlassian connector cannot upload attachments — attachments are
+  always a Hailey drag-drop; deliver the files named exactly as the
+  ticket references them.
+
+## Bank stakeholder feedback (management asks)
+
+How to answer a consolidated-requirements email from the bank side (the
+Head-of-Retail pattern: a numbered table + "confirm each item, no CRs
+after sign-off"):
+
+- **Answer in THEIR format.** Mirror their numbering, their table layout
+  (even their border/zebra styling) and their classification vocabulary.
+  If they ask for Covered / Existing / Configuration / Development /
+  Dependency, respond in exactly those terms — adding **"Decision
+  required — <owner>"** where a call is needed.
+- **Classification-first mindset.** Every item maps to: Covered (cite
+  WHERE in the baseline), Development (to be detailed in the revised
+  BRD), Configuration, Dependency (name the ticket or stream), or a
+  Decision with a named owning authority. State limitations,
+  assumptions and exclusions transparently — that classification is
+  also the shield against "everything reasonably required is in scope,
+  no future CRs" framings: tie scope-completeness to the transparent
+  item-by-item exercise, never give a blanket commitment.
+- **Defend approved design with precedent, don't concede unilaterally.**
+  When feedback contradicts an approved decision (e.g. the revert
+  timeout mirrors the approved RF-2365 cancellation timeout), cite the
+  precedent, present 2–3 options, and route the call to its owning
+  authority (Credit/Risk) — and flag the conflict to Hailey with the
+  source reference (golden rules 1 and 7).
+- **Commit to a dated deliverable** (item-by-item response matrix +
+  revised BRD) — leave the date as a bracketed placeholder for Hailey
+  to confirm, and never invent commitments she hasn't made.
+- **Email craft:** match her voice ("Dear <name>," … "Thanks and Best
+  regards, Hailey"); suggest Reply-All so the bank CC list keeps
+  visibility; when the mail connector is read-only, deliver the draft
+  as a paste-ready HTML file (tables survive the Outlook paste).
+
 ## Emails / Communication Setup
 
 - Label the audience in every template table: **Email (Bank)** or
@@ -116,7 +188,9 @@ decision, Comments tab default so the reason is seen first.
   the same names in the repo, the BRD, the ticket text and the zip.
 - Deliver all screens as **one zip** for drag-drop onto the ticket (the
   Atlassian connector cannot upload attachments); embed them inline in
-  the repo US so GitHub renders them.
+  the repo US so GitHub renders them. When she asks for specific screens
+  to attach, re-send them as individually named PNGs, and embed each one
+  inline right next to the AC that references it.
 - The flow diagram is draw.io style (green START, white circles/
   diamonds, amber system-action node) and mirrors the reference ticket's
   diagram layout.
@@ -128,6 +202,8 @@ decision, Comments tab default so the reason is seen first.
   permission, enquiry). Put the ticket-mapped list in the US
   (Dependencies section); fold only generic, unticketed clauses into the
   BRD impact table.
+- After her personal review: every further change lands purple in the
+  ticket, with the dev-lead tag comment (golden rule 6).
 - Deliverables checklist: BRD .docx + .pdf (dated cover) · US markdown
   in repo (images inline) + Jira description in sync · screens zip ·
   everything committed and pushed · files sent to Hailey in chat.
