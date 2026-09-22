@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 400;
+    src: url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 500;
+    src: url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 600;
+    src: url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 700;
+    src: url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 760px; height: 560px; }
+  body {
+    background: #222222;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  .modal {
+    position: absolute;
+    left: 106px;
+    top: 49px;
+    width: 548px;
+    height: 462px;
+    background: #F6FCFF;
+    border-radius: 20px;
+    padding: 0 35px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+  .title {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 40px;
+    color: #001726;
+    letter-spacing: 0.1px;
+  }
+  .subtitle {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #959B9E;
+    line-height: 18px;
+  }
+  .divider {
+    margin-top: 20px;
+    height: 3px;
+    background: #F3F7F9;
+    border-radius: 2px;
+  }
+  .label {
+    margin-top: 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2F3133;
+  }
+  .label .star { color: #DC3453; font-weight: 600; }
+  .textarea {
+    margin-top: 10px;
+    width: 478px;
+    height: 126px;
+    background: #FFFFFF;
+    border: 1px solid #E3E8EB;
+    border-radius: 8px;
+    padding: 18px 21px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #626567;
+    line-height: 20px;
+  }
+  .buttons {
+    position: absolute;
+    left: 35px;
+    right: 35px;
+    bottom: 36px;
+    display: flex;
+    gap: 12px;
+  }
+  .btn {
+    width: 233px;
+    height: 52px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .btn-outline {
+    border: 1.5px solid #9DC7E6;
+    background: transparent;
+    color: #0072BC;
+  }
+  .btn-fill {
+    background: #0072BC;
+    color: #FFFFFF;
+    border: none;
+  }
+</style>
+</head>
+<body>
+  <div class="modal">
+    <div class="title">Are you sure you want to revert<br>the Application?</div>
+    <div class="subtitle">The request will be sent to the Revert Queue for Checker approval.</div>
+    <div class="divider"></div>
+    <div class="label">Revert Reason <span class="star">*</span></div>
+    <div class="textarea">Enter your comment</div>
+    <div class="buttons">
+      <div class="btn btn-outline">Back</div>
+      <div class="btn btn-fill">Yes, Revert</div>
+    </div>
+  </div>
+</body>
+</html>

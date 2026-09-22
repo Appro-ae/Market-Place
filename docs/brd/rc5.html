@@ -1,0 +1,84 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>rc5</title><style>
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
+html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+.cover{position:absolute;left:158px;top:123px;width:1723px;height:767px;background:#FFFFFF;}
+/* accordion rows */
+.acc{position:absolute;left:177px;width:1681.5px;height:59px;border-radius:8px;background:#E6F1F8;display:flex;align-items:center;}
+.acc .t{margin-left:16px;font-size:16.75px;font-weight:600;color:#0D0D0D;letter-spacing:0.1px;position:relative;top:0.5px;}
+.acc svg,.hdr svg{position:absolute;right:19px;top:50%;transform:translateY(-50%);}
+.hdr{position:absolute;left:177px;top:207.5px;width:1681.5px;height:58.5px;border-radius:8px;background:#008AAB;display:flex;align-items:center;}
+.hdr .t{margin-left:16px;font-size:16.75px;font-weight:600;color:#FFFFFF;letter-spacing:0.1px;position:relative;top:0.5px;}
+#enquiry{top:124px;}
+#usersmgmt{top:799px;}
+/* submenu */
+.smenu{position:absolute;left:177px;top:283px;width:282.5px;}
+.srow{position:relative;width:282.5px;height:28px;display:flex;align-items:center;}
+.srow .t{margin-left:17px;font-size:13px;font-weight:600;color:#0D0D0D;}
+.srow svg{position:absolute;right:22px;top:50%;transform:translateY(-50%);}
+.srow.sel{background:#008AAB;border-radius:8px;height:30px;}
+.srow.sel .t{color:#FFFFFF;}
+.sbar{position:absolute;left:452px;top:288px;width:4px;height:112px;border-radius:2px;background:#D5DFE6;}
+/* right area */
+.cb{position:absolute;width:17px;height:17px;box-sizing:border-box;border-radius:4.5px;}
+.cb.on{background:#008AAB;}
+.cb svg{position:absolute;left:0;top:0;}
+.lbl{position:absolute;font-size:13.25px;font-weight:400;color:#0D0D0D;line-height:17px;}
+.hdiv{position:absolute;left:484px;top:329px;width:1350.5px;height:1.5px;background:#E6F1F8;}
+.vdiv{position:absolute;left:923px;top:329px;width:1px;height:76px;background:#E6F1F8;}
+</style></head><body>
+<img class="base" src="/tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/shots/screenshots/43-add-role-permissions-scrolled.png">
+<div class="cover"></div>
+
+<!-- collapsed: Enquiry -->
+<div class="acc" id="enquiry"><span class="t">Enquiry</span>
+<svg width="17" height="9" viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<!-- expanded: Manually Queue -->
+<div class="hdr"><span class="t">Manually Queue</span>
+<svg width="17" height="9" viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<div class="smenu" id="smenu"></div>
+<div class="sbar"></div>
+
+<!-- right area -->
+<div class="cb on" style="left:486px;top:292.5px;"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polyline points="4,8.8 7.2,12 13,5.8" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="lbl" style="left:523.5px;top:292px;">Select All</div>
+<div class="hdiv"></div>
+<div class="vdiv"></div>
+
+<div class="cb on" style="left:486px;top:349.5px;"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polyline points="4,8.8 7.2,12 13,5.8" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="lbl" style="left:523.5px;top:348px;">[Credit Card] View Application</div>
+<div class="cb on" style="left:486px;top:397.5px;"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polyline points="4,8.8 7.2,12 13,5.8" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="lbl" style="left:523.5px;top:396px;">[Credit Card] Evaluate Application</div>
+
+<div class="cb on" style="left:967.5px;top:349.5px;"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polyline points="4,8.8 7.2,12 13,5.8" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="lbl" style="left:1005px;top:348px;">[Personal Loan] View Application</div>
+<div class="cb on" style="left:967.5px;top:397.5px;"><svg width="17" height="17" viewBox="0 0 17 17" fill="none"><polyline points="4,8.8 7.2,12 13,5.8" stroke="#FFFFFF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="lbl" style="left:1005px;top:396px;">[Personal Loan] Evaluate Application</div>
+
+<!-- collapsed: Users Management -->
+<div class="acc" id="usersmgmt"><span class="t">Users Management</span>
+<svg width="17" height="9" viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+
+<script>
+const items=["Sale Queue L1","Sale Queue L2","Sale Queue L3","Credit Queue L1","Credit Queue L2","Credit Queue L3","Risk Queue L1","Risk Queue L2","Risk Queue L3","Transaction Posting Queue","Disbursement Maker","Disbursement Checker","Compliance Queue L1","Compliance Queue L2","Termination Queue","Revert Queue"];
+const wrap=document.getElementById('smenu');
+items.forEach((name,i)=>{
+  const sel = name==="Revert Queue";
+  const d=document.createElement('div');
+  d.className='srow'+(sel?' sel':'');
+  const col = sel? '#FFFFFF':'#0D0D0D';
+  d.innerHTML='<span class="t">'+name+'</span><svg width="8" height="12" viewBox="0 0 8 12" fill="none"><polyline points="1.5,1.5 6.2,6 1.5,10.5" stroke="'+col+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  wrap.appendChild(d);
+});
+</script>
+</body></html>

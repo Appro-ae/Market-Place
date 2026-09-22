@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html,body{margin:0;padding:0;background:#ffffff;}
+  svg{display:block;}
+  text{font-family:Helvetica,Arial,sans-serif;font-size:11px;fill:#000000;}
+</style>
+</head>
+<body>
+<svg width="1400" height="520" viewBox="0 0 1400 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="7" refX="11.7" refY="3.25" orient="auto">
+      <path d="M0,0 L12,3.25 L0,6.5 Z" fill="#000000"/>
+    </marker>
+  </defs>
+
+  <!-- ======== edges ======== -->
+  <g stroke="#000000" stroke-width="1" fill="none">
+    <!-- START -> rect1 -->
+    <line x1="123" y1="130" x2="180" y2="130" marker-end="url(#arr)"/>
+    <!-- rect1 -> circle1 -->
+    <line x1="312" y1="130" x2="391" y2="130" marker-end="url(#arr)"/>
+    <!-- circle1 -> diamond1 -->
+    <line x1="519" y1="130" x2="590" y2="130" marker-end="url(#arr)"/>
+    <!-- diamond1 -> auto-approve circle (no response) -->
+    <line x1="810" y1="130" x2="1017" y2="130" marker-end="url(#arr)"/>
+    <!-- auto-approve -> prev status circle (orthogonal) -->
+    <path d="M1075,188 L1075,330 L1242,330" marker-end="url(#arr)"/>
+    <!-- diamond1 -> diamond2 (response within x days) -->
+    <line x1="700" y1="220" x2="700" y2="345" marker-end="url(#arr)"/>
+    <!-- diamond2 -> prev status circle (approves) -->
+    <line x1="800" y1="390" x2="1218" y2="390" marker-end="url(#arr)"/>
+    <!-- prev status circle -> END (up) -->
+    <line x1="1300" y1="308" x2="1300" y2="156" marker-end="url(#arr)"/>
+    <!-- diamond2 -> rect2 (rejects) -->
+    <line x1="600" y1="390" x2="485" y2="390" marker-end="url(#arr)"/>
+    <!-- rect2 -> END2 -->
+    <line x1="335" y1="390" x2="241" y2="390" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- ======== nodes ======== -->
+  <!-- START -->
+  <ellipse cx="90" cy="130" rx="33" ry="33" fill="#cdeb8b" stroke="#000000"/>
+  <text x="90" y="130" text-anchor="middle" dominant-baseline="central" font-size="12">START</text>
+
+  <!-- rect1 -->
+  <rect x="180" y="94" width="132" height="72" fill="#ffffff" stroke="#000000"/>
+  <g text-anchor="middle">
+    <text x="246" y="110.5" dominant-baseline="central">Bank user opens a</text>
+    <text x="246" y="123.5" dominant-baseline="central">rejected application</text>
+    <text x="246" y="136.5" dominant-baseline="central">and submits revert</text>
+    <text x="246" y="149.5" dominant-baseline="central">request</text>
+  </g>
+
+  <!-- circle1 -->
+  <ellipse cx="455" cy="130" rx="64" ry="64" fill="#ffffff" stroke="#000000"/>
+  <g text-anchor="middle">
+    <text x="455" y="104" dominant-baseline="central">"Rejected" status</text>
+    <text x="455" y="117" dominant-baseline="central">retained +</text>
+    <text x="455" y="130" dominant-baseline="central">Revert_App = TRUE</text>
+    <text x="455" y="143" dominant-baseline="central">(pending in Revert</text>
+    <text x="455" y="156" dominant-baseline="central">Queue)</text>
+  </g>
+
+  <!-- diamond1 -->
+  <path d="M700,40 L810,130 L700,220 L590,130 Z" fill="#ffffff" stroke="#000000"/>
+  <g text-anchor="middle">
+    <text x="700" y="110.5" dominant-baseline="central">Is the revert request</text>
+    <text x="700" y="123.5" dominant-baseline="central">reviewed within a</text>
+    <text x="700" y="136.5" dominant-baseline="central">pre-defined time</text>
+    <text x="700" y="149.5" dominant-baseline="central">period (&lt;x&gt; days)?</text>
+  </g>
+
+  <!-- auto-approve circle -->
+  <ellipse cx="1075" cy="130" rx="58" ry="58" fill="#fff2cc" stroke="#d6b656"/>
+  <g text-anchor="middle">
+    <text x="1075" y="110.5" dominant-baseline="central">Auto-approved by</text>
+    <text x="1075" y="123.5" dominant-baseline="central">System (same as</text>
+    <text x="1075" y="136.5" dominant-baseline="central">cancellation</text>
+    <text x="1075" y="149.5" dominant-baseline="central">timeout)</text>
+  </g>
+
+  <!-- END (main) -->
+  <ellipse cx="1300" cy="130" rx="26" ry="26" fill="#ffffff" stroke="#000000"/>
+  <text x="1300" y="130" text-anchor="middle" dominant-baseline="central" font-size="12">END</text>
+
+  <!-- diamond2 -->
+  <path d="M700,345 L800,390 L700,435 L600,390 Z" fill="#ffffff" stroke="#000000"/>
+  <text x="700" y="390" text-anchor="middle" dominant-baseline="central">Approve or reject?</text>
+
+  <!-- prev status circle -->
+  <ellipse cx="1300" cy="390" rx="82" ry="82" fill="#ffffff" stroke="#000000"/>
+  <g text-anchor="middle">
+    <text x="1300" y="351" dominant-baseline="central">Status changes</text>
+    <text x="1300" y="364" dominant-baseline="central">from "Rejected"</text>
+    <text x="1300" y="377" dominant-baseline="central">to "Awaiting Credit</text>
+    <text x="1300" y="390" dominant-baseline="central">Approval" —</text>
+    <text x="1300" y="403" dominant-baseline="central">re-enters Credit</text>
+    <text x="1300" y="416" dominant-baseline="central">Queue L1</text>
+  </g>
+
+  <!-- rect2 -->
+  <rect x="335" y="358" width="140" height="64" fill="#ffffff" stroke="#000000"/>
+  <g text-anchor="middle">
+    <text x="405" y="377" dominant-baseline="central">"Rejected" status</text>
+    <text x="405" y="390" dominant-baseline="central">retained;</text>
+    <text x="405" y="403" dominant-baseline="central">Revert_App cleared</text>
+  </g>
+
+  <!-- END 2 -->
+  <ellipse cx="215" cy="390" rx="26" ry="26" fill="#ffffff" stroke="#000000"/>
+  <text x="215" y="390" text-anchor="middle" dominant-baseline="central" font-size="12">END</text>
+
+  <!-- ======== edge labels (white bg, on the line, draw.io style) ======== -->
+  <g>
+    <rect x="867" y="117" width="92" height="25" fill="#ffffff"/>
+    <text x="913" y="123.5" text-anchor="middle" dominant-baseline="central">no response within</text>
+    <text x="913" y="136.5" text-anchor="middle" dominant-baseline="central">&lt;x&gt; days</text>
+  </g>
+  <g>
+    <rect x="637" y="275" width="126" height="13" fill="#ffffff"/>
+    <text x="700" y="282" text-anchor="middle" dominant-baseline="central">response within &lt;x&gt; days</text>
+  </g>
+  <g>
+    <rect x="970" y="383" width="79" height="13" fill="#ffffff"/>
+    <text x="1010" y="389" text-anchor="middle" dominant-baseline="central">Approves revert</text>
+  </g>
+  <g>
+    <rect x="507" y="383" width="69" height="13" fill="#ffffff"/>
+    <text x="541" y="389" text-anchor="middle" dominant-baseline="central">Rejects revert</text>
+  </g>
+</svg>
+</body>
+</html>

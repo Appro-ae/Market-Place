@@ -1,0 +1,54 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>rc6</title><style>
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:400;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:500;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:600;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-weight:700;src:url('file:///tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
+html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+/* 1) breadcrumb: Queue > Revert Queue > Application Details */
+.crumbpatch{position:absolute;left:156px;top:62px;width:360px;height:24px;background:#FFFFFF;}
+.crumb{position:absolute;left:163px;top:64px;height:22px;font-size:13px;font-weight:500;color:#73787B;display:flex;align-items:center;gap:9px;line-height:1;}
+.crumb svg{width:13px;height:13px;}
+.crumb .on{color:#008AAB;font-weight:600;}
+/* 2) remove Edit + FTS Retrigger (checker view is read-only) */
+.hdrpatch{position:absolute;left:1498px;top:26px;width:392px;height:60px;background:#FFFFFF;}
+/* 3) Application Status -> REJECTED */
+.statpatch{position:absolute;left:928px;top:273px;width:216px;height:24px;background:#FFFFFF;}
+.statval{position:absolute;left:933px;top:279px;color:#404345;font-size:13px;font-weight:700;-webkit-text-stroke:0.3px #404345;line-height:1;white-space:pre;}
+/* 4) Refetch ECB action hidden (read-only) */
+.ecbpatch{position:absolute;left:1118px;top:915px;width:126px;height:30px;background:#E5F2F6;}
+/* 5) Comments: REVERT REASON comment replaces the empty state */
+.cmtpatch{position:absolute;left:1352px;top:558px;width:534px;height:420px;background:#FFFFFF;}
+.cmt{position:absolute;left:1376px;top:584px;width:488px;}
+.cmt .t{font-size:13.5px;font-weight:600;color:#404345;}
+.cmt .t span{font-size:12px;font-weight:500;color:#73787B;margin-left:10px;}
+.cmt .b{margin-top:9px;font-size:12.8px;font-weight:400;color:#404345;line-height:1.6;}
+.cmt .b b{font-weight:700;}
+.cmt .f{margin-top:9px;font-size:11.5px;font-weight:500;color:#9AA4AC;}
+.cmt .sep{margin-top:16px;height:1px;background:#EEF1F4;}
+/* 6) action bar: Reject + Approve only */
+.bar{position:absolute;left:0;bottom:0;width:1920px;height:72px;background:#FFFFFF;border-top:1px solid #E5E5E5;box-sizing:border-box;}
+.btn{position:absolute;bottom:11.5px;height:49px;box-sizing:border-box;border-radius:6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding-bottom:3.5px;}
+.btn-reject{border:1px solid #D8092E;background:#FFFFFF;color:#D8092E;width:172px;right:235px;}
+.btn-approve{background:#008AAB;color:#FFFFFF;width:172px;right:42.5px;}
+</style></head><body>
+<img class="base" src="/tmp/claude-0/-home-user-Market-Place/a38b038b-b944-58b0-bf51-db5a11f4a2d6/scratchpad/shots/screenshots/48-queue-application-view.png">
+<div class="crumbpatch"></div>
+<div class="crumb"><span>Queue</span><svg viewBox="0 0 24 24" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span>Revert Queue</span><svg viewBox="0 0 24 24" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span class="on">Application Details</span></div>
+<div class="hdrpatch"></div>
+<div class="statpatch"></div>
+<div class="statval">: REJECTED</div>
+<div class="ecbpatch"></div>
+<div class="cmtpatch"></div>
+<div class="cmt">
+  <div class="t">Feras Matar<span>Credit</span></div>
+  <div class="b"><b>REVERT REASON:</b> Salary certificate received after decisioning — finalised income was understated and the same obligation was counted twice in the DBR. Requesting revert for re-assessment with the corrected figures.</div>
+  <div class="f">10:42 AM | 18 09 2026</div>
+  <div class="sep"></div>
+</div>
+<div class="bar"></div>
+<div class="btn btn-reject">Reject</div>
+<div class="btn btn-approve">Approve</div>
+</body></html>

@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><title>ec2</title><style>@font-face{font-family:'Plus Jakarta Sans';font-weight:400;src:url('fonts/plus-jakarta-sans-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:500;src:url('fonts/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:600;src:url('fonts/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
+@font-face{font-family:'Plus Jakarta Sans';font-weight:700;src:url('fonts/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
+html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+.crumbpatch{position:absolute;left:156px;top:62px;width:420px;height:24px;background:#FFF;}
+.crumb{position:absolute;left:163px;top:64px;height:22px;font-size:13px;font-weight:500;color:#73787B;display:flex;align-items:center;gap:9px;line-height:1;}
+.crumb .on{color:#008AAB;font-weight:600;}
+.hbtn{position:absolute;top:33px;height:46px;box-sizing:border-box;border:1px solid #008AAB;border-radius:6px;background:#FFF;color:#008AAB;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 22px;}
+.statpatch{position:absolute;left:928px;top:273px;width:300px;height:24px;background:#FFF;}
+.statval{position:absolute;left:933px;top:279px;color:#404345;font-size:13px;font-weight:700;-webkit-text-stroke:0.3px #404345;line-height:1;white-space:pre;}
+.cmtpatch{position:absolute;left:1352px;top:558px;width:534px;height:420px;background:#FFF;}
+.bar{position:absolute;left:0;bottom:0;width:1920px;height:72px;background:#FFF;border-top:1px solid #E5E5E5;box-sizing:border-box;}
+.btn{position:absolute;bottom:11.5px;height:49px;box-sizing:border-box;border-radius:6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 26px 3.5px;}
+.btn-reject{border:1px solid #D8092E;background:#FFF;color:#D8092E;right:395px;}
+.btn-override{border:1px solid #008AAB;background:#FFF;color:#008AAB;right:245px;}
+.btn-send{background:#008AAB;color:#FFF;right:42.5px;}
+.annot{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
+</style></head><body>
+
+<img class="base" src="../SC6_Revert_Queue_Approve_Reject.png">
+<div class="crumbpatch"></div>
+<div class="crumb"><span>Queue</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span>Credit Queue L1</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span class="on">Application Details</span></div>
+<div class="hbtn" style="right:212px;">FTS Retrigger</div>
+<div class="hbtn" style="right:42px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#008AAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</div>
+<div class="statpatch"></div><div class="statval">: AWAITING CREDIT APPROVAL</div>
+<div class="cmtpatch"></div>
+<div class="bar"></div>
+<div class="btn btn-reject">Reject</div>
+<div class="btn btn-override">Override</div>
+<div class="btn btn-send">Send Application</div>
+<div class="annot" style="left:1690px;top:24px;width:200px;height:64px;"></div>
+</body></html>
