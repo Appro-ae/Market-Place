@@ -39,15 +39,19 @@ npm install playwright            # once; Chromium is pre-installed at /opt/pw-b
 node build_screens.js             # writes ec*.html and renders the PNGs at deviceScaleFactor 2
 ```
 
-## Open points (asked in chat, defaults written into the AC)
+## Decisions folded in (22/09, PO)
 
-1. Input control — Empaneled Company typeahead + "Others" free text (default) vs. the Customer
-   Journey BVE list vs. free text only.
-2. Mandatory reason saved as EMPLOYER NAME CHANGE REASON comment (default: yes).
-3. MOD / MOI / Pensioner re-classified together with ALOC (default: yes, same RF-424 step).
-4. Length of Service not re-run (default: not re-run).
-5. Rule Engine re-run counter — RF-1492 struck it out, RF-2682 reinstated it (default: RF-2682).
-6. IEM030 "alphabetic only" blocks digits / & / hyphen in employer names (default: keep, as the
-   ticket asks for Customer Journey consistency — recommendation to widen both).
-7. Product-tab treatment of the new permission (default: mirror the live *Edit Length of Service*).
-8. Downstream consumers marked TBC in AC5 (document templates, T24 CIF, EastNets).
+1. Input control — plain editable field pre-populated with the finalized Employer Name from the
+   current logic (RF-174); no typeahead, no BVE call.
+2. No mandatory reason field — the section sits in the same Edit pop-up as Income / Liability;
+   the audit trail records original → updated.
+3. Rule Engine re-run counter — RF-2682 applies.
+4. MOD / MOI / Pensioner re-classified with ALOC; Length of Service not re-run.
+5. Display — Employer Name Update block: Original / Updated name and ALOC classification,
+   Updated By / On; IEM030 alphabetic-only validation kept (Customer Journey consistency).
+
+## Still TBC with Dev
+
+* Document templates that print the Employer Name (Application Form, Document Stack,
+  Affordability Form) and whether T24 CIF / EastNets send it (AC5).
+* Product-tab treatment of the new permission — mirror the live *Edit Length of Service*.

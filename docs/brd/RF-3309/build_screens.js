@@ -54,7 +54,7 @@ ${CQ_BASE_HTML(`<div class="annot" style="left:1690px;top:24px;width:200px;heigh
 // ---------- SC3: Edit Application pop-up with the new Employer Name section ----------
 const MODAL_CSS = `
 .dim{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,23,38,0.55);}
-.modal{position:absolute;left:470px;top:38px;width:980px;height:1004px;background:#F6FCFF;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:30px 36px;}
+.modal{position:absolute;left:470px;top:120px;width:980px;height:840px;background:#F6FCFF;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:30px 36px;}
 .mt{font-size:22px;font-weight:700;color:#001726;}
 .mx{position:absolute;right:30px;top:24px;font-size:26px;color:#73787B;font-weight:400;}
 .sec{margin-top:10px;height:40px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:14.5px;font-weight:600;color:#0D0D0D;}
@@ -100,21 +100,13 @@ ${CQ_BASE_HTML()}
   <div class="sec open">Employer Name${chevUp()}</div>
   <div class="body">
     <div class="ro">
-      <div><div class="k">Current Employer Name (Finalized)</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
       <div><div class="k">Source</div><div class="v">EFR (Sponsor Name)</div></div>
       <div><div class="k">Current classification</div><div class="v">N-ALOC · Category N-ALOC</div></div>
+      <div></div>
     </div>
-    <div class="lbl">New Employer Name <span class="star">*</span></div>
-    <div class="inp">AL FUTT<span class="caret"></span><span class="chev">${chevDown('#73787B')}</span></div>
-    <div class="dd">
-      <div class="it hi"><span>AL FUTTAIM GROUP LLC</span><span class="cat">Category A · Private · Active</span></div>
-      <div class="it"><span>AL FUTTAIM ENGINEERING &amp; TECHNOLOGIES LLC</span><span class="cat">Category B · Private · Active</span></div>
-      <div class="it"><span>AL FUTTAIM MOTORS LLC</span><span class="cat">Category A · Private · Active</span></div>
-      <div class="it oth"><span>Others — enter the Employer Name manually</span></div>
-    </div>
-    <div class="help">Type at least 3 characters to search the Empaneled Company list (Master List › Empaneled Companies). Select “Others” if the employer is not in the list, then key in the name (alphabetic characters only, max 200 characters — same validation as the Customer Journey Employer Name field).</div>
-    <div class="lbl">Reason for change <span class="star">*</span></div>
-    <div class="ta">Enter the reason for changing the Employer Name</div>
+    <div class="lbl">Employer Name <span class="star">*</span></div>
+    <div class="inp">AL FUTTAIM GROUP LLC<span class="caret" style="left:196px"></span></div>
+    <div class="help">Pre-populated with the finalized Employer Name from the journey (EFR Sponsor Name or Customer Journey input). Overwrite it to correct the employer — alphabetic characters only, max 200 characters (same validation as the Customer Journey Employer Name field).</div>
   </div>
   </div>
   <div class="note"><b>Note:</b> on Save the system updates the Finalized Employer Name, re-runs the employer classification (ALOC / N-ALOC, MOD / MOI / Pensioner), recalculates the related fields and re-runs the Rule Engine. The application is then routed per the standard routing logic.</div>
@@ -149,13 +141,13 @@ const AD_CSS = `
 .acc{position:absolute;left:147px;width:1138px;height:50px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-sizing:border-box;font-size:16px;font-weight:600;color:#0D0D0D;}
 .acc svg{width:15px;height:9px;}
 .acc.open{background:#008AAB;color:#FFF;}
-.panel{position:absolute;left:147px;top:522px;width:1138px;height:390px;background:#FFF;border:1px solid #E3E8EB;border-top:none;border-radius:0 0 8px 8px;box-sizing:border-box;padding:16px 22px;}
+.panel{position:absolute;left:147px;top:522px;width:1138px;height:440px;background:#FFF;border:1px solid #E3E8EB;border-top:none;border-radius:0 0 8px 8px;box-sizing:border-box;padding:16px 22px;}
 .sub{font-size:13.5px;font-weight:700;color:#008AAB;margin-bottom:10px;}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;row-gap:16px;column-gap:20px;}
 .kv .k{font-size:12px;font-weight:500;color:#73787B;}
 .kv .v{margin-top:3px;font-size:13px;font-weight:700;color:#404345;}
 .kv.new .v{color:#008AAB;}
-.hl{outline:3px solid #FF5500;outline-offset:6px;border-radius:6px;}
+.hl{outline:3px solid #FF5500;outline-offset:0;border-radius:8px;}
 .toast{position:absolute;right:42px;top:128px;width:420px;height:56px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.14);display:flex;align-items:center;padding:0 16px;font-size:13px;font-weight:600;color:#404345;}
 `;
 const ec5 = `<!doctype html><html><head><meta charset="utf-8"><title>ec5</title><style>${FONT}${CQ_BASE_CSS}${AD_CSS}</style></head><body>
@@ -166,9 +158,8 @@ ${CQ_BASE_HTML()}
   <div class="sub">Employment Information</div>
   <div class="grid">
     <div class="kv"><div class="k">Employment Category</div><div class="v">SALARIED</div></div>
-    <div class="kv new hl"><div class="k">Employer Name (Finalized)</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
-    <div class="kv new hl"><div class="k">Employer Name Source</div><div class="v">CREDIT USER — edited 22/09/2026 10:42</div></div>
-    <div class="kv"><div class="k">Employer Name (EFR Sponsor Name)</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
+    <div class="kv new"><div class="k">Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
+    <div class="kv new"><div class="k">Employer Name Source</div><div class="v">CREDIT USER</div></div>
     <div class="kv new"><div class="k">ALOC Classification</div><div class="v">ALOC</div></div>
     <div class="kv new"><div class="k">Company Category</div><div class="v">A</div></div>
     <div class="kv new"><div class="k">Sector</div><div class="v">PRIVATE</div></div>
@@ -178,8 +169,19 @@ ${CQ_BASE_HTML()}
     <div class="kv"><div class="k">Finalized Length of Service (months)</div><div class="v">38</div></div>
     <div class="kv"><div class="k">HR Contact Person (Name)</div><div class="v">HR SHARED SERVICES</div></div>
   </div>
+  <div class="hl" style="margin-top:22px;padding:10px 12px;">
+  <div class="sub">Employer Name Update</div>
+  <div class="grid">
+    <div class="kv"><div class="k">Original Employer Name</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
+    <div class="kv"><div class="k">Original ALOC Classification</div><div class="v">N-ALOC · CATEGORY N-ALOC</div></div>
+    <div class="kv"><div class="k">Updated By</div><div class="v">FERAS.MATAR@REEMBANK.AE</div></div>
+    <div class="kv new"><div class="k">Updated Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
+    <div class="kv new"><div class="k">Updated ALOC Classification</div><div class="v">ALOC · CATEGORY A</div></div>
+    <div class="kv"><div class="k">Updated On</div><div class="v">22/09/2026 10:42</div></div>
+  </div>
+  </div>
 </div>
-<div class="acc" style="top:922px;">Liability Info${chevDown()}</div>
+<div class="acc" style="top:970px;">Liability Info${chevDown()}</div>
 <div class="toast">✓&nbsp; Application “APP_RB_10092600001281” is updated successfully!</div>
 </body></html>`;
 
@@ -277,7 +279,7 @@ const ecflow = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,bod
 </g>
 <ellipse cx="90" cy="130" rx="33" ry="33" fill="#cdeb8b" stroke="#000"/><text x="90" y="130" text-anchor="middle" dominant-baseline="central" font-size="12">START</text>
 <rect x="170" y="94" width="142" height="72" fill="#fff" stroke="#000"/>${T(241,130,['Credit user opens the','application in Credit','Queue (L1–L3) and','clicks Edit'])}
-<rect x="360" y="94" width="142" height="72" fill="#fff" stroke="#000"/>${T(431,130,['Selects the new','Employer Name, enters','the reason and clicks','Save → Yes'])}
+<rect x="360" y="94" width="142" height="72" fill="#fff" stroke="#000"/>${T(431,130,['Overwrites the pre-','populated Employer','Name and clicks','Save → Yes'])}
 <path d="M613,72 L676,130 L613,188 L550,130 Z" fill="#fff" stroke="#000"/>${T(613,130,['Validation','passed?'])}
 <ellipse cx="798" cy="130" rx="68" ry="68" fill="#fff2cc" stroke="#d6b656"/>${T(798,130,['System: Finalized','Employer Name = new','value; re-run ALOC /','MOD / MOI classification;','recalculate variables +','Limit Assignment'])}
 <ellipse cx="990" cy="130" rx="60" ry="60" fill="#fff2cc" stroke="#d6b656"/>${T(990,130,['Re-run Rule Engine','(published strategies)','+ audit "Edit','Information"','old → new'])}

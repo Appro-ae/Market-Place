@@ -17,9 +17,9 @@
 * **Scope: Credit Card and Personal Loan only.** CASA is excluded (no credit decisioning). Mortgage Loan has its own Credit Queue edit story (RF-2957) and is not covered here.
 * **Entry point:** the existing **Edit** button on Credit Queue › Application Details (L1, L2, L3). The section is available exactly when the Edit button is available today — application in Credit Queue (`Awaiting Credit Approval`), not waiting for FTS income (RF-265 AC3), not locked by another request (RF-2682 AC2 step 8).
 * **In-scope scenarios** (the plain list):
-  * **E1** — EFR [Sponsor Name] (Mainland / Freezone) differs from the legal / trading name in the Empaneled Company list → Credit user selects the matching Empaneled Company entry → application becomes ALOC with its Category / Sector / Industry.
-  * **E2** — Customer-typed Employer Name (GCC / Golden / Family visa, "Others" free text) is wrong, misspelt or Arabic → Credit user corrects it.
-  * **E3** — Employer genuinely not in the Empaneled Company list → Credit user enters it as "Others" free text → classification stays N-ALOC; the corrected name flows to the application details and the generated documents.
+  * **E1** — EFR [Sponsor Name] (Mainland / Freezone) differs from the legal / trading name held in the Empaneled Company list → Credit user overwrites it with the listed name → application becomes ALOC with its Category / Sector / Industry.
+  * **E2** — Customer-typed Employer Name (GCC / Golden / Family visa, "Others" free text in the journey) is wrong, misspelt or Arabic → Credit user corrects it.
+  * **E3** — Employer genuinely not in the Empaneled Company list → Credit user corrects the name anyway → classification stays N-ALOC; the corrected name flows to the application details and the generated documents.
   * **E4** — Application returned to Credit Queue L1 through an approved Revert (RF-3305) → Employer Name corrected before the re-decision.
 * **Not in scope:** editing the Employer Name from Application Enquiry or from Risk / Compliance / Sale queues; editing Employment Category / Employment Type; re-running Length of Service (it has its own edit section, RF-1492); re-fetching EFR / AECB / MOHRE; Arabic input in the Super Portal; BVE integration in the Super Portal. See *Out of scope*.
 * **Screens: SC1–SC6 + flow** — attached to this ticket as `SC1_Role_Permission_Credit_Queue_Edit_Employer_Name.png` (Role Management › Manually Queue › Credit Queue L1 with the new permission), `SC2_Credit_Queue_Application_Details_Edit_Button.png` (Credit Queue application details, Edit entry point), `SC3_Edit_Application_Popup_Employer_Name.png` (Edit Application pop-up with the new Employer Name section), `SC4_Edit_Employer_Name_Confirmation_Popup.png` (confirmation before the re-run), `SC5_Application_Details_Employer_Name_Updated.png` (Application Details after the update), `SC6_Application_Enquiry_History_Edit_Employer_Name.png` (Application Enquiry history with the audit step), `Flow_Edit_Employer_Name.png` (end-to-end flow). SC images are build-accurate composites over the live UAT portal; Figma to follow from design.
@@ -45,11 +45,9 @@
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
 | Employer Name (section header) | Label | N/A | N/A | Text "Employer Name". Section header styled consistently with the existing headers ("Application Details", "Liability Info", "Length of Service", "Other Income and Expenses"). Displayed only when the user's role has "Edit Employer Name" = TRUE (AC4). |
-| Current Employer Name (Finalized) | Label (read-only) | N/A | No | Pre-populated with the current [Finalized Employer Name] of the application — the value stored in [CompanyName] per RF-174 AC2 Step 2. |
-| Source | Label (read-only) | N/A | No | Origin of the current value: **EFR (Sponsor Name)** \| **Customer Journey** \| **Credit User** (after a previous edit). |
+| Employer Name | Input text | Yes | Yes | **Pre-populated with the current [Finalized Employer Name]** of the application — the value derived by the current logic (RF-174 AC2 Step 2: EFR [Sponsor Name] for Mainland / Freezone, the Customer Journey [Employer Name] for GCC / Golden / Family visa) and stored in [CompanyName]. The user overwrites the text in place. **Validation consistent with the Customer Journey Employer Name field (RF-8 / RF-18 AC1):** alphabetic characters only → **IEM030** (*The employer name can contain only alphabetic character. Please try again!*); max length **200** characters (the Empaneled Company [Employer Name] length, RF-869 AC1) → **IEM076**; blank → **IEM003**. English only in the Super Portal (Arabic handling of RF-2087 applies to the Customer Journey). Value stored trimmed, upper-cased for matching as today. If the value is unchanged on Save (case-insensitive), the Employer Name branch of AC2.3 is skipped — no re-classification is triggered for an unchanged name. |
+| Source | Label (read-only) | N/A | No | Origin of the pre-populated value: **EFR (Sponsor Name)** \| **Customer Journey** \| **Credit User** (after a previous edit). |
 | Current classification | Label (read-only) | N/A | No | Current [ALOC] result and [Employer Category] (RF-424 AC3), e.g. "N-ALOC · Category N-ALOC" or "ALOC · Category A". |
-| New Employer Name | Searchable dropdown + free text | Yes | Yes | Searchable dropdown over the **Empaneled Company** master list (Master List › Empaneled Companies, RF-85 / RF-869): when the user types at least 3 characters the system returns, after ~0.3 s, the [Employer Name] values that contain the keyed text, each shown with its Category · Sector · Employer Status. Last option **"Others"**: on selection the free-text field appears with the information message **IEM107** (*If you cannot find the Employer Name in the above dropdown, kindly enter the Employer Name manually below.*). **Validation consistent with the Customer Journey Employer Name field (RF-8 / RF-18 AC1):** alphabetic characters only → **IEM030** (*The employer name can contain only alphabetic character. Please try again!*); max length **200** characters (the Empaneled Company [Employer Name] length, RF-869 AC1) → **IEM076**. English only in the Super Portal (Arabic handling of RF-2087 applies to the Customer Journey). Value stored trimmed, upper-cased for matching as today. **Save is enabled only when the new value differs from the current [Finalized Employer Name]** (case-insensitive) — no re-run is triggered for an unchanged name. |
-| Reason for change | Text area | Yes | Yes | Mandatory justification for overriding a KYC-derived value (EFR / customer-declared). Max 500 characters. Saved as a comment per AC1.1. Blank on Save → **IEM003**. |
 | Clear all | Button | N/A | N/A | Reloads the section with the stored values (removes the changes) — same behaviour as the existing sections (RF-1492). |
 | Cancel | Button | N/A | N/A | Cancels the editing — AC3. |
 | Save | Button | N/A | N/A | Saves the change — AC2. |
@@ -70,25 +68,16 @@ The edit shall be restricted in the below scenarios (existing Edit rules apply):
 | User without the permission | "Edit Employer Name" = FALSE → section hidden; all Edit permissions FALSE → Edit button hidden (RF-1501 AC2) |
 | Application not in Credit Queue | Application Enquiry, Risk / Compliance / Sale queues — view only |
 
-### AC1.1: Reason saved as Comment
-
-* When the user submits the change (Save → Yes), the Reason for change is displayed in the Comment area with the below details — same shape as the Cancel Reason (RF-2365) and Revert Reason (RF-3305):
-  * Comment title: \<\<User's name posted comment\>\> \<\<Department name\>\>
-  * Comment body: "EMPLOYER NAME CHANGE REASON: \<content of Reason for change inputted\>"
-  * Comment footer: \<\<Posted Date time\>\> (format hh:mm AM/PM | DD MM YYYY)
-* Save the comment to DB with prefix "EMPLOYER NAME CHANGE REASON" — format: EMPLOYER NAME CHANGE REASON: \<reason text\>
-* Store basic audit trail — refer to **CR 003** (RF Common Rule).
-
 ### AC2: Save updated information
 
 **AC2.1: Validation** — when the user clicks Save the system checks, in order:
 
-* [New Employer Name] blank → **IEM003**; [Reason for change] blank → **IEM003** (inline).
-* [New Employer Name] free text contains non-alphabetic characters → **IEM030**; exceeds 200 characters → **IEM076**.
-* [New Employer Name] equals the current [Finalized Employer Name] → Save stays disabled (no message).
+* [Employer Name] blank → **IEM003** (inline).
+* [Employer Name] contains non-alphabetic characters → **IEM030**; exceeds 200 characters → **IEM076**.
+* [Employer Name] equals the current [Finalized Employer Name] → the Employer Name branch of AC2.3 is skipped (no message); the other edited sections are saved as today.
 * Other edited sections (Limit Assignment, Finalized Income, Liability Info, Length of Service, Other Income and Expenses) keep their own validations (RF-1492 AC1, RF-2682 AC2 step 1).
 
-**AC2.2: Confirmation** (SC4, `SC4_Edit_Employer_Name_Confirmation_Popup.png`)
+**AC2.2: Confirmation** (SC4, `SC4_Edit_Employer_Name_Confirmation_Popup.png`) — one confirmation for the whole pop-up, as today; the note is extended with the ALOC re-run when the Employer Name changed
 
 ![SC4 – Confirmation before the update and re-run](SC4_Edit_Employer_Name_Confirmation_Popup.png)
 
@@ -99,17 +88,17 @@ The edit shall be restricted in the below scenarios (existing Edit rules apply):
 
 | # | Action | Rule / Reference |
 | --- | --- | --- |
-| 1 | **Override the finalized Employer Name.** [Finalized Employer Name] (= Application [CompanyName], RF-174 AC2) = \<New Employer Name\>. Set [Employer Name Source] = "Credit User". The source data are **not** modified: EFR [Sponsor Name] and the Customer Journey [Employer Name] stay as retrieved / inputted. The previous finalized value is kept in the audit trail (step 6). | Single source of truth: every consumer of the Employer Name reads [Finalized Employer Name] (AC5). |
-| 2 | **Re-run the employer classification** with the new [Finalized Employer Name]: push it to Rosette and compare with the Empaneled Company list — score ≥ 0.9 **and** Category ≠ NON-ALOC → [ALOC] = 1, save [Employer Category], [Sector], [Industry], [Employer Status], [Employer Land Line & Contact Details], [HR Contact Person (Name)], [HR Contact Number/Email] from the matched row; otherwise [ALOC] = 0, [Employer Category] = N-ALOC and the RF-869 AC2 fields are hidden. Re-evaluate the **MOD / MOI / Pensioner** flags against the MOD/MOI master table with the same matching (RF-424 AC2.1); the AECB pension check (RF-424 AC2.2) is unchanged. A value selected from the Empaneled Company dropdown still passes through the same classification step (score 1.0) so one code path serves both cases. | RF-424 AC2 + AC3, RF-869 AC3 |
+| 1 | **Override the finalized Employer Name.** Keep the previous value as **[Original Employer Name]** together with its **[Original ALOC Classification]** / [Original Employer Category] (set once, at the first edit — the system-derived value of RF-174 / RF-424). Then [Finalized Employer Name] (= Application [CompanyName], RF-174 AC2) = \<inputted Employer Name\>; [Employer Name Source] = "Credit User"; [Employer Name Updated By] = \<user email id\>; [Employer Name Updated On] = \<current date time\>. The source data are **not** modified: EFR [Sponsor Name] and the Customer Journey [Employer Name] stay as retrieved / inputted. | Single source of truth: every consumer of the Employer Name reads [Finalized Employer Name] (AC5). |
+| 2 | **Re-run the employer classification** with the new [Finalized Employer Name]: push it to Rosette and compare with the Empaneled Company list — score ≥ 0.9 **and** Category ≠ NON-ALOC → [ALOC] = 1, save [Employer Category], [Sector], [Industry], [Employer Status], [Employer Land Line & Contact Details], [HR Contact Person (Name)], [HR Contact Number/Email] from the matched row; otherwise [ALOC] = 0, [Employer Category] = N-ALOC and the RF-869 AC2 fields are hidden. Re-evaluate the **MOD / MOI / Pensioner** flags against the MOD/MOI master table with the same matching (RF-424 AC2.1); the AECB pension check (RF-424 AC2.2) is unchanged. The result is stored as the **updated** classification; the original classification stays available for display (AC6). | RF-424 AC2 + AC3, RF-869 AC3 |
 | 3 | **Recalculate the related fields** — Calculated Variables (RF-425) and the Approved Limit Amount / Limit Assignment (IB-398, RF-134 CC, RF-361 PL), because the classification (ALOC / MOD / MOI / Pensioner) drives the maximum DBR and the income-multiplier group. ECB extracted data are recalculated as part of the standard edit recalculation (RF-2682 AC2 step 2); DBR inputs are unchanged. | RF-2682 AC2 step 2 |
 | 4 | **Re-run the Rule Engine** — Segmentation (RF-132), Filtration (RF-138), Deviation (RF-159) — against the **currently published** strategy / score-check versions; the Industry, Sector (RF-1896) and classification-based attributes evaluate on the new values. The Rule Engine re-run counter applies as for every edit action (RF-2682 AC2 step 3): the flag counting re-runs is shared by Edit Info, Re-fetch ECB and Retrigger FTS; if the application fails the Rule Engine more than 2 times → Application Status = "Rejected". | RF-132 / RF-138 / RF-159, RF-2682 AC2 step 3 |
 | 5 | **Routing** — after the re-run the system follows the routing logic (RF-177) and drops the application to the corresponding queue: it stays in the Credit Queue at its current level, or drops to the queue the routing logic determines — same behaviour as any existing edit. Application Status remains `Awaiting Credit Approval` unless the routing changes it. **No new Application Status** → no mobile-app impact. | RF-177 |
-| 6 | **Audit trail** — store basic audit trail (**CR 003**) and the [Application History] object: [Application ID] = \<current Application ID\>; [Step] = "Edit Information"; [State] = \<current status of application\> (RF Customer Journey Detail Description #41); [Start Time] / [End Time] = yyyy-MM-dd HH:mm:ss; [Step Status] = "Successful"; **[Step Detail] = 'Employer Name updated from "\<old Finalized Employer Name\>" to "\<new Finalized Employer Name\>" by %Username%. Classification: \<old ALOC / Category\> → \<new ALOC / Category\>. Reason: \<reason\>'**; [Action by] = \<user email id\>. This makes the old / new values explicit in the audit trail (ticket scope) and resolves the RF-2827 expectation of a dynamic step detail for this field. The Rule Engine and Limit Assignment re-runs log their own existing steps with [Action by] = \<System\>. | CR 003, RF-2682 AC2 step 5, RF-2827 |
+| 6 | **Audit trail** — store basic audit trail (**CR 003**) and the [Application History] object: [Application ID] = \<current Application ID\>; [Step] = "Edit Information"; [State] = \<current status of application\> (RF Customer Journey Detail Description #41); [Start Time] / [End Time] = yyyy-MM-dd HH:mm:ss; [Step Status] = "Successful"; **[Step Detail] = 'Employer Name updated from "\<old Finalized Employer Name\>" to "\<new Finalized Employer Name\>" by %Username%. Classification: \<original ALOC / Category\> → \<updated ALOC / Category\>'**; [Action by] = \<user email id\>. This makes the old / new values explicit in the audit trail (ticket scope) and resolves the RF-2827 expectation of a dynamic step detail for this field. The Rule Engine and Limit Assignment re-runs log their own existing steps with [Action by] = \<System\>. | CR 003, RF-2682 AC2 step 5, RF-2827 |
 | 7 | **Loading and concurrency** — same as RF-2682 AC2 step 8: the loading screen displays up to 15 seconds; all other actions in Credit Queue are blocked while the recalculation and Rule Engine run; another action during the run shows "The Application is in another request processing."; after success the actions are available again. | RF-2682 AC2 step 8 |
 | 8 | **Refresh** — toaster **IM004** *Application "\<Application ID\>" is updated successfully!*; the Application Details, Rule Engine Result and Approve Limit Result sections reload with the recalculated values (SC5, AC6). | IM004 |
 
 * Employer Name edits are combined with the other sections in one Save: if the user changed several sections, the recalculation and the Rule Engine run once, after all values are stored (as RF-1492 AC2 "Else" branch).
-* **Repeat edits:** no cap on the number of Employer Name edits per application; each edit is audited (step 6) and the latest saved value is the finalized one.
+* **Repeat edits:** no cap on the number of Employer Name edits per application; each edit is audited (step 6), the latest saved value is the finalized one and [Original Employer Name] is never overwritten after the first edit.
 
 ### AC3: Cancel Editing Application
 
@@ -138,7 +127,7 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 
 | Consumer | Behaviour after the edit | Reference | Status |
 | --- | --- | --- | --- |
-| Application Details › Employment Information — Credit Queue (all levels), Risk Queue, Sale Queue, Compliance Queue, Application Enquiry | Displays the new Employer Name; new label **Employer Name Source** = "Credit User – edited \<DD/MM/YYYY hh:mm\>"; Company Category / Sector / Industry / Employer Status / contact fields refreshed from the re-classification (hidden when N-ALOC). | RF-869 AC2 + AC3 "Apply for" list, AC6 | Confirmed |
+| Application Details › Employment Information — Credit Queue (all levels), Risk Queue, Sale Queue, Compliance Queue, Application Enquiry | Displays the updated Employer Name as the working value, plus the **Employer Name Update** block (original name + original classification, updated name + updated classification, updated by / on — AC6); Company Category / Sector / Industry / Employer Status / contact fields refreshed from the re-classification (hidden when N-ALOC). | RF-869 AC2 + AC3 "Apply for" list, AC6 | Confirmed |
 | ALOC / N-ALOC, Employer Category, MOD / MOI / Pensioner flags | Re-classified from the new value. | RF-424, RF-869 | Confirmed |
 | Rule Engine attributes (Industry, Sector, classification-based) and Limit Assignment (maximum DBR, income-multiplier group) | Re-run / recalculated (AC2.3 steps 3–4); results shown in Rule Engine Result and Approve Limit Result. | RF-1896, RF-132/138/159, RF-134/361 | Confirmed |
 | Length of Service | **Not** re-run. The Employer Name edit does not re-trigger the AECB / EFR / MOHRE comparison of RF-1241; the Credit user corrects LOS in its own section when needed. | RF-1241, RF-1492 | Confirmed (PO decision) |
@@ -154,15 +143,23 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 
 ![SC5 – Application Details › Employment Information after the update](SC5_Application_Details_Employer_Name_Updated.png)
 
+The working value stays in the existing field; the change is made traceable by a new **Employer Name Update** block that shows the original and the updated value side by side with their classification. Wording follows the portal convention `Label : VALUE` and the "Original / Updated" pair used for overridden values:
+
 | Field (Application Details › Employment Information) | Value after the edit | Source |
 | --- | --- | --- |
-| Employer Name (Finalized) | \<new Finalized Employer Name\> | AC2.3 step 1 |
-| Employer Name Source *(new label)* | EFR (Sponsor Name) \| Customer Journey \| **Credit User – edited \<DD/MM/YYYY hh:mm\>** | [Employer Name Source] |
-| Employer Name (EFR Sponsor Name) *(new label — original, read-only)* | EFR [Sponsor Name] as retrieved, so the original value stays visible next to the override | RF-174 AC2 |
+| Employer Name | \<updated Finalized Employer Name\> — the value the system uses | AC2.3 step 1 |
+| Employer Name Source *(new label)* | EFR (Sponsor Name) \| Customer Journey \| **Credit User** | [Employer Name Source] |
+| **Employer Name Update** *(new sub-block — shown only after an edit; hidden otherwise per RF-265 AC2)* | | |
+| Original Employer Name | \<system-derived value before the first edit\> | [Original Employer Name] |
+| Original ALOC Classification | ALOC \| N-ALOC · Category \<X\> | [Original ALOC Classification] |
+| Updated Employer Name | \<current Finalized Employer Name\> | [Finalized Employer Name] |
+| Updated ALOC Classification | ALOC \| N-ALOC · Category \<X\> | AC2.3 step 2 |
+| Updated By / Updated On | \<user email id\> / DD/MM/YYYY hh:mm | AC2.3 step 1 |
 | ALOC Classification, Company Category, Sector, Industry, Employer Status, Employer Land Line & Contact Details, HR Contact Person (Name), HR Contact Number/Email | Refreshed from the re-classification; hidden when [ALOC] = 0 | RF-869 AC2 |
 | Rule Engine Result, Approve Limit Result sections | Recalculated results of AC2.3 steps 3–4 | RF-265 |
 
-* Display rule unchanged: fields with an empty value are hidden (RF-265 AC2).
+* Display rule unchanged: fields with an empty value are hidden (RF-265 AC2) — an application that was never edited shows no Employer Name Update block.
+* After repeated edits the block keeps the **first** original value and the **latest** updated value; the intermediate values are in the Application History (SC6).
 
 **SC6 – Application Enquiry › Application History** (`SC6_Application_Enquiry_History_Edit_Employer_Name.png`)
 
@@ -175,11 +172,11 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 | Area | Impact | Screen |
 | --- | --- | --- |
 | Role Management / Permission Matrix | **New permission "Edit Employer Name"** on Credit Queue L1, L2, L3 (Editor group; per product tab as the existing Edit permissions). Permission Matrix page updated. Distinct right — never bundled. | <img src="assets/ia_role_cq.png" width="290"><br>*Role Management › Credit Queue L1 (SC1)* |
-| Edit Application pop-up (Credit Queue) | New **Employer Name** section: current value + source + classification (read-only), Empaneled Company typeahead with "Others" free text, mandatory reason; Customer Journey validation (IEM030 / IEM076 / IEM003). Confirmation pop-up text extended with the ALOC re-run note. | <img src="assets/ia_edit_popup.png" width="290"><br>*Edit Application › Employer Name (SC3)* |
+| Edit Application pop-up (Credit Queue) | New **Employer Name** section: editable field pre-populated with the finalized Employer Name, source and current classification as read-only labels; Customer Journey validation (IEM030 / IEM076 / IEM003). Confirmation pop-up note extended with the ALOC re-run. | <img src="assets/ia_edit_popup.png" width="290"><br>*Edit Application › Employer Name (SC3)* |
 | Employer classification (ALOC / MOD / MOI / Pensioner) | The RF-424 / RF-869 classification step becomes **re-runnable on demand** for one application with a user-provided name; it must overwrite the previous classification results and the RF-869 AC2 fields atomically. | <img src="assets/ia_confirm.png" width="290"><br>*Confirmation before the re-run (SC4)* |
 | Rule Engine & Limit Assignment | Re-run on the new classification against the currently published versions; re-run counter shared with Edit Info / Re-fetch ECB / Retrigger FTS (RF-2682). Recalculation of Calculated Variables and Approved Limit Amount. | <img src="assets/ia_policy.png" width="290"><br>*Strategies › Versions / Audit Trails* |
-| Audit trail | "Edit Information" step with a **dynamic Step Detail** (old → new Employer Name, classification change, reason) — closes the RF-2827 gap for this field; reason stored as EMPLOYER NAME CHANGE REASON comment (CR 003). | <img src="assets/ia_history.png" width="290"><br>*Application History (SC6)* |
-| Application Details display | Two new labels — **Employer Name Source** and **Employer Name (EFR Sponsor Name)** — on the five Application Details screens of RF-869 AC3 (Credit / Risk / Sale / Compliance queues, Application Enquiry); classification fields refreshed. | <img src="assets/ia_app_details.png" width="290"><br>*Application Details › Employment Information (SC5)* |
+| Audit trail | "Edit Information" step with a **dynamic Step Detail** (original → updated Employer Name and classification change) — closes the RF-2827 gap for this field (CR 003). | <img src="assets/ia_history.png" width="290"><br>*Application History (SC6)* |
+| Application Details display | New **Employer Name Source** label and the **Employer Name Update** block (Original / Updated name and ALOC classification, Updated By / On) on the five Application Details screens of RF-869 AC3 (Credit / Risk / Sale / Compliance queues, Application Enquiry); classification fields refreshed. | <img src="assets/ia_app_details.png" width="290"><br>*Application Details › Employment Information (SC5)* |
 | Queue model / drop points | No new drop point. Routing after the re-run follows RF-177; cases parked by drop point 12 (*different Employer Name than EFR*) can now be resolved inside the queue instead of rejected — volume effect on Credit Queue is neutral to positive. | <img src="assets/ia_queue.png" width="290"><br>*Queue menu* |
 | Status model / mobile app | No new Application Status; status stays `Awaiting Credit Approval` unless the routing changes it → **no mobile-app change**. | <img src="assets/ia_status.png" width="290"><br>*Status unchanged by the edit* |
 | Communication Setup | **No new template.** Existing drop-to-queue notifications apply if the routing moves the application (RF-3067 fix). The customer is not notified. | <img src="assets/ia_comm.png" width="290"><br>*Email Templates — unchanged* |
@@ -195,7 +192,7 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 | RF-2682 | READY IN UAT | Edit Other Income and Expenses — latest section pattern (placement, IA1 permission, IA2/IA3 document regeneration, RE re-run counter). The Employer Name section is placed after it. |
 | RF-424 / RF-869 | SIT TESTING COMPLETED | ALOC / MOD / MOI / Pensioner classification and the Empaneled Company fields — the logic re-run in AC2.3 step 2. |
 | RF-1896 | READY IN UAT | Industry / Sector attributes in Segmentation and Filtration sourced from the ALOC logic — evaluated on the new classification. |
-| RF-1843 / RF-1834 | READY IN UAT / Open | New acceptable values for Employer Category in Empaneled Company — the typeahead shows whatever Category values the master carries. |
+| RF-1843 / RF-1834 | READY IN UAT / Open | New acceptable values for Employer Category in Empaneled Company — the re-classification returns whatever Category values the master carries. |
 | RF-174 / RF-1241 | SIT TESTING COMPLETED | Finalized Employer Name derivation and Length of Service logic — source of the current value; LOS deliberately not re-run (AC5). |
 | RF-2827 | READY IN UAT | Static Step Detail on edit in Compliance Queue — AC2.3 step 6 defines the dynamic Step Detail for this field. |
 | RF-2806 / RF-2334 / RF-3214 / RF-3195 | READY IN UAT / READY IN SIT / SIT TESTING COMPLETED / Open | Employer Name dropdown and search defects in the Customer Journey (invalid data, no search results, Arabic suggestions) — root causes of wrong employer names that this edit remedies. |
@@ -212,4 +209,4 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 * Editing the Employer Name from Application Enquiry or from Risk / Compliance / Sale queues (view only there).
 * Editing Employment Category / Employment Type; re-running Length of Service (own edit section, RF-1492); re-fetching EFR, AECB or MOHRE data.
 * BVE integration in the Super Portal (the Customer Journey dropdown source); Arabic input in the Super Portal; changes to the Empaneled Company upload format or validation (RF-869).
-* Maker–checker approval of the Employer Name edit (none of the existing Edit sections has one); bulk edit; customer notification of the correction; a cap on the number of edits.
+* Maker–checker approval of the Employer Name edit and a mandatory change reason (none of the existing Edit sections has one — the audit trail records the change); bulk edit; customer notification of the correction; a cap on the number of edits.

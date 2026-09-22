@@ -20,7 +20,7 @@ body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-s
 .annot{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
 
 .dim{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,23,38,0.55);}
-.modal{position:absolute;left:470px;top:38px;width:980px;height:1004px;background:#F6FCFF;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:30px 36px;}
+.modal{position:absolute;left:470px;top:120px;width:980px;height:840px;background:#F6FCFF;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:30px 36px;}
 .mt{font-size:22px;font-weight:700;color:#001726;}
 .mx{position:absolute;right:30px;top:24px;font-size:26px;color:#73787B;font-weight:400;}
 .sec{margin-top:10px;height:40px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:14.5px;font-weight:600;color:#0D0D0D;}
@@ -75,21 +75,13 @@ body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-s
   <div class="sec open">Employer Name<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <div class="body">
     <div class="ro">
-      <div><div class="k">Current Employer Name (Finalized)</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
       <div><div class="k">Source</div><div class="v">EFR (Sponsor Name)</div></div>
       <div><div class="k">Current classification</div><div class="v">N-ALOC · Category N-ALOC</div></div>
+      <div></div>
     </div>
-    <div class="lbl">New Employer Name <span class="star">*</span></div>
-    <div class="inp">AL FUTT<span class="caret"></span><span class="chev"><svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#73787B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-    <div class="dd">
-      <div class="it hi"><span>AL FUTTAIM GROUP LLC</span><span class="cat">Category A · Private · Active</span></div>
-      <div class="it"><span>AL FUTTAIM ENGINEERING &amp; TECHNOLOGIES LLC</span><span class="cat">Category B · Private · Active</span></div>
-      <div class="it"><span>AL FUTTAIM MOTORS LLC</span><span class="cat">Category A · Private · Active</span></div>
-      <div class="it oth"><span>Others — enter the Employer Name manually</span></div>
-    </div>
-    <div class="help">Type at least 3 characters to search the Empaneled Company list (Master List › Empaneled Companies). Select “Others” if the employer is not in the list, then key in the name (alphabetic characters only, max 200 characters — same validation as the Customer Journey Employer Name field).</div>
-    <div class="lbl">Reason for change <span class="star">*</span></div>
-    <div class="ta">Enter the reason for changing the Employer Name</div>
+    <div class="lbl">Employer Name <span class="star">*</span></div>
+    <div class="inp">AL FUTTAIM GROUP LLC<span class="caret" style="left:196px"></span></div>
+    <div class="help">Pre-populated with the finalized Employer Name from the journey (EFR Sponsor Name or Customer Journey input). Overwrite it to correct the employer — alphabetic characters only, max 200 characters (same validation as the Customer Journey Employer Name field).</div>
   </div>
   </div>
   <div class="note"><b>Note:</b> on Save the system updates the Finalized Employer Name, re-runs the employer classification (ALOC / N-ALOC, MOD / MOI / Pensioner), recalculates the related fields and re-runs the Rule Engine. The application is then routed per the standard routing logic.</div>
