@@ -117,23 +117,30 @@ Prepare the next deployment CR package and write the Business Impact.
   `Data: <change>`, or an SDK version. Part 5 also carried a count line above
   the table: *"Jira list — 67 items, UAT sign-off complete:"*.
 
-**Two flags to settle before writing Part 8:**
+Link type is `Relates` (id `10003`). Sprint field is `customfield_10020`;
+RF Sprint 17 = id `3374`, RF Sprint 18 = id `3416`.
+
+**Two flags, both settled for Part 8 (RF-3327) on 23 Sep:**
 
 1. **Business Impact is a NET-NEW section.** Neither RF-3249 nor RF-3143
-   contains one. Adding it changes the house template — confirm the intended
-   placement (recommend: directly under the intro, above Release tag) and
-   whether Reem Bank expects it going forward.
-2. **The CR linkage chain is already broken.** Parts 1–5 plus the 22-May CR are
-   interlinked with `relates to`. **RF-3226 (Part 6) and RF-3249 (Part 7) have
-   zero issue links.** Linking Part 8 only to RF-3249 therefore attaches it to a
-   detached node, not to the chain. Recommend repairing Part 6 and Part 7 into
-   the chain at the same time.
+   contains one. On RF-3327 it sits after the logistics block (release tag,
+   notes, Camunda file) and before the package table, as a
+   No | Ticket | Business Impact | Deployment Risk table. Confirm whether it
+   becomes standard for Part 9 onward.
+2. **The CR linkage chain was broken at Parts 6 and 7** (both had zero links).
+   Repaired 23 Sep alongside Part 8: Parts 6, 7 and 8 now interlink and all
+   three reach Part 5, which carries the chain back to Part 1. Keep new CRs
+   linked back three hops, matching house precedent.
+
+**Release tag and release-note dates are never derivable from Jira** — they are
+build/deployment facts. Leave them marked for confirmation and hand to Umair.
 
 | CR | Key | Created | Status | Links |
 |---|---|---|---|---|
-| Part 7 | RF-3249 | 2026-09-04 | Open | **0 — detached** |
-| Part 6 | RF-3226 | 2026-08-30 | Open | **0 — detached** |
-| Part 5 | RF-3143 | 2026-08-18 | Open | 3 |
+| **Part 8** | **RF-3327** | **2026-09-23** | **Open** | **3 — created 23 Sep** |
+| Part 7 | RF-3249 | 2026-09-04 | Open | 3 — *repaired 23 Sep* |
+| Part 6 | RF-3226 | 2026-08-30 | Open | 3 — *repaired 23 Sep* |
+| Part 5 | RF-3143 | 2026-08-18 | Open | 6 |
 | Part 4 | RF-3028 | 2026-07-09 | READY IN UAT | 2 |
 | 22 May | RF-2715 | 2026-05-22 | Open | 2 |
 | Part 3 | RF-2671 | 2026-05-08 | Done | 5 |
