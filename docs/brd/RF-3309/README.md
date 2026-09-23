@@ -26,10 +26,11 @@ here; on the ticket they are attachments with the same file names).
 | `assets/ia_*.png` | Impact-analysis reference crops |
 | `fonts/` | Plus Jakarta Sans (400–700) used by the composites |
 
-The screens are composites over the **real UAT captures** already used for RF-3305
-(`../SC5_Role_Permission_Revert_Queue.png`, `../SC6_Revert_Queue_Approve_Reject.png`,
-`../SC2_Application_Enquiry_Revert_Button.png`) — the UAT portal is not reachable from the
-remote session, so the existing captures are the base and only the new elements are drawn.
+The screens are composites over the **raw UAT captures** in `base/` (the live portal's
+Credit Queue application view `48-queue-application-view.png`, Application Enquiry detail
+`42-application-detail.png` and Add Role `43-add-role-permissions-scrolled.png`) — only the
+new elements are drawn; SC2 is the untouched real screen plus the annotation. The UAT portal
+is not reachable from the remote session, so the captures are the base.
 
 ## Regenerating
 

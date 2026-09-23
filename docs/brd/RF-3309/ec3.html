@@ -5,64 +5,32 @@
 html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
 body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
 .base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
-.crumbpatch{position:absolute;left:156px;top:62px;width:420px;height:24px;background:#FFF;}
-.crumb{position:absolute;left:163px;top:64px;height:22px;font-size:13px;font-weight:500;color:#73787B;display:flex;align-items:center;gap:9px;line-height:1;}
-.crumb .on{color:#008AAB;font-weight:600;}
-.hbtn{position:absolute;top:33px;height:46px;box-sizing:border-box;border:1px solid #008AAB;border-radius:6px;background:#FFF;color:#008AAB;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 22px;}
-.statpatch{position:absolute;left:928px;top:273px;width:300px;height:24px;background:#FFF;}
-.statval{position:absolute;left:933px;top:279px;color:#404345;font-size:13px;font-weight:700;-webkit-text-stroke:0.3px #404345;line-height:1;white-space:pre;}
-.cmtpatch{position:absolute;left:1352px;top:558px;width:534px;height:420px;background:#FFF;}
-.bar{position:absolute;left:0;bottom:0;width:1920px;height:72px;background:#FFF;border-top:1px solid #E5E5E5;box-sizing:border-box;}
-.btn{position:absolute;bottom:11.5px;height:49px;box-sizing:border-box;border-radius:6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 26px 3.5px;}
-.btn-reject{border:1px solid #D8092E;background:#FFF;color:#D8092E;right:395px;}
-.btn-override{border:1px solid #008AAB;background:#FFF;color:#008AAB;right:245px;}
-.btn-send{background:#008AAB;color:#FFF;right:42.5px;}
-.annot{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
+.annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
 
 .dim{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,23,38,0.55);}
-.modal{position:absolute;left:470px;top:120px;width:980px;height:840px;background:#F6FCFF;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:30px 36px;}
-.mt{font-size:22px;font-weight:700;color:#001726;}
+.modal{position:absolute;left:470px;top:130px;width:980px;height:820px;background:#FFFFFF;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:28px 36px;}
+.mt{font-size:22px;font-weight:700;color:#0D0D0D;}
 .mx{position:absolute;right:30px;top:24px;font-size:26px;color:#73787B;font-weight:400;}
-.sec{margin-top:10px;height:40px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:14.5px;font-weight:600;color:#0D0D0D;}
+.sec{margin-top:10px;height:44px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:15px;font-weight:600;color:#0D0D0D;}
 .sec svg{width:15px;height:9px;}
-.sec.open{background:#008AAB;color:#FFF;}
-.body{background:#FFF;border:1px solid #E3E8EB;border-top:none;border-radius:0 0 8px 8px;padding:14px 18px 16px;}
 .hl{outline:3px solid #FF5500;outline-offset:5px;border-radius:8px;}
+.body{background:#FFF;border:1px solid #E5E5E5;border-top:none;border-radius:0 0 8px 8px;padding:14px 18px 16px;}
 .ro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
 .ro .k{font-size:11.5px;font-weight:500;color:#73787B;}
 .ro .v{margin-top:4px;font-size:13px;font-weight:700;color:#404345;}
 .lbl{margin-top:12px;font-size:13.5px;font-weight:500;color:#2F3133;}
-.lbl .star{color:#DC3453;font-weight:600;}
+.lbl .star{color:#D8092E;font-weight:600;}
 .inp{position:relative;margin-top:8px;height:46px;border:1.5px solid #008AAB;border-radius:8px;background:#FFF;display:flex;align-items:center;padding:0 16px;font-size:14px;color:#404345;font-weight:500;}
-.inp .caret{position:absolute;left:78px;top:12px;width:1.5px;height:22px;background:#404345;}
-.inp .chev{position:absolute;right:14px;top:16px;}
-.dd{margin-top:4px;border:1px solid #E3E8EB;border-radius:8px;background:#FFF;box-shadow:0 8px 20px rgba(0,0,0,.10);overflow:hidden;}
-.dd .it{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:13.5px;color:#404345;border-bottom:1px solid #F0F3F5;}
-.dd .it.hi{background:#E6F3F7;font-weight:600;}
-.dd .it .cat{font-size:11.5px;color:#73787B;font-weight:500;}
-.dd .it.oth{color:#008AAB;font-weight:600;border-bottom:none;}
+.inp .caret{position:absolute;top:12px;width:1.5px;height:22px;background:#404345;}
 .help{margin-top:8px;font-size:11px;color:#73787B;line-height:1.5;}
-.ta{margin-top:8px;height:54px;border:1px solid #E3E8EB;border-radius:8px;background:#FFF;padding:12px 16px;font-size:13.5px;color:#959B9E;}
 .note{margin-top:12px;border-radius:8px;background:#FFF7E6;border:1px solid #F5D08A;padding:10px 14px;font-size:12px;color:#7A5A00;line-height:1.5;}
-.mbar{position:absolute;left:36px;right:36px;bottom:24px;display:flex;align-items:center;justify-content:flex-end;gap:12px;}
+.mbar{position:absolute;left:36px;right:36px;bottom:24px;display:flex;align-items:center;justify-content:flex-end;gap:14px;}
 .clr{margin-right:auto;font-size:13.5px;font-weight:600;color:#008AAB;text-decoration:underline;}
-.mb{height:49px;border-radius:6px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 34px;box-sizing:border-box;}
+.mb{height:48px;border-radius:8px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 40px;box-sizing:border-box;}
 .mb.o{border:1px solid #008AAB;color:#008AAB;background:#FFF;}
 .mb.f{background:#008AAB;color:#FFF;}
 </style></head><body>
-
-<img class="base" src="../SC6_Revert_Queue_Approve_Reject.png">
-<div class="crumbpatch"></div>
-<div class="crumb"><span>Queue</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span>Credit Queue L1</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#868687" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg><span class="on">Application Details</span></div>
-<div class="hbtn" style="right:212px;">FTS Retrigger</div>
-<div class="hbtn" style="right:42px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#008AAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</div>
-<div class="statpatch"></div><div class="statval">: AWAITING CREDIT APPROVAL</div>
-<div class="cmtpatch"></div>
-<div class="bar"></div>
-<div class="btn btn-reject">Reject</div>
-<div class="btn btn-override">Override</div>
-<div class="btn btn-send">Send Application</div>
-
+<img class="base" src="base/48-queue-application-view.png">
 <div class="dim"></div>
 <div class="modal">
   <div class="mt">Edit Application</div><div class="mx">×</div>
@@ -72,7 +40,7 @@ body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-s
   <div class="sec">Length of Service<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <div class="sec">Other Income and Expenses<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <div class="hl">
-  <div class="sec open">Employer Name<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="sec" style="border-radius:8px 8px 0 0;">Employer Name<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <div class="body">
     <div class="ro">
       <div><div class="k">Source</div><div class="v">EFR (Sponsor Name)</div></div>
