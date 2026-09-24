@@ -117,6 +117,17 @@ Prepare the next deployment CR package and write the Business Impact.
   `Data: <change>`, or an SDK version. Part 5 also carried a count line above
   the table: *"Jira list — 67 items, UAT sign-off complete:"*.
 
+**Ticket references must be Jira smart links, not plain URLs.** The house CRs
+use ADF `inlineCard` nodes, which render as live cards showing each ticket's
+current status. A plain URL written through `contentFormat: "markdown"` stays
+dead text. To get them: build the whole description as an ADF document and push
+with `contentFormat: "adf"`, using
+`{"type":"inlineCard","attrs":{"url":"https://scvaladdin.atlassian.net/browse/RF-xxxx"}}`
+inside each table cell's paragraph. A read-back in markdown confirms success
+when each cell shows `<custom data-type="smartlink" data-id="id-N">`.
+Keep `code` marks out of the payload — `code` + `textColor` makes Jira reject
+the entire edit with a bare `INVALID_INPUT`.
+
 Link type is `Relates` (id `10003`). Sprint field is `customfield_10020`;
 RF Sprint 17 = id `3374`, RF Sprint 18 = id `3416`.
 

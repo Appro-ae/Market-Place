@@ -1,6 +1,7 @@
 # RF-3327 — [CR][PROD] Request Approval Package (Part 8)
 
-**Created in Jira 23 Sep 2026** · https://scvaladdin.atlassian.net/browse/RF-3327
+**Created in Jira 23 Sep 2026** · ticket references converted to Jira smart links (ADF `inlineCard`) 24 Sep
+ · https://scvaladdin.atlassian.net/browse/RF-3327
 
 | Field | Value |
 |---|---|
