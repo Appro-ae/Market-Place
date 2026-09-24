@@ -14,17 +14,31 @@ Two changes follow. The risk-group value list offered on Rule Engine criteria is
 Score 3.0 values, and **AECB Score Range** is added as an attribute in Score Check Management,
 which today can only test the raw **AECB Score** as a number.
 
-**SC1 — Consumer Score 3.0 mapping (AECB source)**
+**SC1 — Consumer Score 3.0 mapping (AECB source document)**
 
 ![SC1](screens/SC1_Consumer_Score_3.0_Mapping.png)
 
-**SC2 — Rule Engine risk-group value list today (to be replaced)**
+**SC2 — Rule Engine value list, current** · *AS-IS*
 
-![SC2](screens/SC2_Rule_Engine_Risk_Group_Values.png)
+![SC2](screens/SC2_Rule_Engine_Values_Current.png)
 
-**SC3 — Score Check Management today (AECB Score as a number only)**
+**SC3 — Rule Engine value list with Score 3.0** · *TO-BE (AC2)*
 
-![SC3](screens/SC3_Score_Check_Management_AECB_Score.jpg)
+Composite over the real capture: the list now offers the Score 3.0 codes, shown scrolled to the
+M→N boundary so both segments are visible in one list.
+
+![SC3](screens/SC3_Rule_Engine_Values_Score_3.0.png)
+
+**SC4 — Score Check Management, current** · *AS-IS* — only the numeric `AECB Score` can be tested
+
+![SC4](screens/SC4_Score_Check_Mgmt_Current.jpg)
+
+**SC5 — Score Check Management with AECB Score Range** · *TO-BE (AC3)*
+
+Composite over the real capture: the new attribute sits in the same condition set as the existing
+numeric `AECB Score`, which keeps working.
+
+![SC5](screens/SC5_Score_Check_Mgmt_AECB_Score_Range.png)
 
 ### User Story Details
 
