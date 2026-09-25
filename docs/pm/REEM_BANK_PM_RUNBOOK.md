@@ -128,6 +128,19 @@ when each cell shows `<custom data-type="smartlink" data-id="id-N">`.
 Keep `code` marks out of the payload — `code` + `textColor` makes Jira reject
 the entire edit with a bare `INVALID_INPUT`.
 
+**Do not try to write smart links through markdown.** A read of an existing
+smart link serialises as `<custom data-type="smartlink" data-id="id-N">URL</custom>`,
+but that syntax is *not* accepted on the way back in: pushed through
+`contentFormat: "markdown"` it is stored as literal text and renders as escaped
+`&lt;custom …&gt;` tags around the link. Verified on RF-3329, 25 Sep 2026, via
+`expand: "renderedFields"` — which is the only reliable way to tell, since both
+a real smart link and literal text read back identically in markdown. Either
+push ADF with `inlineCard`, or use ordinary markdown links `[RF-1234](url)`,
+which render cleanly but are not live cards.
+
+**Sprint and assignee** are ordinary field writes on the same call:
+`{"customfield_10020": <sprintId>, "assignee": {"accountId": "<id>"}}`.
+
 Link type is `Relates` (id `10003`). Sprint field is `customfield_10020`;
 RF Sprint 17 = id `3374`, RF Sprint 18 = id `3416`.
 

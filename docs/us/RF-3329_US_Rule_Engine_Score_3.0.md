@@ -1,139 +1,169 @@
-# RF-3329 — [Rule Engine] Update for Score 3.0
+# RF-3329 — [AECB] Update for Score 3.0
 
-Jira: https://scvaladdin.atlassian.net/browse/RF-3329 · Story · Medium · RF project
-Written 24 Sep 2026. Jira description is in sync with this file.
+Jira: https://scvaladdin.atlassian.net/browse/RF-3329 · Story · Medium · **KhoeHD** · **RF Sprint 17**
+Rewritten 25 Sep 2026 after harvesting ADIB-8315. Jira description is in sync with this file.
+Summary reads `[AECB]` because the PO set it; field labels inside use **ECB** per RF-3061 — see
+`docs/pm/ADIB-8315_Harvest_for_RF-3329.md` for the full cross-project comparison.
 
 ### Context of Business
 
-Al Etihad Credit Bureau has issued **Consumer Score 3.0**, which replaces the risk-group scale the
-Rule Engine uses today. Score 3.0 splits into two segments — **Mature** (scale 300–850, values
-M0–M9) and **New to Credit** (scale 300–650, values N0–N9) — each band carrying a risk group, a
-descriptive band and a score range.
+Al Etihad Credit Bureau has issued **Consumer Score 3.0**. It splits the consumer score into two segments, each with its own scale and range codes: **Mature** (300 – 850, M0–M9) and **New to Credit** (300 – 650, N0–N9). Score 3.0 is **additive** — the existing range families stay live and unchanged in meaning; the new codes join them.
 
-Two changes follow. The risk-group value list offered on Rule Engine criteria is replaced by the
-Score 3.0 values, and **AECB Score Range** is added as an attribute in Score Check Management,
-which today can only test the raw **AECB Score** as a number.
+Two changes follow: the range value list on Rule Engine criteria gains the Score 3.0 codes plus a new **ECB Score Segment** variable, and **ECB Score Range** is added as an attribute in Score Check Management, which today can only test the raw numeric score.
 
-**SC1 — Consumer Score 3.0 mapping (AECB source document)**
+**Precedent:** the same change is built, merged and SIT QC validated on the ADIB platform under [ADIB-8315](https://scvaladdin.atlassian.net/browse/ADIB-8315). Its range tables match this story row for row. The criteria below adopt its master-data, segment-detection and downstream requirements, and its SIT defects are carried into Dependencies as guards.
 
-![SC1](screens/SC1_Consumer_Score_3.0_Mapping.png)
+**Naming:** field labels follow the ECB wording set by [RF-3061](https://scvaladdin.atlassian.net/browse/RF-3061). The attached screens predate that rename and still read “AECB” — confirm the label against the live portal before build.
 
-**SC2 — Rule Engine value list, current** · *AS-IS*
-
-![SC2](screens/SC2_Rule_Engine_Values_Current.png)
-
-**SC3 — Rule Engine value list with Score 3.0** · *TO-BE (AC2)*
-
-Composite over the real capture: the list now offers the Score 3.0 codes, shown scrolled to the
-M→N boundary so both segments are visible in one list.
-
-![SC3](screens/SC3_Rule_Engine_Values_Score_3.0.png)
-
-**SC4 — Score Check Management, current** · *AS-IS* — only the numeric `AECB Score` can be tested
-
-![SC4](screens/SC4_Score_Check_Mgmt_Current.jpg)
-
-**SC5 — Score Check Management with AECB Score Range** · *TO-BE (AC3)*
-
-Composite over the real capture: the new attribute sits in the same condition set as the existing
-numeric `AECB Score`, which keeps working.
-
-![SC5](screens/SC5_Score_Check_Mgmt_AECB_Score_Range.png)
+**Screens** — delivered as a zip for drag-drop: SC1_Consumer_Score_3.0_Mapping.png (source) · SC2_Rule_Engine_Values_Current.png and SC3_Rule_Engine_Values_Score_3.0.png (AC3, current and target) · SC4_Score_Check_Mgmt_Current.jpg and SC5_Score_Check_Mgmt_AECB_Score_Range.png (AC5, current and target). SC3 and SC5 are composites drawn over the real portal captures, not mock-ups.
 
 ### User Story Details
 
-Scope: **Rule Engine — Strategies (Segmentation, Filtration, Deviation) and Score Check Management,
-for the products where Score Check Management is enabled: Credit Card, Personal Loan and CASA.**
-Mortgage Loan and Auto Loan tabs are disabled today and are out of scope.
+Scope: **Rule Engine — Strategies (Segmentation, Filtration, Deviation) — Score Check Management, the Application Enquiry banner and the ECB Report, for Credit Card, Personal Loan and CASA.** Mortgage Loan and Auto Loan tabs are disabled today and are out of scope.
 
 **In-scope scenarios**
-* **S1** — Credit user selects an AECB Score Range value on a Strategy criterion.
-* **S2** — Credit user adds an AECB Score Range condition to a Score Check Management value set.
-* **S3** — An application is evaluated against a strategy using a Score 3.0 value.
-* **S4** — A strategy version published under the superseded values is opened or re-published.
+
+* **S1** — A Credit user selects an ECB Score Range value on a Strategy criterion and is offered the Score 3.0 codes alongside the existing families.
+* **S2** — A Credit user builds a rule on the new ECB Score Segment variable.
+* **S3** — A Credit user adds an ECB Score Range condition to a Score Check Management value set.
+* **S4** — An application returns a Score 3.0 range; segment, code and description are derived, displayed and evaluated.
+* **S5** — An application returns a legacy range code; behaviour is unchanged.
+* **S6** — A range is added, edited or deactivated in the master after go-live, with no code change and no deployment.
 
 **Not in scope**
-* Changes to the AECB request or response contract.
+
+* Changes to the ECB request or response contract.
 * Changes to Limit Assignment boundaries or deviation thresholds.
-* Mortgage Loan and Auto Loan (tabs disabled).
+* Mortgage Loan and Auto Loan, whose Score Check Management tabs are disabled.
+* A Bureau Status Check / rejection-list gate. [ADIB-8315](https://scvaladdin.atlassian.net/browse/ADIB-8315) AC3 configures range codes that terminate the flow before the Rule Engine; RF has no equivalent gate on the board, so it is excluded until confirmed to exist.
 
-### AC1 — Consumer Score 3.0 value list
+### AC1 — Score Range master (backend configurable)
 
-Both segments are fully contiguous — no gaps or overlaps — so every score in a segment's scale
-resolves to exactly one value. (Verified programmatically against the AECB table.)
+* A single Score Range master holds every range code. **Adding, editing or deactivating a range requires no code change and no deployment.**
+* The master carries, per code: range code, risk group, descriptive band, segment / score name, min and max score, and an active flag.
+* Range codes are never hard-coded in service logic; every consumer reads the master.
 
-| Segment | Value | Risk Group | Band | Min Score | Max Score |
-|---|---|---|---|---|---|
-| Mature | **M0** | Very High Risk | Weak | 300 | 300 |
-| Mature | **M1** | Very High Risk | Weak | 301 | 523 |
-| Mature | **M2** | High Risk | Fair | 524 | 673 |
-| Mature | **M3** | Medium Risk | Good | 674 | 714 |
-| Mature | **M4** | Medium Risk | Good | 715 | 740 |
-| Mature | **M5** | Medium Risk | Good | 741 | 755 |
-| Mature | **M6** | Low Risk | Very Good | 756 | 773 |
-| Mature | **M7** | Low Risk | Very Good | 774 | 789 |
-| Mature | **M8** | Very Low Risk | Excellent | 790 | 809 |
-| Mature | **M9** | Very Low Risk | Excellent | 810 | 850 |
-| New to Credit | **N0** | Very High Risk | Weak | 300 | 427 |
-| New to Credit | **N1** | Very High Risk | Weak | 428 | 450 |
-| New to Credit | **N2** | High Risk | Fair | 451 | 463 |
-| New to Credit | **N3** | High Risk | Fair | 464 | 478 |
-| New to Credit | **N4** | High Risk | Fair | 479 | 491 |
-| New to Credit | **N5** | Medium Risk | Good | 492 | 506 |
-| New to Credit | **N6** | Medium Risk | Good | 507 | 519 |
-| New to Credit | **N7** | Low Risk | Very Good | 520 | 531 |
-| New to Credit | **N8** | Low Risk | Very Good | 532 | 553 |
-| New to Credit | **N9** | Low Risk | Very Good | 554 | 650 |
+**AC1.1 — Day-1 Score 3.0 values.** Both segments are fully contiguous with no gaps or overlaps, so every score in a segment's scale resolves to exactly one code. M-codes are Mature, N-codes are New to Credit.
 
-* Displayed as code + risk group, e.g. **M0 – Very High Risk**, matching the existing pattern.
-* Mature scale 300–850, New to Credit scale 300–650; resolved against the applicant's segment.
-* A score outside the scale, or a missing score, resolves to no value — never defaults to the
-  lowest band.
+| **Code** | **Risk Group** | **Band** | **Score range** |
+| --- | --- | --- | --- |
+| **M0** | Very High Risk | Weak | 300 – 300 |
+| **M1** | Very High Risk | Weak | 301 – 523 |
+| **M2** | High Risk | Fair | 524 – 673 |
+| **M3** | Medium Risk | Good | 674 – 714 |
+| **M4** | Medium Risk | Good | 715 – 740 |
+| **M5** | Medium Risk | Good | 741 – 755 |
+| **M6** | Low Risk | Very Good | 756 – 773 |
+| **M7** | Low Risk | Very Good | 774 – 789 |
+| **M8** | Very Low Risk | Excellent | 790 – 809 |
+| **M9** | Very Low Risk | Excellent | 810 – 850 |
+| **N0** | Very High Risk | Weak | 300 – 427 |
+| **N1** | Very High Risk | Weak | 428 – 450 |
+| **N2** | High Risk | Fair | 451 – 463 |
+| **N3** | High Risk | Fair | 464 – 478 |
+| **N4** | High Risk | Fair | 479 – 491 |
+| **N5** | Medium Risk | Good | 492 – 506 |
+| **N6** | Medium Risk | Good | 507 – 519 |
+| **N7** | Low Risk | Very Good | 520 – 531 |
+| **N8** | Low Risk | Very Good | 532 – 553 |
+| **N9** | Low Risk | Very Good | 554 – 650 |
 
-### AC2 — Rule Engine criteria value list
-* AECB Score Range offers the Score 3.0 values in place of the superseded list (*1 – Very High
-  Risk* … *5 – Very Low Risk*, plus the lettered series).
-* **Is in** / **Is not in** operators and multi-select unchanged.
-* S4 — published versions are re-mapped to Score 3.0; **the old-to-new mapping is confirmed by
-  Credit / Risk before any version is re-published**. No version migrated on an assumed mapping.
-* Superseded values are not selectable on a new or edited strategy once Score 3.0 is live.
+**AC1.2 — Existing families retained, unchanged in meaning.** RF's current range codes are migrated into the same master so all codes live in one place. They keep their present risk groups and remain selectable. **The enumerated list of RF's existing codes is taken from the current production configuration and confirmed with the developer before build** — it is not assumed from the ADIB set, whose families differ.
 
-### AC3 — AECB Score Range in Score Check Management
-* **AECB Score Range** available as an attribute alongside the numeric **AECB Score**, on the
-  Credit Card, Personal Loan and CASA tabs.
-* Usable in a group's Values conditions under Match All / Match Any.
-* Operators follow Strategies: **Is in** / **Is not in** over the Score 3.0 values.
+### AC2 — Segment detection
+
+The segment is derived from the returned range by **exact match against the Score Range master, never by prefix alone**.
+
+| **Returned range** | **Segment / Score Name** |
+| --- | --- |
+| Two characters, M + digit (M0–M9) | Consumer Score 3.0 — Mature |
+| Two characters, N + digit (N0–N9) | Consumer Score 3.0 — New to Credit |
+| Any existing family code | Its current score name — unchanged |
+
+* Prefix matching is explicitly prohibited: a single-character legacy **M** is a Very Low Risk code in the existing families, while **M0–M9** is the Mature segment. A startsWith test would classify a legacy Very Low Risk customer as Mature.
+* The derived segment is persisted on the application so the banner, the reports and the audit trail all read the same value.
+* A range not found in the master does not resolve to a segment and is handled as no value, never defaulted.
+
+### AC3 — Rule Engine criteria value list
+
+* The ECB Score Range criterion is sourced from the AC1 master, so it offers the Score 3.0 codes **in addition to** the existing families — not in place of them.
+* Operators are unchanged: **Is In, Is Not In, Include, Does Not Include, Is Empty, Is Not Empty**.
+* Strategy versions published before this change keep working untouched, because no existing code is retired or remapped. No migration of published versions is required.
+* A code deactivated in the master stops being offered on new or edited strategies but does not break a version that already references it.
+
+_📎 see attached: SC2_Rule_Engine_Values_Current.png (current) · SC3_Rule_Engine_Values_Score_3.0.png (target)_
+
+### AC4 — ECB Score Segment as a Rule Engine variable
+
+A new variable is added to **Segmentation, Filtration and Deviation**:
+
+| **Field** | **Operators** | **Values** |
+| --- | --- | --- |
+| **ECB Score Segment** | Is In, Is Not In, Include, Does Not Include, Is Empty, Is Not Empty | Dropdown: Mature / New to Credit |
+
+* Without this variable a strategy cannot distinguish the two populations, and their scales end 200 points apart — one shared numeric threshold mis-decisions one of them.
+* The value is the segment persisted in AC2.
+
+### AC5 — ECB Score Range in Score Check Management
+
+* **ECB Score Range** is available as an attribute alongside the existing numeric score, on the Credit Card, Personal Loan and CASA tabs.
+* Usable in a group's Values conditions under Match All / Match Any, on the same footing as the existing attributes.
+* Operators as AC3.
 * Added through Edit Attributes so it reaches all groups on the product tab.
+* **ECB Score Segment** is available here on the same terms.
+
+_📎 see attached: SC4_Score_Check_Mgmt_Current.jpg (current) · SC5_Score_Check_Mgmt_AECB_Score_Range.png (target)_
+
+### AC6 — Application Enquiry banner
+
+| **Field** | **Current** | **Required** |
+| --- | --- | --- |
+| ECB Score Range | description only, e.g. “Medium Risk” | code and description, e.g. “M1 – Very High Risk” |
+| **ECB Score Segment** | not present | Text: Mature / New to Credit |
+
+* The same banner component serves **Application Enquiry, Credit Queue detail and Termination Queue detail** — all three must reflect the change. [ADIB-8352](https://scvaladdin.atlassian.net/browse/ADIB-8352) is the defect raised when one surface was missed.
+
+### AC7 — ECB Report
+
+* In the Credit Summary block, below the Credit Score, display **Score Range = code – description** as text, e.g. “M9 – Excellent”.
+* Star display follows the segment's scale:
+
+| **Stars** | **Mature** | **New to Credit** | **Equivalent risk group** |
+| --- | --- | --- | --- |
+| 1 | 300 – 523 | 300 – 450 | Very High Risk |
+| 2 | 524 – 673 | 451 – 491 | High Risk |
+| 3 | 674 – 755 | 492 – 519 | Medium Risk |
+| 4 | 756 – 789 | 520 – 650 | Low Risk |
+| 5 | 790 – 850 | **NA** | Very Low Risk |
+
+* The star bands align exactly with the risk groups in AC1.1, so the star count is derived from the risk group on the master rather than a second hard-coded band table.
+* New to Credit has no 5-star band because it has no Very Low Risk code — see Impact Analysis.
+
+**Consumers of the code, description and segment:** Application Enquiry banner, Credit Queue detail, Termination Queue detail, ECB Report, Rule Engine Result, and the portal reports carrying the score range — enumerate the last with the developer.
 
 ### Impact Analysis
 
-| Area | Impact |
-|---|---|
-| **Rule Engine / Strategies** | Value list replaced on every AECB Score Range criterion — Segmentation, Filtration, Deviation. Published versions carry superseded values until migrated (AC2). |
-| **Score Check Management** | New attribute on CC, PL, CASA. Existing groups and value sets unchanged; numeric AECB Score keeps working. |
-| **Credit decisioning outcomes** | Granularity moves from 5 risk groups to 10 values per segment, so an application can fall on a different side of a threshold. Published strategies to be re-validated before go-live. |
-| **New to Credit applicants** | Scale ends at 650 and top band N9 is Low Risk / Very Good — **no Excellent / Very Low Risk band exists**. Any criterion selecting Very Low Risk, or any numeric threshold above 650, can never be met by a New to Credit applicant. Existing thresholds to be reviewed. |
-| **Reporting / MIS** | Rule Engine Result and the score in Application Enquiry and reports display the Score 3.0 value; historical applications keep what they were decisioned under. |
-| **Audit trail** | Score-check step records the Score 3.0 value and the segment applied. |
+| **Area** | **Impact** |
+| --- | --- |
+| **Rule Engine / Strategies** | Value list sourced from the master and extended with 20 codes; a new ECB Score Segment variable across Segmentation, Filtration and Deviation. Existing published versions keep working unchanged, since nothing is retired or remapped. |
+| **Score Check Management** | Two new attributes on Credit Card, Personal Loan and CASA. Existing groups and value sets unchanged; the numeric score condition keeps working. |
+| **Master data / configuration** | New backend-configurable Score Range master replacing hard-coded lists. Migration must load the existing families with their present risk groups, and must not place any new code into a rejecting or excluding configuration by default — see [ADIB-8334](https://scvaladdin.atlassian.net/browse/ADIB-8334). |
+| **Credit decisioning outcomes** | Granularity moves from the current families to 10 codes per segment, so an application can fall on a different side of a threshold. Published strategies to be re-validated before go-live. |
+| **New to Credit applicants** | The scale ends at 650 and the top code N9 is Low Risk / Very Good — there is no Excellent / Very Low Risk code and no 5-star band. Any criterion selecting Very Low Risk, or any numeric threshold above 650, can never be met by a New to Credit applicant. Existing thresholds to be reviewed, which is what AC4 exists to solve. |
+| **Reporting / MIS** | Every consumer listed above displays the code, description and segment; historical applications keep the value they were decisioned under. |
+| **Audit trail** | The score step records the range code, description and segment. Where an application is rejected on the range, the audit trail state must be written as rejected — [ADIB-8337](https://scvaladdin.atlassian.net/browse/ADIB-8337) was raised when it was not. |
 
 ### Dependencies
 
-| Ticket | Relationship |
-|---|---|
-| RF-2136 | Application score card — the scoring stream this sits in; Clarify In Progress. |
-| RF-2880 | Score Check Management screen — the surface AC3 changes. |
-| RF-2882 | Score Check Management logic and saving — must accept the new attribute. |
-| RF-2074 | Strategies attribute list — AECB Score Range sits beside the Lexis Nexis attributes. |
-| RF-1931 | Weighted Average Score calculation defect — confirm resolved first. |
-| RF-1333 | Credit Queue display of AECB Score — displayed value changes. |
-
----
-
-## Open with the PO
-
-1. **Old-to-new mapping** — the superseded list has 5 numeric values plus a lettered series;
-   Score 3.0 has 10 per segment. Not a 1:1 map, so Credit/Risk must define it. AC2 blocks
-   migration until they do.
-2. **Segment derivation** — how the system decides Mature vs New to Credit is not in the source.
-3. **Numeric AECB Score thresholds** — review every existing threshold above 650 against the
-   New to Credit ceiling.
+| **Ticket** | **Relationship** |
+| --- | --- |
+| [ADIB-8315](https://scvaladdin.atlassian.net/browse/ADIB-8315) | Same change on the ADIB platform, SIT QC validated. Reference implementation for AC1, AC2, AC6 and AC7. |
+| [ADIB-8334](https://scvaladdin.atlassian.net/browse/ADIB-8334) | Guard: new codes defaulted into a rejecting configuration and every application was rejected. Verify the migration's default state. |
+| [ADIB-8337](https://scvaladdin.atlassian.net/browse/ADIB-8337) | Guard: audit trail not written as rejected on a score-range rejection. |
+| [ADIB-8352](https://scvaladdin.atlassian.net/browse/ADIB-8352) | Guard: banner change shipped on some surfaces but not all. |
+| [ADIB-8344](https://scvaladdin.atlassian.net/browse/ADIB-8344) | Guard: a downstream report missed the new score name. |
+| [RF-3091](https://scvaladdin.atlassian.net/browse/RF-3091) | Migration of RF EFR and ECB to MarketPlace, in development — decides where the Score Range master lives. Must be settled before AC1 is built. |
+| [RF-3061](https://scvaladdin.atlassian.net/browse/RF-3061) | Portal wording changed from AECB to ECB — the source of this story's field labels. Confirm against the live portal before build. |
+| [RF-2074](https://scvaladdin.atlassian.net/browse/RF-2074) | Strategies attribute list — the new attributes sit alongside the Lexis Nexis attributes changed there. |
+| [RF-2880](https://scvaladdin.atlassian.net/browse/RF-2880) | Score Check Management screen — the surface AC5 changes. |
+| [RF-1333](https://scvaladdin.atlassian.net/browse/RF-1333) | Credit Queue display of the score range field — changes under AC6. |
