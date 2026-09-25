@@ -31,7 +31,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .sec h2{font-size:24px;font-weight:900;color:var(--navy);letter-spacing:-.2px}
 
 /* cards */
-.shot{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(26,33,77,.13);overflow:hidden}
+.shot{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .shot img{display:block;width:100%}
 .cap{font-size:10px;color:var(--muted);font-style:italic;margin-top:8px}
 .ticks{display:grid;gap:10px}
@@ -49,20 +49,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .cover .logo img{height:60px}
 .cover .tag{position:absolute;left:50%;transform:translateX(-50%);top:166px;background:var(--yellow);color:var(--navy);
             font-weight:900;font-size:11.5px;letter-spacing:4px;border-radius:16px;padding:8px 26px;white-space:nowrap}
-.cover .browser{position:absolute;left:112px;top:420px;width:570px;border-radius:12px;overflow:hidden;background:#fff;
-                box-shadow:0 34px 70px rgba(6,18,78,.38),0 0 0 1px rgba(255,255,255,.3)}
-.cover .browser .wb{height:30px;background:#F1F4FA;display:flex;align-items:center;gap:7px;padding:0 12px;border-bottom:1px solid #E3E8F2}
-.cover .browser .wb i{width:10px;height:10px;border-radius:50%;background:#FF5F57}
-.cover .browser .wb i:nth-child(2){background:#FEBC2E}
-.cover .browser .wb i:nth-child(3){background:#28C840}
-.cover .browser .wb span{margin-left:12px;flex:1;height:18px;border-radius:9px;background:#fff;border:1px solid #E3E8F2;
-                          font-size:9.5px;color:#7A8499;display:flex;align-items:center;padding-left:10px;letter-spacing:.2px}
-.cover .browser img{display:block;width:100%}
-.cover .float{position:absolute;background:#fff;border-radius:12px;overflow:hidden;
-              box-shadow:0 26px 54px rgba(6,18,78,.42),0 0 0 1px rgba(255,255,255,.35)}
-.cover .float img{display:block;width:100%}
-.cover .fa{left:50px;top:600px;width:200px;transform:rotate(-5deg)}
-.cover .fb{left:432px;top:672px;width:318px;transform:rotate(4deg)}
+.cover .hero{position:absolute;left:15px;top:218px;width:764px}
 .cover .ybar{position:absolute;left:56px;top:918px;width:96px;height:6px;border-radius:3px;background:var(--yellow)}
 .cover h1{position:absolute;left:56px;top:938px;right:56px;font-size:44px;color:#fff;letter-spacing:-.5px}
 .cover .sub{position:absolute;left:56px;top:996px;font-size:17px;color:#DCE7FF}
@@ -79,7 +66,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .stat .l{font-size:11px;color:#C9D3F0;margin-top:8px;line-height:1.4}
 .whats{margin-top:24px;border:1.5px solid var(--blue);border-radius:16px;background:var(--soft);padding:20px 20px 22px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
-.card{background:#fff;border-radius:12px;padding:16px 16px 18px;border-left:4px solid var(--blue);box-shadow:0 2px 10px rgba(26,33,77,.05)}
+.card{background:#fff;border-radius:12px;padding:16px 16px 18px;border:1px solid #DCE6FA;border-left:4px solid var(--blue)}
 .card.y{border-left-color:var(--yellow)}
 .card .no{font-size:10.5px;font-weight:900;letter-spacing:2px;color:var(--blue)}
 .card.y .no{color:#E0A000}
@@ -97,7 +84,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .cards.two .card p{font-size:12.6px}
 .thumb{height:150px;border-radius:10px;background:#F4F7FD;border:1px solid var(--line);display:flex;align-items:center;
        justify-content:center;overflow:hidden;margin-bottom:14px}
-.thumb img{max-width:92%;max-height:132px;border-radius:6px;box-shadow:0 6px 16px rgba(26,33,77,.12)}
+.thumb img{max-width:92%;max-height:132px;border-radius:6px;border:1px solid var(--line)}
 /* ===== feature pages ===== */
 .feat .shot{margin-top:18px}
 .bands{margin-top:22px;border:1px solid var(--line);border-radius:12px;padding:16px 18px 12px}
@@ -143,7 +130,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 /* zoom inset (page 5) */
 .zoomwrap{position:relative;margin-top:18px;padding-bottom:78px}
 .zoomwrap .zoom{position:absolute;right:-8px;bottom:0;width:520px;border:2px solid var(--blue);border-radius:10px;
-                overflow:hidden;background:#fff;box-shadow:0 16px 40px rgba(26,33,77,.22)}
+                overflow:hidden;background:#fff;}
 .zoomwrap .zoom img{display:block;width:100%}
 .zoomwrap .zl{position:absolute;right:14px;bottom:170px;background:var(--blue);color:#fff;font-size:9.5px;font-weight:900;
               letter-spacing:2px;border-radius:10px;padding:4px 10px}
@@ -154,7 +141,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .ba .lab.t{background:#EEF1F6;color:var(--muted)}
 .ba .lab.n{background:var(--blue);color:#fff}
 .ba .img{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
-.ba .img.n{border:2px solid var(--blue);box-shadow:0 10px 26px rgba(50,120,255,.18)}
+.ba .img.n{border:2px solid var(--blue);}
 .ba .img img{display:block;width:100%}
 /* ===== appendix ===== */
 .pill.ap{background:var(--blue)}
@@ -205,12 +192,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
   <svg class="spark" style="left:118px;top:318px;width:22px;height:22px;opacity:0.95" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:668px;top:300px;width:30px;height:30px;opacity:0.9" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:700px;top:860px;width:16px;height:16px;opacity:0.8" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:92px;top:830px;width:12px;height:12px;opacity:0.7" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg>
   <div class="logo"><img src="../assets/appro_logo_white.png" alt="appro"></div>
   <div class="tag">BUSINESS REQUIREMENTS &middot; Q3 2026</div>
-  <div class="browser">
-    <div class="wb"><i></i><i></i><i></i><span>Super Portal &nbsp;&rsaquo;&nbsp; Score Check Management</span></div>
-    <img src="../assets/cover_sc5_window.png" alt="">
-  </div>
-  <div class="float fa"><img src="../assets/cover_sc3_list.png" alt=""></div>
-  <div class="float fb"><img src="../assets/cover_sc6_segment.png" alt=""></div>
+  <img class="hero" src="../assets/cover_hero_score.png" alt="">
   <div class="ybar"></div>
   <h1>ECB Consumer Credit Score 3.0</h1>
   <div class="sub">What's new in Super Portal</div>

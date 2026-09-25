@@ -1,0 +1,72 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>@@FONT@@</style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:transparent;font-family:'Lato',sans-serif}
+body{width:840px;height:780px;position:relative}
+#stage{position:absolute;left:90px;top:90px;width:660px;height:600px}
+.card{position:absolute;background:#fff;border-radius:22px;box-shadow:0 34px 70px rgba(6,18,78,.36),0 2px 6px rgba(6,18,78,.10)}
+.main{left:34px;top:30px;width:440px;height:360px;padding:24px 26px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.k{font-size:11px;font-weight:900;letter-spacing:2.6px;color:#1A214D}
+.pill{font-size:10.5px;font-weight:900;letter-spacing:1.6px;border-radius:12px;padding:5px 11px}
+.pill.m{background:#3B7EF6;color:#fff}
+.pill.n{background:#FDBA23;color:#1A214D}
+svg{position:absolute}
+.big{position:absolute;left:0;right:0;text-align:center;color:#1A214D}
+.ntc{left:372px;top:352px;width:280px;height:228px;padding:18px 20px}
+.chip{position:absolute;background:#fff;color:#1A214D;font-weight:900;font-size:13px;letter-spacing:.6px;border-radius:16px;
+      padding:8px 14px;box-shadow:0 14px 30px rgba(6,18,78,.30)}
+.chip b{color:#3B7EF6}
+</style></head><body>
+<div id="stage">
+
+<div class="card main">
+  <div class="top"><span class="k">CONSUMER CREDIT SCORE 3.0</span><span class="pill m">MATURE</span></div>
+  <svg id="g1" width="440" height="300" style="left:0;top:40px"></svg>
+  <div class="big" style="top:178px"><div style="font-size:64px;font-weight:900;line-height:1;letter-spacing:-1px">812</div>
+    <div style="font-size:15px;font-weight:900;color:#3B7EF6;margin-top:8px">M9 &middot; Very Low Risk</div>
+    <div style="font-size:12.5px;color:#6B7486;margin-top:3px">Excellent</div></div>
+</div>
+
+<div class="card ntc">
+  <div class="top"><span class="k" style="font-size:10px;letter-spacing:2.2px">NEW TO CREDIT</span><span class="pill n">300 &ndash; 650</span></div>
+  <svg id="g2" width="280" height="200" style="left:0;top:36px"></svg>
+  <div class="big" style="top:118px"><div style="font-size:36px;font-weight:900;line-height:1">548</div>
+    <div style="font-size:12.5px;font-weight:900;color:#3B7EF6;margin-top:6px">N8 &middot; Low Risk</div></div>
+</div>
+
+<div class="chip" style="left:470px;top:62px"><b>M0 &ndash; M9</b> &nbsp;Mature</div>
+<div class="chip" style="left:14px;top:448px"><b>N0 &ndash; N9</b> &nbsp;New to Credit</div>
+
+</div>
+<script>
+function gauge(id,cx,cy,r,w,min,max,segs,score,labels){
+  const svg=document.getElementById(id), NS='http://www.w3.org/2000/svg';
+  const th=s=>Math.PI*(1-(s-min)/(max-min));
+  const pt=(t,rad)=>[cx+rad*Math.cos(t), cy-rad*Math.sin(t)];
+  const arc=(a,b,col,gap)=>{const t1=th(a)-gap,t2=th(b)+gap;const [x1,y1]=pt(t1,r),[x2,y2]=pt(t2,r);
+    const p=document.createElementNS(NS,'path');p.setAttribute('d',`M${x1},${y1} A${r},${r} 0 0 1 ${x2},${y2}`);
+    p.setAttribute('stroke',col);p.setAttribute('stroke-width',w);p.setAttribute('fill','none');p.setAttribute('stroke-linecap','butt');svg.appendChild(p);};
+  arc(min,max,'#EEF2F9',0);
+  const gap=0.016;
+  segs.forEach(([a,b,c])=>arc(a,b,c,gap));
+  // marker
+  const [mx,my]=pt(th(score),r);
+  const k=document.createElementNS(NS,'circle');k.setAttribute('cx',mx);k.setAttribute('cy',my);k.setAttribute('r',w*0.62);
+  k.setAttribute('fill','#1A214D');k.setAttribute('stroke','#fff');k.setAttribute('stroke-width',w*0.28);svg.appendChild(k);
+  // end labels
+  labels.forEach(([s,txt,dy])=>{const [x,y]=pt(th(s),r);const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',x);t.setAttribute('y',y+dy);t.setAttribute('text-anchor','middle');t.setAttribute('font-size',w>20?12:10.5);
+    t.setAttribute('font-family','Lato');t.setAttribute('font-weight','700');t.setAttribute('fill','#8A93A6');t.textContent=txt;svg.appendChild(t);});
+}
+// Mature 300-850: VH 300-523 | H 524-673 | M 674-755 | L 756-789 | VL 790-850
+gauge('g1',220,215,150,28,300,850,
+  [[300,523.5,'#1B2150'],[523.5,673.5,'#3B7EF6'],[673.5,755.5,'#FDBA23'],[755.5,789.5,'#9DBBFF'],[789.5,850,'#D4E1FF']],
+  812,[[300,'300',30],[850,'850',30]]);
+// New to Credit 300-650: VH 300-450 | H 451-491 | M 492-519 | L 520-650 (no Very Low band)
+gauge('g2',140,128,92,16,300,650,
+  [[300,450.5,'#1B2150'],[450.5,491.5,'#3B7EF6'],[491.5,519.5,'#FDBA23'],[519.5,650,'#9DBBFF']],
+  548,[[300,'300',22],[650,'650',22]]);
+</script>
+</body></html>

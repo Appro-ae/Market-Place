@@ -14,7 +14,7 @@ team. No Jira references, no workflow, no technical derivation logic.
 
 ## Pages
 
-1. Cover — the newsletter composition: centred logo, yellow pill, disc, sparkles; a browser-framed Score Check Management screen with the Score 3.0 value list and the Score Segment row floating over it
+1. Cover — the newsletter composition: centred logo, yellow pill, disc, sparkles; a score hero — Mature gauge (812 · M9 · Very Low Risk) and New to Credit gauge (548 · N8 · Low Risk), drawn to the real Score 3.0 bands
 2. At a glance — headline, the two Rule Engine tools with product thumbnails, products, what stays the same
 3. 01 · Score 3.0 codes in the Rule Engine value list
 4. 02 · The AECB Score Segment variable (the only screen with `#FF5500` callouts) + good to know
@@ -60,3 +60,32 @@ captured from the build, which still read AECB.
 The captured test name in the strategy group field was replaced with neutral
 group names: **Group 1** on SC3, **Group 2** on SC6 (same bold, underlined
 field style, font calibrated against the capture).
+
+## No CSS drop shadows — ever
+
+Chromium prints a CSS `box-shadow` as a blurred soft-mask group. macOS Preview
+(and some other viewers) paint those groups as **solid dark rectangles** — the
+first version of the new cover showed exactly that on the PO's machine, while
+every render here looked fine. The PDF therefore carries no CSS shadows at all:
+
+* depth on the cover comes from `build/hero.html`, rendered by
+  `build/render_hero.js` to a transparent PNG with the shadows baked in. The
+  canvas is padded 90px on every side so the shadows fade out inside the image
+  — a shadow clipped at the image edge shows as a faint rectangle too;
+* inner pages use flat 1px borders instead of shadows.
+
+Check after any change:
+
+```
+python3 - <<'X'
+import pymupdf; d=pymupdf.open('BRD_ECB_Consumer_Credit_Score_3.0_V1.0.pdf')
+print(sum(1 for x in range(1,d.xref_length()) if '/Type /ExtGState' in (o:=d.xref_object(x,compressed=False)) and '/SMask' in o and '/SMask /None' not in o))
+X
+```
+
+It must print `0`.
+
+The gauges are drawn to the real bands: Mature 300 – 523 / 524 – 673 /
+674 – 755 / 756 – 789 / 790 – 850; New to Credit 300 – 450 / 451 – 491 /
+492 – 519 / 520 – 650. The sample scores are consistent with the mapping:
+812 is M9 · Very Low Risk · Excellent, 548 is N8 · Low Risk.
