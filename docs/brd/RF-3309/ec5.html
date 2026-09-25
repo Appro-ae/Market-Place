@@ -2,50 +2,34 @@
 @font-face{font-family:'Plus Jakarta Sans';font-weight:500;src:url('fonts/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');}
 @font-face{font-family:'Plus Jakarta Sans';font-weight:600;src:url('fonts/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
 @font-face{font-family:'Plus Jakarta Sans';font-weight:700;src:url('fonts/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
-html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
+html,body{margin:0;padding:0;width:1920px;height:1400px;overflow:hidden;background:#fff;}
 body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
-.base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1400px;display:block;}
+.cover{position:absolute;left:140px;top:778px;width:1160px;height:530px;background:#FFF;}
+.hdr{position:absolute;left:148px;top:784px;width:1138px;height:64px;border-radius:8px;background:#008AAB;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#FFF;}
+.hdr svg{width:16px;height:9px;}
+.rw{position:absolute;left:148px;width:1138px;height:38px;display:flex;align-items:center;font-size:12.5px;color:#404345;}
+.rw .l{position:absolute;left:26px;font-weight:400;}
+.rw .r{position:absolute;left:462px;font-weight:700;}
+.rw .r.new{color:#008AAB;}
+.subh{position:absolute;left:174px;font-size:13px;font-weight:700;color:#008AAB;}
+.toast{position:absolute;right:46px;top:120px;width:430px;height:54px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.16);display:flex;align-items:center;padding:0 16px;font-size:12.5px;font-weight:600;color:#404345;line-height:1.4;}
 .annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
-
-.cover{position:absolute;left:142px;top:466px;width:1150px;height:492px;background:#FFF;}
-.acc{position:absolute;left:148px;width:1138px;height:51px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#1E1F20;}
-.acc svg{width:16px;height:9px;}
-.panel{position:absolute;left:148px;top:527px;width:1138px;background:#FFF;border:1px solid #E5E5E5;border-top:none;border-radius:0 0 8px 8px;box-sizing:border-box;padding:14px 22px 16px;}
-.sub{font-size:13.5px;font-weight:700;color:#008AAB;margin-bottom:10px;}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;row-gap:15px;column-gap:20px;}
-.kv .k{font-size:11.5px;font-weight:500;color:#73787B;}
-.kv .v{margin-top:3px;font-size:12.5px;font-weight:700;color:#404345;}
-.kv.new .v{color:#008AAB;}
-.blk{margin-top:16px;border:3px solid #FF5500;border-radius:8px;padding:10px 14px 14px;}
-.toast{position:absolute;right:42px;top:120px;width:430px;height:54px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.16);display:flex;align-items:center;padding:0 16px;font-size:12.5px;font-weight:600;color:#404345;line-height:1.4;}
 </style></head><body>
-<img class="base" src="base/48-queue-application-view.png">
+<img class="base" src="base/CQ-04f-section-liability-info.png">
 <div class="cover"></div>
-<div class="acc" style="top:476px;">Application Details<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#008AAB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-<div class="panel">
-  <div class="sub">Employment Information</div>
-  <div class="grid">
-    <div class="kv"><div class="k">Employment Category</div><div class="v">SALARIED</div></div>
-    <div class="kv new"><div class="k">Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
-    <div class="kv new"><div class="k">Employer Name Source</div><div class="v">CREDIT USER</div></div>
-    <div class="kv new"><div class="k">ALOC Classification</div><div class="v">ALOC</div></div>
-    <div class="kv new"><div class="k">Company Category</div><div class="v">A</div></div>
-    <div class="kv new"><div class="k">Sector</div><div class="v">PRIVATE</div></div>
-    <div class="kv new"><div class="k">Industry</div><div class="v">WHOLESALE AND RETAIL TRADE, REPAIR OF MOTOR VEHICLES AND MOTORCYCLES</div></div>
-    <div class="kv new"><div class="k">Employer Status</div><div class="v">ACTIVE</div></div>
-    <div class="kv"><div class="k">Finalized Length of Service (months)</div><div class="v">38</div></div>
-  </div>
-  <div class="blk">
-  <div class="sub" style="margin-bottom:8px;">Employer Name Update</div>
-  <div class="grid">
-    <div class="kv"><div class="k">Original Employer Name</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
-    <div class="kv"><div class="k">Original ALOC Classification</div><div class="v">N-ALOC · CATEGORY N-ALOC</div></div>
-    <div class="kv"><div class="k">Updated By</div><div class="v">FERAS.MATAR@REEMBANK.AE</div></div>
-    <div class="kv new"><div class="k">Updated Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
-    <div class="kv new"><div class="k">Updated ALOC Classification</div><div class="v">ALOC · CATEGORY A</div></div>
-    <div class="kv"><div class="k">Updated On</div><div class="v">22/09/2026 10:42</div></div>
-  </div>
-  </div>
-</div>
+<div class="hdr">Application Details<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+<div class="rw" style="top:864px;"><span class="l">Employer Name</span><span class="r new">: AL FUTTAIM GROUP LLC</span></div>
+<div class="rw" style="top:902px;"><span class="l">Employer Name Source</span><span class="r new">: CREDIT USER</span></div>
+<div class="rw" style="top:940px;"><span class="l">ALOC Classification</span><span class="r new">: ALOC</span></div>
+<div class="rw" style="top:978px;"><span class="l">Company Category</span><span class="r new">: A</span></div>
+<div class="subh" style="top:1030px;">Employer Name Update</div>
+<div class="rw" style="top:1056px;"><span class="l">Original Employer Name</span><span class="r">: AL FUTTAIM PRIVATE CO LLC</span></div>
+<div class="rw" style="top:1094px;"><span class="l">Original ALOC Classification</span><span class="r">: N-ALOC · CATEGORY N-ALOC</span></div>
+<div class="rw" style="top:1132px;"><span class="l">Updated Employer Name</span><span class="r new">: AL FUTTAIM GROUP LLC</span></div>
+<div class="rw" style="top:1170px;"><span class="l">Updated ALOC Classification</span><span class="r new">: ALOC · CATEGORY A</span></div>
+<div class="rw" style="top:1208px;"><span class="l">Updated By</span><span class="r">: FERAS.MATAR@REEMBANK.AE</span></div>
+<div class="rw" style="top:1246px;"><span class="l">Updated On</span><span class="r">: 22/09/2026 10:42</span></div>
+<div class="annot" style="left:154px;top:1018px;width:1126px;height:278px;"></div>
 <div class="toast">✓&nbsp;&nbsp;Application "APP_RB_10092600001281" is updated successfully!</div>
 </body></html>

@@ -33,130 +33,108 @@ const ec2 = `<!doctype html><html><head><meta charset="utf-8"><title>ec2</title>
 
 // ---------------------------------------------------------------------------
 // SC3 — Edit Application pop-up with the new Employer Name section
-// (modal over the real capture; section headers mimic the portal accordion)
+// Base: REAL Edit pop-up capture (CQ-05b), page 1920x1400. The Length of
+// Service section + footer are redrawn slightly compressed so the new
+// Employer Name section fits before the footer, in the live field-card style.
 // ---------------------------------------------------------------------------
-const MODAL_CSS = `
-.dim{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,23,38,0.55);}
-.modal{position:absolute;left:470px;top:130px;width:980px;height:820px;background:#FFFFFF;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:28px 36px;}
-.mt{font-size:22px;font-weight:700;color:#0D0D0D;}
-.mx{position:absolute;right:30px;top:24px;font-size:26px;color:#73787B;font-weight:400;}
-.sec{margin-top:10px;height:44px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:15px;font-weight:600;color:#0D0D0D;}
-.sec svg{width:15px;height:9px;}
-.hl{outline:3px solid #FF5500;outline-offset:5px;border-radius:8px;}
-.body{background:#FFF;border:1px solid #E5E5E5;border-top:none;border-radius:0 0 8px 8px;padding:14px 18px 16px;}
-.ro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-.ro .k{font-size:11.5px;font-weight:500;color:#73787B;}
-.ro .v{margin-top:4px;font-size:13px;font-weight:700;color:#404345;}
-.lbl{margin-top:12px;font-size:13.5px;font-weight:500;color:#2F3133;}
-.lbl .star{color:#D8092E;font-weight:600;}
-.inp{position:relative;margin-top:8px;height:46px;border:1.5px solid #008AAB;border-radius:8px;background:#FFF;display:flex;align-items:center;padding:0 16px;font-size:14px;color:#404345;font-weight:500;}
-.inp .caret{position:absolute;top:12px;width:1.5px;height:22px;background:#404345;}
-.help{margin-top:8px;font-size:11px;color:#73787B;line-height:1.5;}
-.note{margin-top:12px;border-radius:8px;background:#FFF7E6;border:1px solid #F5D08A;padding:10px 14px;font-size:12px;color:#7A5A00;line-height:1.5;}
-.mbar{position:absolute;left:36px;right:36px;bottom:24px;display:flex;align-items:center;justify-content:flex-end;gap:14px;}
-.clr{margin-right:auto;font-size:13.5px;font-weight:600;color:#008AAB;text-decoration:underline;}
-.mb{height:48px;border-radius:8px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 40px;box-sizing:border-box;}
-.mb.o{border:1px solid #008AAB;color:#008AAB;background:#FFF;}
-.mb.f{background:#008AAB;color:#FFF;}
+const M3_CSS = `
+html,body{margin:0;padding:0;width:1920px;height:1400px;overflow:hidden;background:#7F7F7F;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1400px;display:block;}
+.cover{position:absolute;left:192px;top:1030px;width:1536px;height:302px;background:#FFF;}
+.ext{position:absolute;left:192px;top:1320px;width:1536px;height:52px;background:#FFF;border-radius:0 0 18px 18px;}
+.sec{position:absolute;left:208px;width:1504px;height:48px;border-radius:6px;background:#E6F1F8;display:flex;align-items:center;padding:0 18px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#1E1F20;}
+.card{position:absolute;height:70px;background:#FFF;border:1px solid #D9DADC;border-radius:10px;box-sizing:border-box;padding:11px 17px;}
+.card .k{font-size:12.5px;font-weight:700;color:#00809E;}
+.card .k .star{color:#D32F2F;}
+.card.ro .k{color:#73787B;}
+.card .v{margin-top:6px;font-size:13px;font-weight:500;color:#404345;display:flex;align-items:center;gap:8px;}
+.card .v .cur{color:#404345;font-weight:600;}
+.card .v .sep{color:#C4C6C8;}
+.card.on{border:1.5px solid #008AAB;}
+.caret{display:inline-block;width:1.5px;height:18px;background:#404345;}
+.foot{position:absolute;left:208px;right:208px;top:1312px;height:48px;display:flex;align-items:center;}
+.clr{font-size:14px;font-weight:700;color:#008AAB;}
+.fb{height:47px;border-radius:24px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 34px;box-sizing:border-box;margin-left:14px;}
+.fb.o{border:1px solid #008AAB;color:#008AAB;background:#FFF;}
+.fb.f{background:#008AAB;color:#FFF;}
+.annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
 `;
-const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title><style>${FONT}${PAGE_CSS}${MODAL_CSS}</style></head><body>
-<img class="base" src="base/48-queue-application-view.png">
-<div class="dim"></div>
-<div class="modal">
-  <div class="mt">Edit Application</div><div class="mx">×</div>
-  <div class="sec">Details (Limit Assignment)${chevDown()}</div>
-  <div class="sec">Application Details (Finalized Income)${chevDown()}</div>
-  <div class="sec">Liability Info${chevDown()}</div>
-  <div class="sec">Length of Service${chevDown()}</div>
-  <div class="sec">Other Income and Expenses${chevDown()}</div>
-  <div class="hl">
-  <div class="sec" style="border-radius:8px 8px 0 0;">Employer Name${chevUp('#0D0D0D')}</div>
-  <div class="body">
-    <div class="ro">
-      <div><div class="k">Source</div><div class="v">EFR (Sponsor Name)</div></div>
-      <div><div class="k">Current classification</div><div class="v">N-ALOC · Category N-ALOC</div></div>
-      <div></div>
-    </div>
-    <div class="lbl">Employer Name <span class="star">*</span></div>
-    <div class="inp">AL FUTTAIM GROUP LLC<span class="caret" style="left:196px"></span></div>
-    <div class="help">Pre-populated with the finalized Employer Name from the journey (EFR Sponsor Name or Customer Journey input). Overwrite it to correct the employer — alphabetic characters only, max 200 characters (same validation as the Customer Journey Employer Name field).</div>
-  </div>
-  </div>
-  <div class="note"><b>Note:</b> on Save the system updates the Finalized Employer Name, re-runs the employer classification (ALOC / N-ALOC, MOD / MOI / Pensioner), recalculates the related fields and re-runs the Rule Engine. The application is then routed per the standard routing logic.</div>
-  <div class="mbar"><span class="clr">Clear all</span><div class="mb o">Cancel</div><div class="mb f">Save</div></div>
-</div>
+const card3 = (x, w, cls, label, star, inner) =>
+  `<div class="card ${cls}" style="left:${x}px;top:1232px;width:${w}px;"><div class="k">${label}${star ? ' <span class="star">*</span>' : ''}</div><div class="v">${inner}</div></div>`;
+const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title><style>${FONT}${M3_CSS}</style></head><body>
+<img class="base" src="base/CQ-05b-edit-flow-liability.png">
+<div class="cover"></div><div class="ext"></div>
+<div class="sec" style="top:1036px;">Length of Service</div>
+<div class="card" style="left:225px;top:1094px;width:476px;height:68px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
+<div class="sec" style="top:1174px;">Employer Name</div>
+${card3(225, 476, 'on', 'Employer Name', true, `AL FUTTAIM GROUP LLC<span class="caret"></span>`)}
+${card3(721, 476, 'ro', 'Employer Name Source', false, `EFR (Sponsor Name)`)}
+${card3(1217, 494, 'ro', 'Current ALOC Classification', false, `N-ALOC · Category N-ALOC`)}
+<div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
+<div class="annot" style="left:198px;top:1166px;width:1524px;height:146px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------
-// SC4 — confirmation pop-up (modal only)
+// SC4 — confirmation pop-up (real dialog style: white modal, left-aligned
+// bold title, pill buttons bottom-right — per the live Override dialog)
 // ---------------------------------------------------------------------------
 const ec4 = `<!doctype html><html><head><meta charset="utf-8"><title>ec4</title><style>${FONT}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:760px;height:560px}
-body{background:#222;font-family:'Plus Jakarta Sans',sans-serif;position:relative;overflow:hidden}
-.modal{position:absolute;left:106px;top:49px;width:548px;height:462px;background:#FFFFFF;border-radius:16px;padding:0 35px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
-.title{margin-top:34px;text-align:center;font-size:24px;font-weight:700;line-height:36px;color:#0D0D0D}
-.sub{margin-top:14px;text-align:center;font-size:13.5px;font-weight:400;color:#626567;line-height:20px}
+body{background:#5c5c5c;font-family:'Plus Jakarta Sans',sans-serif;position:relative;overflow:hidden}
+.modal{position:absolute;left:80px;top:70px;width:600px;height:420px;background:#FFFFFF;border-radius:16px;padding:34px 38px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.title{font-size:21px;font-weight:700;line-height:31px;color:#1E1F20}
+.sub{margin-top:16px;font-size:13.5px;font-weight:400;color:#626567;line-height:21px}
 .sub b{color:#404345;font-weight:700}
-.div{margin-top:18px;height:2px;background:#F1F2F4;border-radius:2px}
-.warn{margin-top:16px;text-align:center;font-size:13px;color:#7A5A00;background:#FFF7E6;border:1px solid #F5D08A;border-radius:8px;padding:12px 14px;line-height:19px}
-.buttons{position:absolute;left:35px;right:35px;bottom:36px;display:flex;gap:12px}
-.btn{width:233px;height:50px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600}
+.warn{margin-top:18px;font-size:12.5px;color:#7A5A00;background:#FFF7E6;border:1px solid #F5D08A;border-radius:8px;padding:12px 16px;line-height:19px}
+.buttons{position:absolute;right:38px;bottom:32px;display:flex;gap:14px}
+.btn{height:47px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;padding:0 42px}
 .o{border:1px solid #008AAB;color:#008AAB}.f{background:#008AAB;color:#FFF}
 </style></head><body><div class="modal">
 <div class="title">Are you sure you want to update this Application?</div>
-<div class="sub">Employer Name of <b>APP_RB_10092600001281</b> will change from<br><b>AL FUTTAIM PRIVATE CO LLC</b> to <b>AL FUTTAIM GROUP LLC</b></div>
-<div class="div"></div>
+<div class="sub">Employer Name of <b>APP_RB_10092600001281</b> will change from <b>AL FUTTAIM PRIVATE CO LLC</b> to <b>AL FUTTAIM GROUP LLC</b>.</div>
 <div class="warn">Note that the system will re-run the ALOC classification, auto-recalculate the related fields and then re-run the Rule Engine. Please choose carefully!</div>
 <div class="buttons"><div class="btn o">No</div><div class="btn f">Yes</div></div>
 </div></body></html>`;
 
 // ---------------------------------------------------------------------------
-// SC5 — Application Details after the update (raw 48; only the accordion
-// column is redrawn: Application Details expanded + Employer Name Update)
-// Real geometry: accordion column x148–1286, rows h51 pitch61 from y476.
+// SC5 — Application Details after the update. Base: REAL application view
+// with an expanded section (CQ-04f, page 1920x1400). The expanded section is
+// redrawn as "Application Details": teal header + white panel with
+// "Label : VALUE" rows, exactly the live expanded-accordion design.
 // ---------------------------------------------------------------------------
-const AD_CSS = `
-.cover{position:absolute;left:142px;top:466px;width:1150px;height:492px;background:#FFF;}
-.acc{position:absolute;left:148px;width:1138px;height:51px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#1E1F20;}
-.acc svg{width:16px;height:9px;}
-.panel{position:absolute;left:148px;top:527px;width:1138px;background:#FFF;border:1px solid #E5E5E5;border-top:none;border-radius:0 0 8px 8px;box-sizing:border-box;padding:14px 22px 16px;}
-.sub{font-size:13.5px;font-weight:700;color:#008AAB;margin-bottom:10px;}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;row-gap:15px;column-gap:20px;}
-.kv .k{font-size:11.5px;font-weight:500;color:#73787B;}
-.kv .v{margin-top:3px;font-size:12.5px;font-weight:700;color:#404345;}
-.kv.new .v{color:#008AAB;}
-.blk{margin-top:16px;border:3px solid #FF5500;border-radius:8px;padding:10px 14px 14px;}
-.toast{position:absolute;right:42px;top:120px;width:430px;height:54px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.16);display:flex;align-items:center;padding:0 16px;font-size:12.5px;font-weight:600;color:#404345;line-height:1.4;}
+const A5_CSS = `
+html,body{margin:0;padding:0;width:1920px;height:1400px;overflow:hidden;background:#fff;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1400px;display:block;}
+.cover{position:absolute;left:140px;top:778px;width:1160px;height:530px;background:#FFF;}
+.hdr{position:absolute;left:148px;top:784px;width:1138px;height:64px;border-radius:8px;background:#008AAB;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#FFF;}
+.hdr svg{width:16px;height:9px;}
+.rw{position:absolute;left:148px;width:1138px;height:38px;display:flex;align-items:center;font-size:12.5px;color:#404345;}
+.rw .l{position:absolute;left:26px;font-weight:400;}
+.rw .r{position:absolute;left:462px;font-weight:700;}
+.rw .r.new{color:#008AAB;}
+.subh{position:absolute;left:174px;font-size:13px;font-weight:700;color:#008AAB;}
+.toast{position:absolute;right:46px;top:120px;width:430px;height:54px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.16);display:flex;align-items:center;padding:0 16px;font-size:12.5px;font-weight:600;color:#404345;line-height:1.4;}
+.annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
 `;
-const ec5 = `<!doctype html><html><head><meta charset="utf-8"><title>ec5</title><style>${FONT}${PAGE_CSS}${AD_CSS}</style></head><body>
-<img class="base" src="base/48-queue-application-view.png">
+const r5 = (top, l, v, nw) => `<div class="rw" style="top:${top}px;"><span class="l">${l}</span><span class="r${nw ? ' new' : ''}">: ${v}</span></div>`;
+const ec5 = `<!doctype html><html><head><meta charset="utf-8"><title>ec5</title><style>${FONT}${A5_CSS}</style></head><body>
+<img class="base" src="base/CQ-04f-section-liability-info.png">
 <div class="cover"></div>
-<div class="acc" style="top:476px;">Application Details${chevUp('#008AAB')}</div>
-<div class="panel">
-  <div class="sub">Employment Information</div>
-  <div class="grid">
-    <div class="kv"><div class="k">Employment Category</div><div class="v">SALARIED</div></div>
-    <div class="kv new"><div class="k">Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
-    <div class="kv new"><div class="k">Employer Name Source</div><div class="v">CREDIT USER</div></div>
-    <div class="kv new"><div class="k">ALOC Classification</div><div class="v">ALOC</div></div>
-    <div class="kv new"><div class="k">Company Category</div><div class="v">A</div></div>
-    <div class="kv new"><div class="k">Sector</div><div class="v">PRIVATE</div></div>
-    <div class="kv new"><div class="k">Industry</div><div class="v">WHOLESALE AND RETAIL TRADE, REPAIR OF MOTOR VEHICLES AND MOTORCYCLES</div></div>
-    <div class="kv new"><div class="k">Employer Status</div><div class="v">ACTIVE</div></div>
-    <div class="kv"><div class="k">Finalized Length of Service (months)</div><div class="v">38</div></div>
-  </div>
-  <div class="blk">
-  <div class="sub" style="margin-bottom:8px;">Employer Name Update</div>
-  <div class="grid">
-    <div class="kv"><div class="k">Original Employer Name</div><div class="v">AL FUTTAIM PRIVATE CO LLC</div></div>
-    <div class="kv"><div class="k">Original ALOC Classification</div><div class="v">N-ALOC · CATEGORY N-ALOC</div></div>
-    <div class="kv"><div class="k">Updated By</div><div class="v">FERAS.MATAR@REEMBANK.AE</div></div>
-    <div class="kv new"><div class="k">Updated Employer Name</div><div class="v">AL FUTTAIM GROUP LLC</div></div>
-    <div class="kv new"><div class="k">Updated ALOC Classification</div><div class="v">ALOC · CATEGORY A</div></div>
-    <div class="kv"><div class="k">Updated On</div><div class="v">22/09/2026 10:42</div></div>
-  </div>
-  </div>
-</div>
+<div class="hdr">Application Details${chevDown('#FFFFFF')}</div>
+${r5(864, 'Employer Name', 'AL FUTTAIM GROUP LLC', true)}
+${r5(902, 'Employer Name Source', 'CREDIT USER', true)}
+${r5(940, 'ALOC Classification', 'ALOC', true)}
+${r5(978, 'Company Category', 'A', true)}
+<div class="subh" style="top:1030px;">Employer Name Update</div>
+${r5(1056, 'Original Employer Name', 'AL FUTTAIM PRIVATE CO LLC', false)}
+${r5(1094, 'Original ALOC Classification', 'N-ALOC · CATEGORY N-ALOC', false)}
+${r5(1132, 'Updated Employer Name', 'AL FUTTAIM GROUP LLC', true)}
+${r5(1170, 'Updated ALOC Classification', 'ALOC · CATEGORY A', true)}
+${r5(1208, 'Updated By', 'FERAS.MATAR@REEMBANK.AE', false)}
+${r5(1246, 'Updated On', '22/09/2026 10:42', false)}
+<div class="annot" style="left:154px;top:1018px;width:1126px;height:278px;"></div>
 <div class="toast">✓&nbsp;&nbsp;Application "APP_RB_10092600001281" is updated successfully!</div>
 </body></html>`;
 
@@ -273,9 +251,9 @@ const ecflow = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,bod
 const out = {
   ec1: ['SC1_Role_Permission_Credit_Queue_Edit_Employer_Name', 1920, 1080, ec1],
   ec2: ['SC2_Credit_Queue_Application_Details_Edit_Button', 1920, 1080, ec2],
-  ec3: ['SC3_Edit_Application_Popup_Employer_Name', 1920, 1080, ec3],
+  ec3: ['SC3_Edit_Application_Popup_Employer_Name', 1920, 1400, ec3],
   ec4: ['SC4_Edit_Employer_Name_Confirmation_Popup', 760, 560, ec4],
-  ec5: ['SC5_Application_Details_Employer_Name_Updated', 1920, 1080, ec5],
+  ec5: ['SC5_Application_Details_Employer_Name_Updated', 1920, 1400, ec5],
   ec6: ['SC6_Application_Enquiry_History_Edit_Employer_Name', 1920, 1080, ec6],
   ecflow: ['Flow_Edit_Employer_Name', 1400, 520, ecflow],
 };

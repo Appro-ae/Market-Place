@@ -32,7 +32,7 @@
 
 ### AC1: Employer Name section in the Edit Application pop-up
 
-**Navigation:** Queue → Credit Queue (L1 / L2 / L3) → click a row → Application Details (SC2) → **Edit** → Edit Application pop-up → new section **"Employer Name"** placed after "Other Income and Expenses" (RF-2682) and before the action buttons (SC3).
+**Navigation:** Queue → Credit Queue (L1 / L2 / L3) → click a row → Application Details (SC2) → **Edit** → Edit Application pop-up → new section **"Employer Name"** placed after **"Length of Service"** — the last section of the pop-up as built (Application Details / Finalized Income → Other Income And Expenses → Liability Info → Length of Service, RF-1492 / RF-2682) — and before the Clear All / Cancel / Save actions (SC3).
 
 **SC2 – Credit Queue › Application Details, Edit entry point** (`SC2_Credit_Queue_Application_Details_Edit_Button.png`)
 
@@ -44,13 +44,13 @@
 
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
-| Employer Name (section header) | Label | N/A | N/A | Text "Employer Name". Section header styled consistently with the existing headers ("Application Details", "Liability Info", "Length of Service", "Other Income and Expenses"). Displayed only when the user's role has "Edit Employer Name" = TRUE (AC4). |
-| Employer Name | Input text | Yes | Yes | **Pre-populated with the current [Finalized Employer Name]** of the application — the value derived by the current logic (RF-174 AC2 Step 2: EFR [Sponsor Name] for Mainland / Freezone, the Customer Journey [Employer Name] for GCC / Golden / Family visa) and stored in [CompanyName]. The user overwrites the text in place. **Validation consistent with the Customer Journey Employer Name field (RF-8 / RF-18 AC1):** alphabetic characters only → **IEM030** (*The employer name can contain only alphabetic character. Please try again!*); max length **200** characters (the Empaneled Company [Employer Name] length, RF-869 AC1) → **IEM076**; blank → **IEM003**. English only in the Super Portal (Arabic handling of RF-2087 applies to the Customer Journey). Value stored trimmed, upper-cased for matching as today. If the value is unchanged on Save (case-insensitive), the Employer Name branch of AC2.3 is skipped — no re-classification is triggered for an unchanged name. |
-| Source | Label (read-only) | N/A | No | Origin of the pre-populated value: **EFR (Sponsor Name)** \| **Customer Journey** \| **Credit User** (after a previous edit). |
-| Current classification | Label (read-only) | N/A | No | Current [ALOC] result and [Employer Category] (RF-424 AC3), e.g. "N-ALOC · Category N-ALOC" or "ALOC · Category A". |
-| Clear all | Button | N/A | N/A | Reloads the section with the stored values (removes the changes) — same behaviour as the existing sections (RF-1492). |
+| Employer Name (section header) | Section bar | N/A | N/A | Text "Employer Name". Full-width light-blue section bar styled consistently with the existing section bars ("Application Details", "Other Income And Expenses", "Liability Info", "Length of Service"). Displayed only when the user's role has "Edit Employer Name" = TRUE (AC4). |
+| Employer Name | Input field card | Yes | Yes | Field card in the standard Edit pop-up style (bordered card, field label with red asterisk, value below). **Pre-populated with the current [Finalized Employer Name]** of the application — the value derived by the current logic (RF-174 AC2 Step 2: EFR [Sponsor Name] for Mainland / Freezone, the Customer Journey [Employer Name] for GCC / Golden / Family visa) and stored in [CompanyName]. The user overwrites the text in place. **Validation consistent with the Customer Journey Employer Name field (RF-8 / RF-18 AC1):** alphabetic characters only → **IEM030** (*The employer name can contain only alphabetic character. Please try again!*); max length **200** characters (the Empaneled Company [Employer Name] length, RF-869 AC1) → **IEM076**; blank → **IEM003**. English only in the Super Portal (Arabic handling of RF-2087 applies to the Customer Journey). Value stored trimmed, upper-cased for matching as today. If the value is unchanged on Save (case-insensitive), the Employer Name branch of AC2.3 is skipped — no re-classification is triggered for an unchanged name. |
+| Employer Name Source | Field card (read-only) | N/A | No | Read-only card beside the Employer Name field. Origin of the pre-populated value: **EFR (Sponsor Name)** \| **Customer Journey** \| **Credit User** (after a previous edit). |
+| Current ALOC Classification | Field card (read-only) | N/A | No | Read-only card beside the Employer Name field. Current [ALOC] result and [Employer Category] (RF-424 AC3), e.g. "N-ALOC · Category N-ALOC" or "ALOC · Category A". |
+| Clear All | Link button | N/A | N/A | Bottom-left of the pop-up (existing control). Reloads all sections with the stored values (removes the changes) — behaviour unchanged (RF-1492). |
 | Cancel | Button | N/A | N/A | Cancels the editing — AC3. |
-| Save | Button | N/A | N/A | Saves the change — AC2. |
+| Save | Button | N/A | N/A | Bottom-right (existing control). **Disabled until at least one value in the pop-up changes** (existing behaviour — an unchanged Employer Name alone keeps Save disabled). Saves the change — AC2. |
 
 Applicable status for the edit (unchanged from the existing Edit sections):
 
@@ -74,7 +74,7 @@ The edit shall be restricted in the below scenarios (existing Edit rules apply):
 
 * [Employer Name] blank → **IEM003** (inline).
 * [Employer Name] contains non-alphabetic characters → **IEM030**; exceeds 200 characters → **IEM076**.
-* [Employer Name] equals the current [Finalized Employer Name] → the Employer Name branch of AC2.3 is skipped (no message); the other edited sections are saved as today.
+* [Employer Name] equals the current [Finalized Employer Name] → Save stays disabled if nothing else changed; if other sections changed, the Employer Name branch of AC2.3 is skipped (no message) and the other sections are saved as today.
 * Other edited sections (Limit Assignment, Finalized Income, Liability Info, Length of Service, Other Income and Expenses) keep their own validations (RF-1492 AC1, RF-2682 AC2 step 1).
 
 **AC2.2: Confirmation** (SC4, `SC4_Edit_Employer_Name_Confirmation_Popup.png`) — one confirmation for the whole pop-up, as today; the note is extended with the ALOC re-run when the Employer Name changed
@@ -143,7 +143,7 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 
 ![SC5 – Application Details › Employment Information after the update](SC5_Application_Details_Employer_Name_Updated.png)
 
-The working value stays in the existing field; the change is made traceable by a new **Employer Name Update** block that shows the original and the updated value side by side with their classification. Wording follows the portal convention `Label : VALUE` and the "Original / Updated" pair used for overridden values:
+The working value stays in the existing field; the change is made traceable by a new **Employer Name Update** sub-block inside the expanded Application Details section (teal sub-header + `Label : VALUE` rows, the standard expanded-section display). It shows the original and the updated value with their classification:
 
 | Field (Application Details › Employment Information) | Value after the edit | Source |
 | --- | --- | --- |

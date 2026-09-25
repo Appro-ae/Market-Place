@@ -2,57 +2,36 @@
 @font-face{font-family:'Plus Jakarta Sans';font-weight:500;src:url('fonts/plus-jakarta-sans-latin-500-normal.woff2') format('woff2');}
 @font-face{font-family:'Plus Jakarta Sans';font-weight:600;src:url('fonts/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
 @font-face{font-family:'Plus Jakarta Sans';font-weight:700;src:url('fonts/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
-html,body{margin:0;padding:0;width:1920px;height:1080px;overflow:hidden;background:#fff;}
+html,body{margin:0;padding:0;width:1920px;height:1400px;overflow:hidden;background:#7F7F7F;}
 body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
-.base{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;}
+.base{position:absolute;left:0;top:0;width:1920px;height:1400px;display:block;}
+.cover{position:absolute;left:192px;top:1030px;width:1536px;height:302px;background:#FFF;}
+.ext{position:absolute;left:192px;top:1320px;width:1536px;height:52px;background:#FFF;border-radius:0 0 18px 18px;}
+.sec{position:absolute;left:208px;width:1504px;height:48px;border-radius:6px;background:#E6F1F8;display:flex;align-items:center;padding:0 18px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#1E1F20;}
+.card{position:absolute;height:70px;background:#FFF;border:1px solid #D9DADC;border-radius:10px;box-sizing:border-box;padding:11px 17px;}
+.card .k{font-size:12.5px;font-weight:700;color:#00809E;}
+.card .k .star{color:#D32F2F;}
+.card.ro .k{color:#73787B;}
+.card .v{margin-top:6px;font-size:13px;font-weight:500;color:#404345;display:flex;align-items:center;gap:8px;}
+.card .v .cur{color:#404345;font-weight:600;}
+.card .v .sep{color:#C4C6C8;}
+.card.on{border:1.5px solid #008AAB;}
+.caret{display:inline-block;width:1.5px;height:18px;background:#404345;}
+.foot{position:absolute;left:208px;right:208px;top:1312px;height:48px;display:flex;align-items:center;}
+.clr{font-size:14px;font-weight:700;color:#008AAB;}
+.fb{height:47px;border-radius:24px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 34px;box-sizing:border-box;margin-left:14px;}
+.fb.o{border:1px solid #008AAB;color:#008AAB;background:#FFF;}
+.fb.f{background:#008AAB;color:#FFF;}
 .annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
-
-.dim{position:absolute;left:0;top:0;width:1920px;height:1080px;background:rgba(0,23,38,0.55);}
-.modal{position:absolute;left:470px;top:130px;width:980px;height:820px;background:#FFFFFF;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.4);box-sizing:border-box;padding:28px 36px;}
-.mt{font-size:22px;font-weight:700;color:#0D0D0D;}
-.mx{position:absolute;right:30px;top:24px;font-size:26px;color:#73787B;font-weight:400;}
-.sec{margin-top:10px;height:44px;border-radius:8px;background:#E6F3F7;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:15px;font-weight:600;color:#0D0D0D;}
-.sec svg{width:15px;height:9px;}
-.hl{outline:3px solid #FF5500;outline-offset:5px;border-radius:8px;}
-.body{background:#FFF;border:1px solid #E5E5E5;border-top:none;border-radius:0 0 8px 8px;padding:14px 18px 16px;}
-.ro{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
-.ro .k{font-size:11.5px;font-weight:500;color:#73787B;}
-.ro .v{margin-top:4px;font-size:13px;font-weight:700;color:#404345;}
-.lbl{margin-top:12px;font-size:13.5px;font-weight:500;color:#2F3133;}
-.lbl .star{color:#D8092E;font-weight:600;}
-.inp{position:relative;margin-top:8px;height:46px;border:1.5px solid #008AAB;border-radius:8px;background:#FFF;display:flex;align-items:center;padding:0 16px;font-size:14px;color:#404345;font-weight:500;}
-.inp .caret{position:absolute;top:12px;width:1.5px;height:22px;background:#404345;}
-.help{margin-top:8px;font-size:11px;color:#73787B;line-height:1.5;}
-.note{margin-top:12px;border-radius:8px;background:#FFF7E6;border:1px solid #F5D08A;padding:10px 14px;font-size:12px;color:#7A5A00;line-height:1.5;}
-.mbar{position:absolute;left:36px;right:36px;bottom:24px;display:flex;align-items:center;justify-content:flex-end;gap:14px;}
-.clr{margin-right:auto;font-size:13.5px;font-weight:600;color:#008AAB;text-decoration:underline;}
-.mb{height:48px;border-radius:8px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 40px;box-sizing:border-box;}
-.mb.o{border:1px solid #008AAB;color:#008AAB;background:#FFF;}
-.mb.f{background:#008AAB;color:#FFF;}
 </style></head><body>
-<img class="base" src="base/48-queue-application-view.png">
-<div class="dim"></div>
-<div class="modal">
-  <div class="mt">Edit Application</div><div class="mx">×</div>
-  <div class="sec">Details (Limit Assignment)<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="sec">Application Details (Finalized Income)<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="sec">Liability Info<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="sec">Length of Service<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="sec">Other Income and Expenses<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,1.5 8.5,7.3 15.5,1.5" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="hl">
-  <div class="sec" style="border-radius:8px 8px 0 0;">Employer Name<svg viewBox="0 0 17 9" fill="none"><polyline points="1.5,7.3 8.5,1.5 15.5,7.3" stroke="#0D0D0D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-  <div class="body">
-    <div class="ro">
-      <div><div class="k">Source</div><div class="v">EFR (Sponsor Name)</div></div>
-      <div><div class="k">Current classification</div><div class="v">N-ALOC · Category N-ALOC</div></div>
-      <div></div>
-    </div>
-    <div class="lbl">Employer Name <span class="star">*</span></div>
-    <div class="inp">AL FUTTAIM GROUP LLC<span class="caret" style="left:196px"></span></div>
-    <div class="help">Pre-populated with the finalized Employer Name from the journey (EFR Sponsor Name or Customer Journey input). Overwrite it to correct the employer — alphabetic characters only, max 200 characters (same validation as the Customer Journey Employer Name field).</div>
-  </div>
-  </div>
-  <div class="note"><b>Note:</b> on Save the system updates the Finalized Employer Name, re-runs the employer classification (ALOC / N-ALOC, MOD / MOI / Pensioner), recalculates the related fields and re-runs the Rule Engine. The application is then routed per the standard routing logic.</div>
-  <div class="mbar"><span class="clr">Clear all</span><div class="mb o">Cancel</div><div class="mb f">Save</div></div>
-</div>
+<img class="base" src="base/CQ-05b-edit-flow-liability.png">
+<div class="cover"></div><div class="ext"></div>
+<div class="sec" style="top:1036px;">Length of Service</div>
+<div class="card" style="left:225px;top:1094px;width:476px;height:68px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
+<div class="sec" style="top:1174px;">Employer Name</div>
+<div class="card on" style="left:225px;top:1232px;width:476px;"><div class="k">Employer Name <span class="star">*</span></div><div class="v">AL FUTTAIM GROUP LLC<span class="caret"></span></div></div>
+<div class="card ro" style="left:721px;top:1232px;width:476px;"><div class="k">Employer Name Source</div><div class="v">EFR (Sponsor Name)</div></div>
+<div class="card ro" style="left:1217px;top:1232px;width:494px;"><div class="k">Current ALOC Classification</div><div class="v">N-ALOC · Category N-ALOC</div></div>
+<div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
+<div class="annot" style="left:198px;top:1166px;width:1524px;height:146px;"></div>
 </body></html>

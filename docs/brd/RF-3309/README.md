@@ -26,11 +26,14 @@ here; on the ticket they are attachments with the same file names).
 | `assets/ia_*.png` | Impact-analysis reference crops |
 | `fonts/` | Plus Jakarta Sans (400–700) used by the composites |
 
-The screens are composites over the **raw UAT captures** in `base/` (the live portal's
-Credit Queue application view `48-queue-application-view.png`, Application Enquiry detail
-`42-application-detail.png` and Add Role `43-add-role-permissions-scrolled.png`) — only the
-new elements are drawn; SC2 is the untouched real screen plus the annotation. The UAT portal
-is not reachable from the remote session, so the captures are the base.
+The screens are composites over the **raw UAT captures** in `base/`: the Credit Queue
+application view (`48-queue-application-view.png` — SC2), the real **Edit Application pop-up**
+(`CQ-05b-edit-flow-liability.png` — SC3), the real expanded-section view
+(`CQ-04f-section-liability-info.png` — SC5), the Application Enquiry detail
+(`42-application-detail.png` — SC6) and Add Role (`43-add-role-permissions-scrolled.png` — SC1).
+Only the new elements are drawn; SC2 is the untouched real screen plus the annotation. SC4
+follows the live dialog style (left-aligned title, pill buttons). The UAT portal is not
+reachable from the remote session, so the captures are the base.
 
 ## Regenerating
 
