@@ -254,3 +254,43 @@ A read of an existing smart link serialises as
 is stored as literal text and renders as escaped `&lt;custom …&gt;` tags around
 the link. Use ADF `inlineCard` nodes, or plain `[KEY](url)` markdown links.
 Verified on RF-3329, 25 Sep 2026.
+
+### 7.6 Web fonts do not load in this container — vendor them
+
+Chromium rejects the agent proxy's CA, so any `<link>` to
+`fonts.googleapis.com` fails with `net::ERR_CERT_AUTHORITY_INVALID` and the page
+**silently falls back to a system sans**. `document.fonts.check()` still returns
+`true` for the missing family, so it is not a usable test — check
+`[...document.fonts].length` instead, and fail the build when it is zero.
+
+Fetch the `.woff2` with `curl --cacert /root/.ccr/ca-bundle.crt` (curl does trust
+the proxy CA), inline it as base64 in a local `@font-face`, and commit it next to
+the build script. See `docs/us/screens/build/`.
+
+Composites built before 25 Sep 2026 shipped in the wrong typeface because of
+this and had to be redone.
+
+### 7.7 Measure the capture, never guess the type scale
+
+Sample every value off the base capture with PIL before drawing over it. Two
+traps found on the Reem portal captures, 25 Sep 2026:
+
+* The criteria list renders at **17px / `#0D0D0D`**, not the 15px / `#404345`
+  that a first pass assumed.
+* The hover tooltip is an **OS-level tooltip at ~22.5px**. It does not scale with
+  the page, so it is ~1.3× the page text. Drawing it at row size is obvious.
+
+Calibrate by rendering a known string from the capture and comparing widths:
+`"AECB Score Range"` = 145px of text, `"1 – Very High Risk"` = 136px. Adjust the
+size until both land, then draw.
+
+### 7.8 Never reconstruct what an overlay hides
+
+A dropdown panel, tooltip or modal in a capture covers page content that cannot
+be recovered. So the panel frame stays at captured size even when the new option
+list is shorter, and a tooltip stays at captured width even when the new label is
+shorter. Shrinking either would mean inventing the page underneath.
+
+Moving existing pixels is fine and is not invention: when a wider chip pushes the
+value input across, lift that input's pixels and re-seat them at the new offset
+rather than redrawing the text.
