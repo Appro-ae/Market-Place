@@ -40,22 +40,34 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .tick i:after{content:"";position:absolute;left:5.5px;top:2.5px;width:5px;height:9px;border:solid var(--blue);border-width:0 2px 2px 0;transform:rotate(45deg)}
 .tick b{color:var(--navy)}
 
-/* ===== cover ===== */
+/* ===== cover — newsletter composition: centred logo, pill, disc, device hero, title low ===== */
 .cover{background:var(--blue)}
-.cover .circle{position:absolute;width:640px;height:640px;border-radius:50%;left:77px;top:250px;
-               background:radial-gradient(circle at 50% 40%,#3F82FF 0%,#2E6CE6 60%,#275FD0 100%)}
-.cover .logo{position:absolute;left:0;right:0;top:78px;text-align:center}
-.cover .logo img{height:64px}
-.cover .tag{position:absolute;left:50%;transform:translateX(-50%);top:176px;background:var(--yellow);color:var(--navy);
+.cover .circle{position:absolute;width:640px;height:640px;border-radius:50%;left:77px;top:262px;
+               background:radial-gradient(circle at 50% 36%,#4C8DFF 0%,#2F6CEB 56%,#2356C6 100%)}
+.cover .spark{position:absolute}
+.cover .logo{position:absolute;left:0;right:0;top:70px;text-align:center}
+.cover .logo img{height:60px}
+.cover .tag{position:absolute;left:50%;transform:translateX(-50%);top:166px;background:var(--yellow);color:var(--navy);
             font-weight:900;font-size:11.5px;letter-spacing:4px;border-radius:16px;padding:8px 26px;white-space:nowrap}
-.cover .hero{position:absolute;left:120px;top:330px;width:554px}
-.cover .hero .a{width:470px}
-.cover .hero .b{width:440px;position:absolute;left:114px;top:196px}
-.cover .bar{position:absolute;left:56px;top:880px;width:96px;height:6px;border-radius:3px;background:var(--yellow)}
-.cover h1{position:absolute;left:56px;top:902px;right:56px;font-size:40px;color:#fff;letter-spacing:-.5px}
-.cover .sub{position:absolute;left:56px;top:958px;font-size:17px;color:#DCE7FF}
-.cover .meta{position:absolute;left:56px;right:56px;bottom:44px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff}
-.cover .meta .v{font-size:12.5px;font-weight:900;letter-spacing:2.5px}
+.cover .browser{position:absolute;left:112px;top:420px;width:570px;border-radius:12px;overflow:hidden;background:#fff;
+                box-shadow:0 34px 70px rgba(6,18,78,.38),0 0 0 1px rgba(255,255,255,.3)}
+.cover .browser .wb{height:30px;background:#F1F4FA;display:flex;align-items:center;gap:7px;padding:0 12px;border-bottom:1px solid #E3E8F2}
+.cover .browser .wb i{width:10px;height:10px;border-radius:50%;background:#FF5F57}
+.cover .browser .wb i:nth-child(2){background:#FEBC2E}
+.cover .browser .wb i:nth-child(3){background:#28C840}
+.cover .browser .wb span{margin-left:12px;flex:1;height:18px;border-radius:9px;background:#fff;border:1px solid #E3E8F2;
+                          font-size:9.5px;color:#7A8499;display:flex;align-items:center;padding-left:10px;letter-spacing:.2px}
+.cover .browser img{display:block;width:100%}
+.cover .float{position:absolute;background:#fff;border-radius:12px;overflow:hidden;
+              box-shadow:0 26px 54px rgba(6,18,78,.42),0 0 0 1px rgba(255,255,255,.35)}
+.cover .float img{display:block;width:100%}
+.cover .fa{left:50px;top:600px;width:200px;transform:rotate(-5deg)}
+.cover .fb{left:432px;top:672px;width:318px;transform:rotate(4deg)}
+.cover .ybar{position:absolute;left:56px;top:918px;width:96px;height:6px;border-radius:3px;background:var(--yellow)}
+.cover h1{position:absolute;left:56px;top:938px;right:56px;font-size:44px;color:#fff;letter-spacing:-.5px}
+.cover .sub{position:absolute;left:56px;top:996px;font-size:17px;color:#DCE7FF}
+.cover .meta{position:absolute;left:56px;right:56px;bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff}
+.cover .meta .v{font-size:13px;font-weight:900;letter-spacing:3.5px}
 .cover .meta .r{text-align:right;font-size:11px;line-height:1.6;color:#E6EEFF}
 
 /* ===== at a glance ===== */
@@ -127,6 +139,45 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .zoomwrap .zoom img{display:block;width:100%}
 .zoomwrap .zl{position:absolute;right:14px;bottom:170px;background:var(--blue);color:#fff;font-size:9.5px;font-weight:900;
               letter-spacing:2px;border-radius:10px;padding:4px 10px}
+/* before / after (page 5) */
+.ba{margin-top:22px}
+.ba .row{display:grid;grid-template-columns:142px 1fr;gap:14px;align-items:center;margin-top:10px}
+.ba .lab{font-size:10px;font-weight:900;letter-spacing:1.6px;white-space:nowrap;border-radius:12px;padding:6px 10px;text-align:center}
+.ba .lab.t{background:#EEF1F6;color:var(--muted)}
+.ba .lab.n{background:var(--blue);color:#fff}
+.ba .img{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.ba .img.n{border:2px solid var(--blue);box-shadow:0 10px 26px rgba(50,120,255,.18)}
+.ba .img img{display:block;width:100%}
+/* ===== appendix ===== */
+.pill.ap{background:var(--blue)}
+.pops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.pop{border-radius:14px;padding:18px 18px 12px;border:1.5px solid var(--blue);background:var(--soft)}
+.pop.b{border-color:var(--yellow);background:#FFF9EC}
+.pop.b .kick{color:#C28A00}
+.pop h3{font-size:18px;font-weight:900;color:var(--navy);margin:6px 0 12px}
+.pop ul{list-style:none}
+.pop li{font-size:12.4px;line-height:1.5;padding-left:17px;position:relative;margin-bottom:9px;color:#2F3445}
+.pop li:before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.pop.b li:before{background:var(--yellow)}
+.arrive{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px}
+.ar{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:#fff}
+.ar .k{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--muted)}
+.ar .v{font-size:19px;font-weight:900;color:var(--navy);margin:6px 0 4px}
+.ar p{font-size:11.6px;color:#3C4252;line-height:1.45}
+.src{font-size:9.5px;color:#8A93A6;font-style:italic;margin-top:16px}
+.codes{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.ct{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.cth{background:var(--panel);color:#fff;padding:12px 16px;font-size:14.5px;font-weight:900;display:flex;justify-content:space-between;align-items:baseline}
+.cth span{font-size:11px;font-weight:700;color:var(--yellow);letter-spacing:1.5px}
+.ct table{width:100%;border-collapse:collapse}
+.ct th{font-size:9.5px;letter-spacing:1.8px;color:var(--muted);text-align:left;padding:10px 12px 8px;font-weight:900;border-bottom:1px solid var(--line)}
+.ct td{font-size:12px;padding:8px 12px;border-bottom:1px solid #F0F3F8;color:#2F3445;white-space:nowrap}
+.ct tr:last-child td{border-bottom:none}
+.ct td.c{font-weight:900;color:var(--navy);font-size:13.5px}
+.rg{display:inline-block;font-size:10.5px;font-weight:700;border-radius:10px;padding:3px 9px}
+.rg.vh{background:#1B2150;color:#fff}.rg.h{background:#3B7EF6;color:#fff}.rg.m{background:#FDBA23;color:#1A214D}
+.rg.l{background:#E6EDFF;color:#1A214D}.rg.vl{background:#fff;color:#1A214D;border:1.5px solid #1B2150;padding:1.5px 8px}
+
 /* ===== thank you ===== */
 .ty{background:var(--blue)}
 .ty .c{position:absolute;left:0;right:0;top:300px;text-align:center;color:#fff}
@@ -143,18 +194,21 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 <!-- ================= 1. COVER ================= -->
 <section class="page cover">
   <div class="circle"></div>
+  <svg class="spark" style="left:118px;top:318px;width:22px;height:22px;opacity:0.95" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:668px;top:300px;width:30px;height:30px;opacity:0.9" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:700px;top:860px;width:16px;height:16px;opacity:0.8" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg><svg class="spark" style="left:92px;top:830px;width:12px;height:12px;opacity:0.7" viewBox="0 0 24 24"><path d="M12 0C12.9 8 16 11.1 24 12 16 12.9 12.9 16 12 24 11.1 16 8 12.9 0 12 8 11.1 11.1 8 12 0Z" fill="#fff"/></svg>
   <div class="logo"><img src="../assets/appro_logo_white.png" alt="appro"></div>
   <div class="tag">BUSINESS REQUIREMENTS &middot; Q3 2026</div>
-  <div class="hero">
-    <div class="shot a"><img src="../../us/screens/SC3_Rule_Engine_Values_Score_3.0.png" alt=""></div>
-    <div class="shot b"><img src="../../us/screens/SC6_Rule_Engine_AECB_Score_Segment.png" alt=""></div>
+  <div class="browser">
+    <div class="wb"><i></i><i></i><i></i><span>Super Portal &nbsp;&rsaquo;&nbsp; Score Check Management</span></div>
+    <img src="../assets/cover_sc5_window.png" alt="">
   </div>
-  <div class="bar"></div>
+  <div class="float fa"><img src="../assets/cover_sc3_list.png" alt=""></div>
+  <div class="float fb"><img src="../assets/cover_sc6_segment.png" alt=""></div>
+  <div class="ybar"></div>
   <h1>ECB Consumer Credit Score 3.0</h1>
-  <div class="sub">What's new in Super Portal for your credit team</div>
+  <div class="sub">What's new in Super Portal</div>
   <div class="meta">
-    <div class="v">V1.0 &middot; 25 SEPTEMBER 2026</div>
-    <div class="r">Prepared for Reem Bank<br>Appro Onboarding Solutions FZ-LLC &middot; Credit Bureau &amp; Decisioning</div>
+    <div class="v">Q3 2026</div>
+    <div class="r">Prepared for Reem Bank &middot; V1.0 &middot; 25 September 2026<br>Appro Onboarding Solutions FZ-LLC &middot; Credit Bureau &amp; Decisioning</div>
   </div>
 </section>
 
@@ -269,34 +323,80 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
   <div class="body">
     <div class="sec"><span class="pill">03</span><h2>Score Range, right where your score checks live</h2></div>
     <p class="lead">Score Check Management already tests the numeric AECB Score. It now tests the <b>Score 3.0 codes</b> too &mdash; the segment-safe way to set a threshold.</p>
-    <div class="zoomwrap">
-      <div class="shot"><img src="../assets/sc5_main.png" alt=""></div>
-      <div class="zoom"><img src="../assets/sc5_zoom.png" alt=""></div>
+    <div class="shot" style="margin-top:18px"><img src="../assets/sc5_main.png" alt=""></div>
+    <div class="cap">Score Check Management &middot; Credit Card &middot; Group 1. Expats</div>
+
+    <div class="ba">
+      <div class="kick">The same value set, before and after</div>
+      <div class="row"><div class="lab t">TODAY</div><div class="img"><img src="../assets/sc4_before.png" alt=""></div></div>
+      <div class="row"><div class="lab n">WITH SCORE 3.0</div><div class="img n"><img src="../assets/sc5_after.png" alt=""></div></div>
     </div>
-    <div class="cap">Score Check Management &middot; Credit Card &middot; a value set conditioned on M6&ndash;M9 (enlarged)</div>
 
     <div class="ticks" style="margin-top:24px">
       <div class="tick"><i></i><div>Two new attributes &mdash; <b>AECB Score Range</b> and <b>AECB Score Segment</b> &mdash; beside the numeric AECB Score.</div></div>
+      <div class="tick"><i></i><div>Values read exactly as they do in the Rule Engine &mdash; <b>M6 &ndash; Low Risk</b> through <b>M9 &ndash; Very Low Risk</b>.</div></div>
       <div class="tick"><i></i><div>Works under <b>Match All / Match Any</b>, like every other attribute.</div></div>
       <div class="tick"><i></i><div>Added once through <b>Edit Attributes</b>, then available to every group on the tab.</div></div>
       <div class="tick"><i></i><div>Live on <b>Credit Card, Personal Loan and CASA</b>.</div></div>
-    </div>
-
-    <div class="inout">
-      <div class="i"><h4>IN SCOPE</h4><ul>
-        <li>Rule Engine &mdash; Segmentation, Filtration and Deviation</li>
-        <li>Score Check Management</li>
-        <li>Credit Card, Personal Loan and CASA</li></ul></div>
-      <div class="o"><h4>NOT IN SCOPE</h4><ul>
-        <li>Mortgage Loan and Auto Loan &mdash; tabs disabled today</li>
-        <li>Any change to the bureau request or response</li>
-        <li>Limit Assignment boundaries and deviation thresholds</li></ul></div>
     </div>
   </div>
   <div class="ftr"><p>Confidential document between Appro Onboarding Solutions FZ-LLC and the recipient institution — not to be shared outside both organizations. Information reflects Appro's reading of the Etihad Credit Bureau specification at the date of publication.</p><b>5</b></div>
 </section>
 
-<!-- ================= 7. THANK YOU ================= -->
+<!-- ================= 6. APPENDIX A ================= -->
+<section class="page">
+  <div class="hdr"><img src="../assets/appro_logo_navy.png" alt="appro">
+    <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
+  <div class="body">
+    <div class="sec"><span class="pill ap">APPENDIX A</span><h2>How Consumer Credit Score 3.0 works</h2></div>
+    <p class="lead">The goal is unchanged &mdash; rank customers by the likelihood of reaching 90+ days past due on at least one contract within 12 months. What changes is how the score is built: <b>one scored population becomes two</b>, each with its own scorecards, scale and range codes. On both scales, a higher score means lower risk.</p>
+
+    <div class="pops">
+      <div class="pop a"><div class="kick">Population A</div><h3>Mature Credit &middot; 300 &ndash; 850</h3><ul>
+        <li>Oldest credit contract is older than 3 months</li>
+        <li>7 segment scorecards</li>
+        <li>Range codes <b>M0 &ndash; M9</b> across five risk groups, Very High to Very Low</li>
+        <li>A score of <b>700</b> means 20 : 1 odds &mdash; a 4.8% expected bad rate. The odds double every 40 points.</li></ul></div>
+      <div class="pop b"><div class="kick">Population B</div><h3>New to Credit &middot; 300 &ndash; 650</h3><ul>
+        <li>No valid credit history, or a first contract opened in the last 3 months, with telco or account data in the last 12 months</li>
+        <li>3 segment scorecards built on telco, cheque, income and account data</li>
+        <li>Range codes <b>N0 &ndash; N9</b> across four risk groups &mdash; <b>no Very Low Risk band</b></li>
+        <li>A score of <b>475</b> means 7 : 1 odds &mdash; a 12.0% expected bad rate. The odds double every 25 points.</li></ul></div>
+    </div>
+
+    <div class="kick" style="margin-top:24px">How it arrives in the bureau response</div>
+    <div class="arrive">
+      <div class="ar"><div class="k">INDEX</div><div class="v">715</div><p>The three-digit score &mdash; 300 to 850 on Mature, 300 to 650 on New to Credit.</p></div>
+      <div class="ar"><div class="k">RANGE</div><div class="v">M2 &middot; N9</div><p>A two-character code naming the scorecard and the band. This is the value to set rules on.</p></div>
+      <div class="ar"><div class="k">NO-HIT &amp; THIN FILE</div><div class="v">Now scored</div><p>Alternative Score and No-Hit Score are retired &mdash; these applicants now arrive with a real Score 3.0 value.</p></div>
+    </div>
+
+    <div class="bands" style="margin-top:24px">
+      <div class="kick">The two scales side by side</div>
+      <img src="../assets/bands_score3.png" alt="">
+    </div>
+    <p class="src">Source: Etihad Credit Bureau &mdash; Consumer Credit Score 3.0 User Guide and A2A specification, as summarised in the Appro Newsletter Q3 2026.</p>
+  </div>
+  <div class="ftr"><p>Confidential document between Appro Onboarding Solutions FZ-LLC and the recipient institution — not to be shared outside both organizations. Information reflects Appro's reading of the Etihad Credit Bureau specification at the date of publication.</p><b>6</b></div>
+</section>
+
+<!-- ================= 7. APPENDIX B ================= -->
+<section class="page">
+  <div class="hdr"><img src="../assets/appro_logo_navy.png" alt="appro">
+    <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
+  <div class="body">
+    <div class="sec"><span class="pill ap">APPENDIX B</span><h2>The 20 Score 3.0 range codes</h2></div>
+    <p class="lead">Each code carries a risk group and a descriptive band. In Super Portal a value reads as code and risk group &mdash; for example <b>M9 &ndash; Very Low Risk</b>. Both scales are contiguous: every score maps to exactly one code.</p>
+    <div class="codes">
+      <div class="ct"><div class="cth">Mature Credit <span>300 &ndash; 850</span></div><table><tr><th>CODE</th><th>RISK GROUP</th><th>BAND</th><th>SCORE</th></tr><tr><td class="c">M0</td><td><span class="rg vh">Very High Risk</span></td><td>Weak</td><td>300 &ndash; 300</td></tr><tr><td class="c">M1</td><td><span class="rg vh">Very High Risk</span></td><td>Weak</td><td>301 &ndash; 523</td></tr><tr><td class="c">M2</td><td><span class="rg h">High Risk</span></td><td>Fair</td><td>524 &ndash; 673</td></tr><tr><td class="c">M3</td><td><span class="rg m">Medium Risk</span></td><td>Good</td><td>674 &ndash; 714</td></tr><tr><td class="c">M4</td><td><span class="rg m">Medium Risk</span></td><td>Good</td><td>715 &ndash; 740</td></tr><tr><td class="c">M5</td><td><span class="rg m">Medium Risk</span></td><td>Good</td><td>741 &ndash; 755</td></tr><tr><td class="c">M6</td><td><span class="rg l">Low Risk</span></td><td>Very Good</td><td>756 &ndash; 773</td></tr><tr><td class="c">M7</td><td><span class="rg l">Low Risk</span></td><td>Very Good</td><td>774 &ndash; 789</td></tr><tr><td class="c">M8</td><td><span class="rg vl">Very Low Risk</span></td><td>Excellent</td><td>790 &ndash; 809</td></tr><tr><td class="c">M9</td><td><span class="rg vl">Very Low Risk</span></td><td>Excellent</td><td>810 &ndash; 850</td></tr></table></div>
+      <div class="ct"><div class="cth">New to Credit <span>300 &ndash; 650</span></div><table><tr><th>CODE</th><th>RISK GROUP</th><th>BAND</th><th>SCORE</th></tr><tr><td class="c">N0</td><td><span class="rg vh">Very High Risk</span></td><td>Weak</td><td>300 &ndash; 427</td></tr><tr><td class="c">N1</td><td><span class="rg vh">Very High Risk</span></td><td>Weak</td><td>428 &ndash; 450</td></tr><tr><td class="c">N2</td><td><span class="rg h">High Risk</span></td><td>Fair</td><td>451 &ndash; 463</td></tr><tr><td class="c">N3</td><td><span class="rg h">High Risk</span></td><td>Fair</td><td>464 &ndash; 478</td></tr><tr><td class="c">N4</td><td><span class="rg h">High Risk</span></td><td>Fair</td><td>479 &ndash; 491</td></tr><tr><td class="c">N5</td><td><span class="rg m">Medium Risk</span></td><td>Good</td><td>492 &ndash; 506</td></tr><tr><td class="c">N6</td><td><span class="rg m">Medium Risk</span></td><td>Good</td><td>507 &ndash; 519</td></tr><tr><td class="c">N7</td><td><span class="rg l">Low Risk</span></td><td>Very Good</td><td>520 &ndash; 531</td></tr><tr><td class="c">N8</td><td><span class="rg l">Low Risk</span></td><td>Very Good</td><td>532 &ndash; 553</td></tr><tr><td class="c">N9</td><td><span class="rg l">Low Risk</span></td><td>Very Good</td><td>554 &ndash; 650</td></tr></table></div>
+    </div>
+    <p class="src">Source: Etihad Credit Bureau &mdash; Consumer Credit Score 3.0 mapping.</p>
+  </div>
+  <div class="ftr"><p>Confidential document between Appro Onboarding Solutions FZ-LLC and the recipient institution — not to be shared outside both organizations. Information reflects Appro's reading of the Etihad Credit Bureau specification at the date of publication.</p><b>7</b></div>
+</section>
+
+<!-- ================= 8. THANK YOU ================= -->
 <section class="page ty">
   <div class="c">
     <img src="../assets/appro_logo_white.png" alt="appro">

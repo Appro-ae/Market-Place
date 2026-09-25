@@ -1,6 +1,6 @@
 # BRD — ECB Consumer Credit Score 3.0 · What's new in Super Portal
 
-Client-facing product introduction for the Score 3.0 front-end changes. Written
+Client-facing product introduction for the Score 3.0 front-end changes, eight pages. Written
 for a sales-consultant read: what is new on screen and why it helps the credit
 team. No Jira references, no workflow, no technical derivation logic.
 
@@ -14,12 +14,14 @@ team. No Jira references, no workflow, no technical derivation logic.
 
 ## Pages
 
-1. Cover — blue, white logo, hero of the two Rule Engine composites
+1. Cover — the newsletter composition: centred logo, yellow pill, disc, sparkles; a browser-framed Score Check Management screen with the Score 3.0 value list and the Score Segment row floating over it
 2. At a glance — headline, four numbers, the three new tools, scope chips, what stays the same
 3. 01 · Score 3.0 codes in the Rule Engine value list
 4. 02 · The AECB Score Segment variable (the only screen with `#FF5500` callouts) + good to know
-5. 03 · Score Range in Score Check Management (zoom inset) + in / not in scope
-6. Thank you + next step
+5. 03 · Score Range in Score Check Management + the same value set before and after (SC4 real capture vs SC5)
+6. Appendix A · How Consumer Credit Score 3.0 works — the two populations, Index / Range, the two scales
+7. Appendix B · The 20 range codes, colour-coded by risk group
+8. Thank you + next step
 
 ## Rebuild
 
