@@ -1,62 +1,50 @@
-# BRD — ECB Consumer Credit Score 3.0
+# BRD — ECB Consumer Credit Score 3.0 · What's new in Super Portal
 
-Client-facing Business Requirements Document for the Super Portal changes that
-accompany the bureau's Consumer Credit Score 3.0 release. Built from the Score
-3.0 user story; **no Jira ticket references appear in the document**.
+Client-facing product introduction for the Score 3.0 front-end changes. Written
+for a sales-consultant read: what is new on screen and why it helps the credit
+team. No Jira references, no workflow, no technical derivation logic.
 
-| File | What it is |
+| Path | What it is |
 |---|---|
-| `build_brd.js` | **Source of truth.** Edit this, never the Word file. |
-| `BRD_ECB_Consumer_Credit_Score_3.0_V1.0.docx` | Editable deliverable |
-| `BRD_ECB_Consumer_Credit_Score_3.0_V1.0.pdf` | Circulation copy |
-| `assets/` | Logos, flow diagram, annotated key screen, impact-analysis crops |
-| `build/` | HTML sources for the generated figures |
+| `build/brd.html` | **Source of truth.** Six A4 pages, edit here. |
+| `build/render_brd.js` | Renders the PDF with Chromium |
+| `build/fonts/lato-inline.css` | Lato 400 / 400 italic / 700 / 900, base64 |
+| `BRD_ECB_Consumer_Credit_Score_3.0_V1.0.pdf` | The circulation copy |
+| `assets/` | Logos, the score-band and one-score-two-decisions graphics, SC5 crops |
+
+## Pages
+
+1. Cover — blue, white logo, hero of the two Rule Engine composites
+2. At a glance — headline, four numbers, the three new tools, scope chips, what stays the same
+3. 01 · Score 3.0 codes in the Rule Engine value list
+4. 02 · The AECB Score Segment variable (the only screen with `#FF5500` callouts) + good to know
+5. 03 · Score Range in Score Check Management (zoom inset) + in / not in scope
+6. Thank you + next step
 
 ## Rebuild
 
 ```
-node build_brd.js
-soffice --headless -env:UserInstallation=file:///tmp/lo3 \
-        --convert-to pdf --outdir "$PWD" "$PWD/BRD_ECB_Consumer_Credit_Score_3.0_V1.0.docx"
+node build/render_brd.js
 ```
 
-Proof every page before shipping (blank pages, clipped images, orphan rows,
-mid-word header wraps):
+The script **fails** if Lato did not load or if any image is missing, so a
+fallback-font or broken-image PDF cannot be produced silently.
 
-```
-python3 -c "import pymupdf; d=pymupdf.open('BRD_...pdf'); [p.get_pixmap(dpi=95).save(f'/tmp/brd_p{i+1}.png') for i,p in enumerate(d)]"
-```
+## Visual language
 
-## Two container traps this build hit
+Taken from the Q3 2026 newsletter so the two attachments read as one set:
+brand blue `#3278FF`, navy `#1A214D` / panel `#1B2150`, yellow `#FDBA23`,
+soft panel `#EEF4FF`, Lato, spaced-caps kickers, numbered navy pills, rounded
+cards with a coloured left bar.
 
-**LibreOffice ships without Writer here.** Only `libreoffice-core` and
-`-common` are installed, so *every* `--convert-to` fails with a bare
-`Error: source file could not be loaded` — including on a plain `.txt`, which
-is the quickest way to tell this apart from a malformed docx. Fix:
-`apt-get update && apt-get install -y libreoffice-writer`. `apt-get install`
-without the `update` first fails with 404s on stale package URLs.
+`appro_logo_navy.png` / `appro_logo_white.png` are the newsletter wordmark
+rendered at 1200 dpi with a real alpha channel. `bands_score3.png` and
+`ia_credit_policy.png` are Appro's own newsletter graphics, cropped, not
+redrawn. Screens are the composites in `docs/us/screens/`.
 
-**Inline images get clipped to the inherited line height.** With a document
-default of `spacing: { line: 276 }`, LibreOffice renders every `ImageRun` as a
-thin horizontal strip — the cover logo, the flow, the screens, the impact-
-analysis crops. The docx is valid and Word may render it correctly, so this is
-only visible in the PDF proof. Every image paragraph therefore sets
-`spacing: { line: 240, lineRule: AT_LEAST }`.
+## Superseded
 
-Related: an image wider than its table column is clipped, not scaled. The
-impact-analysis crops are sized against the Screen column width (3200 twips
-≈ 198px usable), not eyeballed.
-
-## Assets
-
-`appro_wordmark_navy.png` and `appro_wordmark_white_on_blue.png` are extracted
-from the Q3 2026 newsletter PDF at 300 dpi — the real brand asset, never
-redrawn. Brand blue sampled from the cover: `#3278FF`.
-
-`ia_credit_policy.png` and `ia_ntc_scale.png` are crops of Appro's own
-published newsletter graphics (the scale-collision panel and the band bars).
-
-`Flow_ECB_Consumer_Score_3.0.png` and `Banner_Score_Segment_Display.png` are
-generated from `build/*.html` via Playwright at deviceScaleFactor 2.
-`SC6_Annotated_Score_Segment.png` is the key screen with the house `#FF5500`
-annotation box drawn over the real composite.
+The first V1.0 (docx-js → LibreOffice, Arial, cancellation-template layout,
+14 pages) was replaced on 25 Sep 2026 at the PO's direction: too heavy, and it
+carried the workflow, segment detection, credit report and release plan. It
+is in git history if needed.
