@@ -1,0 +1,32 @@
+ECB Consumer Credit Score 3.0 — UAT 26 Sep, production after bureau go-live
+Dear all,
+Attached is our Q3 2026 newsletter on ECB Consumer Credit Score 3.0 (AECB), together with the BRD covering the Super Portal changes that go with it.
+WHERE WE ARE
+Milestone
+Date
+Owner
+Build available in UAT
+26 September 2026
+Appro
+UAT verification
+From 26 September 2026
+Reem Bank and Expleo
+ECB go-live — Consumer Score 3.0 in production
+27 September 2026 (tentative, bureau-set)
+Etihad Credit Bureau
+Production deployment of this change
+After bureau go-live, once UAT verification is complete
+Appro
+Updated data points and upgraded report (PDF) format
+October release
+Appro
+Once Reem Bank and Expleo have verified the build in UAT, Appro can deploy to production. We will release after the bureau go-live, not before — deploying ahead of it would put Score 3.0 codes in front of credit users while the bureau is still returning Score 2.1 values.
+No production impact today. With the Rule Engine configured as it is now and the AECB response structured as it is now, this change does not alter any live decision. It adds range codes, one new variable and two new attributes — it retires nothing and remaps nothing.
+The impact is on how credit policy is set up. Score 3.0 is a new calibration with two scorecards on different scales — a score of 600 is High Risk on Mature and Low Risk on New to Credit. Cut-offs, tier mapping and any eligibility rule that quotes a score value need to be rewritten against the new bands, and New-to-Credit has no Very Low Risk band at all. Sections 9 to 11 of the BRD set out what we need confirmed.
+Updated data points and the upgraded report format will follow in the October release.
+ATTACHED
+•  Appro Newsletter Q3 2026 — ECB Consumer Credit Score 3.0
+•  BRD — ECB Consumer Credit Score 3.0, Rule Engine and Score Check Management (V1.0)
+Happy to walk the team through it.
+Thanks and Best regards,
+Hailey

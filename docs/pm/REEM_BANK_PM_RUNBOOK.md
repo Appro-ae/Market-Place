@@ -294,3 +294,24 @@ shorter. Shrinking either would mean inventing the page underneath.
 Moving existing pixels is fine and is not invention: when a wider chip pushes the
 value input across, lift that input's pixels and re-seat them at the new offset
 rather than redrawing the text.
+
+## 8. Client-facing deliverables
+
+### 8.1 BRD build
+
+Generator, assets and the two container traps that cost a rebuild are in
+`docs/brd/README.md`. Headlines: `libreoffice-writer` is **not** installed in a
+fresh container (every conversion fails identically, even on a `.txt`), and
+inline images are clipped to the inherited line height unless the image
+paragraph sets `lineRule: AT_LEAST`.
+
+### 8.2 Email drafts
+
+The connector is read-only for sending, so an email is delivered as a
+**paste-ready HTML file** in `docs/email/` — Outlook-safe markup only: tables
+for layout, inline styles, padding never margin, Arial, no flexbox and no
+base64 images. A `.txt` twin ships beside it for a quick copy.
+
+House voice: "Dear all," … "Thanks and Best regards, Hailey". Keep it to one
+screen: a milestone table, the two things that matter in callout blocks, the
+attachment list, one closing line.

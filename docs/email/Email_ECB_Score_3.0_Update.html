@@ -1,0 +1,104 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>ECB Consumer Credit Score 3.0 — UAT 26 Sep, production after bureau go-live</title>
+</head>
+<body style="margin:0;padding:24px;background:#ffffff;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="700" style="width:700px;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#1a1a1a;">
+
+  <tr><td style="padding:0 0 18px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+      <tr><td style="height:4px;background:#3278FF;font-size:0;line-height:0;">&nbsp;</td></tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:0 0 16px 0;">
+    Dear all,
+  </td></tr>
+
+  <tr><td style="padding:0 0 16px 0;">
+    Attached is our Q3 2026 newsletter on <b>ECB Consumer Credit Score 3.0 (AECB)</b>, together with the BRD covering the Super Portal changes that go with it.
+  </td></tr>
+
+  <tr><td style="padding:0 0 10px 0;font-size:12px;letter-spacing:1.2px;color:#6b6b6b;font-weight:bold;">
+    WHERE WE ARE
+  </td></tr>
+
+  <tr><td style="padding:0 0 18px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;font-size:13.5px;">
+      <tr>
+        <td style="background:#1A214D;color:#ffffff;font-weight:bold;padding:9px 12px;border:1px solid #1A214D;">Milestone</td>
+        <td style="background:#1A214D;color:#ffffff;font-weight:bold;padding:9px 12px;border:1px solid #1A214D;width:210px;">Date</td>
+        <td style="background:#1A214D;color:#ffffff;font-weight:bold;padding:9px 12px;border:1px solid #1A214D;width:150px;">Owner</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">Build available in <b>UAT</b></td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;"><b>26 September 2026</b></td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">Appro</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">UAT verification</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">From 26 September 2026</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">Reem Bank and Expleo</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">ECB go-live &mdash; Consumer Score 3.0 in production</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;"><b>27 September 2026</b> (tentative, bureau-set)</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">Etihad Credit Bureau</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">Production deployment of this change</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">After bureau go-live, once UAT verification is complete</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;background:#F7F9FC;">Appro</td>
+      </tr>
+      <tr>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">Updated data points and upgraded report (PDF) format</td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;"><b>October release</b></td>
+        <td style="padding:9px 12px;border:1px solid #D8D8D8;">Appro</td>
+      </tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:0 0 16px 0;">
+    Once Reem Bank and Expleo have verified the build in UAT, Appro can deploy to production. We will release <b>after</b> the bureau go-live, not before &mdash; deploying ahead of it would put Score 3.0 codes in front of credit users while the bureau is still returning Score 2.1 values.
+  </td></tr>
+
+  <tr><td style="padding:0 0 14px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+      <tr><td style="border-left:4px solid #3278FF;background:#F4F8FF;padding:12px 16px;">
+        <b>No production impact today.</b> With the Rule Engine configured as it is now and the AECB response structured as it is now, this change does not alter any live decision. It adds range codes, one new variable and two new attributes &mdash; it retires nothing and remaps nothing.
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:0 0 18px 0;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
+      <tr><td style="border-left:4px solid #FDBA23;background:#FFFBF2;padding:12px 16px;">
+        <b>The impact is on how credit policy is set up.</b> Score 3.0 is a new calibration with two scorecards on different scales &mdash; a score of 600 is <b>High Risk</b> on Mature and <b>Low Risk</b> on New to Credit. Cut-offs, tier mapping and any eligibility rule that quotes a score value need to be rewritten against the new bands, and New-to-Credit has no Very Low Risk band at all. Sections 9 to 11 of the BRD set out what we need confirmed.
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <tr><td style="padding:0 0 18px 0;">
+    Updated data points and the upgraded report format will follow in the <b>October release</b>.
+  </td></tr>
+
+  <tr><td style="padding:0 0 10px 0;font-size:12px;letter-spacing:1.2px;color:#6b6b6b;font-weight:bold;">
+    ATTACHED
+  </td></tr>
+
+  <tr><td style="padding:0 0 18px 0;font-size:13.5px;">
+    &bull;&nbsp; Appro Newsletter Q3 2026 &mdash; ECB Consumer Credit Score 3.0<br>
+    &bull;&nbsp; BRD &mdash; ECB Consumer Credit Score 3.0, Rule Engine and Score Check Management (V1.0)
+  </td></tr>
+
+  <tr><td style="padding:0 0 22px 0;">
+    Happy to walk the team through it.
+  </td></tr>
+
+  <tr><td style="padding:0;">
+    Thanks and Best regards,<br>
+    <b>Hailey</b>
+  </td></tr>
+
+</table>
+</body></html>
