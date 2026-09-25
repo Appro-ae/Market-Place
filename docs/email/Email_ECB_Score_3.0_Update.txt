@@ -21,8 +21,8 @@ Updated data points and upgraded report (PDF) format
 October release
 Appro
 Once Reem Bank and Expleo have verified the build in UAT, Appro can deploy to production. We will release after the bureau go-live, not before — deploying ahead of it would put Score 3.0 codes in front of credit users while the bureau is still returning Score 2.1 values.
-No production impact today. With the Rule Engine configured as it is now and the AECB response structured as it is now, this change does not alter any live decision. It adds range codes, one new variable and two new attributes — it retires nothing and remaps nothing.
-The impact is on how credit policy is set up. Score 3.0 is a new calibration with two scorecards on different scales — a score of 600 is High Risk on Mature and Low Risk on New to Credit. Cut-offs, tier mapping and any eligibility rule that quotes a score value need to be rewritten against the new bands, and New-to-Credit has no Very Low Risk band at all. Share your Score 3.0 thresholds and New-to-Credit treatment, and we will configure them.
+No interruption to Production when the ECB response is received. AECB has confirmed the response structure stays exactly as it is today — the score is still returned as an Index and a Range.
+The impact is on how credit policy is set up. Score 3.0 is a new calibration with two scorecards on different scales — a score of 600 is High Risk on Mature but Low Risk on New to Credit. To help your team classify customers correctly, Appro has updated ECB Score Range in the Rule Engine and added a new ECB Score Segment, so each credit rule can be set against the right scale.
 Updated data points and the upgraded report format will follow in the October release.
 ATTACHED
 •  Appro Newsletter Q3 2026 — ECB Consumer Credit Score 3.0
