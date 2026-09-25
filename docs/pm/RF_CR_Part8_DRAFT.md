@@ -103,3 +103,39 @@ is consistent.
 RF Sprint 18 (8 Sep – 6 Oct) carries the goal *"We will cover 2 new CRs in this
 sprint."* Part 6 and Part 7 are both still at `Open`. Worth reconciling whether
 Part 8 is one of the two Sprint 18 CRs, and what closes out 6 and 7.
+
+---
+
+## Update — 25 Sep 2026, 09:45 · two items added
+
+RF-3327 now carries **12 items**. Added:
+
+| No | Ticket | Remark | Status at the time of adding |
+|---|---|---|---|
+| 11 | RF-3328 | Change Password on 30-day expiry | Open |
+| 12 | RF-3329 | AECB Consumer Score 3.0 — release after the bureau go-live | READY TO DEVELOP |
+
+Pushed as a full **ADF** document with `inlineCard` nodes so the smart links stay
+live (markdown cannot write them — runbook §7.5). Verified through
+`expand: "renderedFields"`: all twelve cells render as
+`<a … title="smart-link" class="external-link">`, no escaped `&lt;custom …&gt;`.
+
+The intro line changed from *"Jira list - 10 items, Sprint 17 scope"* to
+*"Jira list - 12 items"*, because **RF-3328 carries no sprint** — the old wording
+would have been false the moment it was added.
+
+### Considered and left out
+
+| Ticket | Why not |
+|---|---|
+| RF-3319 — [Mobile] audit trail for Offer / MPIN / T&C + API enhancements | **Done**, no sprint. The only Part 8 candidate that is actually finished. Left out because it was never in the Sprint 17 scope this CR was built from — PO call. |
+| RF-3330 — [Mobile] SniffData for SDK | DEV IN PROGRESS, no sprint, created 25 Sep. Same question as RF-3319. |
+| RF-3204 — [Integration] CIF Creation API update | **Sprint 18**, whose goal is "2 new CRs". Belongs to a later package, not Part 8. |
+
+### Readiness — unchanged and still the open risk
+
+Nothing in Part 8 has passed UAT. Statuses across the twelve: 1 Done (none of
+the twelve — RF-3319 is the Done one and it is excluded), 4 READY IN SIT,
+3 DEV IN PROGRESS, 2 READY TO DEVELOP, 3 Open. The precedent CR (RF-3143)
+recorded *"Jira list — 67 items, UAT sign-off complete"* before circulation.
+Flagged to the PO on 24 Sep; the CR was still raised as a normal CR on her call.
