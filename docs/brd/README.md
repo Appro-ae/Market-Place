@@ -26,11 +26,35 @@ team. No Jira references, no workflow, no technical derivation logic.
 ## Rebuild
 
 ```
-node build/render_brd.js
+node build/render_hero.js     # only if the cover hero changes
+node build/render_brd.js      # unprotected master -> build/.master.pdf (git-ignored)
+python3 build/protect.py      # outlines text, encrypts, verifies -> the circulation PDF
 ```
 
-The script **fails** if Lato did not load or if any image is missing, so a
-fallback-font or broken-image PDF cannot be produced silently.
+`render_brd.js` **fails** if Lato did not load or if any image is missing, so a
+fallback-font or broken-image PDF cannot be produced silently. `protect.py`
+exits non-zero unless the result has no extractable text, no embedded fonts,
+no risky soft masks and copying denied.
+
+## Copy protection (the circulation PDF)
+
+Done at the PO's request, 25 Sep 2026: the file should not be copiable by
+people or by AI tools.
+
+1. **No text layer.** Ghostscript rewrites the master with `-dNoOutputFonts`,
+   so every glyph becomes a vector outline. The pages look identical and stay
+   sharp at any zoom, but nothing can be selected, copy-pasted or extracted,
+   even by tools that ignore PDF permission flags.
+2. **Print-only permissions.** AES-256 encryption with an empty open password
+   and a random owner password that is never stored. Viewing and printing are
+   allowed; copying, extraction, editing, annotation, form filling and page
+   assembly are denied. To change the document, edit `build/brd.html` and
+   rebuild. The protected file is never the source.
+
+**Limit, stated plainly:** no file format can stop someone from taking a
+screenshot or photo of a page, and an AI shown that image can read it. The
+steps above close off copy-paste and text extraction, which is what a
+document can do.
 
 ## Visual language
 
