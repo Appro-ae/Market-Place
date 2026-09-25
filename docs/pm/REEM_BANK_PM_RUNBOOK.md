@@ -189,3 +189,68 @@ Result (+ Impact) → Reference`.
 
 Captures go in one zip for drag-drop, with a `📎 see attached: <filename>`
 marker where each image belongs.
+
+## 7. Standing rules on RF user stories (PO instructions)
+
+### 7.1 No Dependencies section — permanent
+
+**Instruction from the PO, 25 Sep 2026: "remove dependencies forever".**
+RF user stories do **not** carry a *Dependencies* table. Related tickets belong
+in Jira's own issue links, not in the description body. Where a related ticket
+genuinely changes how an AC is built, name it inline in the sentence it affects
+(e.g. the RF-3061 naming note in RF-3329) — never as a standing table.
+
+### 7.2 No cross-project attribution in RF stories
+
+Harvesting another project's ticket is fine — the substance can be adopted.
+The **wording** does not travel: no "precedent", no "same change on X", no
+guard rows citing another project's defects. The RF story reads as RF's own
+requirement. (PO instruction, 25 Sep 2026, on RF-3329.)
+
+### 7.3 A description write REPLACES the whole field
+
+`editJiraIssue` on `description` overwrites everything, including inline media
+nodes. Before every write:
+
+1. **Fetch the current description.** Never assert "not modified since our last
+   write" from a field list that did not include `description`. This exact
+   mistake destroyed the PO's own 07:42 and 07:55 edits on RF-3329 on
+   25 Sep 2026 — three inline images and her wording — because the pre-write
+   check fetched only `key, summary, updated, assignee, priority, status,
+   labels`.
+2. **Diff it against what we last pushed.** Any delta is the PO's hand. Merge
+   it; never discard it.
+
+**Recovery, if it happens anyway:** the previous body is in the changelog —
+`histories[].items[]` where `field="description"`, in `fromString`. Attachment
+IDs are in the same changelog where `field="Attachment"`: `to` = attachment ID,
+`toString` = filename. Jira does **not** delete attachments on a description
+edit, so only the inline references are lost, never the files.
+
+### 7.4 Inline images through the connector
+
+The connector cannot upload attachments, but it *can* re-reference files already
+on the ticket. Markdown image syntax against the attachment content URL works
+and renders as a real `<img>`:
+
+```
+![<filename>](https://scvaladdin.atlassian.net/rest/api/3/attachment/content/<attachmentId>)
+```
+
+Verified on RF-3329, 25 Sep 2026 via `expand: "renderedFields"`, which rendered
+`<span class="image-wrap"><img src=".../attachment/content/135598" alt="..."/></span>`.
+The read-back in `fields.description` shows a `blob:https://media.staging.atl-paas.net/…`
+wrapper — that is the converter's serialisation, not a broken link. **Always
+confirm with `renderedFields`, never from the markdown read-back.**
+
+PDFs and other non-images take the same URL as a plain link:
+`[📎 <filename>](https://scvaladdin.atlassian.net/rest/api/3/attachment/content/<id>)`.
+
+### 7.5 Do not try to write smart links through markdown
+
+A read of an existing smart link serialises as
+`<custom data-type="smartlink" data-id="id-N">URL</custom>`, but that syntax is
+*not* accepted on the way back in: pushed through `contentFormat: "markdown"` it
+is stored as literal text and renders as escaped `&lt;custom …&gt;` tags around
+the link. Use ADF `inlineCard` nodes, or plain `[KEY](url)` markdown links.
+Verified on RF-3329, 25 Sep 2026.
