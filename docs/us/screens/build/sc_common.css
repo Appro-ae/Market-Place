@@ -20,3 +20,7 @@ img.base{position:absolute;top:0;left:0;width:876px;height:446px}
 .chip{display:inline-flex;align-items:center;height:26px;padding:0 11px;
       border:1px solid #76a8d3;background:#f7fcff;border-radius:4px;
       font-size:16.2px;font-weight:400;color:#3c88a8;white-space:nowrap}
+
+/* --- strategy group name field (replaces the captured test name) --- */
+.gname{font-size:17.5px;font-weight:800;color:#0d0d0d;line-height:20px;letter-spacing:.2px;white-space:nowrap;
+       text-decoration:underline;text-decoration-color:#a9c0e8;text-decoration-thickness:2px;text-underline-offset:3px}

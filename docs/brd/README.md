@@ -15,10 +15,10 @@ team. No Jira references, no workflow, no technical derivation logic.
 ## Pages
 
 1. Cover — the newsletter composition: centred logo, yellow pill, disc, sparkles; a browser-framed Score Check Management screen with the Score 3.0 value list and the Score Segment row floating over it
-2. At a glance — headline, four numbers, the three new tools, scope chips, what stays the same
+2. At a glance — headline, the two Rule Engine tools with product thumbnails, products, what stays the same
 3. 01 · Score 3.0 codes in the Rule Engine value list
 4. 02 · The AECB Score Segment variable (the only screen with `#FF5500` callouts) + good to know
-5. 03 · Score Range in Score Check Management + the same value set before and after (SC4 real capture vs SC5)
+5. 03 · Two new attributes in Score Check Management — add ECB Score Range, add ECB Score Segment — plus the same value set before and after (SC4 real capture vs SC5)
 6. Appendix A · How Consumer Credit Score 3.0 works — the two populations, Index / Range, the two scales
 7. Appendix B · The 20 range codes, colour-coded by risk group
 8. Thank you + next step
@@ -50,3 +50,13 @@ The first V1.0 (docx-js → LibreOffice, Arial, cancellation-template layout,
 14 pages) was replaced on 25 Sep 2026 at the PO's direction: too heavy, and it
 carried the workflow, segment detection, credit report and release plan. It
 is in git history if needed.
+
+## Naming
+
+Running text says **ECB** throughout (ECB Score Range, ECB Score Segment),
+matching the PO's wording and the newsletter. The screens keep the labels as
+captured from the build, which still read AECB.
+
+The captured test name in the strategy group field was replaced with neutral
+group names: **Group 1** on SC3, **Group 2** on SC6 (same bold, underlined
+field style, font calibrated against the capture).

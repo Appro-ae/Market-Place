@@ -90,6 +90,14 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
 .chip{font-size:11.5px;font-weight:700;color:var(--navy);background:#fff;border:1.5px solid #CFDBF7;border-radius:14px;padding:5px 12px}
 .chip.b{background:var(--navy);color:#fff;border-color:var(--navy)}
 
+/* two feature cards with product thumbnails (page 2) */
+.cards.two{grid-template-columns:1fr 1fr;gap:16px}
+.cards.two .card{padding:14px 16px 18px}
+.cards.two .card h3{font-size:16px}
+.cards.two .card p{font-size:12.6px}
+.thumb{height:150px;border-radius:10px;background:#F4F7FD;border:1px solid var(--line);display:flex;align-items:center;
+       justify-content:center;overflow:hidden;margin-bottom:14px}
+.thumb img{max-width:92%;max-height:132px;border-radius:6px;box-shadow:0 6px 16px rgba(26,33,77,.12)}
 /* ===== feature pages ===== */
 .feat .shot{margin-top:18px}
 .bands{margin-top:22px;border:1px solid var(--line);border-radius:12px;padding:16px 18px 12px}
@@ -217,25 +225,16 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
   <div class="hdr"><img src="../assets/appro_logo_navy.png" alt="appro">
     <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
   <div class="body">
-    <h1>Score 3.0 arrives with <span class="hl">three new tools</span> for your credit team.</h1>
-    <p class="lead" style="margin-top:16px">The bureau's new score splits customers into two populations &mdash; <b>Mature</b> and <b>New to Credit</b> &mdash; each with its own scale and its own range codes. Super Portal now speaks that language, so your credit policy can too.</p>
-
-    <div class="stats">
-      <div class="stat"><div class="n">20</div><div class="l">new Score 3.0<br>range codes</div></div>
-      <div class="stat"><div class="n">1</div><div class="l">new Rule Engine<br>variable</div></div>
-      <div class="stat"><div class="n">2</div><div class="l">new Score Check<br>attributes</div></div>
-      <div class="stat"><div class="n y">0</div><div class="l">changes to your<br>published strategies</div></div>
-    </div>
+    <h1>Super Portal now speaks <span class="hl">Score 3.0</span>.</h1>
+    <p class="lead" style="margin-top:16px">The bureau's new score splits customers into two populations &mdash; <b>Mature</b> and <b>New to Credit</b> &mdash; each with its own scale and its own range codes. Super Portal now reads both &mdash; in the Rule Engine and in Score Check Management.</p>
 
     <div class="whats">
       <div class="kick">What's new in Super Portal</div>
-      <div class="cards">
-        <div class="card"><div class="no">01</div><h3>Score 3.0 codes in every rule</h3>
-          <p>Select M0&ndash;M9 and N0&ndash;N9 on any AECB Score Range criterion, right beside the codes you use today.</p></div>
-        <div class="card y"><div class="no">02</div><h3>Two populations, told apart</h3>
-          <p>A new AECB Score Segment variable lets one strategy treat Mature and New-to-Credit customers differently.</p></div>
-        <div class="card"><div class="no">03</div><h3>Score Range in Score Checks</h3>
-          <p>Build Score Check Management value sets on the Score 3.0 codes &mdash; not just the raw number.</p></div>
+      <div class="cards two">
+        <div class="card"><div class="thumb"><img src="../assets/thumb_codes.png" alt=""></div><div class="no">01</div><h3>Score 3.0 codes in every rule</h3>
+          <p>Select M0&ndash;M9 and N0&ndash;N9 on any ECB Score Range criterion, right beside the codes you use today.</p></div>
+        <div class="card y"><div class="thumb"><img src="../assets/thumb_segment.png" alt=""></div><div class="no">02</div><h3>Two populations, told apart</h3>
+          <p>A new ECB Score Segment variable lets one strategy treat Mature and New-to-Credit customers differently.</p></div>
       </div>
     </div>
 
@@ -243,16 +242,12 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
       <span class="k">AVAILABLE ON</span>
       <span class="chip b">Credit Card</span><span class="chip b">Personal Loan</span><span class="chip b">CASA</span>
     </div>
-    <div class="scope" style="margin-top:10px">
-      <span class="k">ACROSS</span>
-      <span class="chip">Segmentation</span><span class="chip">Filtration</span><span class="chip">Deviation</span><span class="chip">Score Check Management</span>
-    </div>
 
     <div class="kick" style="margin-top:30px">And nothing you run today changes</div>
     <div class="zero c">
       <div class="z"><div class="ic"></div><h3>Same bureau interface</h3><p>Request format and connectivity are unchanged.</p></div>
       <div class="z"><div class="ic"></div><h3>Strategies keep running</h3><p>Nothing published is retired or remapped.</p></div>
-      <div class="z"><div class="ic"></div><h3>Score checks untouched</h3><p>The numeric AECB Score condition works as before.</p></div>
+      <div class="z"><div class="ic"></div><h3>Score checks untouched</h3><p>The numeric ECB Score condition works as before.</p></div>
     </div>
   </div>
   <div class="ftr"><p>Confidential document between Appro Onboarding Solutions FZ-LLC and the recipient institution — not to be shared outside both organizations. Information reflects Appro's reading of the Etihad Credit Bureau specification at the date of publication.</p><b>2</b></div>
@@ -264,9 +259,9 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
     <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
   <div class="body">
     <div class="sec"><span class="pill">01</span><h2>Every Score 3.0 code, ready to select</h2></div>
-    <p class="lead">Credit users pick the new codes straight from the <b>AECB Score Range</b> criterion &mdash; the same list and the same workflow, with twenty new options.</p>
+    <p class="lead">Credit users pick the new codes straight from the <b>ECB Score Range</b> criterion &mdash; the same list and the same workflow, with twenty new options.</p>
     <div class="shot"><img src="../../us/screens/SC3_Rule_Engine_Values_Score_3.0.png" alt=""></div>
-    <div class="cap">Strategy criterion &middot; AECB Score Range &middot; Score 3.0 codes in the value list</div>
+    <div class="cap">Strategy criterion &middot; ECB Score Range &middot; Score 3.0 codes in the value list</div>
 
     <div class="bands">
       <div class="kick">The 20 new codes at a glance</div>
@@ -288,7 +283,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
     <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
   <div class="body">
     <div class="sec"><span class="pill">02</span><h2>One new variable. Two populations, told apart.</h2></div>
-    <p class="lead"><b>AECB Score Segment</b> tells a strategy which scorecard produced the score &mdash; Mature or New to Credit &mdash; so a single rule can treat each one correctly.</p>
+    <p class="lead"><b>ECB Score Segment</b> tells a strategy which scorecard produced the score &mdash; Mature or New to Credit &mdash; so a single rule can treat each one correctly.</p>
 
     <div class="shot anno" style="margin-top:18px">
       <img src="../../us/screens/SC6_Rule_Engine_AECB_Score_Segment.png" alt="">
@@ -311,7 +306,7 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
     </div>
 
     <div class="tip"><div class="t">GOOD TO KNOW</div>
-      <p><b>New to Credit has no Very Low Risk band</b> &mdash; its scale tops out at 650. A rule that selects Very Low Risk, or tests a score above 650, will never match a New-to-Credit customer. Pair it with <b>AECB Score Segment</b>.</p></div>
+      <p><b>New to Credit has no Very Low Risk band</b> &mdash; its scale tops out at 650. A rule that selects Very Low Risk, or tests a score above 650, will never match a New-to-Credit customer. Pair it with <b>ECB Score Segment</b>.</p></div>
   </div>
   <div class="ftr"><p>Confidential document between Appro Onboarding Solutions FZ-LLC and the recipient institution — not to be shared outside both organizations. Information reflects Appro's reading of the Etihad Credit Bureau specification at the date of publication.</p><b>4</b></div>
 </section>
@@ -321,8 +316,8 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
   <div class="hdr"><img src="../assets/appro_logo_navy.png" alt="appro">
     <div class="t">BUSINESS REQUIREMENTS &middot; Q3 2026 &middot; V1.0<br>ECB CONSUMER CREDIT SCORE 3.0</div></div>
   <div class="body">
-    <div class="sec"><span class="pill">03</span><h2>Score Range, right where your score checks live</h2></div>
-    <p class="lead">Score Check Management already tests the numeric AECB Score. It now tests the <b>Score 3.0 codes</b> too &mdash; the segment-safe way to set a threshold.</p>
+    <div class="sec"><span class="pill">03</span><h2>Two new attributes in Score Check Management</h2></div>
+    <p class="lead">The update: <b>add ECB Score Range</b> and <b>add ECB Score Segment</b>. Both sit beside the numeric score you already test, so a value set can now be built on the Score 3.0 codes.</p>
     <div class="shot" style="margin-top:18px"><img src="../assets/sc5_main.png" alt=""></div>
     <div class="cap">Score Check Management &middot; Credit Card &middot; Group 1. Expats</div>
 
@@ -333,8 +328,8 @@ h1{font-size:30px;line-height:1.18;font-weight:900;color:var(--navy);letter-spac
     </div>
 
     <div class="ticks" style="margin-top:24px">
-      <div class="tick"><i></i><div>Two new attributes &mdash; <b>AECB Score Range</b> and <b>AECB Score Segment</b> &mdash; beside the numeric AECB Score.</div></div>
-      <div class="tick"><i></i><div>Values read exactly as they do in the Rule Engine &mdash; <b>M6 &ndash; Low Risk</b> through <b>M9 &ndash; Very Low Risk</b>.</div></div>
+      <div class="tick"><i></i><div><b>Add ECB Score Range</b> &mdash; select Score 3.0 codes, shown exactly as in the Rule Engine: <b>M6 &ndash; Low Risk</b> through <b>M9 &ndash; Very Low Risk</b>.</div></div>
+      <div class="tick"><i></i><div><b>Add ECB Score Segment</b> &mdash; Mature or New to Credit.</div></div>
       <div class="tick"><i></i><div>Works under <b>Match All / Match Any</b>, like every other attribute.</div></div>
       <div class="tick"><i></i><div>Added once through <b>Edit Attributes</b>, then available to every group on the tab.</div></div>
       <div class="tick"><i></i><div>Live on <b>Credit Card, Personal Loan and CASA</b>.</div></div>
