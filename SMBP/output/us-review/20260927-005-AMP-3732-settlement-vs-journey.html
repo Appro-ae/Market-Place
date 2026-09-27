@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMP-3732 vs Journey</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:80ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:780px;font-size:13px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;min-width:130px}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  .ok{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6;white-space:nowrap}
+  /* flow lanes */
+  .lane{background:#ffffff;border-radius:12px;padding:14px 16px;margin-bottom:10px;overflow-x:auto}
+  .lane .lt{font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
+  .lane .lt .st{font-weight:700;letter-spacing:0;text-transform:none;color:#3b7ef6}
+  .steps{display:flex;align-items:center;gap:0;min-width:900px}
+  .step{background:#edf2ff;border:1.5px solid #1a214d;border-radius:9px;padding:6px 10px;font-size:11.5px;font-weight:700;text-align:center;line-height:1.3;white-space:nowrap}
+  .step small{display:block;font-weight:400;font-size:10px}
+  .step.new{background:#fdba23;border-color:#fdba23}
+  .step.cond{border-style:dashed}
+  .step.sys{background:#1a214d;color:#ffffff;border-color:#1a214d}
+  .arr{flex:0 0 auto;width:18px;height:2px;background:#1a214d;position:relative;margin:0 2px}
+  .arr::after{content:"";position:absolute;right:-1px;top:-3px;border-left:6px solid #1a214d;border-top:4px solid transparent;border-bottom:4px solid transparent}
+  /* matrix */
+  .yes{color:#3b7ef6;font-weight:900}
+  .no{color:#1a214d;font-weight:900;opacity:.45}
+  .x{display:inline-block;border-radius:6px;padding:0 7px;font-weight:900;font-size:11px}
+  .x.s{background:#3b7ef6;color:#ffffff}
+  .x.h{background:#edf2ff;color:#1a214d;border:1px dashed #1a214d}
+  .x.c{background:#fdba23;color:#1a214d}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>AMP-3732 <span class="b">vs the Approved Journey</span></h1></div>
+  <p class="sub"><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a> (Kha — Bank Portal PL B2B Settlement: Choose Variant, DC/Buyout, Hard Gates · Ready to Clarify) visualized against the approved journey: <a href="https://scvaladdin.atlassian.net/browse/AMP-3694">3694</a> (US Approved, re-read today incl. its strikethrough updates), <a href="https://scvaladdin.atlassian.net/browse/AMP-3404">3404</a>, <a href="https://scvaladdin.atlassian.net/browse/AMP-3721">3721</a> (approved), and baseline <a href="https://scvaladdin.atlassian.net/browse/MLB-125">MLB-125</a> (read in full).</p>
+  <div class="meta"><span class="tag red">Verdict: GOOD SKELETON — 6 P1</span><span class="tag">5 P2 · 4 P3</span><span class="tag">Nothing posted to Jira</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The screen placement and mechanics match the journey; the contract scope does not.</b> AMP-3694 (approved) was updated to show <b>unsecured installments only</b> on the CJ settlement screen — Credit Card and Overdraft are struck out. Kha's BP version shows all 3 categories for DC and Installments + Overdraft for Buyout. Add to that: single-select Buyout vs the CJ's "at least 1" multi-select, variant cards gated by AECB instead of returned by product matching, a DC gate that blocks PL-only consolidation, and the ticket citing <b>itself</b> as the config source. Not Ready for Dev until the scope question is settled with Trang's side.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · The two flows, visualized</span>
+  <h2>Same insertion point — that part matches</h2>
+  <div class="lane">
+    <div class="lt">Customer Journey — approved <span class="st">(AMP-3694 AC5–AC8 → 3404)</span></div>
+    <div class="steps">
+      <div class="step">Additional Info<small>3694 AC4</small></div><div class="arr"></div>
+      <div class="step sys">Product match<small>at Pre-dedupe</small></div><div class="arr"></div>
+      <div class="step new">Choose Finance Variant<small>cards = bank-returned</small></div><div class="arr"></div>
+      <div class="step cond">Settlement<small>skip: Fresh · 0/1 contract · AECB timeout</small></div><div class="arr"></div>
+      <div class="step">T&amp;C → KFS<small>download + swipe-sign</small></div><div class="arr"></div>
+      <div class="step sys">Loading = Submission<small>3404 Part 1–2</small></div><div class="arr"></div>
+      <div class="step">Offer Detail<small>shortfall fallback AC6a here</small></div>
+    </div>
+  </div>
+  <div class="lane">
+    <div class="lt">Bank Portal — AMP-3732 <span class="st">(RM drives the same journey)</span></div>
+    <div class="steps">
+      <div class="step">Employment &amp; Income<small>3694 AC1–AC4</small></div><div class="arr"></div>
+      <div class="step sys">AECB + Gates G1–G5<small>DC only, AC5</small></div><div class="arr"></div>
+      <div class="step new">Choose Finance Variant<small>cards = AECB-gated + toggles</small></div><div class="arr"></div>
+      <div class="step cond">Settle Liabilities<small>MLB-125 enhanced · skip: Fresh only</small></div><div class="arr"></div>
+      <div class="step new">Shortfall → DC Alternative<small>AC6 — pre-Calculator, auto-select</small></div><div class="arr"></div>
+      <div class="step">Calculator<small>Transaction Type → Pricing (3721)</small></div>
+    </div>
+  </div>
+  <p class="note">Yellow = new screen · dashed = conditional · navy = system step. The shortfall fallback sits <b>pre-submission</b> in BP (the bank knows its own eligibility) vs <b>post-offer</b> in CJ (3404 AC6a) — a defensible divergence, but the story must say so; today AC6 admits it is unsourced.</p>
+</section>
+
+<section>
+  <span class="seclabel">03 · The core conflict — what each variant lets you settle</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Category on settlement screen</th><th>MLB-125 (baseline, mortgage CJ)</th><th>CJ approved — 3694 AC6 (any variant)</th><th>CJ post-offer — 3404 AC6 (re-scope)</th><th>BP 3732 — Buyout / +Top Up</th><th>BP 3732 — Debt Consolidation</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Credit Cards</td><td><span class="x s">Shown</span> pre-selected</td><td><span class="x h">STRUCK OUT</span></td><td>Buyout: hidden · DC: <span class="x s">Shown</span></td><td><span class="x h">Hidden</span></td><td><span class="x c">Shown ⚠</span></td></tr>
+      <tr><td class="k">Installments (unsecured)</td><td><span class="x s">Shown</span> ≤60 inst.</td><td><span class="x s">Shown</span> — the only category</td><td><span class="x s">Shown</span></td><td><span class="x s">Shown</span></td><td><span class="x s">Shown</span></td></tr>
+      <tr><td class="k">Non-Inst. (Overdraft)</td><td><span class="x s">Shown</span> type 58</td><td><span class="x h">STRUCK OUT</span></td><td>Not listed</td><td><span class="x c">Shown ⚠</span></td><td><span class="x c">Shown ⚠</span></td></tr>
+      <tr><td class="k">Selection mode</td><td>Multi, default ON</td><td>Toggle, default OFF — Buyout: "≥ 1 contract"</td><td>Multi — unselect allowed, ≥ 1 remains</td><td><span class="x c">Single-select ⚠</span></td><td>Multi, default not stated</td></tr>
+      <tr><td class="k">Reduce Limit slider</td><td>CC + OD only</td><td>Struck with CC/OD</td><td>N/A</td><td>Removed ✓ (consistent)</td><td><span class="x c">Kept ⚠</span> (CC+OD — struck in CJ)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">⚠ = diverges from the approved CJ. Note 3404 AC6 puts DC's CC-scope <b>post-offer</b> ("Active contracts — PL AND Credit Card"), so the BP showing CC pre-submission for DC may be the <i>intended</i> end-state — but then 3694 AC6 (struck to installments-only) and 3732 describe different screens for the same journey, and one of them is wrong.</p>
+</section>
+
+<section>
+  <span class="seclabel">04 · Gates &amp; gating — BP vs DP</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Gate</th><th>BP 3732 default</th><th>DP baseline (AMP-2215)</th><th>Check</th></tr></thead>
+    <tbody>
+      <tr><td class="k">G1 Min active facilities</td><td>≥ 3</td><td>≥ 3</td><td><span class="ok">✓ match</span></td></tr>
+      <tr><td class="k">G2 Min distinct providers</td><td>≥ 2</td><td>≥ 3</td><td><span class="pr p2">P2 mismatch</span></td></tr>
+      <tr><td class="k">G3 Min CC utilisation</td><td>≥ 30%</td><td>≥ 70%</td><td><span class="pr p2">P2 mismatch</span></td></tr>
+      <tr><td class="k">G4 Clean payment history</td><td>Delay ≥ 3 · 17 blocked statuses</td><td>Same pattern</td><td><span class="ok">✓ ~match</span></td></tr>
+      <tr><td class="k">G5 Post-consol DBR</td><td>≤ 50%</td><td>≤ 50% (CBUAE)</td><td><span class="ok">✓ match</span></td></tr>
+      <tr><td class="k">Variant availability</td><td>AECB gating + backend toggles; Fresh hardcoded always-on; DC needs ≥ 1 CC</td><td>CJ 3694 AC5: cards = whatever the bank's product matching returns at Pre-dedupe; nothing hardcoded</td><td><span class="pr">P1 different mechanisms</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Same customer, DC offered in one portal and refused in the other at G2/G3 defaults. And G3 is <b>undefined when the customer holds zero credit cards</b> — which the DC gate ("≥ 1 in-scope CC") forces, but only if that gate itself survives review (P1-4).</p>
+</section>
+
+<section>
+  <span class="seclabel">05 · Findings</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Finding</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr">P1</span></td><td class="k">Category scope contradicts approved 3694</td><td>3694 AC6 (approved) struck CC and NI — installments only. 3732 shows CC+Inst+NI (DC) and Inst+NI (Buyout). Align with Trang: either 3694's strike was the decision (then 3732 narrows) or 3404's post-offer scope is the end-state (then 3694 needs un-striking). One screen definition per journey.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Buyout single-select vs CJ multi-select</td><td>3732 AC3: radio, exactly 1 contract. 3694 AC6: "at least 1"; 3404 AC6: list, unselect, ≥ 1 remains. Same product, two rules — pick one (multi, per approved CJ, unless the bank's product truly settles a single contract; then 3721's Buyout definition must say so).</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Variant cards: gated vs bank-returned</td><td>3694 AC5: cards NOT hardcoded, shown only if product matching returns them. 3732 AC1: Fresh hardcoded "cannot be disabled", others from AECB + toggles. In BP the bank is the product owner, so gating may replace matching — state that as an intentional divergence like the collapsed/expanded omission note, and define what happens when the bank has no Fresh product.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">DC gate "≥ 1 credit card" blocks PL-only consolidation</td><td>DC scope is PL AND CC (3404 AC6). A customer with 3 personal finances and no card is a valid DC case in the CJ but gets no DC card in BP. Justify the CC requirement or change the gate to "≥ 2 in-scope contracts of any eligible category". Also fixes G3-undefined-with-no-CC.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Ticket cites itself as the config source</td><td>"per AMP-3732 AC1/AC2/AC3/AC4/AC5/AC6" appears ~8× referring to the AECB Contract Scope Configuration story — but AMP-3732 is this ticket. Replace with the real config story key (adapted from AMP-2321); and AC6 admits the fallback is unsourced — create that ticket (or declare AC6 in scope here) before Ready for Dev.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">"Highest cost-to-balance ratio" undefined</td><td>AC6 auto-selects contracts by an undefined metric (interest cost? EMI/balance? overdue?). CJ 3404 AC6a has no auto-selection at all — the customer re-scopes manually. Define the formula and the tie-break, or drop auto-select and mirror the CJ.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Toggle defaults unstated</td><td>MLB-125 pre-selects everything (ON); 3694 AC6 default OFF; 3404 DC default ON. 3732 inherits "MLB-125 mechanics unchanged" — which silently imports default-ON. State the default per variant.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Skip rules incomplete</td><td>3694 AC6 skips settlement on: Fresh, 0 contracts, exactly 1 contract (auto-selected), AECB timeout. 3732 covers Fresh and 0 only. Add the 1-contract and timeout behaviours for the BP.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">G2/G3 defaults diverge from DP</td><td>≥2 vs ≥3 providers; 30% vs 70% utilisation (AMP-2215). Same customer, opposite DC answers per portal. Align defaults or record the business reason per channel.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Standalone Buyout "Top Up = 0" vs IA1</td><td>IA1: Top Up available = Approved − Settlement. For standalone Buyout the loan amount must clamp to the settlement amount, else the customer receives unintended cash. State the clamp.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Baseline mis-attribution</td><td>MLB-125 is the <b>Mortgage customer-journey mobile</b> screen (in SIT), not "the Bank Portal's existing settlement infrastructure". If BP has no settle screen today, this story builds it — size it that way.</td></tr>
+      <tr><td><span class="pr p3">P3</span></td><td class="k">Naming &amp; copy</td><td>Card "New Finance" / IA2 Transaction Type "New" vs 3721 (approved) "Fresh" — one enum. DC toggle named <code>refinancing_enabled</code> — rename <code>dc_enabled</code>. DC subtitle says "cards and personal finances" while overdrafts are also shown. G5 at variant time: state the assumed settlement pool (all in-scope contracts) since nothing is selected yet.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>What matches (keep):</b> insertion point after Employment &amp; Income + AECB ✓ · Fresh skips settlement ✓ · DC multi-select mechanics ✓ · obligation formulas = F5 ✓ · G5 = CBUAE 50% ✓ · Transaction Type → Pricing Matrix per 3721 ✓ · the explicit "intentional omission" note for collapsed/expanded cards is exactly how divergences should be declared — the scope divergences above need the same treatment.</p>
+</section>
+
+<section>
+  <span class="seclabel">06 · Draft comment — paste-ready (needs your go)</span>
+  <div class="cmt"><ol>
+    <li><b>Contract scope vs approved CJ:</b> AMP-3694 AC6 (US Approved) now shows unsecured installments only — CC and Overdraft are struck out. This story shows all 3 categories for DC and Inst+OD for Buyout. Please align with Trang which screen definition stands; if BP intentionally differs, declare it like your AC1 omission note.</li>
+    <li><b>Buyout selection:</b> single-select here vs "at least 1 contract" (3694 AC6) and a multi-contract list (3404 AC6). One rule for the product, both portals.</li>
+    <li><b>Variant availability:</b> 3694 AC5 renders only bank-returned variants (matching at Pre-dedupe), nothing hardcoded; here Fresh is hardcoded and others are AECB-gated. State this as an intentional BP divergence and define the no-Fresh-product case.</li>
+    <li><b>DC gate ≥1 CC</b> blocks PL-only consolidation, which the CJ scope (PL AND CC, 3404 AC6) allows — justify or relax to "≥2 in-scope contracts"; G3 is also undefined at zero CC.</li>
+    <li><b>Self-references:</b> "per AMP-3732 AC…" cites this ticket itself ~8× where the AECB Contract Scope Configuration story is meant — please fix the key; and AC6's fallback needs its promised ticket (or explicit in-scope declaration) before RfD.</li>
+    <li><b>Define "highest cost-to-balance ratio"</b> for the DC fallback auto-selection (3404 AC6a has no auto-selection — customer re-scopes manually).</li>
+    <li>P2s: toggle default per variant (MLB-125 imports default-ON; 3694 says OFF); add 1-contract auto-select + AECB-timeout skip rules (3694 AC6); G2/G3 defaults vs DP AMP-2215 (≥2/30% vs ≥3/70%); clamp loan amount for standalone Buyout (Top Up = 0); MLB-125 is the Mortgage CJ screen, not existing BP infra. P3: "New" vs 3721's approved "Fresh"; <code>refinancing_enabled</code> → <code>dc_enabled</code>; DC subtitle omits overdrafts; state the G5 pool at gate time.</li>
+  </ol></div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
