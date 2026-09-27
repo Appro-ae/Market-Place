@@ -186,6 +186,21 @@
     </div>
   </div>
 
+  <div class="callout amber" style="margin-top:18px">
+    <h3 style="margin-bottom:8px">"Wait — aren't Buyout and Debt Consolidation the same thing?"</h3>
+    <p style="margin:0 0 10px;max-width:none">Fair question — both settle old debt and create new debt. The difference is <strong>what</strong> they settle and <strong>why</strong> the bank offers them. Same mechanism, opposite business logic:</p>
+    <div class="tblwrap" style="background:var(--card)"><table style="min-width:560px">
+      <tr><th></th><th>Buyout</th><th>Debt Consolidation</th></tr>
+      <tr><td><b>How many debts</b></td><td><b>One</b> contract</td><td><b>Many</b> contracts at once</td></tr>
+      <tr><td><b>What kind of debt</b></td><td>An instalment loan only — like-for-like: a loan replaces a loan. Credit cards are excluded</td><td>Anything unsecured: credit cards, loans, overdrafts. Its main job is <b>converting card debt into loan debt</b></td></tr>
+      <tr><td><b>Why the customer does it</b></td><td><b>Price switch.</b> Same debt, better rate — like changing phone company</td><td><b>Restructuring.</b> Escape 36%/yr revolving cards that never end, into one loan with a fixed end date</td></tr>
+      <tr><td><b>What kind of customer</b></td><td>Healthy — pays on time, shopping for a better deal. The bank is <b>acquiring</b> a good customer</td><td>Stretched — several cards near their limits. The bank is <b>rehabilitating</b> a leveraged customer</td></tr>
+      <tr><td><b>That's why the system…</b></td><td>Single-select, cards hidden, no hard gates</td><td>Multi-select, cards included, and <b>gates G1–G5 must pass first</b> — the safety check for a riskier profile</td></tr>
+      <tr><td><b>Cash on top?</b></td><td>Only via the Top-Up variant</td><td>Normally none — the loan equals the settled debts</td></tr>
+    </table></div>
+    <p style="margin:10px 0 0;max-width:none;font-size:13.5px">One sentence: <strong>Buyout moves one loan to a cheaper bank; DC merges a messy pile of card-heavy debt into one loan that actually ends.</strong> The riskier profile of DC is exactly why it alone carries hard gates.</p>
+  </div>
+
   <div class="worked" style="margin-top:18px">
     <h3>Three things to remember before you read anything else</h3>
     <ol>
@@ -429,9 +444,46 @@ Post-DBR = (New EMI + out-of-scope obligations) / income   → must pass G5</cod
   <div class="callout"><strong>Compliance guard-rail:</strong> no story asserts the 48-month CBUAE tenor cap — the generic tenor formula allows up to 300 months and only Product Setup's Max Tenor protects us. We recommended an explicit platform validation for PL.</div>
 </section>
 
-<!-- ============ 7. GLOSSARY ============ -->
+<!-- ============ 7. STAKEHOLDER BENEFITS ============ -->
 <section>
-  <div class="sechead"><span class="secnum">07</span><div><h2>Glossary — the words you'll hear in standup</h2></div></div>
+  <div class="sechead"><span class="secnum">07</span><div><h2>Who benefits — the stakeholder map</h2>
+  <div class="lede">Every lending product survives only if each party in the relationship wins something. Here is who wins what.</div></div></div>
+
+  <div class="tblwrap"><table style="min-width:720px">
+    <tr><th>Stakeholder</th><th>Benefit</th><th>Industry logic</th></tr>
+    <tr><td rowspan="4"><b>Borrower</b></td><td>Lower rate / lower EMI (Buyout)</td><td>Rate arbitrage — old contract repriced to current market; the 1% exit-fee cap makes switching rational</td></tr>
+    <tr><td>Liquidity without a second loan (Top-Up)</td><td>One instalment, one relationship; a parallel second loan would eat DBR twice</td></tr>
+    <tr><td>Cash-flow relief + simplicity (DC)</td><td>~36%/yr revolving card debt → ~6–11% reducing loan; four payments → one; escapes the minimum-payment trap</td></tr>
+    <tr><td>Credit-score repair</td><td>One well-serviced loan reports cleaner to AECB than several near-limit cards — utilisation drops, score rises</td></tr>
+    <tr><td rowspan="4"><b>Acquiring bank</b><br><span style="font-weight:400;color:var(--muted);font-size:12px">(new lender — our client)</span></td><td>Low-risk customer acquisition</td><td>A buyout customer arrives with a proven repayment history — the old bank already did the risk discovery. That is why "good standing" is an entry condition in the market</td></tr>
+    <tr><td>Instant book growth</td><td>One buyout adds a full outstanding balance on day 1</td></tr>
+    <tr><td>Primary-bank capture</td><td>Salary transfer + DC make the bank the customer's main bank — cards, CASA, insurance cross-sell follow. The loan margin is the entry ticket; the relationship is the prize</td></tr>
+    <tr><td>Predictable acquisition cost</td><td>Absorbed exit fee capped at 1% — the bank knows exactly what "buying" a customer costs</td></tr>
+    <tr><td rowspan="3"><b>Losing bank</b><br><span style="font-weight:400;color:var(--muted);font-size:12px">(old lender)</span></td><td>Full immediate repayment + exit fee</td><td>The outstanding comes back as cash plus ≤1% fee; risk-weighted assets shrink, freeing regulatory capital</td></tr>
+    <tr><td>NPL avoided (DC case)</td><td>For a stretched borrower, a competitor's consolidation is a rescue — full repayment today beats a default tomorrow</td></tr>
+    <tr><td>− Loses its best customers</td><td>Only good-standing loans qualify, so buyouts strip the incumbent's healthiest book — the churn pressure that forces retention offers and honest pricing</td></tr>
+    <tr><td rowspan="3"><b>Channel / marketplace</b><br><span style="font-weight:400;color:var(--muted);font-size:12px">(Appro / SMBP)</span></td><td>Higher conversion per lead</td><td>A customer with no DBR room for a fresh loan can still convert via DC — the shortfall→DC fallback literally rescues lost deals</td></tr>
+    <tr><td>Larger average ticket</td><td>Settlement tickets = existing balances (+ top-up), structurally bigger than fresh loans → more commission per application</td></tr>
+    <tr><td>Capability differentiation</td><td>A marketplace selling only fresh loans competes on rate; one running bureau-driven settlement journeys competes on capability</td></tr>
+    <tr><td rowspan="3"><b>Regulator / market</b><br><span style="font-weight:400;color:var(--muted);font-size:12px">(CBUAE)</span></td><td>Competition</td><td>The 1% exit cap (Reg. 29/2011) was written to break lock-in — switching rights discipline pricing market-wide</td></tr>
+    <tr><td>Financial stability</td><td>DC converts open-ended revolving debt into amortising debt with a fixed end date — households deleverage on schedule</td></tr>
+    <tr><td>Consumer protection</td><td>One consolidated loan under 50% DBR is easier to supervise than five scattered facilities; KFS + cooling-off travel with the new contract</td></tr>
+  </table></div>
+
+  <div class="worked" style="margin-top:16px">
+    <h3>The one-line version</h3>
+    <p style="margin:6px 0 12px;font-size:14.5px">Borrower saves money, the new bank buys a proven customer, the old bank gets repaid in full, the channel converts more leads at bigger tickets, and the regulator gets a competitive, deleveraging market. The only structural loser is the incumbent's margin — which is exactly what the regulator intended.</p>
+    <h3>Two consequences for our backend</h3>
+    <ol>
+      <li><b>The acquiring bank's benefit depends on the standing check.</b> Buying a delinquent loan is buying someone else's problem — this is why G4 should extend to Buyout (open point 1).</li>
+      <li><b>The borrower's benefit must be provable on screen.</b> The "Now / After / Save" comparison is regulatory-grade evidence of customer benefit, not decoration — treat F11's accuracy as a compliance requirement.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 8. GLOSSARY ============ -->
+<section>
+  <div class="sechead"><span class="secnum">08</span><div><h2>Glossary — the words you'll hear in standup</h2></div></div>
   <div class="gloss">
     <div class="gterm"><b>Transaction Type</b> — the variant, set once per product. Drives screens, pricing lookup and (planned) rule-engine strategies.</div>
     <div class="gterm"><b>AECB</b> — Al Etihad Credit Bureau. The report listing every loan/card the customer holds anywhere in the UAE.</div>
