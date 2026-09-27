@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release 5 US Feedback</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:150px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:78ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  section{padding:22px 0 2px}
+  .ushead{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:8px}
+  .uskey{background:#1a214d;color:#ffffff;font-weight:900;font-size:13px;border-radius:8px;padding:5px 12px}
+  h2{font-weight:900;font-size:17px;flex:1;min-width:240px}
+  .vch{border-radius:20px;padding:3px 12px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .vch.blk{background:#1a214d;color:#fdba23}
+  .vch.fix{background:#fdba23;color:#1a214d}
+  .vch.ok{background:#ffffff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .st{font-size:11px;font-weight:700;color:#1a214d;background:#ffffff;border-radius:20px;padding:3px 12px;border:1px solid #1a214d}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:6px}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:9px 12px;white-space:nowrap}
+  tbody td{padding:9px 12px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.id{font-weight:900;white-space:nowrap;width:52px}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  td .fx{display:block;margin-top:3px;font-size:12.5px}
+  td .fx b{color:#3b7ef6}
+  .good{font-size:12.5px;background:#ffffff;border-radius:10px;padding:8px 14px;margin-bottom:4px}
+  .good b{color:#3b7ef6}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Release 5 <span class="b">Per-US Feedback</span></h1></div>
+  <p class="sub">Story-level feedback for the PO feature review — one section per US, findings as <em>what is wrong → why it matters → fix</em>, paste-ready per ticket. Complements the release-level pack (20260927-001). Every story read in full this session; nothing posted to Jira.</p>
+  <div class="meta"><span class="tag">27 Sep 2026</span><span class="tag">P1 blocks Ready for Dev · P2 close before dev starts · P3 can follow</span><span class="tag">For: Hailey (PO review) · Author of stories: Gấu trắng</span></div>
+</header>
+
+<!-- 3721 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3721">AMP-3721</a></span><h2>Product Setup — Adapting Buy Out and Top Up to PL</h2><span class="st">Ready To Clarify</span><span class="vch fix">FIX BEFORE APPROVE</span></div>
+  <div class="good"><b>Good:</b> Transaction Type at product level (not per PM row) is the right simplification; per-row overrides with exact upload validation and ET33 error file follow the proven AMP-1786 pattern.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">21-1</td><td><span class="pr">P1</span></td><td><b>FSTL is defined as "First Settlement Letter" here, but "First Salary Transfer Letter" in AMP-3728</b> (doc #10/11, FAB precedent). Same factor, two meanings, two stories in one release — pricing rows and document logic will diverge silently.<span class="fx"><b>Fix:</b> one definition (3728's salary-transfer meaning matches the FAB baseline and the document list); correct 3721 AC1 wording and re-check every "FSTL" mention.</span></td></tr>
+      <tr><td class="id">21-2</td><td><span class="pr">P1</span></td><td><b>No migration rule for existing PL products.</b> Transaction Type becomes mandatory at product level, but products and pricing schemes created before this change carry none — fetch (3748) groups by this exact field.<span class="fx"><b>Fix:</b> AC for backfill: existing products default to <code>Fresh</code> (or explicit admin migration step); state what happens to their existing PM rows.</span></span></td></tr>
+      <tr><td class="id">21-3</td><td><span class="pr p2">P2</span></td><td>Settlement columns are <b>optional for DC</b> (AC5) with no rationale — DC settles the most facilities and needs letters per facility (market norm; 3732 multi-select).<span class="fx"><b>Fix:</b> either make them mandatory for DC too, or record why DC is exempt.</span></td></tr>
+      <tr><td class="id">21-4</td><td><span class="pr p2">P2</span></td><td>Early Settlement Absorption % has <b>no link to the CBUAE 1% exit-fee cap</b> — the absorbed base amount is uncapped in the spec.<span class="fx"><b>Fix:</b> state the base: absorbed = Absorption% × min(1% × outstanding, actual fee).</span></td></tr>
+      <tr><td class="id">21-5</td><td><span class="pr p3">P3</span></td><td>Settlement Letter Validity default is blank; UAE norm is 15 days (ENBD).<span class="fx"><b>Fix:</b> default 15.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3748 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3748">AMP-3748</a></span><h2>PL Product Fetching pre-submission</h2><span class="st">To Do</span><span class="vch fix">FIX BEFORE APPROVE</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">48-1</td><td><span class="pr">P1</span></td><td><b>Dedup rule is undefined when two active products share a Transaction Type.</b> The purpose card shows product name, features, amount range, docs — from <i>which</i> product? "Appears once (deduplicated)" selects nothing.<span class="fx"><b>Fix:</b> define the pick (newest start date / explicit "channel default" flag / block duplicate active types per channel at save).</span></td></tr>
+      <tr><td class="id">48-2</td><td><span class="pr p2">P2</span></td><td>No error semantics: API failure vs empty result are different cases — 3694 only defines "no variant returned → skip to Loading".<span class="fx"><b>Fix:</b> AC for timeout/5xx (retry? skip? block?), consistent with the AECB-timeout skip pattern.</span></td></tr>
+      <tr><td class="id">48-3</td><td><span class="pr p3">P3</span></td><td>Depends on 3721 AC1; the CR carries no sequencing note.<span class="fx"><b>Fix:</b> "blocked by AMP-3721" link + release ordering.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3732 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a></span><h2>Settlement Screen — Variants, DC/Buyout, Hard Gates</h2><span class="st">Ready To Clarify</span><span class="vch fix">FIX BEFORE APPROVE</span></div>
+  <div class="good"><b>Good:</b> Explicit legend, variant-behaviour matrix, "config supersedes MLB-125 hardcodes" statement, and the edge-case list in AC5 are model story-writing.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">32-1</td><td><span class="pr">P1</span></td><td><b>Shortfall check exists twice with different trigger points</b>: AC6 fires at Confirm Settlement (pre-submission), AMP-3404 AC6a at offer return (post-offer). Both can't own the pivot.<span class="fx"><b>Fix:</b> pick one owner (post-offer is correct — approved amount only exists then); AC6 pre-check can stay as a soft warning at most.</span></td></tr>
+      <tr><td class="id">32-2</td><td><span class="pr">P1</span></td><td>AC6 says of itself "a dedicated Jira ticket should be created" — <b>self-declared unticketed scope inside an RTC story</b>.<span class="fx"><b>Fix:</b> create the fallback ticket (or fold it into 3404 AC6a) before approval.</span></td></tr>
+      <tr><td class="id">32-3</td><td><span class="pr">P1</span></td><td>G1–G5 defaults here (G2≥2, G3≥30%) conflict with the DP DC engine (AMP-2215: G2≥3, G3≥70%) — shared finding with 3753.<span class="fx"><b>Fix:</b> one decision, recorded in both stories.</span></td></tr>
+      <tr><td class="id">32-4</td><td><span class="pr p2">P2</span></td><td>Edge case missing: <code>show_excluded_contracts</code> ON with <b>zero in-scope</b> contracts — settlement screen would show only EXCLUDED cards with nothing selectable.<span class="fx"><b>Fix:</b> define: skip screen (Fresh-only path) even when excluded contracts exist.</span></td></tr>
+      <tr><td class="id">32-5</td><td><span class="pr p3">P3</span></td><td>Buyout standing check absent (market gates buyout on good standing; only DC has G4).<span class="fx"><b>Fix:</b> extend G4 (or a filtration rule) to Buyout variants — carried from the market benchmark.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3744 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3744">AMP-3744</a></span><h2>Update ETL table (PL flow)</h2><span class="st">To Do</span><span class="vch blk">BLOCKED — CLARIFY</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">44-1</td><td><span class="pr">P1</span></td><td><b>Product scope contradiction</b>: title says "PL flow", body names no product, siblings 3754/3755 say "Covered Card — ETB". One ETL, which journeys consume it?<span class="fx"><b>Fix:</b> one "Applicable Product" statement across all three ETL stories.</span></td></tr>
+      <tr><td class="id">44-2</td><td><span class="pr p2">P2</span></td><td><b>The story's own sample violates its own validation</b>: PF EMI sample "15,000" contains a comma; AC2 numeric rule would flag it as a violation.<span class="fx"><b>Fix:</b> state whether thousands separators are accepted (and normalised) or rejected; fix the sample.</span></td></tr>
+      <tr><td class="id">44-3</td><td><span class="pr p2">P2</span></td><td>"Replicate the same as ADIB" (CR note) is unverified — no field-by-field mapping to ADIB-7148 is attached; <i>parity is asserted, not evidenced</i>.<span class="fx"><b>Fix:</b> attach the parity matrix (field | ADIB | SMBP | delta).</span></td></tr>
+      <tr><td class="id">44-4</td><td><span class="pr p3">P3</span></td><td>Two date formats accepted (DD/MM/YYYY or M/D/YYYY) — 4/8/2029 is ambiguous between them.<span class="fx"><b>Fix:</b> one format from the bank, or a per-feed format declaration.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3754 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3754">AMP-3754</a></span><h2>ETL Table — Runtime Validations (21 exclusions)</h2><span class="st">To Do</span><span class="vch blk">BLOCKED — CLARIFY</span></div>
+  <div class="good"><b>Good:</b> Skip-on-null semantics, AC6 multiple-reason display and per-check audit examples are ADIB production lessons correctly carried over.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">54-1</td><td><span class="pr">P1</span></td><td><b>Two reason codes are "TBD"</b> (RIM Status, Firco Flag) — a customer can be CANCELLED with no code; and the registry cited is <b>ADIB's</b> Failed Reason list, not SMBP's.<span class="fx"><b>Fix:</b> assign both codes; name the canonical SMBP registry; verify RES135–155 for collisions in it.</span></td></tr>
+      <tr><td class="id">54-2</td><td><span class="pr">P1</span></td><td><b>AC5 contradicts the state model</b>: it promises "resume once the ETL table is refreshed", but AC4.2 sets State = <b>Cancelled</b> — a terminal state. Also AC2 says null → skip, so the only null-fails path is the INCLUSION checks (RIM Type/Status), which AC5 never names.<span class="fx"><b>Fix:</b> either null-on-inclusion → a resumable non-terminal state (define it + re-trigger point), or delete AC5 and accept re-apply after block period.</span></td></tr>
+      <tr><td class="id">54-3</td><td><span class="pr p2">P2</span></td><td>The story ends with its own three open questions (age threshold, FCCM rating values, expired EID) — fields loaded by 3744 but never validated.<span class="fx"><b>Fix:</b> answer or explicitly de-scope, in the AC table, before Ready for Dev.</span></td></tr>
+      <tr><td class="id">54-4</td><td><span class="pr p3">P3</span></td><td>Preconditions cite ADIB tickets (7176/7148/7149) instead of SMBP equivalents — replication by reference invites drift.<span class="fx"><b>Fix:</b> restate the rules or link the SMBP stories (3744/3753).</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3755 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3755">AMP-3755</a></span><h2>ETL — Snapshot / Truncate / Load / Rollback</h2><span class="st">To Do</span><span class="vch ok">MINOR — BEST IN RELEASE</span></div>
+  <div class="good"><b>Good:</b> Snapshot-before-truncate with verified restore, staleness escalation (3-day DATA_STALE), full audit schema, and the reasoned TPQ boundary. Use this story as the template for the others.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">55-1</td><td><span class="pr p2">P2</span></td><td><b>Validation boundary vs 3744 is implicit</b>: here duplicate RIM / missing column → rollback; 3744 loads format mismatches as-is with email. The line between the two validators is never stated as one table.<span class="fx"><b>Fix:</b> one decision table (failure class → blocking? rollback? notify?) owned by this story.</span></td></tr>
+      <tr><td class="id">55-2</td><td><span class="pr p2">P2</span></td><td><code>SYNC_IN_PROGRESS</code> retry for downstream checks has no max wait — a customer mid-journey at 02:00 could spin indefinitely on a hung sync.<span class="fx"><b>Fix:</b> timeout + fallback (treat as AECB-timeout-style skip or park), stated here or in 3754.</span></td></tr>
+      <tr><td class="id">55-3</td><td><span class="pr p3">P3</span></td><td>Row-count mismatch = warning only "during initial onboarding" — a temporal exception written as a permanent rule.<span class="fx"><b>Fix:</b> config flag (strict mode default ON after go-live).</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3728 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3728">AMP-3728</a></span><h2>Document Mapping — Backend logic (PL flow)</h2><span class="st">Ready To Clarify</span><span class="vch blk">BLOCKED — SPLIT</span></div>
+  <div class="good"><b>Good:</b> Driving the document list from pricing-scheme factors (no separate config screen) is an elegant reuse decision; the M/O + stage + queue table is clear.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">28-1</td><td><span class="pr">P1</span></td><td><b>"Buyout+Equity" appears in the liability-letter condition (doc #6)</b> — Equity is a mortgage Transaction Type that 3721 explicitly excludes from the PL value list. A value that cannot exist in PL drives a mandatory document.<span class="fx"><b>Fix:</b> condition = Buyout / Buyout+Top Up / <b>Debt Consolidation</b> — note DC is currently missing from doc #6 entirely, though DC settles the most facilities (letters per facility is the market norm).</span></td></tr>
+      <tr><td class="id">28-2</td><td><span class="pr">P1</span></td><td><b>AC5 introduces a full post-approval operating model without stories</b>: Persona Match, Disbursement Maker/Checker queue, DAF, DMS upload, Fund Holding API, Camunda STL reminders — anchored on FAB tickets (FABL-1000/2047/1859), none existing as SMBP scope.<span class="fx"><b>Fix:</b> split AC5 into its own stories with SMBP-native ACs; keep 3728 to document resolution.</span></td></tr>
+      <tr><td class="id">28-3</td><td><span class="pr p2">P2</span></td><td>Persona thresholds hardcoded (salary ≥ 15,000; AECB ≥ 711; &lt; 14× multiplier) — against the platform's config/FEEL philosophy and per-bank reality.<span class="fx"><b>Fix:</b> configurable per product, maker-checker governed.</span></td></tr>
+      <tr><td class="id">28-4</td><td><span class="pr p2">P2</span></td><td>FSTL naming collision with 3721 (see 21-1); also doc #3 Passport: "shown when Expat" yet "not requested by default" — two rules in one cell.<span class="fx"><b>Fix:</b> single condition column; O-by-default with explicit trigger.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3757 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3757">AMP-3757</a></span><h2>Document Management — Generic Digital Signature</h2><span class="st">To Do</span><span class="vch blk">BLOCKED — EMPTY</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">57-1</td><td><span class="pr">P1</span></td><td><b>Description is empty</b> while the journey already runs three signature models (T&amp;C/KFS swipe-stamp, drawn signature in the prototype, EFR + OTP on the security cheque).<span class="fx"><b>Fix:</b> the story must define one evidence model per document class (method, what is stored, legal basis under UAE e-transactions law) — or leave Release 5.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 3753 -->
+<section>
+  <div class="ushead"><span class="uskey"><a style="color:#ffffff" href="https://scvaladdin.atlassian.net/browse/AMP-3753">AMP-3753</a></span><h2>AECB Contract Scope Configuration — Admin UI</h2><span class="st">To Do</span><span class="vch fix">FIX BEFORE APPROVE</span></div>
+  <div class="good"><b>Good:</b> Auto-seeded defaults per new product, atomic save, and the explicit "LA uses the full AECB set, settlement uses the filtered set" separation (IA2) are exactly right.</div>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Pr</th><th>Finding → Fix</th></tr></thead>
+    <tbody>
+      <tr><td class="id">53-1</td><td><span class="pr">P1</span></td><td><b>Save semantics contradict themselves</b>: AC8 says "On success: save entire configuration atomically… return to read-only" and, in the same cell, "change flows to Maker-Checker approval queue". Applied immediately or pending checker? These are different systems.<span class="fx"><b>Fix:</b> maker-checker semantics: save = pending request; live config unchanged until checker approves (matches platform pattern); auto-seeded defaults documented as checker-exempt or pre-approved.</span></td></tr>
+      <tr><td class="id">53-2</td><td><span class="pr">P1</span></td><td>G2/G3 defaults (≥2, ≥30%) vs DP engine (≥3, ≥70%) while <b>IA3 claims alignment</b> — the claim is false as written.<span class="fx"><b>Fix:</b> decide per gate; correct IA3 either way.</span></td></tr>
+      <tr><td class="id">53-3</td><td><span class="pr p2">P2</span></td><td>G4 default blocked list includes <b>"U (Active Payments)"</b> — would fail nearly every applicant; several letter-to-meaning mappings look off against the AECB dictionary.<span class="fx"><b>Fix:</b> verify all 17 codes with Credit before the default ships.</span></td></tr>
+      <tr><td class="id">53-4</td><td><span class="pr p3">P3</span></td><td>Numbering drift: AC6 titled "Section 4", AC7 titled "Section 5" but its body says "Section 4"; AC1 table names differ again.<span class="fx"><b>Fix:</b> renumber once.</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="note"><b>Coverage note:</b> AMP-3731 / 3729 / 3722 (the "Others" row) were verified at status level only (RTC / UAT Testing / To Do) and are not reviewed here — say the word and I'll extend the pack. Cross-cutting items already tracked at release level (untracked SCB migration and Limit Assignment rows, empty CR header) are in pack 20260927-001. Sources: full ticket text as read 27 Sep 2026; cross-references AMP-2215, AMP-2321, AMP-3694, AMP-3404, AMP-3717, AMP-3689, ADIB-7147/7148/7176.</span>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Feedback pack for PO review; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
