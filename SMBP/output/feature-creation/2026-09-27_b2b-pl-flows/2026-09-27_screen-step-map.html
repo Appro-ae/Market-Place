@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>B2B PL Screen Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#16232B; --muted:#5A6B75;
+    --line:#DDE3E1; --accent:#0E756A; --accent-soft:#E3F0ED;
+    --amber:#A8690F; --amber-soft:#F7ECDA; --red:#B3452F; --red-soft:#F6E4DF;
+    --blue:#28536B; --blue-soft:#E4EDF2; --chip:#EDF1EF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+      --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+      --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+      --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+    --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+    --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+    --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font:400 15.5px/1.6 "Public Sans",system-ui,sans-serif;padding-block:0 64px}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+  h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:0 0 10px}
+  h2{font-size:22px;font-weight:700;margin:0 0 6px}
+  p{max-width:75ch}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .eyebrow{font:600 11px/1 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  header.hero{padding:48px 0 26px;border-bottom:1px solid var(--line)}
+  .hero .sub{color:var(--muted);font-size:16px;max-width:70ch}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tag{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:500}
+  section{padding:34px 0 4px}
+  .sechead{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .secnum{font:700 15px "IBM Plex Mono",monospace;color:var(--accent)}
+  .lede{color:var(--muted);margin-top:2px;font-size:14.5px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+  .lg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .d-ok{background:var(--accent)} .d-warn{background:var(--amber)} .d-gap{background:var(--red)}
+
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;font-size:13px;min-width:900px}
+  th{font:600 11px "Archivo";letter-spacing:.06em;text-transform:uppercase;text-align:left;color:var(--muted);
+    padding:10px 12px;border-bottom:2px solid var(--line);background:var(--chip);white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.scr{font-weight:600;font-family:"Archivo";min-width:150px}
+  td.scr small{display:block;font:500 11px "IBM Plex Mono",monospace;color:var(--muted);margin-top:2px}
+  td.src{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .b{display:inline-block;font:600 10px "Archivo";letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:3px 8px;margin-bottom:3px}
+  .b.ok{background:var(--accent-soft);color:var(--accent)}
+  .b.warn{background:var(--amber-soft);color:var(--amber)}
+  .b.gap{background:var(--red-soft);color:var(--red)}
+  td .mp{font-size:12.5px;color:var(--muted)}
+  td .mp b{color:var(--ink)}
+
+  .callout{border:1px solid var(--line);border-left:4px solid var(--red);background:var(--red-soft);
+    border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14px;max-width:none}
+  .conf{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:8px}
+  .ccard{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:14px 16px}
+  .ccard.w{border-left-color:var(--amber)}
+  .ccard b{font-family:"Archivo";display:block;font-size:14px;margin-bottom:4px}
+  .ccard p{font-size:13px;color:var(--muted);margin:0}
+  .ccard .who{font:600 10.5px "Archivo";letter-spacing:.08em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:4px}
+  .ccard.w .who{color:var(--amber)}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">SMBP · B2B Personal Finance · Screen ↔ Step ↔ Backend contract</div>
+  <h1>Screen-by-screen map with market behaviour</h1>
+  <p class="sub">Every screen in Gấu trắng's prototype mapped to its user-story step, the backend behaviour it triggers, and the market-practice check. This is the handoff contract for Hailey's backend feature creation — <strong>build from the US column, not the prototype, wherever they disagree (§06)</strong>.</p>
+  <div class="meta">
+    <span class="tag">Prototype: Appro B2B — PF Journey (Buyout, DC, offline v2)</span>
+    <span class="tag">US: AMP-3694 · AMP-3404 · AMP-3732 · AMP-3721 · AMP-3748</span>
+    <span class="tag">27 Sep 2026 · Internal</span>
+  </div>
+  <div class="legend" style="margin-top:14px">
+    <span class="lg"><span class="dot d-ok"></span>Aligned — US, prototype and market agree</span>
+    <span class="lg"><span class="dot d-warn"></span>Watch — market practice suggests a stronger default</span>
+    <span class="lg"><span class="dot d-gap"></span>Conflict — prototype and US disagree; decision needed before build</span>
+  </div>
+</header>
+
+<!-- 01 ENTRY -->
+<section>
+  <div class="sechead"><span class="secnum">01</span><div><h2>Entry &amp; identity</h2>
+  <div class="lede">Standard onboarding rail — unchanged from B2C except where marked.</div></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Screen (prototype)</th><th>Behaviour (per US)</th><th>Backend trigger / data</th><th>Market practice check</th><th>Source</th></tr>
+    <tr>
+      <td class="scr">Landing / "Let's Start"<small>screen 1</small></td>
+      <td><span class="b ok">Aligned</span> Application record created on landing (state LEAD); backend profile check: NTB / ETB-no-salary-account / ETB-salary-account (prototype's "backend check" panel)</td>
+      <td>Create application; dedupe/ETB API by EID→RIM later at dedupe (AMP-3717)</td>
+      <td class="mp">Instant app-record creation on first touch is standard (funnel analytics need it)</td>
+      <td class="src">AMP-3694</td>
+    </tr>
+    <tr>
+      <td class="scr">Choose a product<small>CC / PF / HF / AF / SME / CASA</small></td>
+      <td><span class="b ok">Aligned</span> Product-type selection; only PF continues into this flow — CC/HF live journeys, AF/SME marked SOON</td>
+      <td>Sets product type; drives which CJ config loads</td>
+      <td class="mp">Product picker before KYC is the UAE norm (bank apps front-load product choice)</td>
+      <td class="src">AMP-3694 #1</td>
+    </tr>
+    <tr>
+      <td class="scr">Mobile + email → OTP<small>6-digit, resend 0:30</small></td>
+      <td><span class="b ok">Aligned</span> 6-digit OTP, 60&nbsp;s resend, separate channel choice (SMS / email); wrong-number and expired-code error screens exist</td>
+      <td>OTP service; audit device/IP; codes expire 10 min (prototype error screen)</td>
+      <td class="mp">60&nbsp;s resend + attempt caps = market standard; <b>rate-limit server-side</b> (AMP-3470 lesson)</td>
+      <td class="src">AMP-3694 #2</td>
+    </tr>
+    <tr>
+      <td class="scr">Consents (Bureau, T&amp;C, PIA) + Marketing<small>slide-to-agree</small></td>
+      <td><span class="b ok">Aligned</span> Three mandatory consents with Read More + explicit tick; marketing optional and skippable; slide-to-agree gesture</td>
+      <td>Consent capture per AMP-2137/1734: event, timestamp, final action only, consent PDF stored on application</td>
+      <td class="mp">Bureau consent <b>before</b> any AECB call is a regulatory must; unchecked-by-default matches CBUAE conduct expectations</td>
+      <td class="src">AMP-3694 #3</td>
+    </tr>
+    <tr>
+      <td class="scr">Verify identity: UAE PASS or Scan EID or Upload<small>+ EID front/back capture, selfie</small></td>
+      <td><span class="b warn">Watch</span> Prototype offers 3 routes (UAE PASS recommended / EFR scan / manual upload). US only says "eKYC (existing)" — the manual-upload route is not in any AC</td>
+      <td>EFR EID scan + selfie liveness; UAE PASS per AMP-473..475; retry caps (selfie ≤5 configurable, AMP-2848)</td>
+      <td class="mp">UAE PASS-first is where the market is going; <b>manual upload weakens KYC</b> — banks use it only as assisted fallback. Confirm if in scope</td>
+      <td class="src">AMP-3694 #6–7</td>
+    </tr>
+  </table></div>
+</section>
+
+<!-- 02 EMPLOYMENT FORK -->
+<section>
+  <div class="sechead"><span class="secnum">02</span><div><h2>Employment fork — new in B2B</h2>
+  <div class="lede">The screen that decides long flow vs Sales Lead exit. Sits BEFORE eKYC.</div></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Screen (prototype)</th><th>Behaviour (per US)</th><th>Backend trigger / data</th><th>Market practice check</th><th>Source</th></tr>
+    <tr>
+      <td class="scr">Employment ("How do you earn your income?")<small>Salaried / Self-employed / Pensioner</small></td>
+      <td><span class="b ok">Aligned</span> Single-select cards. Salaried/Pensioner: mandatory monthly income (min configurable), additional-income toggle (OFF default), expenses toggle (ON default: lifestyle mandatory, non-bank borrowings optional). Expenses ≤ X% of income (X config). Self-employed: fields hidden, manual-review note</td>
+      <td>Routing rule: additional income ON <b>or</b> self-employed <b>or</b> income &lt; min → short exit. Audit step "Employment Type Selection" with full declared values</td>
+      <td class="mp">Asking affordability inputs pre-KYC is smart funnel design (fail cheap, before paying for EFR/AECB calls) — matches digital-lender best practice. Note prototype hardcodes "AED 7,000" — must render the <b>configured</b> min</td>
+      <td class="src">AMP-3694 AC1</td>
+    </tr>
+    <tr>
+      <td class="scr">Employment Details<small>full name, company (BVE), IBAN</small></td>
+      <td><span class="b ok">Aligned</span> Short-exit data capture. IBAN validated <b>inline</b> (loading → pass/fail state); Submit gated on IBAN pass. Bank-statement upload was removed (struck through in AC2)</td>
+      <td>IBAN validation API pre-submit; audit "Employment Details Submission"; state → Sales Lead</td>
+      <td class="mp">Inline IBAN check beats post-submit failure — market-leading; keeping statements out of the short flow reduces drop-off</td>
+      <td class="src">AMP-3694 AC2/AC2a</td>
+    </tr>
+    <tr>
+      <td class="scr">Thank You ("we'll call you in 2 business days")<small>ref number, back to home</small></td>
+      <td><span class="b ok">Aligned</span> Journey ends; reference shown; status = <b>Sales Lead</b> (not Completed / Declined)</td>
+      <td>New SSS state; lead surfaces to channel queue/report for RM callback; CRM sync (Appro channel only)</td>
+      <td class="mp">2-business-day callback SLA is stated to the customer — <b>the lead queue needs an SLA timer</b>, or the promise is decoration</td>
+      <td class="src">AMP-3694 AC3</td>
+    </tr>
+  </table></div>
+</section>
+
+<!-- 03 DATA, VARIANT, SETTLEMENT -->
+<section>
+  <div class="sechead"><span class="secnum">03</span><div><h2>Data, variant choice &amp; settlement</h2>
+  <div class="lede">The heart of the B2B flow — where the four variants diverge.</div></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Screen (prototype)</th><th>Behaviour (per US)</th><th>Backend trigger / data</th><th>Market practice check</th><th>Source</th></tr>
+    <tr>
+      <td class="scr">Help us complete your details<small>work email, country of birth, employer, emirate, salary date, salary-transfer opt-in</small></td>
+      <td><span class="b ok">Aligned</span> Pre-populated from EFR / UAE PASS / AECB; employer + emirate conditional (AMP-1349); salary-transfer opt-in conditional on ETL ("already have salary account → skip transfer")</td>
+      <td>Audit "Customer Information collection"; state Awaiting Application Submission. ETL lookup decides salary-account state</td>
+      <td class="mp">Prefill-first with edit is the standard; salary-transfer as opt-in (not forced) matches Finance House / modern practice — STL is a pricing factor, not a gate</td>
+      <td class="src">AMP-3694 AC4 · AMP-3717</td>
+    </tr>
+    <tr>
+      <td class="scr" style="border-left:3px solid var(--blue)">— (no screen) Product matching<small>fires at pre-dedupe</small></td>
+      <td><span class="b ok">Aligned</span> Backend fetches all active PL products for the channel; distinct Transaction Types become the variant cards; document checklist + features + T&amp;C PDF loaded per product</td>
+      <td>Fetch API: type=PL, status=Active, channel filter; dedupe purposes; no eligibility filtering pre-submission</td>
+      <td class="mp">Early fetch = zero perceived latency at the variant screen — good. Note: showing purposes without eligibility filter means some customers see variants they'll fail later; market tolerates this pre-bureau</td>
+      <td class="src">AMP-3748</td>
+    </tr>
+    <tr>
+      <td class="scr">Choose your product / finance type<small>variant cards, expand for features + docs</small></td>
+      <td><span class="b ok">Aligned</span> Cards never hardcoded — only variants returned by the bank; DC card additionally requires hard gates G1–G5 pass; single-select; none returned → skip straight to Loading; Fresh only → auto-select and skip settlement</td>
+      <td>Layer 1 gates (DC) + Layer 2 contract gating per variant toggles (<span class="mono">buyout_enabled</span> etc.); audit "Finance Variant Selection"</td>
+      <td class="mp">Showing only qualified options (vs greying out) reduces rejection feeling — matches best-in-class eligibility UX</td>
+      <td class="src">AMP-3694 AC5 · AMP-3732 AC1/AC5</td>
+    </tr>
+    <tr>
+      <td class="scr">Buyout details ("Tell us about the finance you're moving")<small>current bank, outstanding, EMI, months left — manual entry</small></td>
+      <td><span class="b gap">Conflict</span> This prototype screen asks the customer to <b>type</b> their outstanding balance and instalment. The US does the opposite: contracts come <b>from AECB automatically</b> on the Settlement screen — no manual entry anywhere in AMP-3694/3732</td>
+      <td>Per US: AECB report → filtered in-scope contracts → settle toggles. Manual figures would create reconciliation mismatches with the liability letter</td>
+      <td class="mp">Market: bureau-prefilled liabilities is the UAE advantage (one central bureau); manual self-declared balances are legacy web-form practice and a data-quality risk. <b>Build the US version; treat this screen as superseded</b></td>
+      <td class="src">AMP-3694 AC6 vs prototype</td>
+    </tr>
+    <tr>
+      <td class="scr">Settlement ("Your existing finances")<small>hero total, contract cards, toggles</small></td>
+      <td><span class="b ok">Aligned</span> Buyout/B+T: single-select radio behaviour, CC hidden, unsecured instalments only, no reduce-limit slider. DC: multi-select across CC + instalments + NI, reduce-limit slider on CC/OD. Skipped if Fresh, ≤1 contract, or AECB timeout. Bank-name dropdown mandatory when toggle ON</td>
+      <td>In-scope filter = MLB-125 ECB filters + AMP-3732 scope config (category/type/seasoning/secured/%). Audit "Contract Settlement" with toggled-ON list</td>
+      <td class="mp">Toggle-to-settle over bureau data mirrors LendingClub's "we pay your creditors" flow — current best practice. Excluded contracts optionally shown with EXCLUDED badge (transparency practice)</td>
+      <td class="src">AMP-3694 AC6 · AMP-3732 AC2–AC4</td>
+    </tr>
+    <tr>
+      <td class="scr">Amount &amp; tenure sliders + grace + salary date<small>"we'll settle AED 82,400 first" banner</small></td>
+      <td><span class="b ok">Aligned</span> Buyout banner states the settlement is paid first; slider minimum must respect settlement total; grace period range from banks' pricing config; salary date drives instalment date</td>
+      <td>Amount min = MAX(product min, settlement outstanding); grace = pricing-matrix min→calculated max; feeds LA</td>
+      <td class="mp">Anchoring the slider above the settlement prevents impossible offers; FAB competes on long grace — ceiling should be config, not hardcoded 30–99</td>
+      <td class="src">AMP-3404 AC6 customise rules · AMP-3306</td>
+    </tr>
+    <tr>
+      <td class="scr">T&amp;C → KFS<small>scroll-to-end, swipe = signature, download</small></td>
+      <td><span class="b ok">Aligned</span> Bank-provided PDFs; swipe enabled only after full scroll; swipe stamps client signature into the document; downloadable; shown in DP Application Enquiry</td>
+      <td>Consent-capture audit ("T&amp;C Acknowledgement" / "KFS Acknowledgement" with doc name+version); doc versioning matters for re-acknowledgement</td>
+      <td class="mp">KFS before submission (not only at offer) exceeds the market — most banks show KFS at offer stage only. Keep: it de-risks CBUAE conduct review</td>
+      <td class="src">AMP-3694 AC7/AC8</td>
+    </tr>
+  </table></div>
+</section>
+
+<!-- 04 DECISION & OFFER -->
+<section>
+  <div class="sechead"><span class="secnum">04</span><div><h2>Decisioning &amp; offer</h2>
+  <div class="lede">One offer in B2B. The customer shapes it; every change goes back to the bank.</div></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Screen (prototype)</th><th>Behaviour (per US)</th><th>Backend trigger / data</th><th>Market practice check</th><th>Source</th></tr>
+    <tr>
+      <td class="scr">Loading ("Finding your best offers")</td>
+      <td><span class="b ok">Aligned</span> The real submission moment: channel-layer push fires here (was held through variant/settlement/T&amp;C/KFS)</td>
+      <td>Channel checks (fraud, LexisNexis, MOHRE, name screening, income consolidation) → bank layer (CV → fetch → RE → LA → queue)</td>
+      <td class="mp">Holding submission until all inputs exist avoids partial applications polluting the funnel — clean design</td>
+      <td class="src">AMP-3694 · AMP-3404 Part 1–2</td>
+    </tr>
+    <tr>
+      <td class="scr">"A buyout isn't possible right now" → DC alternative</td>
+      <td><span class="b ok">Aligned</span> Fires when settlement &gt; approved amount. Shows DC eligible amount + benefit bullets; accept → variant switches to DC, pool expands to CC, auto-select by highest cost-to-balance, <b>T&amp;C + KFS re-acknowledged</b> for the DC product</td>
+      <td>Recalculation with Transaction Type = DC; DC-fallback flag + audit events; loan amount = MAX(min loan, Σ selected)</td>
+      <td class="mp">Converting a decline into an alternative offer is best-in-class decline-rescue; the re-acknowledgement is the compliance-correct detail most builds miss</td>
+      <td class="src">AMP-3404 AC6a · AMP-3732 AC6</td>
+    </tr>
+    <tr>
+      <td class="scr">Offer Detail ("You're approved for") + Customise sheet<small>rate, EMI, amount/tenure/grace sliders, contracts list, KFS block</small></td>
+      <td><span class="b ok">Aligned</span> Hero text varies by variant (approved vs pre-approved); Now/After/Save rows for Buyout/DC; contracts list with unselect (≥1 must stay); every reselection or "Apply changes" → bank recalculation; calc-failure message blocks proceed</td>
+      <td>Recalc API round-trips; slider bounds: amount MAX(product min, outstanding)→approved; tenure min→calculated; grace matrix min→calculated</td>
+      <td class="mp">"Save AED X/mo" claims are regulatory-grade benefit evidence — F11 accuracy is compliance, not UX. Read-only rate with adjustable amount/tenure matches market</td>
+      <td class="src">AMP-3404 AC6/AC7</td>
+    </tr>
+    <tr>
+      <td class="scr">Protection (credit life / takaful)<small>Sukoon / Salama cards, % of finance</small></td>
+      <td><span class="b ok">Aligned</span> Channel-configured provider list (not bank-specific); B2B payment = <b>"Reduce from finance" only</b>, pay-upfront disabled; premium = fixed AED or % × amount, deducted at disbursal</td>
+      <td>Premium calc per AC8; provider + cost stored on application, visible in DP</td>
+      <td class="mp">Credit life bundled at offer stage is UAE norm; funding from the finance (no upfront card payment) reduces drop-off. Decline must be a first-class option (conduct rules)</td>
+      <td class="src">AMP-3404 AC8</td>
+    </tr>
+  </table></div>
+</section>
+
+<!-- 05 ACCEPTANCE & FULFILMENT -->
+<section>
+  <div class="sechead"><span class="secnum">05</span><div><h2>Acceptance, signing &amp; fulfilment</h2></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Screen (prototype)</th><th>Behaviour (per US)</th><th>Backend trigger / data</th><th>Market practice check</th><th>Source</th></tr>
+    <tr>
+      <td class="scr">Review ("Ready to submit?")<small>net amount credited breakdown</small></td>
+      <td><span class="b ok">Aligned</span> Net = approved − processing fee − insurance premium − settlement (Buyout/DC); fee shown only if bank sent one; % fees converted to AED before deduction</td>
+      <td>F13 calculation; all lines from bank offer + selections</td>
+      <td class="mp">Itemised net-credited breakdown pre-signature is exactly what CBUAE disclosure rules want — stronger than many live UAE journeys</td>
+      <td class="src">AMP-3404 AC9</td>
+    </tr>
+    <tr>
+      <td class="scr">Schedule of Charges + repayment schedule</td>
+      <td><span class="b ok">Aligned</span> Retrieved from bank; customer acknowledges; stored + shown in DP</td>
+      <td>Audit "Schedule of Charges Acknowledgement"</td>
+      <td class="mp">SoC in-journey (not a website link) is above-market disclosure</td>
+      <td class="src">AMP-3404 AC10</td>
+    </tr>
+    <tr>
+      <td class="scr">Customer Declaration + cooling-off<small>checkbox default unticked = waived</small></td>
+      <td><span class="b ok">Aligned</span> All copy from DP Collateral (never hardcoded); mandatory T&amp;C tick; cooling-off ticked → Application Paused screen, resume after 5 business days</td>
+      <td>Audit "Customer Declaration Acknowledgement" + "Cooling-Off Period Started"; pause/resume engine; notifications (AC12 behaviour sections still empty — open point)</td>
+      <td class="mp">Waiver-by-default is market practice and CBUAE-compliant <b>only if</b> the waiver warning text is explicit — Collateral copy must carry it</td>
+      <td class="src">AMP-3404 AC11/AC12</td>
+    </tr>
+    <tr>
+      <td class="scr">Pay the processing fee<small>card payment, 3-D Secure</small></td>
+      <td><span class="b gap">Conflict</span> Prototype has a card-payment screen for the processing fee. AMP-3404 AC9 states the opposite: <b>B2B has no payment collection</b> — pay-upfront is disabled, fees are deducted from the finance amount</td>
+      <td>Per US: no PSP integration in B2B scope</td>
+      <td class="mp">Fee deduction at disbursal is the UAE norm for salaried PL; upfront card payment adds drop-off + PCI scope. <b>Build the US version; flag the screen as B2C-only or dead</b></td>
+      <td class="src">AMP-3404 AC9 vs prototype</td>
+    </tr>
+    <tr>
+      <td class="scr">Sign the agreement (draw signature)</td>
+      <td><span class="b warn">Watch</span> Prototype has a draw-signature screen; the US chain instead captures signature via T&amp;C/KFS swipe + EFR signature for the security cheque. A generic digital-signature capability is being specified separately (AMP-3757)</td>
+      <td>Confirm one signature model: swipe-stamp vs drawn vs EFR — mixed models complicate legal evidence</td>
+      <td class="mp">UAE e-transactions law accepts all three; consistency matters more than method</td>
+      <td class="src">AMP-3757 · AMP-3689</td>
+    </tr>
+    <tr>
+      <td class="scr">Mabrook → Track application → Funds disbursed<small>status timeline, push notifications</small></td>
+      <td><span class="b ok">Aligned</span> Submitted → bank review → disbursed timeline; push/SMS/email at each step; resume at any point post-offer (AMP-1402)</td>
+      <td>SSS states; notification triggers; resume tokens</td>
+      <td class="mp">48-hour disbursal promise appears in prototype features — only promise what fulfilment SLAs support</td>
+      <td class="src">AMP-3404 Part 4 · AMP-1402</td>
+    </tr>
+    <tr>
+      <td class="scr">Quick action needed → upload docs → sign security cheque<small>salary transfer letter, undated cheque, EID-signature + OTP</small></td>
+      <td><span class="b ok">Aligned</span> Post-offer document re-request by notification, 5-day window; security cheque prefilled, signed with EFR signature + OTP; verification status shown</td>
+      <td>Document request workflow (AMP-3689); checklist from product config (AMP-3721 AC9); STL/FSTL per pricing factor</td>
+      <td class="mp">Digital security-cheque signing is ahead of market (most banks still collect physical cheques). Liability letter validity default should be 15 days (market norm)</td>
+      <td class="src">AMP-3689 · AMP-3721</td>
+    </tr>
+    <tr>
+      <td class="scr">Rejection / under-review / error screens<small>"re-apply after 90 days", APR-ERR-503</small></td>
+      <td><span class="b warn">Watch</span> Prototype states a 90-day re-apply block. No AMP US fixes this number — block periods are config elsewhere in the platform</td>
+      <td>Block-period config per status; failed-reason codes; progress saved on technical error</td>
+      <td class="mp">UAE practice varies 30–90 days; keep it config and consistent with the platform's existing block-period model</td>
+      <td class="src">prototype vs config</td>
+    </tr>
+  </table></div>
+</section>
+
+<!-- 06 CONFLICTS -->
+<section>
+  <div class="sechead"><span class="secnum">06</span><div><h2>Decisions needed before Hailey builds</h2>
+  <div class="lede">Where prototype and US disagree, the US wins by default — but each needs an explicit call so the prototype gets corrected, not silently ignored.</div></div></div>
+  <div class="conf">
+    <div class="ccard"><span class="who">Conflict · Gấu trắng to confirm</span><b>1 · Manual "Buyout details" screen vs AECB auto-fill</b><p>Prototype asks the customer to type outstanding balance / EMI / months left. US pulls everything from AECB. Recommendation: kill the manual screen — bureau data is the single source, matching the liability letter.</p></div>
+    <div class="ccard"><span class="who">Conflict · Gấu trắng to confirm</span><b>2 · Processing-fee card payment vs deduct-from-finance</b><p>Prototype has a 3-D Secure payment screen; AMP-3404 AC9 says B2B collects no payment — fees deduct at disbursal. Recommendation: no PSP in B2B scope; mark the screen B2C-only.</p></div>
+    <div class="ccard w"><span class="who">Watch · decide once</span><b>3 · One signature model</b><p>Swipe-stamp (T&amp;C/KFS), drawn signature (prototype), EFR signature + OTP (cheque). Pick the evidence model per document class before AMP-3757 is built.</p></div>
+    <div class="ccard w"><span class="who">Watch · config not copy</span><b>4 · Numbers that must come from config</b><p>Min income (prototype "7,000"), re-apply block ("90 days"), grace range, liability-letter validity (default 15), fee lines in KFS. None may be hardcoded from prototype copy.</p></div>
+    <div class="ccard w"><span class="who">Watch · scope check</span><b>5 · Manual document-upload eKYC route</b><p>Prototype offers upload-instead-of-scan; no AC covers it. Include only if the bank accepts assisted-KYC risk; otherwise drop.</p></div>
+    <div class="ccard w"><span class="who">Carry-over</span><b>6 · Known spec gaps still open</b><p>G4 standing check for Buyout · settlement-execution (manager's cheque) workflow · cooling-off AC12 behaviours · BP-vs-DP gate defaults (G2/G3) · shortfall check trigger point (AMP-3732 AC6 vs AMP-3404 AC6a).</p></div>
+  </div>
+</section>
+
+<footer>
+  Appro internal · SMBP · Sources: prototype "Appro B2B — PF Journey (Buyout, DC, offline v2)"; Jira AMP-3694, AMP-3404, AMP-3732, AMP-3721, AMP-3748, AMP-3689, AMP-3717, AMP-3757 (scvaladdin.atlassian.net); market practice per the benchmark page (27 Sep 2026). US column is authoritative over prototype visuals.
+</footer>
+
+</div>
+</body>
+</html>
