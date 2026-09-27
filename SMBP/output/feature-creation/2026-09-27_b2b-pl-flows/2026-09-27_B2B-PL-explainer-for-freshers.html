@@ -129,13 +129,72 @@
 <header class="hero">
   <div class="eyebrow">SMBP · B2B Personal Finance · onboarding note</div>
   <h1>How the B2B Personal Finance journey works</h1>
-  <p class="sub">A fresher's guide to the four finance variants — New Finance, Buyout, Buyout&nbsp;+&nbsp;Top-Up and Debt Consolidation — with the money flows, the journey, and every formula the backend runs.</p>
+  <p class="sub">A fresher's guide to the four finance variants — New Finance, Buyout, Buyout&nbsp;+&nbsp;Top-Up and Debt Consolidation — with the money flows, the journey, and every formula the backend runs. Never worked in lending before? Section 00 is written for you.</p>
   <div class="meta">
     <span class="tag">Sources: AMP-3694 · AMP-3404 · AMP-3732 · AMP-3721 · AMP-3748</span>
     <span class="tag">Prepared by Gấu trắng · 27 Sep 2026</span>
     <span class="tag">Internal — client data, do not share outside Appro</span>
   </div>
 </header>
+
+<!-- ============ 0. START HERE ============ -->
+<section>
+  <div class="sechead"><span class="secnum">00</span><div><h2>Start here: the phone-contract analogy</h2>
+  <div class="lede">Completely new to lending? Read this box first. Everything else in this page is detail on top of these three ideas.</div></div></div>
+
+  <div class="variants">
+    <div class="vcard">
+      <div class="vtitle"><h3>Buyout = switching phone companies</h3><span class="pill buy">Debt moves</span></div>
+      <p style="color:var(--ink)">You have a loan at Bank A. Bank B says: <em>"Come to us — we'll pay off what you owe Bank A, and now you owe us instead, at a cheaper rate."</em> Your debt doesn't disappear. It just <strong>moves</strong>. You get <strong>no cash</strong> in your hand.</p>
+      <div class="story"><b>Rashid:</b> owes Bank A 60,000. Bank B pays Bank A the 60,000. Now Rashid pays Bank B — a smaller monthly amount.</div>
+    </div>
+    <div class="vcard">
+      <div class="vtitle"><h3>Buyout + Top-Up = switching AND getting a free phone</h3><span class="pill buy">Debt moves + cash</span></div>
+      <p style="color:var(--ink)">Same switch, but the new bank lends you <strong>more than you owed</strong>. The first part pays off the old bank; the extra part is <strong>cash for you</strong>.</p>
+      <div class="story"><b>Rashid:</b> Bank B approves 120,000. It sends 60,000 to Bank A and puts the leftover ~59,400 into Rashid's account.</div>
+    </div>
+    <div class="vcard">
+      <div class="vtitle"><h3>Debt Consolidation = all your bills into one bill</h3><span class="pill dc">Many → one</span></div>
+      <p style="color:var(--ink)">You owe money in many places — two credit cards, a loan, an overdraft. Every month you juggle four payments. The bank pays off <strong>all of them at once</strong>, and now you make <strong>one payment</strong> — usually smaller in total, because cards charge ~36%/year and a loan charges ~6–11%.</p>
+      <div class="story"><b>Rashid:</b> was paying 2,500 (loan) + 2,000 (card minimum) = 4,500/mo to two banks. After DC: one payment of ~2,200/mo to one bank.</div>
+    </div>
+    <div class="vcard">
+      <div class="vtitle"><h3>One picture</h3><span class="pill fresh">Money flows</span></div>
+      <svg viewBox="0 0 380 190" role="img" aria-label="Money flow comparison of the three variants">
+        <defs><marker id="a0" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0L7,3.5L0,7z" fill="var(--muted)"/></marker></defs>
+        <text x="8" y="22" font-size="11" font-weight="700" fill="var(--accent)" font-family="IBM Plex Mono,monospace">BUYOUT</text>
+        <rect x="100" y="8" width="72" height="22" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="136" y="23" text-anchor="middle" font-size="10.5" fill="var(--ink)">New bank</text>
+        <line x1="176" y1="19" x2="280" y2="19" stroke="var(--muted)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="8" width="72" height="22" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="320" y="23" text-anchor="middle" font-size="10.5" fill="var(--ink)">Old bank</text>
+        <text x="8" y="70" font-size="11" font-weight="700" fill="var(--accent)" font-family="IBM Plex Mono,monospace">+ TOP-UP</text>
+        <rect x="100" y="52" width="72" height="42" rx="6" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="136" y="77" text-anchor="middle" font-size="10.5" fill="var(--ink)">New bank</text>
+        <line x1="176" y1="62" x2="280" y2="62" stroke="var(--muted)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="51" width="72" height="22" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="320" y="66" text-anchor="middle" font-size="10.5" fill="var(--ink)">Old bank</text>
+        <line x1="176" y1="84" x2="280" y2="84" stroke="var(--amber)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="73" width="72" height="22" rx="6" fill="var(--amber-soft)" stroke="var(--amber)"/><text x="320" y="88" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--ink)">YOU</text>
+        <text x="8" y="140" font-size="11" font-weight="700" fill="var(--amber)" font-family="IBM Plex Mono,monospace">DEBT</text>
+        <text x="8" y="153" font-size="11" font-weight="700" fill="var(--amber)" font-family="IBM Plex Mono,monospace">CONSOL.</text>
+        <rect x="100" y="118" width="72" height="60" rx="6" fill="var(--amber-soft)" stroke="var(--amber)"/><text x="136" y="152" text-anchor="middle" font-size="10.5" fill="var(--ink)">New bank</text>
+        <line x1="176" y1="128" x2="280" y2="128" stroke="var(--muted)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="117" width="72" height="20" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="320" y="131" text-anchor="middle" font-size="10" fill="var(--ink)">Card 1</text>
+        <line x1="176" y1="149" x2="280" y2="149" stroke="var(--muted)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="139" width="72" height="20" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="320" y="153" text-anchor="middle" font-size="10" fill="var(--ink)">Loan</text>
+        <line x1="176" y1="170" x2="280" y2="170" stroke="var(--muted)" stroke-width="2" marker-end="url(#a0)"/>
+        <rect x="284" y="160" width="72" height="20" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="320" y="174" text-anchor="middle" font-size="10" fill="var(--ink)">Overdraft</text>
+      </svg>
+      <p style="font-size:13px">Notice: in every variant the money for old debts goes <strong>bank to bank</strong> — it never passes through the customer's hands.</p>
+    </div>
+  </div>
+
+  <div class="worked" style="margin-top:18px">
+    <h3>Three things to remember before you read anything else</h3>
+    <ol>
+      <li><b>Settlement money never touches the customer.</b> Our system pays the other bank directly — that's the fraud protection.</li>
+      <li><b>Buyout = one old loan. DC = many old debts</b> — and DC is the only variant that includes credit cards.</li>
+      <li><b>Cheaper per month ≠ cheaper in total.</b> Stretching 30 months into 48 lowers the instalment but adds total cost — that's why the KFS warning exists.</li>
+    </ol>
+  </div>
+</section>
 
 <!-- ============ 1. BIG PICTURE ============ -->
 <section>
