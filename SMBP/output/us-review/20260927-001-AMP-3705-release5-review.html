@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release 5 Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1020px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 22px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;color:#1a214d;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:170px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:76ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px;margin-top:6px}
+  .verdict b{color:#fdba23}
+  .verdict p{max-width:none;font-size:14px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px}
+  .kpi{background:#ffffff;border-radius:12px;padding:12px 14px;text-align:center}
+  .kpi .n{font-weight:900;font-size:24px;color:#3b7ef6;font-variant-numeric:tabular-nums}
+  .kpi .n.bad{color:#1a214d}
+  .kpi span{font-size:11px;font-weight:700;color:#1a214d;text-transform:uppercase;letter-spacing:.5px}
+  .tbl{background:#ffffff;border-radius:14px;overflow:hidden;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:13px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11.5px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .rag{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .rag.r{background:#1a214d;color:#fdba23}
+  .rag.a{background:#fdba23;color:#1a214d}
+  .rag.g{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:900;color:#ffffff;background:#1a214d}
+  .pr.p2{background:#3b7ef6} .pr.p3{background:#fdba23;color:#1a214d}
+  .find{background:#ffffff;border-radius:12px;padding:14px 18px;margin-bottom:10px;border-left:5px solid #1a214d}
+  .find.p2{border-left-color:#3b7ef6} .find.p3{border-left-color:#fdba23}
+  .find h3{font-size:14.5px;font-weight:900;margin-bottom:4px}
+  .find p{max-width:none;font-size:13.5px}
+  .find .fix{margin-top:6px;font-size:13px}
+  .find .fix b{color:#3b7ef6}
+  .note{font-size:12px;margin-top:8px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;align-items:center;gap:5px}
+  .icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}
+  .icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Release 5 <span class="b">Bank Portal Review</span></h1></div>
+  <p class="sub">PO review of <a href="https://scvaladdin.atlassian.net/browse/AMP-3705">AMP-3705</a> "[PROD] — Release 5 of Bank Portal" (CR, To Do) and its 12 linked items. Every linked ticket was opened and read in full; AMP-3731 / 3729 / 3722 at status level only. Read-only — nothing posted to Jira.</p>
+  <div class="meta"><span class="tag red">Verdict: NOT RELEASE-READY</span><span class="tag">Reviewed 27 Sep 2026</span><span class="tag">Reviewer: Huyen (PO)</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>This CR is a scope wish-list, not a release manifest.</b> The package timeline, release tag, change type and release note are all empty; <b>zero</b> of the 12 linked items are US-Approved (7 To Do, 4 Ready To Clarify, 1 in UAT); two scope rows have <b>no Jira ticket at all</b>; one named story has an <b>empty description</b>; and two new failed-reason codes ship as <b>TBD</b>. Before any PROD date is committed: fill the CR header, ticket the two orphan rows, and clear the five P1 findings below.</p>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="n bad">0/12</div><span>US Approved</span></div>
+    <div class="kpi"><div class="n bad">2</div><span>Scope rows w/o ticket</span></div>
+    <div class="kpi"><div class="n bad">1</div><span>Empty story (3757)</span></div>
+    <div class="kpi"><div class="n bad">2</div><span>TBD reason codes</span></div>
+    <div class="kpi"><div class="n">5</div><span>P1 findings</span></div>
+    <div class="kpi"><div class="n">4</div><span>P2 findings</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Release items — status &amp; RAG</span>
+  <div class="tbl"><table>
+    <thead><tr><th>CR row</th><th>Tickets</th><th>Jira status (verified)</th><th>RAG</th><th>Issue</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Update PL Products</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3721">AMP-3721</a></td><td>Ready To Clarify</td><td><span class="rag a">AMBER</span></td><td>Solid spec, unapproved; downstream stories build on its AC1</td></tr>
+      <tr><td class="k">PL Product Fetching</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3748">AMP-3748</a></td><td>To Do</td><td><span class="rag a">AMBER</span></td><td>Depends on 3721 AC1 (Transaction Type at product level); no sequencing note in CR</td></tr>
+      <tr><td class="k">ETL Table (Part 1)</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3744">AMP-3744</a> · <a href="https://scvaladdin.atlassian.net/browse/AMP-3754">AMP-3754</a></td><td>To Do · To Do</td><td><span class="rag r">RED</span></td><td>F2 product-scope contradiction; F4 TBD codes; F7 open rules in-body</td></tr>
+      <tr><td class="k">ETL Table (Part 2)</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3755">AMP-3755</a></td><td>To Do</td><td><span class="rag a">AMBER</span></td><td>Well-specified; F8 validation overlap with 3744 needs one decision table</td></tr>
+      <tr><td class="k">Required Document Module</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3728">AMP-3728</a> · <a href="https://scvaladdin.atlassian.net/browse/AMP-3757">AMP-3757</a></td><td>Ready To Clarify · To Do</td><td><span class="rag r">RED</span></td><td>F3 3757 description is EMPTY; F6 3728 smuggles an unticketed post-approval operating model</td></tr>
+      <tr><td class="k">Migrate SCB v2 → v3</td><td>—</td><td>—</td><td><span class="rag r">RED</span></td><td>F1 no ticket: a production data migration with no US, no ACs, no test basis</td></tr>
+      <tr><td class="k">Others (gap tasks)</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3731">AMP-3731</a> · <a href="https://scvaladdin.atlassian.net/browse/AMP-3729">AMP-3729</a> · <a href="https://scvaladdin.atlassian.net/browse/AMP-3722">AMP-3722</a></td><td>RTC · UAT Testing · To Do</td><td><span class="rag g">GREEN</span></td><td>3729 is the only item already in UAT; statuses verified, descriptions not reviewed</td></tr>
+      <tr><td class="k">Debt Consolidation for BP</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a> · <a href="https://scvaladdin.atlassian.net/browse/AMP-3753">AMP-3753</a></td><td>Ready To Clarify · To Do</td><td><span class="rag r">RED</span></td><td>F5 G2/G3 defaults contradict the DP DC engine while IA3 claims alignment; F9 G4 blocked-status list suspect</td></tr>
+      <tr><td class="k">Limit Assignment</td><td>—</td><td>—</td><td><span class="rag r">RED</span></td><td>F1 empty row: no ticket, no description — undefined scope in a PROD manifest</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · Findings (severity order)</span>
+
+  <div class="find"><h3><span class="pr">P1</span> F1 — Two scope rows have no Jira ticket; CR header is empty</h3>
+  <p>"Migrate data from SCB v2 to SCB v3" and "Limit Assignment" carry no ticket, no ACs, no owner. The SCB row is a <b>production customer-data migration</b> — the single riskiest item in the release — existing only as one sentence. The CR's own Package Timeline, Release Tag, Change Type and Release Note fields are blank.</p>
+  <p class="fix"><b>Fix:</b> No PROD date until both rows have stories with ACs (migration needs: gap list, mapping rules, dry-run plan, rollback). Fill the CR header or the release cannot be communicated to the bank.</p></div>
+
+  <div class="find"><h3><span class="pr">P1</span> F2 — ETL stories contradict each other on which product they serve</h3>
+  <p>The CR row and AMP-3744's title say ETL is for the <b>PL flow</b>. But AMP-3754 and AMP-3755 both state "Applicable Product: <b>Covered Card — ETB</b> (Web and Mobile App)" and their flows hang off the Covered Card journey (EID dedupe per ADIB-7176). Meanwhile the B2B PL journey needs ETL for the salary-transfer opt-in (AMP-3717). Which product does Release 5's ETL actually serve — CC, PL, or both?</p>
+  <p class="fix"><b>Fix:</b> One explicit "Applicable Product" decision across 3744/3754/3755, and the 21-exclusion runtime check confirmed (or explicitly excluded) for the PL journey.</p></div>
+
+  <div class="find"><h3><span class="pr">P1</span> F3 — AMP-3757 (generic Digital Signature) has an empty description</h3>
+  <p>It is a named release item under Required Document Module, and the signature model is already ambiguous across the journey (T&amp;C/KFS swipe-stamp vs drawn signature vs EFR + OTP on the cheque). Releasing "generic digital signature" with zero ACs guarantees three inconsistent implementations.</p>
+  <p class="fix"><b>Fix:</b> 3757 gets a description defining one evidence model per document class before it stays in scope; otherwise pull it from Release 5.</p></div>
+
+  <div class="find"><h3><span class="pr">P1</span> F4 — Two failed-reason codes ship as TBD, and the registry reference is cross-project</h3>
+  <p>AMP-3754 adds RIM Status and Firco Flag exclusions with reason code <b>"TBD"</b> in both AC2 and AC3 — a customer can be CANCELLED with no code. The story also says codes "must be registered in the <b>ADIB</b> Failed Reason Codes list" — this is the SMBP Bank Portal; pointing the registry at another project is how code collisions start (RES146/147/148/155 are new and unverified against any SMBP registry).</p>
+  <p class="fix"><b>Fix:</b> Assign the two codes, and name the canonical SMBP failed-reason registry in the story (not ADIB's).</p></div>
+
+  <div class="find"><h3><span class="pr">P1</span> F5 — Hard-gate defaults contradict the DP engine while claiming alignment</h3>
+  <p>AMP-3753 AC6 bakes in defaults G2 ≥ <b>2</b> providers, G3 ≥ <b>30%</b> utilisation. The Distribution Portal DC engine (AMP-2215) uses G2 ≥ <b>3</b>, G3 ≥ <b>70%</b>. Yet 3753 IA3 states the config is "aligned to ensure consistency between portals" — that claim is false as written. A bank running both portals gets different DC eligibility per channel on day one.</p>
+  <p class="fix"><b>Fix:</b> Decide per gate: deliberate B2B loosening (then delete the alignment claim and record the rationale) or align to DP values. Do not ship the contradiction into PROD config.</p></div>
+
+  <div class="find p2"><h3><span class="pr p2">P2</span> F6 — AMP-3728 smuggles a full post-approval operating model without stories</h3>
+  <p>Titled "document mapping", it introduces: a <b>Persona Match</b> check (salary ≥ 15,000, AECB ≥ 711, &lt;14× multiplier — hardcoded), a Disbursement Maker/Checker Queue, DAF generation, DMS upload, a Fund Holding API and Camunda STL reminders — none of which exist as SMBP stories, all anchored on FAB tickets (FABL-1000/2047/1859) from another project. That is a release's worth of scope hidden in one story's AC5.</p>
+  <p class="fix"><b>Fix:</b> Split AC5's queue/persona/DAF machinery into their own stories with SMBP-native ACs; make persona thresholds configurable; keep 3728 to document resolution only.</p></div>
+
+  <div class="find p2"><h3><span class="pr p2">P2</span> F7 — AMP-3754 ends with its own unanswered design questions</h3>
+  <p>The story body closes with open bullets: age exclusion threshold undefined, FCCM risk-rating exclusion values undefined, expired-EID handling undefined — three ETL fields loaded (3744) but never validated. Acceptable pre-clarification; not acceptable in a PROD manifest unanswered.</p>
+  <p class="fix"><b>Fix:</b> Answer the three in-body questions (or explicitly de-scope those fields) before Ready for Dev.</p></div>
+
+  <div class="find p2"><h3><span class="pr p2">P2</span> F8 — 3744 vs 3755: two validators, opposite outcomes for bad data</h3>
+  <p>AMP-3744 AC2: format mismatches are <b>loaded as-is</b> + email to support. AMP-3755 AC3/AC4: missing column or duplicate RIM → <b>reject + rollback</b>. The boundary between "load anyway" and "roll back" is implied, never stated as one decision table — dev will pick a line, and QA another.</p>
+  <p class="fix"><b>Fix:</b> One table: failure class → blocking? → rollback? → notify? owned by whichever story keeps the loader.</p></div>
+
+  <div class="find p2"><h3><span class="pr p2">P2</span> F9 — G4 blocked-status default list needs a sanity pass</h3>
+  <p>3753's default 17 blocked statuses include <b>"U (Active Payments)"</b> — blocking customers whose contracts are actively being paid would fail nearly every applicant — alongside debatable entries (A Arrangement, C Settlement, E Extended). The letter-to-meaning mapping looks partially wrong against the AECB status dictionary.</p>
+  <p class="fix"><b>Fix:</b> Verify the 17 codes against the AECB reference list with Credit before the default ships; "U" in particular.</p></div>
+
+  <div class="find p3"><h3><span class="pr p3">P3</span> F10 — Hygiene</h3>
+  <p>(a) 3753 section numbering drifts (AC6 titled "Section 4", AC7 titled "Section 5" but its body says "Section 4"). (b) 3754/3755 base their preconditions on ADIB tickets (ADIB-7148/7149/7176) rather than restating rules — replication by reference is how cross-bank drift starts. (c) 3744's claim "replicate the same as ADIB" is unverified against ADIB-7148's field list — <i>inference, not checked field-by-field</i>. (d) AMP-3722 (UI feedback) is cosmetic scope inside a PROD CR with no description.</p></div>
+</section>
+
+<section>
+  <span class="seclabel">04 · What is genuinely good</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Item</th><th>Strength</th></tr></thead>
+    <tbody>
+      <tr><td class="k">AMP-3755</td><td>Best-written story in the release: snapshot-before-truncate, verified rollback, staleness escalation, full audit schema, TPQ boundary explicitly reasoned. Use it as the template for the others.</td></tr>
+      <tr><td class="k">AMP-3754</td><td>Skip-on-null semantics, multiple-reason display (AC6) and resume-after-refresh (AC5) are all lessons learned from ADIB production bugs — correctly carried over.</td></tr>
+      <tr><td class="k">AMP-3753</td><td>Auto-seeding defaults per new product, atomic save, maker-checker on config, and the explicit "LA uses full AECB set, settlement uses filtered set" separation (IA2) — exactly right.</td></tr>
+      <tr><td class="k">AMP-3728</td><td>Driving document requirements from pricing-scheme factors instead of a separate config screen is an elegant reuse decision.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Sources: all ticket text read this session, 27 Sep 2026 (statuses as seen). AMP-3731/3729/3722 verified at status level only. Cross-references: AMP-2215, AMP-2321, AMP-3717, AMP-3689, AMP-3694/3404 read earlier this session.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review pack; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
