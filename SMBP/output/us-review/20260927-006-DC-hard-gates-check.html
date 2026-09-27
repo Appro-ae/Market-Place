@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Hard Gates Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:82ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:820px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;min-width:110px}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  .ok{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6;white-space:nowrap}
+  .bad{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#1a214d;color:#ffffff;white-space:nowrap}
+  .warn{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#fdba23;color:#1a214d;white-space:nowrap}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .cmt h3{font-size:14px;font-weight:900;margin-bottom:4px}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>DC Hard Gates <span class="b">— Are the Rules Reflected Correctly?</span></h1></div>
+  <p class="sub">The Bank Portal stories <a href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a> (settlement, RtC) and <a href="https://scvaladdin.atlassian.net/browse/AMP-3753">AMP-3753</a> (config admin UI, To Do) checked gate-by-gate against the validated DP canon: <a href="https://scvaladdin.atlassian.net/browse/AMP-2215">2215</a> base + ENH <a href="https://scvaladdin.atlassian.net/browse/AMP-2314">2314</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-2316">2316</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-2320">2320</a> + defect fixes <a href="https://scvaladdin.atlassian.net/browse/AMP-3461">3461</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-3457">3457</a> (all UAT Validated) + open bug <a href="https://scvaladdin.atlassian.net/browse/AMP-3756">3756</a>. All read in full this session.</p>
+  <div class="meta"><span class="tag red">Verdict: 4 P1 — TWO FIXED DEFECTS RE-INTRODUCED</span><span class="tag">+ 1 default that blocks everyone</span><span class="tag">Nothing posted to Jira</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>No — the hard rules are not reflected correctly.</b> Three blockers: (1) the G4 default blocked-status list includes <b>'U' = Active Payments</b> — the normal status of every performing contract, so every customer with any active facility fails G4 and DC is never offered; (2) G4's threshold re-introduces the band-code defect UAT already fixed in AMP-3461, with an impossible range (1–9 vs AECB codes 0–7) and a pass/fail boundary that contradicts between 3732 and 3753; (3) G5's validation re-introduces the exact regression fixed in AMP-3457 (ceiling up to 100% accepted; validated rule is 30–60) and is missing the rate/tenure inputs without which post-consolidation DBR cannot be computed at all.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Gate-by-gate</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Gate</th><th>DP canon (2215 + ENH + validated fixes)</th><th>BP 3732 (settlement)</th><th>BP 3753 (config UI)</th><th>Check</th></tr></thead>
+    <tbody>
+      <tr><td class="k">G1 Min active facilities</td><td>Role="A" Holder, active, per category filter. Default <b>3</b>, integer &gt;0, max 3 digits. Fail reason recorded.</td><td>Same logic, default ≥ 3, guarantor excluded</td><td>Default 3, range 1–99</td><td><span class="ok">✓ aligned</span></td></tr>
+      <tr><td class="k">G2 Min distinct providers</td><td>DISTINCT ProviderNo. Default <b>3</b>.</td><td>Default ≥ <b>2</b></td><td>Default <b>2</b></td><td><span class="warn">P2 default drift</span></td></tr>
+      <tr><td class="k">G3 Min CC utilisation</td><td>ΣBalance ÷ ΣLimit × 100. Default <b>70%</b>. <b>NC case defined:</b> ΣLimit = 0 → fail, reason "credit limit not reported".</td><td>Default ≥ <b>30%</b>. No NC case.</td><td>Default 30%, range 0.01–100. No NC case.</td><td><span class="warn">P2 default drift + missing NC</span></td></tr>
+      <tr><td class="k">G4 Clean payment history</td><td>Per 2314: Contract.MaxDPD + CommonData.WorstStatus vs blocked keyword list. Per <b>3461 (validated fix)</b>: MaxDaysPaymentDelay is an AECB <b>band code 0–7</b> — config must be a band dropdown (preferred) or day-mapped; measured values must be displayed. Reference fixture: performing contracts carry <b>WorstStatus = 'U' (Active Payments)</b> — explicitly <i>not</i> in the blocked set.</td><td>"MaxDaysPaymentDelay <b>≥ 3</b> fails" (3 = 60–89d blocks). "17 blocked statuses".</td><td>Numeric input, "maximum <b>allowed</b> bucket" default 3 (3 passes?), <b>range 1–9</b>. Blocked list of 17 <b>includes 'U' (Active Payments)</b>.</td><td><span class="bad">P1 ×3</span></td></tr>
+      <tr><td class="k">G5 Post-consol DBR</td><td>Ceiling default 50%, <b>validated range 30–60</b> (3457 D7 fixed 100% acceptance). Inputs per 2215/2320: contract-category scope, <b>Consolidation Rate</b> + <b>Default Tenure</b> (New EMI via PMT) with Auto-from-product toggle + fallback; out-of-scope obligations added; NC case (income null) = fail; "indicative, at standard tenure" label; config_snapshot for reproducibility.</td><td>"Projected DBR after consolidation ≤ 50%". No rate, no tenure, no scope, no formula inputs.</td><td>Toggle + ceiling % only, <b>range 0.01–100</b>. No rate/tenure/scope/PMT inputs.</td><td><span class="bad">P1 ×2</span></td></tr>
+      <tr><td class="k">Toggles &amp; skip</td><td>2316: per-gate ON/OFF, default ON, OFF = skipped, config preserved. <b>Open bug 3756:</b> engine still evaluates disabled G3/G4.</td><td>"Disabled gate is skipped" ✓</td><td>Same ✓, thresholds greyed when OFF ✓</td><td><span class="ok">✓ spec — add test for 3756</span></td></tr>
+      <tr><td class="k">Order, reasons, audit</td><td>Evaluated G1→G5, first enabled failure stops; per-gate fail reason recorded; 3461 D3: every gate must display its <b>measured value</b>.</td><td>"If any enabled gate fails, DC not shown". No order, no reasons, no record.</td><td>No runtime result capture at all.</td><td><span class="warn">P2 silent gating</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · Findings</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Finding</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr">P1</span></td><td class="k">'U' in the blocked-status default kills DC for everyone</td><td>3753 AC6 G4 default list includes U (Active Payments) — AMP-3461's fixture shows performing contracts carry WorstStatus = 'U'. With 'U' blocked, any customer with one active contract fails G4 → DC variant never appears. Remove U (and review A/E/M/O/X — service statuses on a category that is always excluded from scope). Align the default list with the DP's validated blocked set.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">G4 threshold re-introduces the AMP-3461 defect</td><td>3461 (UAT Validated) ruled: band-code <b>dropdown 0–7</b> preferred, never a raw number; display measured values. 3753 specs a numeric input with range <b>1–9</b> — 8 and 9 don't exist, code 0 can't be blocked, and the ambiguity 3461 closed is back. Use the band dropdown with labels ("3 — 60–89 days").</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">G4 boundary contradicts between the two BP stories</td><td>3732: "no contract may have MaxDaysPaymentDelay <b>≥ 3</b>" (code 3 fails). 3753: "maximum <b>allowed</b> delay bucket, default 3" (code 3 passes). Same gate, opposite outcome at the default. Pick one wording, state pass/fail at the boundary in both. Also: default 3 lets a 30–59-day delinquent (code 2) pass — the DP's post-3461 posture blocks from 30 days; justify the leniency or align.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">G5 re-introduces the AMP-3457 D7 regression + cannot be computed</td><td>3753 validates the ceiling as 0.01–100% — 3457 (UAT Validated) fixed exactly this: range must be <b>30–60</b> (50% = CBUAE retail cap). And neither BP story carries the inputs the formula needs: consolidation rate, assumed tenure (PMT New EMI), G5 contract-category scope, out-of-scope obligation add-back (2215/2320). Since BP config is per PL product, the natural source is the product's own min rate/tenor (2320's Auto pattern) — but the story must say it, plus the income-null NC case and the "indicative, at standard tenure" label.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Default drift vs DP: G2 (2 vs 3) and G3 (30% vs 70%)</td><td>3753 IA3 promises "field names, defaults and validation aligned to ensure consistency between portals" — the defaults on G2/G3 aren't. Align, or record the business reason per channel in both tickets.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Silent gating — no reasons, no order, no measured values</td><td>DP records a failure reason per gate and (per 3461 D3) shows the evaluated value. BP hides the DC card with nothing stored: the RM cannot answer "why is there no DC option?", and support can't either. Add: evaluation order + short-circuit (per 2215), per-gate result + measured value persisted to the application record, and visibility of the gate outcome in the BP enquiry.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">G3 NC case missing</td><td>2215 defines ΣCreditLimit = 0 → fail with reason "NC — credit limit not reported". BP stories are silent; division by zero at runtime. Copy the NC rule.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Skip behaviour has a live counter-example</td><td>Open bug AMP-3756: G3/G4 toggled OFF are still evaluated in the DP engine. The BP replicates the same spec — add an explicit AC/test "disabled gate produces no evaluation record and cannot hide DC", citing 3756, so the port doesn't inherit the bug.</td></tr>
+      <tr><td><span class="pr p3">P3</span></td><td class="k">Cross-reference tangle + naming</td><td>3732's "per AMP-3732 AC…" self-citations are actually pointers to <b>3753</b> — and 3753 points back at "AMP-3732 AC6" for loan-purpose gating, which in 3732 is <b>AC5</b> (AC6 is the DC fallback). Fix the keys/AC numbers in both. Rename <code>refinancing_enabled</code> → <code>dc_enabled</code>; 3753 AC7 body says "Section 4" under a "Section 5" heading.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>What is reflected correctly:</b> G1 logic and default ✓ · G4 field choice (MaxDaysPaymentDelay + WorstStatus, per ENH-1 2314) ✓ · per-gate ON/OFF with config preserved (2316) ✓ · G5 ceiling default 50% = CBUAE ✓ · gates apply to DC only, declared in both stories ✓ · obligation formulas MAX(%×Limit, %×Balance) match the C1 pattern ✓.</p>
+</section>
+
+<section>
+  <span class="seclabel">04 · Draft comments — paste-ready (needs your go)</span>
+  <div class="cmt">
+    <h3>AMP-3753</h3>
+    <ol>
+      <li><b>G4 blocked-status default includes 'U' (Active Payments)</b> — per AMP-3461's fixture that's the WorstStatus of every performing contract, so every customer with an active facility fails G4 and DC never appears. Please remove U and align the default list with the DP's validated set (also review A/E/M/O/X — service statuses, while Services is always out of scope).</li>
+      <li><b>G4 threshold:</b> AMP-3461 (UAT Validated) established MaxDaysPaymentDelay is an AECB band code 0–7 and the config must be a band dropdown with labels — a numeric input with range 1–9 re-introduces that defect (8–9 don't exist, code 0 unblockable).</li>
+      <li><b>G4 boundary:</b> here default 3 is the "maximum allowed" (3 passes); AMP-3732 says "≥ 3 fails". Opposite outcomes — align both stories and state the boundary explicitly.</li>
+      <li><b>G5 validation:</b> 0.01–100% re-introduces AMP-3457 D7 — the validated rule is 30–60 (50% = CBUAE cap). Please restore.</li>
+      <li><b>G5 is not computable as specced:</b> no consolidation rate, assumed tenure, contract-category scope or out-of-scope add-back (AMP-2215/2320). Suggest sourcing rate/tenor from this PL product's own configuration (2320 Auto pattern) and adding the income-null NC case.</li>
+      <li>P2: G2/G3 defaults (2 / 30%) differ from the DP's validated 3 / 70% despite IA3's alignment promise; add G3's ΣLimit=0 NC rule; add per-gate result + measured-value capture (AMP-3461 D3) so the RM can see why DC is hidden; add an explicit skip-behaviour test citing open bug AMP-3756.</li>
+      <li>P3: "AMP-3732 AC6" here is 3732's AC5 (AC6 is the fallback) — fix the pointer; <code>refinancing_enabled</code> → <code>dc_enabled</code>; AC7 says "Section 4" under the Section 5 heading.</li>
+    </ol>
+    <h3 style="margin-top:12px">AMP-3732 — rider to the earlier draft</h3>
+    <ol>
+      <li><b>G4:</b> your default "3 = 60–89 days" conflicts with 3753's "maximum allowed 3"; and the 17-status blocked list inherits 'U' (Active Payments) — see the 3753 comment; with 'U' blocked, G4 fails for every customer and DC is never offered.</li>
+      <li><b>G5:</b> state where the projected-DBR inputs come from (rate/tenor/scope per AMP-2215/2320) — as written the gate cannot be evaluated.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
