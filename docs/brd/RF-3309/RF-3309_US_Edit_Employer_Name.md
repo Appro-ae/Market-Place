@@ -125,17 +125,19 @@ User clicks the Cancel button → confirmation "Are you sure you want to cancel 
 
 After AC2.3 step 1 the new value is the only Employer Name of the application. Wherever the Employer Name is read, displayed, calculated or generated, the system reads **[Finalized Employer Name]**:
 
-| Consumer | Behaviour after the edit | Reference | Status |
-| --- | --- | --- | --- |
-| Application Details › Employment Information — Credit Queue (all levels), Risk Queue, Sale Queue, Compliance Queue, Application Enquiry | Displays the updated Employer Name as the working value, plus the **Employer Name Update** block (original name + original classification, updated name + updated classification, updated by / on — AC6); Company Category / Sector / Industry / Employer Status / contact fields refreshed from the re-classification (hidden when N-ALOC). | RF-869 AC2 + AC3 "Apply for" list, AC6 | Confirmed |
-| ALOC / N-ALOC, Employer Category, MOD / MOI / Pensioner flags | Re-classified from the new value. | RF-424, RF-869 | Confirmed |
-| Rule Engine attributes (Industry, Sector, classification-based) and Limit Assignment (maximum DBR, income-multiplier group) | Re-run / recalculated (AC2.3 steps 3–4); results shown in Rule Engine Result and Approve Limit Result. | RF-1896, RF-132/138/159, RF-134/361 | Confirmed |
-| Length of Service | **Not** re-run. The Employer Name edit does not re-trigger the AECB / EFR / MOHRE comparison of RF-1241; the Credit user corrects LOS in its own section when needed. | RF-1241, RF-1492 | Confirmed (PO decision) |
-| CAM report | Generated at the credit decision from the application data → carries the new Employer Name and classification, as after any edit. | RF-2195, RF-2675, RF-2087 AC6, RF-2682 IA3 | Confirmed |
-| Application Form / Customer Document Stack / Affordability Assessment Form | Where the form prints an Employer Name it reads [Finalized Employer Name] at generation time, as after any edit. | RF-1962, RF-2002, RF-2490, RF-2682 IA2 | ⚠️ TBC — Dev to confirm which templates print the Employer Name |
-| Core banking (T24 CIF creation) and EastNets AML | If the Employer Name is a request parameter, the API reads [Finalized Employer Name] at the time it is triggered (post-decision). | RF-2749, RF-2194 | ⚠️ TBC — Dev to confirm whether Employer Name is sent |
-| Reporting / MIS (Report Enquiry, CAM, WIP, Exception) | Read the finalized value; the Application History carries the old → new change. | — | Confirmed |
-| Customer Journey / customer communication | No change; the customer is not notified of the correction. | — | Confirmed |
+| Consumer | Behaviour after the edit | Reference |
+| --- | --- | --- |
+| Application Details › Employment Information — Credit Queue (all levels), Risk Queue, Sale Queue, Compliance Queue, Application Enquiry | Displays the updated Employer Name as the working value, plus the **Employer Name Update** block (original name + original classification, updated name + updated classification, updated by / on — AC6); Company Category / Sector / Industry / Employer Status / contact fields refreshed from the re-classification (hidden when N-ALOC). | RF-869 AC2 + AC3 "Apply for" list, AC6 |
+| ALOC / N-ALOC, Employer Category, MOD / MOI / Pensioner flags | Re-classified from the new value. | RF-424, RF-869 |
+| Rule Engine attributes (Industry, Sector, classification-based) and Limit Assignment (maximum DBR, income-multiplier group) | Re-run / recalculated (AC2.3 steps 3–4); results shown in Rule Engine Result and Approve Limit Result. | RF-1896, RF-132/138/159, RF-134/361 |
+| Length of Service | **Not** re-run (PO decision). The Employer Name edit does not re-trigger the AECB / EFR / MOHRE comparison of RF-1241; the Credit user corrects LOS in its own section when needed. | RF-1241, RF-1492 |
+| CAM report and Affordability Assessment Form | **Regenerated on the edit** — same pattern as the existing Edit sections (RF-2682 IA2/IA3), so both carry the updated Employer Name, classification and recalculated results. The CAM attached to the decision emails is the regenerated version (RF-2087 AC7). | RF-2195, RF-2675, RF-2490, RF-2682 IA2/IA3 |
+| Application Form | **Not regenerated (PO decision).** The Application Form is generated once, at OTP submission in the Customer Journey, as the record of what the customer submitted (its Employer Name row prints the finalized value at that moment, RF-1962 AC1). No existing Edit section regenerates it; the correction stays traceable in the Employer Name Update block (AC6) and the audit trail. | RF-1962 AC1 |
+| Customer Document Stack | Generated at the signature stage, after the decision → it reads [Finalized Employer Name] at generation time and therefore carries the updated value with no change to the template or trigger. | RF-2002 |
+| Core banking — T24 CIF Creation | **No impact — verified.** The CIF Creation request mapping carries no Employer Name parameter (employment fields are hard-coded: employmentStatus = EMPLOYED, profession = HIRED). | RF-2530 AC1, RF-28, RF-2749 |
+| EastNets AML | **No re-screening on the edit (PO decision).** The Add KYC Input call at the Additional Info step already carried the journey-time finalized name (Employer node → name, RF-2194 AC1) — no existing Edit section re-triggers AML, and this one does not either. The corrected name still reaches EastNets: the post-decision CIF-update call re-sends the same Add KYC Input mapping and reads [Finalized Employer Name] at that time (RF-2530 AC1). | RF-2194 AC1, RF-2530 AC1 |
+| Reporting / MIS (Report Enquiry, CAM, WIP, Exception) | Read the finalized value; the Application History carries the old → new change. | — |
+| Customer Journey / customer communication | No change; the customer is not notified of the correction. | — |
 
 ### AC6: Display in the Credit Queue and Application Enquiry
 
@@ -180,7 +182,7 @@ The working value stays in the existing field; the change is made traceable by a
 | Queue model / drop points | No new drop point. Routing after the re-run follows RF-177; cases parked by drop point 12 (*different Employer Name than EFR*) can now be resolved inside the queue instead of rejected — volume effect on Credit Queue is neutral to positive. | <img src="assets/ia_queue.png" width="290"><br>*Queue menu* |
 | Status model / mobile app | No new Application Status; status stays `Awaiting Credit Approval` unless the routing changes it → **no mobile-app change**. | <img src="assets/ia_status.png" width="290"><br>*Status unchanged by the edit* |
 | Communication Setup | **No new template.** Existing drop-to-queue notifications apply if the routing moves the application (RF-3067 fix). The customer is not notified. | <img src="assets/ia_comm.png" width="290"><br>*Email Templates — unchanged* |
-| Documents / Reporting | CAM report, Application Form, Customer Document Stack, Affordability Assessment Form generated after the edit read the finalized value (TBC which templates print it). Report Enquiry reads the finalized value. | — |
+| Documents / Reporting | CAM report + Affordability Assessment Form regenerated on the edit (RF-2682 IA2/IA3 pattern); Customer Document Stack generated post-decision reads the finalized value; Application Form stays the OTP-time record (not regenerated). Report Enquiry reads the finalized value. | — |
 | Services | backoffice-service (Edit API + permission), application-service (finalized name, source, classification fields), rule-engine / limit-assignment services (re-run), Rosette matching (classification), audit-trail-service, work-flow-service (re-entry of the RE step on an in-flight process instance — same mechanism as RF-1492 subtask RF-1553). | <img src="assets/ia_services.png" width="290"><br>*Services* |
 
 ## Dependencies & related in-flight tickets (RF board scan 22/09)
@@ -202,6 +204,7 @@ The working value stays in the existing field; the change is made traceable by a
 | RF-3138 | READY IN UAT | Drop points / Failed Reason updates 2 — coordinate: no new drop point here, routing after the re-run must align with the updated matrix. |
 | RF-2957 | Open | Mortgage Loan Credit Queue edit — out of scope here; the Employer Name section should be mirrored there when ML is specified. |
 | RF-2359 | READY FOR APPROVE | Employment Type on Application Enquiry details — adjacent labels in the same Employment Information block as AC6. |
+| RF-2194 / RF-2530 | READY IN UAT / SIT TESTING COMPLETED | EastNets Add KYC Input carries the finalized Employer Name + Empaneled Company contact fields; T24 CIF Creation carries no Employer Name — basis of the AC5 rows (no re-screening on edit; corrected name flows via the CIF-update call). |
 
 ## Out of scope
 
@@ -210,3 +213,4 @@ The working value stays in the existing field; the change is made traceable by a
 * Editing Employment Category / Employment Type; re-running Length of Service (own edit section, RF-1492); re-fetching EFR, AECB or MOHRE data.
 * BVE integration in the Super Portal (the Customer Journey dropdown source); Arabic input in the Super Portal; changes to the Empaneled Company upload format or validation (RF-869).
 * Maker–checker approval of the Employer Name edit and a mandatory change reason (none of the existing Edit sections has one — the audit trail records the change); bulk edit; customer notification of the correction; a cap on the number of edits.
+* Re-triggering the EastNets AML screening on the edit (the corrected name reaches EastNets through the post-decision CIF-update call, AC5) and regenerating the Application Form (OTP-time record, AC5).

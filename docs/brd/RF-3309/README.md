@@ -54,8 +54,12 @@ node build_screens.js             # writes ec*.html and renders the PNGs at devi
 5. Display — Employer Name Update block: Original / Updated name and ALOC classification,
    Updated By / On; IEM030 alphabetic-only validation kept (Customer Journey consistency).
 
-## Still TBC with Dev
+## Decisions folded in (27/09) — all TBC closed
 
-* Document templates that print the Employer Name (Application Form, Document Stack,
-  Affordability Form) and whether T24 CIF / EastNets send it (AC5).
-* Product-tab treatment of the new permission — mirror the live *Edit Length of Service*.
+6. Documents — CAM + Affordability Assessment Form regenerated on the edit (RF-2682 IA2/IA3
+   pattern); Customer Document Stack (post-decision) reads the finalized value; Application
+   Form stays the OTP-time record, not regenerated.
+7. T24 CIF Creation — no impact, verified: the RF-2530 mapping carries no Employer Name.
+8. EastNets — no re-screening on the edit; the corrected name reaches EastNets through the
+   post-decision CIF-update call (RF-2530 re-sends the RF-2194 Add KYC mapping).
+9. Product-tab treatment of the new permission mirrors the live *Edit Length of Service*.
