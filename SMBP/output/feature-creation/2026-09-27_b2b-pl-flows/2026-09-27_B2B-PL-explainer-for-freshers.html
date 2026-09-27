@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>B2B Personal Finance Explainer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#16232B; --muted:#5A6B75;
+    --line:#DDE3E1; --accent:#0E756A; --accent-soft:#E3F0ED;
+    --amber:#A8690F; --amber-soft:#F7ECDA; --red:#B3452F; --red-soft:#F6E4DF;
+    --blue:#28536B; --blue-soft:#E4EDF2; --chip:#EDF1EF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+      --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+      --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+      --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+    --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+    --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+    --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font:400 16px/1.65 "Public Sans",system-ui,sans-serif;
+    padding-block:0 64px;}
+  .wrap{max-width:920px;margin:0 auto;padding-inline:20px}
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+  h1{font-size:clamp(30px,5vw,44px);font-weight:800;margin:0 0 10px}
+  h2{font-size:24px;font-weight:700;margin:0 0 6px}
+  h3{font-size:17px;font-weight:600;margin:0 0 4px}
+  p{max-width:70ch}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .eyebrow{font:600 11px/1 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  header.hero{padding:56px 0 34px;border-bottom:1px solid var(--line)}
+  .hero .sub{color:var(--muted);font-size:17px;max-width:62ch}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .tag{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:500}
+  section{padding:40px 0 8px}
+  .sechead{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .secnum{font:700 15px "IBM Plex Mono",monospace;color:var(--accent)}
+  .lede{color:var(--muted);margin-top:2px}
+
+  /* actor strip */
+  .actors{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+  .actor{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .actor b{font-family:"Archivo";font-size:15px}
+  .actor span{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+
+  /* variant cards */
+  .variants{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:18px;margin-top:6px}
+  @media (max-width:460px){.variants{grid-template-columns:1fr}}
+  .vcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+  .vcard .vtitle{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .pill{font:600 11px/1 "Archivo";letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .pill.fresh{background:var(--blue-soft);color:var(--blue)}
+  .pill.buy{background:var(--accent-soft);color:var(--accent)}
+  .pill.dc{background:var(--amber-soft);color:var(--amber)}
+  .vcard p{font-size:14.5px;margin:0;color:var(--muted)}
+  .vcard .story{color:var(--ink);background:var(--chip);border-radius:8px;padding:10px 13px;font-size:13.5px;line-height:1.55}
+  .vcard svg{width:100%;height:auto;display:block}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:13px}
+  .facts div{border-top:1px dashed var(--line);padding-top:6px}
+  .facts b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+  /* journey rail */
+  .rail{position:relative;margin:18px 0 8px;padding-left:26px}
+  .rail::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .step{position:relative;margin:0 0 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+  .step::before{content:"";position:absolute;left:-24px;top:16px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);border:3px solid var(--paper)}
+  .step.branch::before{background:var(--amber)}
+  .step.sys::before{background:var(--blue)}
+  .step b{font-family:"Archivo";font-size:14.5px}
+  .step small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+  .who{float:right;font:600 10.5px/1 "Archivo";letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:4px 9px;margin-left:10px}
+
+  /* tables */
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+  th{font:600 11.5px "Archivo";letter-spacing:.07em;text-transform:uppercase;text-align:left;color:var(--muted);
+    padding:11px 14px;border-bottom:2px solid var(--line);background:var(--chip)}
+  td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.ok{color:var(--accent);font-weight:600}
+  td.no{color:var(--red);font-weight:600}
+  .num{font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace;font-size:12.8px}
+
+  /* gates */
+  .gates{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:10px}
+  .gate{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:10px;padding:13px 14px}
+  .gate .g{font:700 13px "IBM Plex Mono";color:var(--amber)}
+  .gate b{display:block;font-family:"Archivo";font-size:13.5px;margin:3px 0 2px}
+  .gate span{font-size:12.5px;color:var(--muted);display:block}
+  .gate .th{font-family:"IBM Plex Mono";font-size:12.5px;color:var(--ink);margin-top:5px;display:block}
+
+  /* formula blocks */
+  .fx{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;
+    padding:14px 18px;margin:12px 0;overflow-x:auto}
+  .fx code{font-family:"IBM Plex Mono",monospace;font-size:13.5px;white-space:pre}
+  .fx .fxname{font:600 12px "Archivo";letter-spacing:.08em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+  .fx .src{color:var(--muted);font-size:12px;display:block;margin-top:6px}
+
+  .worked{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:16px}
+  .worked h3{color:var(--accent)}
+  .worked ol{margin:8px 0 0;padding-left:20px;font-size:14.5px}
+  .worked li{margin-bottom:8px}
+  .worked .r{font-family:"IBM Plex Mono";font-weight:600}
+
+  .callout{border:1px solid var(--line);border-left:4px solid var(--red);background:var(--red-soft);
+    border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14px}
+  .callout.amber{border-left-color:var(--amber);background:var(--amber-soft)}
+  .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:10px}
+  .gterm{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 14px;font-size:13.5px}
+  .gterm b{font-family:"Archivo";color:var(--accent)}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">SMBP · B2B Personal Finance · onboarding note</div>
+  <h1>How the B2B Personal Finance journey works</h1>
+  <p class="sub">A fresher's guide to the four finance variants — New Finance, Buyout, Buyout&nbsp;+&nbsp;Top-Up and Debt Consolidation — with the money flows, the journey, and every formula the backend runs.</p>
+  <div class="meta">
+    <span class="tag">Sources: AMP-3694 · AMP-3404 · AMP-3732 · AMP-3721 · AMP-3748</span>
+    <span class="tag">Prepared by Gấu trắng · 27 Sep 2026</span>
+    <span class="tag">Internal — client data, do not share outside Appro</span>
+  </div>
+</header>
+
+<!-- ============ 1. BIG PICTURE ============ -->
+<section>
+  <div class="sechead"><span class="secnum">01</span><div><h2>The 30-second big picture</h2>
+  <div class="lede">Who is involved, and what problem each variant solves.</div></div></div>
+
+  <p>SMBP is a <strong>marketplace</strong>: a <em>channel</em> (a partner like Appro) runs the customer journey, and a <em>bank</em> decides and lends. In the <strong>B2B</strong> setup there is exactly <strong>one bank</strong> per channel (AMP-3713). A customer in the UAE often already has loans and credit cards at other banks — so a new personal finance is not always "new money". Sometimes it is really about <strong>moving or merging old debt</strong>. That is why one journey supports four <strong>Transaction Types</strong>.</p>
+
+  <div class="actors">
+    <div class="actor"><b>Customer</b><span>Salaried or pensioner. Applies in the app, picks a variant, signs T&amp;C + KFS.</span></div>
+    <div class="actor"><b>Channel (Distribution Portal)</b><span>Runs identity, fraud, name-screening checks. Owns consents, insurance catalogue, templates.</span></div>
+    <div class="actor"><b>Bank (Bank Portal — what we design)</b><span>Owns products, pricing matrix, rule engine, limit assignment, settlement config, offers.</span></div>
+    <div class="actor"><b>AECB (credit bureau)</b><span>The single source of truth for the customer's existing loans and cards. Every settlement decision starts from its report.</span></div>
+  </div>
+
+  <p style="margin-top:16px"><strong>Regulatory frame (memorise these three numbers):</strong> a UAE personal loan is capped at <span class="mono">20×</span> salary, <span class="mono">48</span> months tenor, and <span class="mono">50%</span> DBR (debt-burden ratio) — CBUAE rules. And CBUAE caps the fee for leaving a bank early at <span class="mono">1%</span> of outstanding, which is the whole reason the buyout market exists.</p>
+</section>
+
+<!-- ============ 2. FOUR VARIANTS ============ -->
+<section>
+  <div class="sechead"><span class="secnum">02</span><div><h2>The four finance variants</h2>
+  <div class="lede">Same journey, four different money flows. Follow Rashid — salary AED 20,000/mo, one old loan (AED 60,000 outstanding, EMI 2,500) and one credit card (limit 40,000, balance 30,000).</div></div></div>
+
+  <div class="variants">
+
+    <!-- FRESH -->
+    <div class="vcard">
+      <div class="vtitle"><h3>New Finance</h3><span class="pill fresh">Fresh</span></div>
+      <svg viewBox="0 0 360 96" role="img" aria-label="Bank pays full amount to customer">
+        <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--accent)"/></marker></defs>
+        <rect x="8" y="28" width="104" height="40" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="60" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Bank</text>
+        <line x1="118" y1="48" x2="242" y2="48" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#a1)"/>
+        <text x="180" y="38" text-anchor="middle" font-size="11.5" fill="var(--muted)">full amount</text>
+        <rect x="248" y="28" width="104" height="40" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">Customer</text>
+      </svg>
+      <p>A brand-new loan. Nothing is settled; old cards and loans stay untouched. The whole approved amount lands in the customer's account (minus fees).</p>
+      <div class="story"><b>Rashid:</b> borrows 100,000 for a wedding. His old loan and card stay as they are. His DBR must still fit: new EMI + old obligations ≤ 50% of income.</div>
+      <div class="facts">
+        <div><b>Settlement screen</b>Skipped entirely</div>
+        <div><b>Cash to customer</b>Full approved amount</div>
+        <div><b>Availability</b>Always shown, can't be disabled</div>
+        <div><b>Offer text</b>"You're approved for"</div>
+      </div>
+    </div>
+
+    <!-- BUYOUT -->
+    <div class="vcard">
+      <div class="vtitle"><h3>Buyout</h3><span class="pill buy">Settlement · 1 contract</span></div>
+      <svg viewBox="0 0 360 132" role="img" aria-label="New bank pays old bank; customer gets no cash">
+        <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--accent)"/></marker></defs>
+        <rect x="8" y="46" width="104" height="40" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="60" y="70" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">New bank</text>
+        <line x1="118" y1="66" x2="242" y2="66" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#a2)"/>
+        <text x="180" y="56" text-anchor="middle" font-size="11.5" fill="var(--muted)">settles outstanding</text>
+        <rect x="248" y="46" width="104" height="40" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="64" text-anchor="middle" font-size="12.5" font-weight="600" fill="var(--ink)">Old bank</text>
+        <text x="300" y="79" text-anchor="middle" font-size="10.5" fill="var(--muted)">loan closed ✓</text>
+        <rect x="118" y="98" width="124" height="26" rx="13" fill="var(--card)" stroke="var(--line)"/>
+        <text x="180" y="115" text-anchor="middle" font-size="10.5" fill="var(--muted)">customer: debt moves, no cash</text>
+      </svg>
+      <p>The new bank pays off <strong>one</strong> existing personal finance at another bank. The customer's debt simply moves to a (usually cheaper) lender. Top-up = 0.</p>
+      <div class="story"><b>Rashid:</b> his old loan costs him 2,500/mo with 30 months left. New bank settles the 60,000 (+ 1% exit fee, absorbed by the bank) and re-lends over 48 months at 5.49% → new EMI ≈ <b>1,409</b>. He pays 1,091 less each month — but for longer, so total cost can be higher. That trade-off is a mandatory KFS warning.</div>
+      <div class="facts">
+        <div><b>Settlement screen</b>Single-select (radio) · credit cards hidden</div>
+        <div><b>Eligible contracts</b>Unsecured instalments only</div>
+        <div><b>Availability</b>≥1 in-scope instalment + <span class="mono">buyout_enabled</span></div>
+        <div><b>Key doc</b>Liability/settlement letter from old bank</div>
+      </div>
+    </div>
+
+    <!-- BUYOUT + TOP UP -->
+    <div class="vcard">
+      <div class="vtitle"><h3>Buyout + Top-Up</h3><span class="pill buy">Settlement + cash</span></div>
+      <svg viewBox="0 0 360 132" role="img" aria-label="New bank settles old bank and gives extra cash to customer">
+        <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--accent)"/></marker></defs>
+        <rect x="8" y="46" width="104" height="40" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="60" y="70" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">New bank</text>
+        <line x1="118" y1="58" x2="242" y2="34" stroke="var(--accent)" stroke-width="2.5" marker-end="url(#a3)"/>
+        <text x="176" y="34" text-anchor="middle" font-size="11" fill="var(--muted)">settlement</text>
+        <rect x="248" y="14" width="104" height="36" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Old bank</text>
+        <line x1="118" y1="76" x2="242" y2="98" stroke="var(--amber)" stroke-width="2.5" marker-end="url(#a3)"/>
+        <text x="176" y="102" text-anchor="middle" font-size="11" fill="var(--muted)">top-up cash</text>
+        <rect x="248" y="82" width="104" height="36" rx="8" fill="var(--amber-soft)" stroke="var(--amber)"/>
+        <text x="300" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">Customer</text>
+      </svg>
+      <p>A buyout <strong>plus</strong> extra cash on top of the settlement — one loan, one instalment. The extra cash is capped by <span class="mono">Max Top Up %</span> of the approved facility (pricing matrix config).</p>
+      <div class="story"><b>Rashid:</b> approved 120,000. Settlement takes 60,600 (60,000 + absorbed exit fee 600). Top-up cash to his account = <b>59,400</b> — allowed, because it is under the product's 50% top-up cap (60,000). The bank may require him to declare the top-up purpose (config toggle).</div>
+      <div class="facts">
+        <div><b>Settlement screen</b>Same as Buyout: single-select, CC hidden</div>
+        <div><b>Cash to customer</b>Approved − settlement, ≤ Max Top Up %</div>
+        <div><b>Availability</b>≥1 in-scope instalment + <span class="mono">buyout_topup_enabled</span></div>
+        <div><b>Extra config</b>Top-up % cap · purpose-required toggle</div>
+      </div>
+    </div>
+
+    <!-- DC -->
+    <div class="vcard">
+      <div class="vtitle"><h3>Debt Consolidation</h3><span class="pill dc">Multi-settlement</span></div>
+      <svg viewBox="0 0 360 150" role="img" aria-label="New bank settles several contracts into one instalment">
+        <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0L8,4L0,8z" fill="var(--amber)"/></marker></defs>
+        <rect x="8" y="55" width="104" height="40" rx="8" fill="var(--amber-soft)" stroke="var(--amber)"/>
+        <text x="60" y="79" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">New bank</text>
+        <line x1="118" y1="62" x2="242" y2="24" stroke="var(--amber)" stroke-width="2" marker-end="url(#a4)"/>
+        <line x1="118" y1="75" x2="242" y2="75" stroke="var(--amber)" stroke-width="2" marker-end="url(#a4)"/>
+        <line x1="118" y1="88" x2="242" y2="126" stroke="var(--amber)" stroke-width="2" marker-end="url(#a4)"/>
+        <rect x="248" y="8" width="104" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="27" text-anchor="middle" font-size="11.5" fill="var(--ink)">Credit card 1</text>
+        <rect x="248" y="60" width="104" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="79" text-anchor="middle" font-size="11.5" fill="var(--ink)">Personal loan</text>
+        <rect x="248" y="112" width="104" height="30" rx="8" fill="var(--card)" stroke="var(--line)"/>
+        <text x="300" y="131" text-anchor="middle" font-size="11.5" fill="var(--ink)">Overdraft</text>
+      </svg>
+      <p>Settles <strong>multiple</strong> liabilities — credit cards, unsecured loans, overdrafts — into one instalment. The pitch: replace ~36% p.a. revolving card debt with a ~5–11% reducing-rate loan. That rate difference is the "Save AED X/mo" banner.</p>
+      <div class="story"><b>Rashid:</b> settles his loan (60,000) <em>and</em> card (30,000). Pool = 90,000 × 1.05 buffer = 94,500 → one EMI ≈ <b>2,197</b>. Before, he paid 2,500 + ~2,000 card minimum = 4,500. Saving ≈ <b>2,303/mo</b>.</div>
+      <div class="facts">
+        <div><b>Settlement screen</b>Multi-select · all 3 AECB categories</div>
+        <div><b>Extra gate</b>Hard gates G1–G5 must pass (§05)</div>
+        <div><b>Availability</b>≥1 in-scope credit card + <span class="mono">refinancing_enabled</span></div>
+        <div><b>Offer text</b>"Pre-approved" + savings banner</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. JOURNEY ============ -->
+<section>
+  <div class="sechead"><span class="secnum">03</span><div><h2>The journey, step by step</h2>
+  <div class="lede">One rail, two exits. Orange dots = decision points, blue dots = pure backend.</div></div></div>
+
+  <div class="rail">
+    <div class="step"><span class="who">Customer</span><b>Product type → Sign-up / OTP → Consents</b><small>Bureau, T&amp;C, PIA mandatory; Marketing optional. Standard entry, unchanged from B2C.</small></div>
+    <div class="step branch"><span class="who">Customer</span><b>Employment &amp; Income — the fork <span class="mono">(NEW)</span></b><small>Salaried / Self-employed / Pensioner. Declares income, lifestyle expenses (≤ X% of income, X configurable), non-bank borrowings.</small></div>
+    <div class="step branch" style="border-left:3px solid var(--amber)"><span class="who">Exit</span><b>Short exit → status "Sales Lead"</b><small>Self-employed, OR anyone with additional income ON, OR income below the configured minimum → Employment Details (name, company, IBAN with inline validation) → Thank You. No eKYC. A human calls within 2 business days. <strong>Your backend needs this new status in enquiry, queues and reports.</strong></small></div>
+    <div class="step"><span class="who">Customer</span><b>eKYC + Selfie → Additional Info</b><small>Work email, country of birth, employer, emirate, salary credit date, grace period, salary-transfer opt-in.</small></div>
+    <div class="step sys"><span class="who">System</span><b>Product matching fires at pre-dedupe</b><small>The bank's active PL products are fetched early, so variant cards are ready before the customer arrives. One product per Transaction Type (AMP-3748).</small></div>
+    <div class="step branch"><span class="who">Customer</span><b>Choose Finance Variant <span class="mono">(NEW)</span></b><small>Cards are never hardcoded — only variants the bank returned. No variants at all → skip straight to Loading. DC card appears only if hard gates G1–G5 pass.</small></div>
+    <div class="step branch"><span class="who">Customer</span><b>Settlement screen (conditional)</b><small>Skipped for Fresh, or if AECB returned ≤1 contract, or AECB timed out. Buyout = pick exactly one loan (cards hidden). DC = toggle many across cards, loans, overdrafts.</small></div>
+    <div class="step"><span class="who">Customer</span><b>T&amp;C → KFS (scroll-to-end, swipe = signature)</b><small>Both downloadable as PDF. The swipe stamps the customer's signature into the document. Consent audit stored, visible in DP Application Enquiry.</small></div>
+    <div class="step sys"><span class="who">System</span><b>Loading — submission actually happens here</b><small>The channel-layer push is <em>held</em> until this screen. Then: fraud, LexisNexis, MOHRE, name screening, income consolidation → bank layer: calculated variables → fetch → rule engine → limit assignment → queue.</small></div>
+    <div class="step branch"><span class="who">System</span><b>Shortfall check: settlement &gt; approved?</b><small>Buyout only. If yes → "A buyout isn't possible right now" screen → offer switches to <strong>Debt Consolidation</strong>: pool expands to include cards, system auto-selects highest cost-to-balance first, and the customer must <strong>re-acknowledge T&amp;C + KFS</strong> for the DC product.</small></div>
+    <div class="step"><span class="who">Customer</span><b>Offer Detail + Customise</b><small>One offer (B2B, single bank). Sliders: amount, tenure, grace period. Contracts list with unselect (≥1 must stay). Every change → recalculation call to the bank.</small></div>
+    <div class="step"><span class="who">Customer</span><b>Insurance → Review → Schedule of Charges → Declaration</b><small>B2B insurance is "Reduce from finance" only (premium deducted, never paid upfront). Review shows Net Amount Credited. Cooling-off checkbox: default unticked = waived; ticked = application pauses 5 business days.</small></div>
+    <div class="step sys"><span class="who">System</span><b>Mabrook → bank review → disbursement</b><small>Tracking screen with push/SMS/email at each stage.</small></div>
+  </div>
+</section>
+
+<!-- ============ 4. SETTLEMENT MATRIX ============ -->
+<section>
+  <div class="sechead"><span class="secnum">04</span><div><h2>Settlement screen — behaviour per variant</h2>
+  <div class="lede">Same screen, three personalities. A contract appears only if it is "in-scope": it passes the bureau filters (active, holder role, no fraud flag) AND the bank's scope config (category ON, type code enabled, seasoning ≥ 6 months, not secured).</div></div></div>
+
+  <div class="tblwrap"><table>
+    <tr><th></th><th>New Finance</th><th>Buyout / Buyout + Top-Up</th><th>Debt Consolidation</th></tr>
+    <tr><td><b>Screen shown?</b></td><td class="no">Skipped</td><td class="ok">Yes</td><td class="ok">Yes</td></tr>
+    <tr><td><b>Credit cards</b></td><td>—</td><td class="no">Hidden entirely</td><td class="ok">Shown</td></tr>
+    <tr><td><b>Instalment loans</b></td><td>—</td><td class="ok">Unsecured only</td><td class="ok">Unsecured only</td></tr>
+    <tr><td><b>Overdrafts (NI)</b></td><td>—</td><td class="ok">Shown</td><td class="ok">Shown</td></tr>
+    <tr><td><b>Selection mode</b></td><td>—</td><td>Single-select — picking one auto-unpicks the other</td><td>Multi-select — any combination across categories</td></tr>
+    <tr><td><b>Reduce-limit slider</b></td><td>—</td><td class="no">Not available (full balance settles)</td><td class="ok">Available (CC + OD)</td></tr>
+    <tr><td><b>Monthly obligation counted as</b></td><td>—</td><td class="num">PaymentAmount (instalments)</td><td class="num">CC/OD: MAX(% × limit, % × balance)</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 5. HARD GATES ============ -->
+<section>
+  <div class="sechead"><span class="secnum">05</span><div><h2>Hard gates — who even sees the DC card</h2>
+  <div class="lede">Five binary checks on the full AECB report, each with an on/off toggle and a configurable threshold. Any enabled gate failing hides Debt Consolidation. They apply to DC only — Fresh and Buyout skip them.</div></div></div>
+
+  <div class="gates">
+    <div class="gate"><span class="g">G1</span><b>Active facilities</b><span>Enough debt to be worth consolidating</span><span class="th">count ≥ 3</span></div>
+    <div class="gate"><span class="g">G2</span><b>Distinct providers</b><span>Debt spread across banks</span><span class="th">≥ 2 (BP) ⚠ DP says ≥ 3</span></div>
+    <div class="gate"><span class="g">G3</span><b>CC utilisation</b><span>Cards are actually being used</span><span class="th">≥ 30% (BP) ⚠ DP says ≥ 70%</span></div>
+    <div class="gate"><span class="g">G4</span><b>Clean payments</b><span>No serious delinquency</span><span class="th">no delay ≥ 60–89d bucket</span></div>
+    <div class="gate"><span class="g">G5</span><b>Post-consol DBR</b><span>The new EMI still fits their income</span><span class="th">≤ 50%</span></div>
+  </div>
+
+  <div class="callout amber"><strong>⚠ Open question for the team:</strong> the Bank Portal defaults (G2 ≥ 2, G3 ≥ 30%) are looser than the Distribution Portal DC engine (G2 ≥ 3, G3 ≥ 70%). Deliberate B2B loosening or spec drift? Raised with the PO — do not hardcode either until answered.</div>
+</section>
+
+<!-- ============ 6. FORMULAS ============ -->
+<section>
+  <div class="sechead"><span class="secnum">06</span><div><h2>The maths, with Rashid's numbers</h2>
+  <div class="lede">Six formulas cover 90% of the backend. P = principal, R = annual rate, N = months.</div></div></div>
+
+  <div class="fx"><span class="fxname">F1 · EMI (monthly instalment)</span>
+  <code>EMI = P × (R/12) × (1+R/12)^N / ((1+R/12)^N − 1)</code>
+  <span class="src">AMP-11 · the standard amortisation formula — everything else builds on it</span></div>
+
+  <div class="fx"><span class="fxname">F2 · DBR room (how much monthly payment fits)</span>
+  <code>DBR Room = MaxDBR% × Finalized Income − existing monthly obligations</code>
+  <span class="src">AMP-680 · Max DBR = 50% (CBUAE); obligations counted per F5</span></div>
+
+  <div class="fx"><span class="fxname">F3 · Max eligibility (biggest loan the room can carry)</span>
+  <code>Max Eligibility = PV of DBR Room
+              = DBR Room × (1 − (1+Base/12)^(−N)) / (Base/12)</code>
+  <span class="src">AMP-2239 · then capped by product min/max and decision boundary</span></div>
+
+  <div class="fx"><span class="fxname">F5 · Monthly obligation per bureau contract</span>
+  <code>Credit card / OD :  MAX(cfg% × CreditLimit, cfg% × Balance)
+Instalment loan  :  PaymentAmount  (as reported)</code>
+  <span class="src">AMP-3732 AC4 · cfg% comes from the AECB Contract Scope config</span></div>
+
+  <div class="fx"><span class="fxname">F6 · Total buyout amount</span>
+  <code>Total = Settlement + Absorbed Exit Fee + Top-Up
+Absorbed Exit Fee = min(1% × outstanding, old-bank fee) × Absorption%</code>
+  <span class="src">AMP-3721 IA1 · 1% cap per CBUAE Reg. 29/2011; Absorption% per pricing scheme</span></div>
+
+  <div class="fx"><span class="fxname">F11 · DC new EMI and post-consolidation DBR</span>
+  <code>New EMI  = PMT(MinRate/12, MinTenure, Σ in-scope balances × 1.05)
+Post-DBR = (New EMI + out-of-scope obligations) / income   → must pass G5</code>
+  <span class="src">AMP-2328 / AMP-2329 · the 1.05 is a 5% settlement buffer</span></div>
+
+  <div class="fx"><span class="fxname">F13 · Net amount credited (what the customer actually receives)</span>
+  <code>Net = Approved − Processing Fee − Insurance Premium − Settlement Amount</code>
+  <span class="src">AMP-3404 AC9 · insurance is % × amount or fixed AED, always "reduce from finance" in B2B</span></div>
+
+  <div class="worked">
+    <h3>Worked end-to-end: Rashid takes Buyout + Top-Up</h3>
+    <ol>
+      <li><b>Obligations (F5):</b> card 5% × 40,000 = <span class="r">2,000</span> + loan EMI <span class="r">2,500</span> = <span class="r">4,500/mo</span></li>
+      <li><b>Room (F2):</b> 50% × 20,000 − 4,500 = <span class="r">5,500/mo</span></li>
+      <li><b>Eligibility (F3):</b> at 6% base, 48m → 5,500 × 42.58 ≈ <span class="r">234,000</span> → bank approves <span class="r">120,000</span> (product cap)</li>
+      <li><b>Buyout (F6):</b> 60,000 + (1% × 60,000 × 100% absorbed = 600) + top-up = total; top-up cash = 120,000 − 60,600 = <span class="r">59,400</span> ✓ under the 50% top-up cap (60,000)</li>
+      <li><b>New EMI (F1):</b> 120,000 @ 5.49% / 48m ≈ <span class="r">2,790/mo</span> — old loan's 2,500 disappears, so his total monthly barely moves while he pockets 59,400</li>
+      <li><b>Net credited (F13):</b> 120,000 − fee 1,260 − insurance 600 − settlement 60,600 = <span class="r">57,540 to Rashid's account</span></li>
+    </ol>
+  </div>
+
+  <div class="callout"><strong>Compliance guard-rail:</strong> no story asserts the 48-month CBUAE tenor cap — the generic tenor formula allows up to 300 months and only Product Setup's Max Tenor protects us. We recommended an explicit platform validation for PL.</div>
+</section>
+
+<!-- ============ 7. GLOSSARY ============ -->
+<section>
+  <div class="sechead"><span class="secnum">07</span><div><h2>Glossary — the words you'll hear in standup</h2></div></div>
+  <div class="gloss">
+    <div class="gterm"><b>Transaction Type</b> — the variant, set once per product. Drives screens, pricing lookup and (planned) rule-engine strategies.</div>
+    <div class="gterm"><b>AECB</b> — Al Etihad Credit Bureau. The report listing every loan/card the customer holds anywhere in the UAE.</div>
+    <div class="gterm"><b>DBR</b> — Debt Burden Ratio: monthly obligations ÷ income. Regulatory ceiling 50%.</div>
+    <div class="gterm"><b>Settlement / Liability letter</b> — old bank's letter stating the exact payoff amount. Valid 1–365 days (config); expired letters are flagged.</div>
+    <div class="gterm"><b>FSTL</b> — First Salary Transfer Letter, a Yes/No pricing factor: does this scheme require proof the salary moves to the new bank?</div>
+    <div class="gterm"><b>Absorption %</b> — how much of the old bank's 1% exit fee the new bank eats (0–100%, per scheme).</div>
+    <div class="gterm"><b>In-scope contract</b> — a bureau contract that passes all filters and can be settled. Everything else shows an EXCLUDED badge (or is hidden).</div>
+    <div class="gterm"><b>Sales Lead</b> — new status for manually-handled applicants (self-employed, extra income, low income). No auto-decision.</div>
+    <div class="gterm"><b>Cooling-off</b> — 5 business days to cancel after signing (CBUAE). Waivable; our default checkbox = waived.</div>
+    <div class="gterm"><b>Grace period</b> — days before the first instalment. Journey range = min of banks' minimums to max of maximums (fallback 30–99).</div>
+    <div class="gterm"><b>KFS</b> — Key Facts Statement: the two-page regulatory summary of rate, fees and warnings the customer must acknowledge.</div>
+    <div class="gterm"><b>Shortfall fallback</b> — buyout ask &gt; approved amount → system pivots the application to Debt Consolidation, with re-acknowledged T&amp;C/KFS.</div>
+  </div>
+</section>
+
+<footer>
+  Appro internal · SMBP project · Sources: Jira AMP-3694, AMP-3404, AMP-3732, AMP-3721, AMP-3748 (scvaladdin.atlassian.net), prototype "Appro B2B — PF Journey", CBUAE Rulebook (Reg. 29/2011, Consumer Protection Standards). Numbers in Rashid's example are illustrative. Fee caps in the prototype KFS are unverified against CBUAE Appendix 2 — see open point 6 in the backend summary.
+</footer>
+
+</div>
+</body>
+</html>
