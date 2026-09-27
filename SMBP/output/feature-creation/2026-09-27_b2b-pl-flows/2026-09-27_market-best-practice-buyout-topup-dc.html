@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Buyout &amp; DC Market Benchmark</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#16232B; --muted:#5A6B75;
+    --line:#DDE3E1; --accent:#0E756A; --accent-soft:#E3F0ED;
+    --amber:#A8690F; --amber-soft:#F7ECDA; --red:#B3452F; --red-soft:#F6E4DF;
+    --blue:#28536B; --blue-soft:#E4EDF2; --chip:#EDF1EF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+      --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+      --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+      --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+    --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+    --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+    --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font:400 16px/1.65 "Public Sans",system-ui,sans-serif;padding-block:0 64px}
+  .wrap{max-width:960px;margin:0 auto;padding-inline:20px}
+  h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+  h1{font-size:clamp(30px,5vw,42px);font-weight:800;margin:0 0 10px}
+  h2{font-size:23px;font-weight:700;margin:0 0 6px}
+  h3{font-size:16px;font-weight:600;margin:0 0 4px}
+  p{max-width:70ch}
+  a{color:var(--accent)}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .eyebrow{font:600 11px/1 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  header.hero{padding:52px 0 30px;border-bottom:1px solid var(--line)}
+  .hero .sub{color:var(--muted);font-size:16.5px;max-width:64ch}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .tag{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:500}
+  section{padding:38px 0 6px}
+  .sechead{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .secnum{font:700 15px "IBM Plex Mono",monospace;color:var(--accent)}
+  .lede{color:var(--muted);margin-top:2px;font-size:15px}
+
+  /* regulation tiles */
+  .regs{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .reg{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:10px;padding:14px 15px}
+  .reg .big{font:700 26px/1.1 "Archivo";color:var(--accent);font-variant-numeric:tabular-nums}
+  .reg b{display:block;font-family:"Archivo";font-size:13px;margin-top:4px}
+  .reg span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* bank cards */
+  .banks{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+  .bank{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:17px 18px;display:flex;flex-direction:column;gap:8px}
+  .bank .bt{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .pill{font:600 10.5px/1 "Archivo";letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .pill.buy{background:var(--accent-soft);color:var(--accent)}
+  .pill.dc{background:var(--amber-soft);color:var(--amber)}
+  .bank ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+  .bank li{margin-bottom:4px}
+  .bank li b{color:var(--ink)}
+  .hl{background:var(--accent-soft);border:1px solid var(--line);border-radius:7px;padding:8px 11px;font-size:13px}
+  .hl b{color:var(--accent)}
+  .src{font-size:11.5px;color:var(--muted)}
+
+  /* tables */
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:680px}
+  th{font:600 11.5px "Archivo";letter-spacing:.07em;text-transform:uppercase;text-align:left;color:var(--muted);
+    padding:11px 14px;border-bottom:2px solid var(--line);background:var(--chip)}
+  td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .v{font-weight:700;font-family:"Archivo";white-space:nowrap}
+  .v.ok{color:var(--accent)} .v.warn{color:var(--amber)} .v.gap{color:var(--red)}
+
+  /* verdict chips */
+  .chipok,.chipwarn{display:inline-block;font:600 11px "Archivo";letter-spacing:.05em;border-radius:999px;padding:4px 10px}
+  .chipok{background:var(--accent-soft);color:var(--accent)}
+  .chipwarn{background:var(--red-soft);color:var(--red)}
+
+  /* conclusions */
+  .concl{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .ccard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .ccard.gap{border-left:4px solid var(--red)}
+  .ccard.opp{border-left:4px solid var(--amber)}
+  .ccard.par{border-left:4px solid var(--accent)}
+  .ccard .k{font:600 11px "Archivo";letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .ccard b{font-family:"Archivo";display:block;font-size:15px;margin:4px 0 5px}
+  .ccard p{font-size:13.5px;color:var(--muted);margin:0}
+  footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">SMBP · B2B Personal Finance · Step 2 — Market best practice</div>
+  <h1>Buyout, Top-Up &amp; Debt Consolidation: how the market does it</h1>
+  <p class="sub">UAE regulatory base, competitor benchmark, settlement mechanics compared against our spec, and the four conclusions for backend design.</p>
+  <div class="meta">
+    <span class="tag">Research date 27 Sep 2026 · verified sources linked</span>
+    <span class="tag">Rates/fees are directional — re-verify before client commitments</span>
+    <span class="tag">Internal — do not share outside Appro</span>
+  </div>
+</header>
+
+<!-- 01 REGULATION -->
+<section>
+  <div class="sechead"><span class="secnum">01</span><div><h2>The regulatory base</h2>
+  <div class="lede">CBUAE sets the frame every product must fit. Five numbers, non-negotiable.</div></div></div>
+  <div class="regs">
+    <div class="reg"><div class="big">20×</div><b>Salary cap</b><span>Max loan = 20× salary / total income · <a href="https://rulebook.centralbank.ae/en/rulebook/article-2-personal-loan">Art. 2</a></span></div>
+    <div class="reg"><div class="big">48<span style="font-size:15px"> mo</span></div><b>Max tenor</b><span>Personal loan repayment ceiling · Art. 2</span></div>
+    <div class="reg"><div class="big">50%</div><b>DBR ceiling</b><span>Total EMIs ÷ income · <a href="https://rulebook.centralbank.ae/en/rulebook/article-3-important-ratios">Art. 3</a></span></div>
+    <div class="reg"><div class="big">1%</div><b>Exit-fee cap</b><span>Fee to leave a bank, on outstanding — the rule that created the buyout market · <a href="https://rulebook.centralbank.ae/en/rulebook/regulation-no-292011-regarding-bank-loans-other-services-offered-individual-customers">Reg. 29/2011</a></span></div>
+    <div class="reg"><div class="big">5<span style="font-size:15px"> days</span></div><b>Cooling-off</b><span>Business days after signing, waivable in writing · <a href="https://rulebook.centralbank.ae/en/rulebook/consumer-protection-standards">CPS</a></span></div>
+  </div>
+  <p style="margin-top:14px;font-size:14.5px;color:var(--muted)">Since 2025 there is <b style="color:var(--ink)">no CBUAE minimum salary</b> — each bank sets its own floor (<a href="https://www.khaleejtimes.com/uae/uae-central-bank-removes-minimum-salary-requirement-for-personal-loans">Khaleej Times</a>). The 1% exit-fee cap makes buyout economics predictable for the acquiring bank — that is why every large UAE bank runs one.</p>
+</section>
+
+<!-- 02 COMPETITORS -->
+<section>
+  <div class="sechead"><span class="secnum">02</span><div><h2>UAE competitor benchmark</h2>
+  <div class="lede">Six live products. Each card highlights the one practice worth copying or countering.</div></div></div>
+  <div class="banks">
+    <div class="bank">
+      <div class="bt"><h3>FAB — Buyout Loan</h3><span class="pill buy">Buyout + funds</span></div>
+      <ul>
+        <li>UAEN from <b>~5.95%</b>, expat <b>~6.95%</b> (variable, PBR-linked)</li>
+        <li>Min salary <b>AED 7,000</b> · approved-employer list · <b>salary transfer mandatory</b></li>
+        <li>Max <b>AED 5M</b> UAEN / 2M expat · tenor ≤48m (≤60m MoD)</li>
+      </ul>
+      <div class="hl"><b>Grace up to 365 days</b> (UAEN) / 275 days (expat) before the first instalment — grace as the headline acquisition weapon.</div>
+      <span class="src"><a href="https://www.bankfab.com/en-ae/personal/loans/personal-loans/buyout-loans">bankfab.com</a> · <a href="https://www.paisabazaar.ae/personal-loans/fab-buyout-loans/">Paisabazaar</a></span>
+    </div>
+    <div class="bank">
+      <div class="bt"><h3>Emirates NBD — Buy Out</h3><span class="pill buy">Buyout</span></div>
+      <ul>
+        <li>Management fee <b>1%</b> of finance amount (capped)</li>
+        <li>Requires existing loan <b>in good standing</b> + balance / rate / term details</li>
+      </ul>
+      <div class="hl"><b>Digital self-serve liability letters</b> — the settlement document is a product feature, not a branch errand.</div>
+      <span class="src"><a href="https://www.emiratesnbd.com/en/loans/personal-loans">emiratesnbd.com</a> · <a href="https://www.emiratesnbd.com/en/help-and-support/request-a-liability-or-no-liability-letter">liability letters</a></span>
+    </div>
+    <div class="bank">
+      <div class="bt"><h3>ADCB — buyout programme</h3><span class="pill buy">Buyout + top-up</span></div>
+      <ul>
+        <li>Settles other banks <b>directly</b> and refinances at ADCB rate</li>
+        <li>Old-bank exit fee 1%, capped <b>AED 10,000</b></li>
+      </ul>
+      <div class="hl"><b>Top-up bundled by default</b> — the extra cash is the sales hook, the buyout is the vehicle.</div>
+      <span class="src"><a href="https://www.soulwallet.com/personal-loans-uae/buy-out-personal-loans">Soulwallet</a></span>
+    </div>
+    <div class="bank">
+      <div class="bt"><h3>Mashreq — Debt Consolidation</h3><span class="pill dc">DC</span></div>
+      <ul>
+        <li>Min salary <b>5,000</b> (listed cos.) / <b>8,000</b> (non-listed) — two-tier ALOC pattern</li>
+        <li><b>Salary transfer required</b> · merges loans + cards + overdraft</li>
+      </ul>
+      <div class="hl">Markets exactly our pitch: <b>"one payment, lower rate"</b>.</div>
+      <span class="src"><a href="https://www.mashreq.com/en/uae/neo/loans/personal-loans/debt-consolidation-loan/">mashreq.com</a></span>
+    </div>
+    <div class="bank">
+      <div class="bt"><h3>DIB — Liability Settlement Finance</h3><span class="pill dc">DC · Islamic</span></div>
+      <ul>
+        <li>Named Islamic DC product settling existing liabilities</li>
+        <li>Structured via <b>Tawarruq / Murabaha</b> — profit, not interest</li>
+      </ul>
+      <div class="hl">Validates our Islamic wording rule — and raises the Tawarruq settlement-flow question (§04).</div>
+      <span class="src"><a href="https://www.dib.ae/personal/personal-finance/liability-settlement-finance">dib.ae</a></span>
+    </div>
+    <div class="bank">
+      <div class="bt"><h3>Finance House — Buyout</h3><span class="pill buy">Buyout</span></div>
+      <ul>
+        <li>Non-bank lender · buyout <b>without salary transfer</b> for some segments</li>
+      </ul>
+      <div class="hl">Salary transfer is a <b>pricing lever</b>, not a universal precondition — matches our STL-as-factor design.</div>
+      <span class="src"><a href="https://www.financehouse.ae/en/personal-finance/buyout/">financehouse.ae</a></span>
+    </div>
+  </div>
+</section>
+
+<!-- 03 MECHANICS VS SPEC -->
+<section>
+  <div class="sechead"><span class="secnum">03</span><div><h2>Settlement mechanics — market vs our spec</h2>
+  <div class="lede">Where our stories already match the market, and where they don't.</div></div></div>
+  <div class="tblwrap"><table>
+    <tr><th>Practice</th><th>Market standard</th><th>Our spec</th><th>Verdict</th></tr>
+    <tr><td><b>Liability-letter validity</b></td><td><b>15 days</b> is the UAE norm (<a href="https://www.emiratesnbd.com/en/help-and-support/request-a-liability-or-no-liability-letter">ENBD</a>, <a href="https://gulfnews.com/lifestyle/community/why-buyout-is-delayed-1.2271841">Gulf News</a>)</td><td>Configurable 1–365 days (AMP-3721 AC2), no default</td><td><span class="chipok">✓ Config covers</span> — set default 15</td></tr>
+    <tr><td><b>Settlement instrument</b></td><td>Manager's cheque bank-to-bank; delays = top buyout complaint</td><td>Not specified in any US</td><td><span class="chipwarn">✗ Gap</span> — execution &amp; reconciliation flow missing</td></tr>
+    <tr><td><b>Documents</b></td><td>EID, 3-month statements, salary certificate, liability letter</td><td>AMP-3721 AC9 — 13-doc checklist incl. FSTL, security cheque</td><td><span class="chipok">✓ Richer than market</span></td></tr>
+    <tr><td><b>Old-loan standing</b></td><td>"Not behind on payments" is an entry condition for <b>buyout</b> (ENBD)</td><td>G4 clean-payment gate applies to <b>DC only</b> (AMP-3732 AC5)</td><td><span class="chipwarn">✗ Gap</span> — extend G4 to Buyout</td></tr>
+    <tr><td><b>Top-up seasoning</b></td><td>≥6 EMIs paid on existing loan (<a href="https://www.hdfc.bank.in/personal-loan/top-up-loan">HDFC, India</a>)</td><td>Seasoning ≥6 months on settled contract (AMP-3732 AC4)</td><td><span class="chipok">✓ Equivalent</span></td></tr>
+    <tr><td><b>Post-settlement proof</b></td><td>Clearance / no-liability certificate closes the loop</td><td>In doc checklist; no follow-up workflow US</td><td><span class="chipwarn">✗ Minor gap</span> — prototype-only today</td></tr>
+    <tr><td><b>Islamic structuring</b></td><td>Buyout/DC via <b>Tawarruq</b> — commodity-sale proceeds settle other banks (ADIB/DIB)</td><td>Wording rule only (loan→finance, AMP-3694)</td><td><span class="chipwarn">✗ Confirm</span> — contract &amp; settlement-flow impact</td></tr>
+    <tr><td><b>Direct creditor payoff</b></td><td>Lender pays creditors, customer never touches funds (<a href="https://www.lendingclub.com/personal-loan/balance-transfer-loan">LendingClub</a>)</td><td>Exactly our Buyout/DC model</td><td><span class="chipok">✓ Parity</span> — fraud-safe standard</td></tr>
+    <tr><td><b>Bureau-driven selection</b></td><td>US fintechs need aggregators/screen-scraping</td><td>AECB select-to-settle toggles — one central bureau</td><td><span class="chipok">✓ Ahead of market</span></td></tr>
+    <tr><td><b>Offer framing</b></td><td>"Now vs After vs Save" is the global consolidation UX</td><td>AMP-3404 AC6 timeline rows</td><td><span class="chipok">✓ Keep it</span></td></tr>
+  </table></div>
+</section>
+
+<!-- 04 CONCLUSIONS -->
+<section>
+  <div class="sechead"><span class="secnum">04</span><div><h2>Conclusions for backend design</h2>
+  <div class="lede">Rationale → evidence → action. Three gaps, one opportunity, one risk.</div></div></div>
+  <div class="concl">
+    <div class="ccard par"><span class="k">Parity</span><b>Structure is right — no redesign</b><p>Direct settlement, bureau-driven selection, savings framing all match market leaders. Build as specified.</p></div>
+    <div class="ccard gap"><span class="k">Gap 1</span><b>Buyout needs a standing check</b><p>Market gates buyout on "in good standing"; our G4 covers DC only. Extend G4 (or a filtration rule) to Buyout variants.</p></div>
+    <div class="ccard gap"><span class="k">Gap 2</span><b>No settlement-execution story</b><p>Manager's cheque issuance, settlement status, reconciliation — the #1 complaint area in UAE buyouts — has no US. Raise as new scope.</p></div>
+    <div class="ccard gap"><span class="k">Gap 3</span><b>Letter-validity default = 15 days</b><p>Config exists (1–365) but ships without a default. UAE norm is 15 days — set it.</p></div>
+    <div class="ccard opp"><span class="k">Opportunity</span><b>Grace period as a weapon</b><p>FAB acquires with up to 365-day grace; our fallback caps at 30–99. Make the ceiling configurable so client banks can match.</p></div>
+    <div class="ccard opp"><span class="k">Risk</span><b>Islamic tenant = Tawarruq flow</b><p>For an Islamic bank, settlement legally flows from the customer's commodity-sale proceeds, not a bank payment. Confirm contract generation and settlement instructions before build.</p></div>
+  </div>
+</section>
+
+<footer>
+  Appro internal · SMBP · Sources linked inline. Bank rates/fees as published on cited pages, 27 Sep 2026; comparison-site figures (Paisabazaar, Soulwallet) are secondary and directional. Regulatory citations: CBUAE Rulebook.
+</footer>
+
+</div>
+</body>
+</html>
