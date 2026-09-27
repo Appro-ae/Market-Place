@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kha × Trang CJ Cross-Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:80ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:780px;font-size:13px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;min-width:140px}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}
+  .ok{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6;white-space:nowrap}
+  .card{background:#ffffff;border-radius:12px;padding:16px 20px;margin-bottom:14px}
+  .card h3{font-size:15px;font-weight:900;margin-bottom:4px}
+  .card h3 .who{color:#3b7ef6;font-weight:700;font-size:12px}
+  .cmt{background:#edf2ff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:12px 16px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:5px}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Kha × Trang <span class="b">— CJ Cross-Check &amp; Suggested Comments</span></h1></div>
+  <p class="sub">Kha's CJ-touching stories (AMP-3730, 3710, 3711, 3674 + the reviewed Bank Portal set) cross-checked against Trang's recent CJ stories (AMP-3689, 3679, 3680). Feedback in Hailey's backend / super-portal PO voice — comments drafted, <b>nothing posted</b>.</p>
+  <div class="meta"><span class="tag red">7 P1 · 6 P2 conflicts</span><span class="tag">5 tickets need a comment</span><span class="tag">27 Sep 2026</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The two sets reference each other well</b> (3689→3728 AC4, 3679→3694/3713) <b>but disagree on four contracts:</b> who generates the Schedule of Charges (3730 says channel, 3404 AC10 says bank), what "Liability Letter" means (uploaded vs generated), when submission fires (3679 calls pre-submission screens "post-submission"), and whether passport applicants can enter an AECB-dependent flow at all (3710/3711 vs 3679/3694). Reconcile before Hailey specs the backend.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Scope checked</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Author</th><th>Ticket</th><th>Status</th><th>CJ relevance</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Kha</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3730">AMP-3730</a> SoC + Liability Letter templates</td><td>Ready to Clarify</td><td>Generates the documents the CJ acknowledges / signs</td></tr>
+      <tr><td class="k">Kha</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3710">AMP-3710</a> / <a href="https://scvaladdin.atlassian.net/browse/AMP-3711">3711</a> Passport CF 1.16 / 1.18</td><td>Ready to Clarify</td><td>New CJ identity path PP-01–PP-10, no AECB</td></tr>
+      <tr><td class="k">Kha</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3674">AMP-3674</a> Finnone integration</td><td>Ready to Clarify</td><td>Fires on CJ offer Accept (HF / ADIB / Prypco)</td></tr>
+      <tr><td class="k">Kha</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3720">AMP-3720</a> Pricing Matrix view mode</td><td>UAT</td><td><span class="ok">✓ No CJ overlap — clear</span></td></tr>
+      <tr><td class="k">Trang</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3689">AMP-3689</a> Resume by notification / Upload Docs</td><td>US Approved</td><td>Doc request, upload, Security Cheque signing</td></tr>
+      <tr><td class="k">Trang</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3679">AMP-3679</a> PL flow from Refinancing website</td><td>Ready to Clarify</td><td>New CJ entry point, B2B/B2C structure switch</td></tr>
+      <tr><td class="k">Trang</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3680">AMP-3680</a> Hide PII sent to bank</td><td>To Do</td><td>Pre-qual masking + Finnone PII (pairs with 3674)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Baseline for the check: AMP-3694 / 3404 (re-verified today) / 3728 / 3721 / 2195 SSS + the Portal Mirror gap check. What's covered correctly: 3689 consumes 3728 AC4 for document resolution; 3679 matches 3694's AECB-post-Selfie timing and the 3713 B2B flag.</p>
+</section>
+
+<section>
+  <span class="seclabel">03 · Conflicts</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Tickets</th><th>Conflict</th><th>Direction</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr">P1</span></td><td class="k">3730 × 3404</td><td><b>SoC generator.</b> 3404 AC10 + Part 4: SoC "Retrieved from Bank". 3730: channel generates it from a template, computing amortization and APR itself.</td><td>One owner. If bank sends the file, 3730 AC2.1 B/D collapse to render-only.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3730 × 3404/3694</td><td><b>IA1 flow is wrong.</b> Lists "Your Offers (AC5)" — B2B has no offer list (single offer, straight to Offer Detail); puts Settlement after Accept — it is pre-submission (3694 AC6); labels AC11 "Application Form &amp; Contract Signing" — AC11 is Customer Declaration.</td><td>Regenerate IA1 from 3694 + 3404 as approved.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3730 × 3728/3689</td><td><b>"Liability Letter" name collision.</b> Existing meaning: customer-uploaded letter from their current bank (3728 doc list, DM DOC007, 3689 upload flow). 3730 reuses the name for a system-generated settlement confirmation.</td><td>Rename 3730's document (e.g. Settlement Confirmation Letter) — enum <code>LIABILITY_LETTER</code> would collide.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3730 × 3404 AC6/6a</td><td><b>Letter data source.</b> 3730 keys Section B on pre-submission settlement toggles; 3404 lets the customer re-scope contracts at Offer Detail and the DC fallback adds credit cards.</td><td>Generate from the final accepted selection (3404 AC7 payload).</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3689 × SSS/BP</td><td><b>Status ownership.</b> 3689: "[Application Status] received from bank, Appro renders it" — SSS model (2195) derives display status in the channel. Plus three per-document status vocabularies (3689, bank results, Ops queue).</td><td>One status dictionary, one owner per transition.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3689 × 3710/3711</td><td><b>Security Cheque signature.</b> 3689 AC1.5 signs with the "Emirates ID signature from eKYC" — passport applicants have no EID signature.</td><td>Gate cheque-signing to EID journeys or define a passport alternative.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3679 × 3404/3694</td><td><b>Submission trigger point.</b> 3679 AC4 calls Choose Finance Type → T&amp;C → KFS the "post-submission sequence"; per 3404/3694 submission is held until Loading, so these are pre-submission — this decides when channel/bank integrations fire.</td><td>Align AC4 + Post-Submission Logic table to the held-submission model.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">3710/3711 × 3679/3694</td><td><b>Passport ⊥ AECB flow.</b> 3711 skips AECB for passport applicants; B2B PL pre-check, Buyout/DC settlement screens and the Ops Persona score (≥711) are AECB-powered.</td><td>Gate: passport → Fresh only, or exclude from B2B PL / refinancing entry.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3730 × DC math</td><td><b>Settlement figure.</b> 3730: Balance + Overdue (2273). DC eligibility: pool × 1.05; Buyout absorbs the 1% early-settlement fee. Letter's Net Amount Credited must equal 3404 AC9 Review Summary.</td><td>One canonical settlement service; letter reads it.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3730</td><td><b>APR formula</b> is a flat approximation; CBUAE disclosure APR is reducing-balance (IRR-based).</td><td>Confirm with compliance before hardcoding.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3689 × 3730</td><td><b>Doc filing gap.</b> 3689 AC1.6 groups don't file the generated SoC / settlement letter / contract pack.</td><td>Add group mapping (APPLICATION DOC or a CONTRACT PACK group).</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3679</td><td><b>Dangling references.</b> Steps 10 &amp; 14 say "See Open Item 1 / 2" — no Open Items section exists. Also: pre-check (step 4a) runs before AECB (step 7) — must use declared data only; and the DC-intent entry lands on Choose Finance Type with all variants (does UTM carry the variant?).</td><td>Add the section or resolve inline; confirm pre-check inputs; decide UTM-carried variant.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3680 × 3674</td><td><b>Contradictory Finnone payloads.</b> 3680 AC2 removes 9 AECB fields (Monthly_Income_Assessed, DSR_Percent…) that 3674's mapping sends; 3674 is HF/ADIB/Prypco-scoped while 3680 reads generic. ACs depend on unversioned Excel sheets.</td><td>Confirm with ADIB, update 3674's mapping in the same release, embed the field lists.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">04 · Suggested comments — paste-ready</span>
+  <h2>Hailey (PO, backend / super portal) — say "go + ticket" to post</h2>
+
+  <div class="card">
+    <h3>AMP-3730 <span class="who">· Kha · SoC + Liability Letter templates</span></h3>
+    <div class="cmt"><ol>
+      <li><b>SoC ownership:</b> AMP-3404 AC10 and its Part-4 table say the Schedule of Charges is <i>"Retrieved from Bank"</i>; this story has the channel generating it with our own amortization/APR math. Please align with Trang — one generator. If the bank sends the file, AC2.1 Sections B/D become render-only.</li>
+      <li><b>IA1 doesn't match the approved B2B flow:</b> B2B has no "Your Offers" list (3404 Part 3 — single offer straight to Offer Detail); Settlement is pre-submission (3694 AC6), not step 7 after Accept; and 3404 AC11 is Customer Declaration, not "Application Form &amp; Contract Signing". Please regenerate IA1 from 3694 + 3404.</li>
+      <li><b>Naming:</b> "Liability Letter" already means the customer-uploaded letter from their current bank (3728 doc list / DOC007 / 3689 upload flow). Suggest renaming this generated document (e.g. Settlement Confirmation Letter) — the <code>LIABILITY_LETTER</code> document_type will collide in the doc engine and Application Enquiry.</li>
+      <li><b>Data source:</b> Section B keys on the pre-submission settlement toggles, but 3404 AC6 allows contract re-scoping at Offer Detail and AC6a switches to DC incl. credit cards. Generate from the final accepted selection (3404 AC7 payload).</li>
+      <li><b>One settlement figure:</b> Balance + Overdue here vs the DC pool × 1.05 and buyout 1% fee absorption elsewhere — the letter's Net Amount Credited must equal 3404 AC9 Review Summary. Point both at one calculation service.</li>
+      <li><b>APR:</b> the Section A formula is a flat approximation; CBUAE disclosure APR is reducing-balance. Please confirm with compliance before it's hardcoded.</li>
+    </ol></div>
+  </div>
+
+  <div class="card">
+    <h3>AMP-3689 <span class="who">· Trang · Resume by notification / Upload Document</span></h3>
+    <div class="cmt"><ol>
+      <li><b>Status ownership:</b> "[Application Status] is received from the bank — Appro renders it" conflicts with the SSS model (AMP-2195), where the channel derives display status. Please confirm which statuses are bank-passthrough vs SSS-derived — today two vocabularies would ship.</li>
+      <li><b>Document Status dictionary:</b> this story sets per-doc statuses locally, the bank sends verification results, and the Ops queue has its own "Awaiting Customer Upload". One shared enum with one owner per transition, please.</li>
+      <li><b>Passport applicants:</b> AC1.5 signs the Security Cheque with the Emirates ID signature from eKYC — passport-journey customers (AMP-3710/3711) have none. Gate cheque-signing to EID journeys or define the alternative.</li>
+      <li><b>Filing generated docs:</b> AC1.6 groups don't cover the generated SoC / settlement letter / contract pack (3730 IA1). Please add the group mapping.</li>
+      <li><b>Cheque amount validation</b> (≤120%, CBUAE Art. 7) sits in the Ops queue — worth stating explicitly that CJ validates signature only, so it isn't built twice.</li>
+    </ol>
+    <p class="note">Kept as-is (good): Trigger A consuming 3728 AC4 keeps a single document-resolution engine.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>AMP-3679 <span class="who">· Trang · PL flow from Refinancing website</span></h3>
+    <div class="cmt"><ol>
+      <li><b>Trigger point:</b> AC4 labels Choose Finance Type → T&amp;C → KFS as the "post-submission sequence", but per 3404/3694 submission is held until the Loading screen — these are pre-submission, and this decides when channel/bank integrations fire. Please align AC4 and the Post-Submission Logic table to the held-submission model.</li>
+      <li><b>Dangling references:</b> steps 10 and 14 say "See Open Item 1 / Open Item 2" — the ticket has no Open Items section. Add it or resolve inline.</li>
+      <li><b>Pre-check ordering:</b> Eligibility Pre-check (step 4a) runs before AECB (step 7). Confirm it uses declared obligations only per 3694 AC1; if it needs AECB the ordering breaks.</li>
+      <li><b>Variant intent:</b> the refinancing entry is DC intent, but the B2B sequence starts at Choose Finance Type with all variants. Should the UTM carry a default variant (DC/Buyout)? Backend needs to know whether variant comes from UTM config or customer choice.</li>
+      <li><b>Passport identity:</b> passport applicants (3710/3711) have no AECB — the AECB-powered liabilities/settlement screens can't run. Exclude passport from this entry point or gate to Fresh.</li>
+    </ol></div>
+  </div>
+
+  <div class="card">
+    <h3>AMP-3680 <span class="who">· Trang · Hide PII sent to bank</span></h3>
+    <div class="cmt"><ol>
+      <li><b>Scope:</b> AC2 depends on AMP-3674, which is Home Finance + ADIB + Prypco only — this ticket reads generic. Please state product/channel scope; a future B2B PL Finnone use isn't covered by the "Finnone PII (ADIB)" sheet.</li>
+      <li><b>Contradictory payloads:</b> AC2 removes 9 AECB fields (Monthly_Income_Assessed, DSR_Percent…) that 3674's mapping currently sends. Confirm with ADIB that Finnone underwriting doesn't need them and update 3674's mapping file in the same release.</li>
+      <li><b>Testability:</b> the ACs hinge on Excel sheets ("PII Action List", "Finnone PII (ADIB)"). Embed the field lists or link a versioned Confluence page — an unversioned sheet isn't testable.</li>
+      <li><b>AECB score only at pre-qual:</b> confirm the masked payload still satisfies the banks' pre-qualification rules, which currently key on DBR/obligations.</li>
+    </ol></div>
+  </div>
+
+  <div class="card">
+    <h3>AMP-3711 <span class="who">· Kha · Confirm Data Elements with Passport (CF 1.18) — also covers the 3710 pairing</span></h3>
+    <div class="cmt"><ol>
+      <li><b>Flow gating:</b> AC9.4 skips AECB for passport applicants, but the B2B PL CJ (3694/3679) is AECB-dependent (eligibility pre-check, Buyout/DC settlement, DBR) and the Ops Persona check needs score ≥ 711. Please define gating — passport → Fresh only, or excluded from B2B PL / refinancing entry — and note that 3689's cheque-signing (EID signature) also can't serve them.</li>
+      <li><b>Status registration:</b> AC9.2 "Awaiting Credit Approval" / manual underwriting — confirm it's registered in the SSS model for B2B before a new status ships.</li>
+    </ol>
+    <p class="note">Kept as-is (good): per-field result handling, the compensating action (AC6) and 5-year raw-evidence retention are solid.</p></div>
+  </div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Comments drafted only; posting needs an explicit per-ticket go.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
