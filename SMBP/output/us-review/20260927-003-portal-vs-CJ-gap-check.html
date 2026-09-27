@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal vs CJ Gap Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:80ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{max-width:none;font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:780px;font-size:13px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;min-width:150px}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  .ok{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6;white-space:nowrap}
+  td .fx{display:block;margin-top:3px;font-size:12.5px}
+  td .fx b{color:#3b7ef6}
+  .note{font-size:12px;margin-top:10px;max-width:none}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Super Portal <span class="b">vs Customer Journey — Gap Check</span></h1></div>
+  <p class="sub">Cross-check of the <a href="https://claude.ai/artifact/8BzA2XUNr7mZTiTChk63Xr">SMBP Portal Mirror</a> backend design — Document Management (MD13, profile builder) and the Ops/Fulfilment 5-stage disbursement queue (MD08S12/13) — against the CJ and Bank Portal user stories (AMP-3694 / 3404 / 3721 / 3728 / 3748 / 3689 / 3717 / 3744 / 3754). Both portal modules read at code level, in full.</p>
+  <div class="meta"><span class="tag red">Verdict: STRONG DESIGN, 6 P1 CONTRACT GAPS</span><span class="tag">27 Sep 2026</span><span class="tag">Nothing posted to Jira</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The portal design is more advanced than the US in several places</b> (ANY-of document groups, mutual-exclusivity engine, the 120% cheque cap, verified-not-typed disbursement details) — <b>but it and the CJ stories currently describe three different document-resolution engines and two different persona rules.</b> Six contract-level gaps must be reconciled before either side builds, or the CJ will send applications the portal cannot resolve.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · What the portal defines (verified from code)</span>
+  <div class="tbl"><table>
+    <tr><th>Module</th><th>Design</th></tr>
+    <tr><td class="k">Document Set Up (MD13)</td><td>Per channel (APPRO/PRYPCO) × product: <b>profiles</b> with condition trees (ALL/ANY groups, AND/OR joins) over attributes — Employment Type {Salaried, Pensioner}, Product Variant {New, Buyout, Buyout + Top-Up, Debt Consolidation}, Salary Transfer Type {STL, NSTL, FSTL}, + system attrs (Salary Digitally Verified, Salary Credited to Acquiring Bank, Persona Customer). Each profile maps to <b>document groups</b> (uploadedBy Customer/Bank Staff, Mandatory/Optional, validity period, ANY-of supported). Exact mutual-exclusivity check across the whole attribute space; maker-checker (Pending→Approved) with audit. Seed doc list DOC001–013.</td></tr>
+    <tr><td class="k">Ops / Fulfilment queue</td><td>5 stages: 1 Disbursement Details (CIF from ETL sync + IBAN from journey — verified, never typed) → 2 Document Checklist (per matched DM profile, validated item-by-item) → 3 <b>Persona Check</b> (system) → 4 Security Cheque → 5 First Salary Credit. Persona: Residency = Expat Resident · income ≥ 15,000 · amount ≤ 14× income · score ≥ 711; matched → stages 4–5 <b>waived</b>; not matched → Fund Holding API, stages 4–5 apply. Statuses: Awaiting Ops Action / Awaiting Fulfilment Action / Awaiting Customer Upload / Awaiting Loan Account Creation. Configurable per-stage checklists (incl. cheque ≤ 120% of loan, CBUAE Art. 7). SMS deep-link NT9 for STL upload.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · P1 — contract gaps (reconcile before build)</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Gap</th><th>Portal says</th><th>US says</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr">P1</span></td><td class="k">Three document-resolution engines</td><td>DM profiles (condition trees → doc groups) resolve the list</td><td>AMP-3728: resolved from <b>pricing-scheme factors</b>, "no separate document configuration screen is needed". AMP-3721 AC9: a third mechanism — per-product checklist with select + mandatory toggles</td><td>Pick ONE owner. The profile builder is the richest (ANY-of, per-doc uploader, periods) — if it wins, 3728 AC1–AC4 and 3721 AC9 must be rewritten to consume it, not duplicate it</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Persona rule differs twice</td><td>Residency = <b>Expat Resident</b> · amount <b>≤ 14×</b> income</td><td>AMP-3728: Nationality + Employer type = <b>Expat + Private sector</b> · amount <b>&lt; 14×</b> (strict)</td><td>One rule: portal drops the employer-type test entirely, and the two sides disagree at exactly 14.0×. Decide criterion set + boundary; make all four thresholds config (feedback 28-3 already raised hardcoding)</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Variant value mismatch</td><td>Product Variant = <b>"New"</b></td><td>3721/3748 Transaction Type = <b>"Fresh"</b> (display "New finance")</td><td>One canonical enum in the data contract (Fresh|Buyout|Buyout + Top Up|Debt Consolidation); portal maps display labels only. A string mismatch here silently matches zero profiles</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">STL modelled differently</td><td>One tri-state attribute {STL, NSTL, FSTL}</td><td>3721: <b>two pricing factors</b> — STL (Yes/No) and FSTL (Yes/No) — with independent doc consequences in 3728</td><td>Tri-state is cleaner (FSTL ⊃ future transfer, NSTL = none) but the pricing matrix keys on two booleans. Define the mapping (STL=Y→STL; STL=N∧FSTL=Y→FSTL; both N→NSTL) or align 3721 to the enum</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">No-profile-match fallback undefined</td><td>Seeds cover 5 combos only (New×STL/NSTL/FSTL, Buyout+TopUp×STL, DC×NSTL). Pensioner exists as an attribute but has <b>zero profiles</b>; Buyout×NSTL, DC×STL etc. match nothing</td><td>3694 sends plain Pensioner down the long flow — it will arrive with no document profile</td><td>Mandatory default/fallback profile per product, or a save-time completeness check alongside the (excellent) overlap check</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Stage-1 assumes ETL for every PL app</td><td>Checklist: "CIF exists in core banking (<b>ETL record found</b>)" — for all apps, incl. seeds marked NTB</td><td>ETL is ETB-only (3744/3754; and scoped to Covered Card in 3754/3755 — the F2 contradiction). An NTB PL customer has no ETL record; CIF comes from onboarding</td><td>Stage-1 rule: CIF source = ETL (ETB) <b>or</b> core-banking onboarding response (NTB); don't fail NTB on a check that can never pass</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">04 · P2 — behaviour gaps</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Gap</th><th>Detail → Fix</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Persona waiver scope</td><td>3728: persona matched → <b>skip the disbursement queue entirely</b> (straight to DMS/DAF). Portal: everyone passes stages 1–2; persona only waives stages 4–5. Portal's version is safer (docs still validated) — <b>adopt it and amend 3728 AC5</b>, don't leave both.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Liability letter uploader</td><td>Portal profile sets DOC007 uploadedBy = <b>Bank Staff</b>; CJ (3689/3728) has the <b>customer</b> uploading it via the channel with re-request cycles. Decide per doc; the seed contradicts the journey.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">Top-up purpose ignores pricing toggle</td><td>Portal seeds DOC008 as always-Optional for Buyout; 3721 AC3 makes it conditional on <b>Top Up Purpose Required</b> per scheme. If profiles win (gap 1), they must read this pricing flag — first concrete case of the engines colliding.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">New statuses not in SSS</td><td>"Awaiting Ops Action / Awaiting Fulfilment Action / Awaiting Customer Upload / Awaiting Loan Account Creation" and "Awaiting Fund Holding" don't exist in the SSS model (AMP-2195) or 3728's "Awaiting Disb. Maker/Checker Action". Register one status set before two vocabularies ship.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">ANY-of groups have no US home</td><td>Portal's "Salary Certificate OR 3-month Statement" ANY-of semantics (good, matches FAB practice) exists in no story — 3728 AC2 lists them as independent rows. Whoever wins gap 1 must spec ANY-of explicitly.</td></tr>
+      <tr><td><span class="pr p3">P3</span></td><td class="k">Naming & registry nits</td><td>DOC011 = "<b>Future</b> Salary Transfer Letter" vs today's PO decision "<b>First</b> Salary Transfer Letter" — align. SMS "NT9" vs registry NT09 format. Enquiry uses "DSR" where CJ says DBR. Portal adds DOC006 Payslips (inactive) — absent from the 3721 AC9 list; add it there or drop it.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">05 · Where the portal is ahead — fold back into the US</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Portal strength</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ok">✓</span> <b>Mutual-exclusivity engine</b> — profiles are checked for overlap across the entire attribute space at save time</td><td>Write into the Document Set Up US as an AC (plus the completeness check from gap 5)</td></tr>
+      <tr><td><span class="ok">✓</span> <b>Security cheque ≤ 120% of loan value (CBUAE Art. 7)</b> in the fulfilment checklist</td><td>Regulatory rule missing from 3728 — add it; also verifies our earlier fee-cap research direction</td></tr>
+      <tr><td><span class="ok">✓</span> <b>Verified-not-typed disbursement details</b> (CIF/IBAN validated, no manual entry) and per-stage configurable checklists</td><td>Adopt as ACs; kills a whole class of ops typo incidents</td></tr>
+      <tr><td><span class="ok">✓</span> Per-doc <b>uploadedBy + validity period</b>, and Persona Rules surfaced in the Enquiry banner with pass/fail per criterion</td><td>Carry into the enquiry US; great auditability</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Coverage:</b> the two injected modules (dm-script, oq-script) were read in full at code level, including seeds, evaluators and checklist config. The recorded platform bundle (4.8&nbsp;MB webpack) and gzip'd tenant data were not line-audited — they replay the existing portal, not the new design. Sources: artifact 8BzA2XUNr7mZTiTChk63Xr (v 1790532117); Jira ticket text as read this session.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Gap check for PO review; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
