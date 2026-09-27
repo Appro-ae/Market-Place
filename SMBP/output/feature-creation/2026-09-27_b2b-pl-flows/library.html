@@ -1,0 +1,182 @@
+<title>B2B PL Library</title>
+<style>
+  :root{
+    --paper:#F7F8F6; --card:#FFFFFF; --ink:#16232B; --muted:#5A6B75;
+    --line:#DDE3E1; --accent:#0E756A; --accent-soft:#E3F0ED;
+    --amber:#A8690F; --amber-soft:#F7ECDA; --red:#B3452F; --red-soft:#F6E4DF;
+    --blue:#28536B; --blue-soft:#E4EDF2; --chip:#EDF1EF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+      --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+      --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+      --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101820; --card:#18222B; --ink:#E8EDEA; --muted:#93A4AC;
+    --line:#2A3742; --accent:#3FBCA8; --accent-soft:#153530; --amber:#DFA34C;
+    --amber-soft:#33270F; --red:#E07A61; --red-soft:#3A1E16; --blue:#8FB6CC;
+    --blue-soft:#1B2C38; --chip:#22303A; color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font:400 15.5px/1.6 "Public Sans","Segoe UI",system-ui,sans-serif;padding-block:0 64px}
+  @import url('');
+  .wrap{max-width:980px;margin:0 auto;padding-inline:20px}
+  h1,h2,h3{font-family:"Archivo","Segoe UI",system-ui,sans-serif;text-wrap:balance;line-height:1.15}
+  h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:0 0 10px}
+  h2{font-size:21px;font-weight:700;margin:0 0 6px}
+  h3{font-size:15.5px;font-weight:700;margin:0}
+  a{color:var(--accent)}
+  p{max-width:72ch}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+  .eyebrow{font:600 11px/1 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  header.hero{padding:48px 0 26px;border-bottom:1px solid var(--line)}
+  .hero .sub{color:var(--muted);font-size:16px;max-width:68ch}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tag{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:500}
+  section{padding:32px 0 4px}
+  .sechead{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .secnum{font:700 15px "IBM Plex Mono",monospace;color:var(--accent)}
+  .lede{color:var(--muted);margin-top:2px;font-size:14.5px}
+
+  .docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+  .doc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+  .doc .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .pill{font:600 10px "Archivo";letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
+  .pill.live{background:var(--accent-soft);color:var(--accent)}
+  .pill.ref{background:var(--blue-soft);color:var(--blue)}
+  .pill.src{background:var(--chip);color:var(--muted)}
+  .doc p{font-size:13px;color:var(--muted);margin:0}
+  .doc .open{margin-top:auto;padding-top:8px}
+  .doc .open a{font:600 13px "Archivo";text-decoration:none;border:1px solid var(--accent);border-radius:8px;padding:7px 14px;display:inline-block}
+  .doc .open a:hover{background:var(--accent-soft)}
+  .doc .aud{font-size:11.5px;color:var(--muted)}
+  .doc .aud b{color:var(--ink)}
+
+  ul.links{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:8px 20px}
+  ul.links li{border-bottom:1px dashed var(--line);padding:7px 2px;font-size:13.5px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  ul.links .k{font-family:"IBM Plex Mono";font-size:12px;color:var(--muted);white-space:nowrap}
+
+  .todo{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:10px;padding:14px 18px}
+  .todo ol{margin:6px 0 0;padding-left:20px;font-size:13.5px}
+  .todo li{margin-bottom:5px}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Appro · SMBP · Huyen's product library</div>
+  <h1>B2B Personal Finance — document library</h1>
+  <p class="sub">Every deliverable, source and open decision for the B2B PL feature, in one place. The pages below are attached to this library, so they open directly — no repo digging. Updated by Gấu trắng as new documents land.</p>
+  <div class="meta">
+    <span class="tag">Last updated 27 Sep 2026</span>
+    <span class="tag">Private — share the link only inside Appro</span>
+  </div>
+</header>
+
+<section>
+  <div class="sechead"><span class="secnum">01</span><div><h2>Deliverables (open directly)</h2>
+  <div class="lede">Reading order for a newcomer: Explainer → Benchmark → Screen Reference.</div></div></div>
+  <div class="docs">
+    <div class="doc">
+      <div class="top"><h3>Fresher Explainer</h3><span class="pill live">Interactive page</span></div>
+      <p>The four finance variants from zero: phone-contract analogy, buyout-vs-DC clarifier, journey rail, hard gates G1–G5, worked Rashid numbers, stakeholder benefit map, glossary.</p>
+      <div class="aud"><b>For:</b> new joiners, anyone outside the squad</div>
+      <div class="open"><a href="explainer.html">Open explainer →</a></div>
+    </div>
+    <div class="doc">
+      <div class="top"><h3>Market Benchmark</h3><span class="pill live">Interactive page</span></div>
+      <p>Step-2 research: CBUAE regulation tiles, six UAE competitor cards (FAB, ENBD, ADCB, Mashreq, DIB, Finance House), market-vs-spec verdict table, 3 gaps / 1 opportunity / 1 risk.</p>
+      <div class="aud"><b>For:</b> PO decisions, client conversations</div>
+      <div class="open"><a href="benchmark.html">Open benchmark →</a></div>
+    </div>
+    <div class="doc">
+      <div class="top"><h3>Screen Reference (map + calculation lab)</h3><span class="pill live">Interactive page</span></div>
+      <p>The handoff contract. Part A: every prototype screen with live screenshot, US behaviour, backend trigger, market check, and the red prototype-vs-US conflicts. Part B: every formula (F1–F13) reproduced live — change an input, the page recomputes. Includes the engine-check finding (prototype offer figures don't reconcile).</p>
+      <div class="aud"><b>For:</b> Hailey's backend feature creation; QA test-case reference</div>
+      <div class="open"><a href="screen-reference.html">Open screen reference →</a></div>
+    </div>
+    <div class="doc">
+      <div class="top"><h3>Backend design summary</h3><span class="pill src">Repo source</span></div>
+      <p>The dense text version: four-variant table, flows A–C, terms, formulas F1–F14, Super Portal design checklist, 7 open points. Kept as source notes in the repo.</p>
+      <div class="aud"><b>Where:</b> <span class="mono">Market-Place › SMBP/output/feature-creation/2026-09-27_b2b-pl-flows/</span> on branch <span class="mono">claude/keen-fermi-te4e18</span></div>
+      <div class="open"><a href="https://github.com/Appro-ae/Market-Place/tree/claude/keen-fermi-te4e18/SMBP/output/feature-creation/2026-09-27_b2b-pl-flows">Open repo folder →</a></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><span class="secnum">02</span><div><h2>Jira sources (scvaladdin.atlassian.net)</h2>
+  <div class="lede">The user stories everything above is built from. Read-only; changes go through Gấu trắng.</div></div></div>
+  <ul class="links">
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3694">B2B PL — Submission flow</a></span><span class="k">AMP-3694 · US Approved</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3404">B2B PL — Post-submission flow</a></span><span class="k">AMP-3404 · US Approved</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">Settlement screen, variants, hard gates</a></span><span class="k">AMP-3732 · Ready To Clarify</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3721">Product Setup — Buyout / Top-Up adaptation</a></span><span class="k">AMP-3721 · Ready To Clarify</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3748">PL product fetching pre-submission</a></span><span class="k">AMP-3748 · To Do</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3689">Document re-request + security cheque e-sign</a></span><span class="k">AMP-3689</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3717">ETL table handling (PL flow)</a></span><span class="k">AMP-3717</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3753">AECB Contract Scope admin UI</a></span><span class="k">AMP-3753</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3734">Impact analysis on PL flow</a></span><span class="k">AMP-3734</span></li>
+    <li><span><a href="https://scvaladdin.atlassian.net/browse/AMP-3713">B2B / B2C flag on SAP</a></span><span class="k">AMP-3713 · US Approved</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sechead"><span class="secnum">03</span><div><h2>Regulatory &amp; market sources</h2></div></div>
+  <ul class="links">
+    <li><span><a href="https://rulebook.centralbank.ae/en/rulebook/article-2-personal-loan">CBUAE — Personal Loan (Art. 2): 20× salary, 48 months</a></span><span class="k">regulation</span></li>
+    <li><span><a href="https://rulebook.centralbank.ae/en/rulebook/article-3-important-ratios">CBUAE — Important Ratios (Art. 3): 50% DBR</a></span><span class="k">regulation</span></li>
+    <li><span><a href="https://rulebook.centralbank.ae/en/rulebook/regulation-no-292011-regarding-bank-loans-other-services-offered-individual-customers">CBUAE — Reg. 29/2011: loan transfer, 1% exit-fee cap</a></span><span class="k">regulation</span></li>
+    <li><span><a href="https://rulebook.centralbank.ae/en/rulebook/consumer-protection-standards">CBUAE — Consumer Protection: 5-day cooling-off, KFS</a></span><span class="k">regulation</span></li>
+    <li><span><a href="https://www.bankfab.com/en-ae/personal/loans/personal-loans/buyout-loans">FAB Buyout Loan</a></span><span class="k">competitor</span></li>
+    <li><span><a href="https://www.emiratesnbd.com/en/help-and-support/request-a-liability-or-no-liability-letter">ENBD liability letters (15-day validity)</a></span><span class="k">competitor</span></li>
+    <li><span><a href="https://www.mashreq.com/en/uae/neo/loans/personal-loans/debt-consolidation-loan/">Mashreq Debt Consolidation</a></span><span class="k">competitor</span></li>
+    <li><span><a href="https://www.dib.ae/personal/personal-finance/liability-settlement-finance">DIB Liability Settlement Finance (Islamic DC)</a></span><span class="k">competitor</span></li>
+  </ul>
+  <p class="note">Still unverified: CBUAE Appendix 2 exact fee caps (processing / early-settlement) — the rulebook site is unreachable from the working environment; needs a manual pull.</p>
+</section>
+
+<section>
+  <div class="sechead"><span class="secnum">04</span><div><h2>Workspace knowledge bases (local files)</h2>
+  <div class="lede">These live in the Hailey-Appro-PO workspace and are re-uploaded per chat (see the handoff note). Not hosted here — client raw data stays local.</div></div></div>
+  <ul class="links">
+    <li><span>SMBP knowledge base (AMP + SMBP, pull 2026-09-26)</span><span class="k">SMBP/input/knowledge-base.md</span></li>
+    <li><span>ADIB knowledge base (checked first — most advanced)</span><span class="k">ADIB/input/knowledge-base.md</span></li>
+    <li><span>RF / Reem Bank knowledge base</span><span class="k">RF/input/knowledge-base.md</span></li>
+    <li><span>Portfolio overview (Selena's cross-project view)</span><span class="k">portfolio-overview.md</span></li>
+    <li><span>CLAUDE.md — team, rules, feature-creation workflow</span><span class="k">workspace root</span></li>
+    <li><span>Prototype: Appro B2B — PF Journey (Buyout, DC, offline v2)</span><span class="k">HTML upload · 51 screens</span></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sechead"><span class="secnum">05</span><div><h2>Open decisions before backend build</h2>
+  <div class="lede">The live blocker list. Owner: Gấu trắng, decision authority: Huyen. Cleared items get struck through on update.</div></div></div>
+  <div class="todo">
+    <ol>
+      <li><b>Manual "Buyout details" screen vs AECB auto-fill</b> — kill the manual screen (recommended). <span class="mono">Conflict, screen ref §06-1</span></li>
+      <li><b>Processing-fee card payment vs deduct-from-finance</b> — no PSP in B2B (recommended). <span class="mono">Conflict, §06-2</span></li>
+      <li><b>One signature model</b> per document class (swipe / drawn / EFR+OTP) before AMP-3757. </li>
+      <li><b>Hard-gate defaults</b>: BP (G2≥2, G3≥30%) vs DP DC engine (G2≥3, G3≥70%) — deliberate or drift?</li>
+      <li><b>Extend G4 standing check to Buyout</b> (market requires good standing; spec gates DC only).</li>
+      <li><b>Settlement-execution workflow</b> (manager's cheque, status, reconciliation) — needs a new US.</li>
+      <li><b>Cooling-off AC12 behaviours</b> (applied / ends / waived) are empty in the ticket.</li>
+      <li><b>Shortfall check trigger point</b>: AMP-3732 AC6 (pre-submission) vs AMP-3404 AC6a (post-offer).</li>
+      <li><b>Liability-letter validity default = 15 days</b>; grace-period ceiling configurable (FAB competes at 365).</li>
+      <li><b>48-month CBUAE tenor cap</b> — add platform validation, not only Product Setup config.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  Appro internal · maintained by Gấu trắng for Huyen (PO) · Repo: Appro-ae/Market-Place, branch claude/keen-fermi-te4e18 · This library and its attached pages are private by default; anyone with the link can read, so share inside Appro only.
+</footer>
+
+</div>
