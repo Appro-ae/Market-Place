@@ -1,6 +1,13 @@
 # BRD — Push Notification (customer journey)
 
-## Current: V1.1 · 28 September 2026 — the PO's Word file is the master
+## FINAL: `BRD_Push_Notification_V1.1_FINAL.pdf` — the PO's circulated version (28/09, 10 pages)
+
+Saved byte-for-byte as the PO sent it (macOS Save as PDF, unprotected). Differences from the
+V1.1 build below: the combined table has no "Opens at (deep-link screen)" column, the
+"Priority: P0 highest." note is removed, and the version history keeps only the 1.0 row
+(cover says V1.1). TOC page numbers match the footers.
+
+## V1.1 build · 28 September 2026 — the PO's Word file is the master
 
 `BRD_Push_Notification_V1.1.docx` (editable) and `.pdf` (circulation copy) are built from the PO's
 own edited file, `po_review/BRD_Push_Notification_V1.1_PO_edit.docx`, by
