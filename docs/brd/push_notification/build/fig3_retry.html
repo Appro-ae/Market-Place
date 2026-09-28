@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="diagram.css">
+<style>body{width:1100px;height:560px}
+.n b{font-size:20px}.n i{font-size:16.5px;color:#4a4a4a}.dtext{font-size:18.5px}.lbl{font-size:16px}</style></head><body>
+<svg class="wires" width="1100" height="560">
+  <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7.6" refY="3.2" orient="auto">
+    <path d="M0,0 L7.6,3.2 L0,6.4 z" fill="#3d3d3d"/></marker></defs>
+  <polygon points="330,196 510,266 330,336 150,266" fill="#fff" stroke="#6C8EBF" stroke-width="1.6"/>
+  <polygon points="800,196 960,266 800,336 640,266" fill="#fff" stroke="#6C8EBF" stroke-width="1.6"/>
+  <g stroke="#3d3d3d" stroke-width="1.6" fill="none" marker-end="url(#a)">
+    <path d="M330,70 L330,100"/>
+    <path d="M330,168 L330,192"/>
+    <path d="M330,336 L330,374"/>
+    <path d="M330,440 L330,478"/>
+    <path d="M510,266 L636,266"/>
+    <path d="M800,196 L800,172"/>
+    <path d="M650,136 L484,136"/>
+    <path d="M800,336 L800,374"/>
+    <path d="M800,440 L800,478"/>
+  </g>
+</svg>
+
+<div class="n start" style="left:180px;top:24px;width:300px;height:46px"><b>Trigger event reached</b></div>
+<div class="n box"   style="left:180px;top:104px;width:300px;height:64px"><b>Send the push request</b><i>attempt n</i></div>
+<div class="dtext"   style="left:190px;top:236px;width:280px;height:60px">HTTP code 20x and<br>error.code = &ldquo;000&rdquo;?</div>
+<div class="lbl" style="left:342px;top:344px">Yes</div>
+<div class="lbl" style="left:540px;top:244px">No</div>
+<div class="n sys"   style="left:180px;top:376px;width:300px;height:64px"><b>Push sent</b><i>Audit trail &middot; Step Status = Success</i></div>
+<div class="n end"   style="left:190px;top:482px;width:280px;height:60px"><b>Journey continues</b><i>application status unchanged</i></div>
+
+<div class="dtext"   style="left:680px;top:236px;width:240px;height:60px">Attempts left?<br>(n &lt; N)</div>
+<div class="lbl" style="left:812px;top:176px">Yes</div>
+<div class="lbl" style="left:812px;top:344px">No</div>
+<div class="n sys"   style="left:650px;top:104px;width:300px;height:64px"><b>Wait X minutes, retry</b><i>attempt n + 1</i></div>
+<div class="n sys"   style="left:650px;top:376px;width:300px;height:64px"><b>Push not sent</b><i>Audit trail &middot; Step Status = Failed</i></div>
+<div class="n end"   style="left:660px;top:482px;width:280px;height:60px"><b>Journey continues</b><i>application status unchanged</i></div>
+
+</body></html>

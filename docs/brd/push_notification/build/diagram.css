@@ -1,0 +1,22 @@
+/* draw.io-style diagram kit — house flow style of the Appro BRDs.
+   green = start · blue = step · amber = system action · purple = end.
+   Arial resolves to Liberation Sans in the container (metric-compatible). */
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fff;position:relative;font-family:Arial,'Liberation Sans',sans-serif;color:#1a1a1a}
+.n{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 14px;text-align:center}
+.n b{display:block;font-size:15.5px;line-height:1.3}
+.n i{display:block;font-style:normal;font-size:12.5px;line-height:1.35;color:#555;margin-top:4px}
+.start{background:#D5E8D4;border:1.6px solid #82B366;border-radius:24px}
+.start b{color:#28541a}
+.end{background:#E1D5E7;border:1.6px solid #9673A6;border-radius:24px}
+.end b{color:#3d2b52}
+.box{background:#fff;border:1.6px solid #6C8EBF;border-radius:4px}
+.sys{background:#FFF2CC;border:1.6px solid #D6B656;border-radius:4px}
+.note{background:#FFFBF2;border:1.6px dashed #D6B656;border-radius:4px}
+.band{position:absolute;display:flex;align-items:center;justify-content:center;height:38px;
+      background:#EDF2FF;border-radius:4px;font-size:12.5px;font-weight:700;letter-spacing:.9px;color:#1A214D}
+.dtext{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14.5px;line-height:1.35}
+.lbl{position:absolute;font-size:12.5px;color:#3d3d3d;font-weight:700;background:#fff;padding:0 5px}
+.cap{position:absolute;font-size:12.5px;color:#6b6b6b;font-style:italic}
+.foot{position:absolute;font-size:13px;line-height:1.45;color:#3d3d3d}
+svg.wires{position:absolute;left:0;top:0}

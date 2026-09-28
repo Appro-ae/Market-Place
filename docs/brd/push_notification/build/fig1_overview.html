@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="diagram.css">
+<!-- Sized for print: placed at 6.67 in wide, 23 px titles land at ~7.7 pt, 18 px lines at ~6 pt. -->
+<style>
+body{width:1440px;height:392px}
+.n{padding:8px 10px}
+.n b{font-size:23px;line-height:1.25}
+.n i{font-size:18px;margin-top:6px;color:#4a4a4a}
+.band{height:44px;font-size:18px;letter-spacing:1px}
+</style></head><body>
+<svg class="wires" width="1440" height="392">
+  <defs><marker id="a" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto">
+    <path d="M0,0 L9,4 L0,8 z" fill="#3d3d3d"/></marker></defs>
+  <g stroke="#3d3d3d" stroke-width="2" fill="none" marker-end="url(#a)">
+    <path d="M220,154 L250,154"/>
+    <path d="M461,154 L491,154"/>
+    <path d="M702,154 L732,154"/>
+    <path d="M943,154 L973,154"/>
+    <path d="M1184,154 L1214,154"/>
+    <path d="M601,218 L601,262"/>
+  </g>
+</svg>
+
+<div class="band" style="left:15px;top:14px;width:687px">APPRO PLATFORM</div>
+<div class="band" style="left:738px;top:14px;width:205px">MIDDLEWARE</div>
+<div class="band" style="left:979px;top:14px;width:446px">SUPER APP &middot; CUSTOMER&rsquo;S DEVICE</div>
+
+<div class="n start" style="left:15px;top:90px;width:205px;height:128px"><b>Trigger event reached</b><i>e.g. offer displayed</i></div>
+<div class="n sys"   style="left:256px;top:90px;width:205px;height:128px"><b>Build the push</b><i>in the customer&rsquo;s language</i></div>
+<div class="n box"   style="left:497px;top:90px;width:205px;height:128px"><b>Send the push request</b><i>to the Push API</i></div>
+<div class="n box"   style="left:738px;top:90px;width:205px;height:128px"><b>Deliver the notification</b><i>to the customer&rsquo;s device</i></div>
+<div class="n box"   style="left:979px;top:90px;width:205px;height:128px"><b>Customer taps</b><i>on iOS or Android</i></div>
+<div class="n end"   style="left:1220px;top:90px;width:205px;height:128px"><b>Journey resumes</b><i>at the screen for the event</i></div>
+
+<div class="n note" style="left:256px;top:266px;width:687px;height:112px"><i style="margin-top:0;font-size:18.5px;line-height:1.4;color:#333">Result recorded in the audit trail &mdash; <b style="display:inline;font-size:18.5px">Success</b> or <b style="display:inline;font-size:18.5px">Failed</b>.
+Failures are retried automatically, every X minutes, up to N attempts. A push never blocks, delays or changes the application.</i></div>
+</body></html>

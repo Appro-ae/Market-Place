@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1400px;background:#fff;font-family:Arial,'Liberation Sans',sans-serif;color:#1a1a1a;padding:24px 20px 20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;column-gap:36px;row-gap:22px}
+.item{display:flex;flex-direction:column}
+.card{display:flex;gap:14px;align-items:flex-start;background:#F2F2F7;border:1px solid #E3E3EA;border-radius:22px;padding:15px 18px 16px}
+.icon{flex:0 0 42px;height:42px;border-radius:10px;background:#003764;display:flex;align-items:center;justify-content:center}
+.txt{flex:1;min-width:0}
+.hd{display:flex;justify-content:space-between;font-size:13.5px;letter-spacing:.6px;color:#6E6E78;margin-bottom:4px}
+.t{font-size:19.5px;font-weight:700;line-height:1.3}
+.b{font-size:18px;line-height:1.35;color:#2b2b30;margin-top:3px}
+.tag{display:flex;gap:10px;align-items:baseline;margin:8px 6px 0;font-size:15.5px;color:#555}
+.id{font-weight:700;color:#fff;background:#156082;border-radius:4px;padding:2px 8px;font-size:14.5px;letter-spacing:.3px}
+.tag em{font-style:normal;color:#1A214D;font-weight:700}
+.legend{align-self:center;font-size:16px;line-height:1.5;color:#555;border:1.4px dashed #C9CCD6;border-radius:12px;padding:16px 18px}
+.legend b{color:#1A214D}
+</style></head><body>
+<div class="grid" id="grid"></div>
+<script>
+const bell = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>';
+/* Order and copy exactly as the Trigger Point table; placeholders filled with example values. */
+const N = [
+ ['P01','CC · PL','Your Credit Card offer is ready','Tap to review your offer and continue your application.','Offer selection'],
+ ['P01 (CASA)','CASA','Your account is approved','Tap to continue and complete your account opening.','Resume application'],
+ ['P02','CC · PL · CASA','Your offer expires in 14 days','Complete your application before your approval expires.','Offer selection'],
+ ['P05','CC · PL · CASA','We need a document from you','Upload it to keep your application moving.','Document upload'],
+ ['P06','CC · PL','Your application is active again','Your cooling-off period has ended. Tap to continue or cancel.','Application Ready to Continue, then KFS'],
+ ['P09','PL','Action needed on your direct debit','Your bank didn’t accept the authority. Tap to see next steps.','DDA screen / next steps'],
+ ['P04','CC · PL · CASA','Update on your application','Tap to view the status of your Personal Loan application.','Application status'],
+ ['P08','PL','Direct debit is set up','Your bank approved your direct debit. Tap to view your loan.','Loan details'],
+ ['P10','PL','Your loan is on its way','Funds will reach your account shortly. Tap for details.','Loan details'],
+ ['P11','CC · PL · CASA','Your Credit Card is ready','Tap to see what happens next.','Product screen (card / loan / account)'],
+ ['P03','CC · PL · CASA','Your offer has expired','You can reapply whenever you’re ready.','SDK start (new application)'],
+];
+const g = document.getElementById('grid');
+for (const [id, prod, t, b, dl] of N) {
+  g.insertAdjacentHTML('beforeend', `<div class="item" data-id="${id}">
+    <div class="card"><div class="icon">${bell}</div><div class="txt">
+      <div class="hd"><span>SUPER APP</span><span>now</span></div>
+      <div class="t">${t}</div><div class="b">${b}</div></div></div>
+    <div class="tag"><span class="id">${id}</span><span>${prod}</span><span>&rarr; opens <em>${dl}</em></span></div></div>`);
+}
+g.insertAdjacentHTML('beforeend', `<div class="legend"><b>Illustrative.</b> English copy as specified; %%PRODUCT_TYPE%% and
+  %%COUNTING_DOWN%% shown with example values. The final look depends on the device operating system and the Super App.
+  Arabic copy is to be provided by Reem Bank Business.</div>`);
+</script>
+</body></html>

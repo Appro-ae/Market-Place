@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Composite over a REAL UAT capture (Application Enquiry > Audit Trail).
+     Kept from the capture: the header row (pixels untouched).
+     Drawn: two new "Push Notification" rows, measured from the capture —
+     rows 150 px for two lines (176 px here for three), zebra #F5FDFF / #FFFFFF,
+     2 px #F1F2F4 separators, text #202121 Plus Jakarta Sans 25.5 px / 500,
+     line pitch 42.5 px, column x = 29 / 138 / 445 / 787 / 1128 / 1652 / 1955 / 2151.
+     Values are illustrative. -->
+<link rel="stylesheet" href="fonts/pjs-inline.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:2275px;height:560px;background:#fff;position:relative;overflow:hidden}
+#hdr{position:absolute;left:0;top:0;width:2275px;height:114px;overflow:hidden}
+#hdr img{position:absolute;left:0;top:0}
+.row{position:absolute;left:0;width:2275px}
+.sep{position:absolute;left:0;width:2275px;height:2px;background:#F1F2F4}
+.c{position:absolute;font-family:'Plus Jakarta Sans';font-size:25.5px;font-weight:500;line-height:42.5px;color:#202121;white-space:nowrap}
+.box{position:absolute;border:4px solid #FF5500;border-radius:8px}
+.tag{position:absolute;font-family:Arial,'Liberation Sans',sans-serif;font-size:27px;font-weight:700;color:#FF5500}
+.tag span{font-weight:400;color:#6b6b6b;font-style:italic}
+</style></head><body>
+<div id="hdr"><img src="../assets/base_audit_trail.png" alt=""></div>
+<div id="rows"></div>
+<div class="box" style="left:4px;top:116px;width:2267px;height:352px"></div>
+<div class="tag" style="left:8px;top:492px">New step: Push Notification &mdash; one entry per push <span>&nbsp;(illustrative values)</span></div>
+<script>
+const COLS = [29, 138, 445, 787, 1128, 1652, 1955, 2151];
+const ROWH = 176, PITCH = 42.5;
+const ROWS = [
+  { fill: '#F5FDFF', cells: [['27'], ['Push Notification'], ['28/09/2026 10:15:02'], ['28/09/2026 10:15:03'],
+      ['Send Push P01 · Attempt 1 of 3', 'stan 000187 · requestId 8F3A92C1', 'messageId 0:1790341509514173…'],
+      ['Approved In', 'Principle'], ['Success'], ['System']] },
+  { fill: '#FFFFFF', cells: [['28'], ['Push Notification'], ['29/09/2026 10:00:00'], ['29/09/2026 10:10:30'],
+      ['Send Push P02 · Attempt 3 of 3', 'stan 000214 · requestId 5C71D0B4', 'No response (timeout)'],
+      ['Approved In', 'Principle'], ['Failed'], ['System']] },
+];
+let y = 114;
+const R = document.getElementById('rows');
+for (const r of ROWS) {
+  R.insertAdjacentHTML('beforeend', `<div class="row" style="top:${y}px;height:${ROWH}px;background:${r.fill}"></div>`);
+  r.cells.forEach((lines, i) => {
+    const top = y + (ROWH - lines.length * PITCH) / 2;
+    R.insertAdjacentHTML('beforeend', `<div class="c" style="left:${COLS[i]}px;top:${top}px">${lines.join('<br>')}</div>`);
+  });
+  y += ROWH;
+  R.insertAdjacentHTML('beforeend', `<div class="sep" style="top:${y}px"></div>`);
+  y += 2;
+}
+</script>
+</body></html>

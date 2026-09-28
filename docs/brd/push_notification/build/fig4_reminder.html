@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="diagram.css">
+<!-- Sized for print: placed at 6.67 in wide, 19-21 px text lands at ~6.5-7 pt. -->
+<style>
+body{width:1420px;height:360px}
+.tick{position:absolute;top:140px;font-size:18px;color:#555;transform:translateX(-50%)}
+.ev{position:absolute;font-size:18.5px;line-height:1.35;text-align:center;transform:translateX(-50%)}
+.ev b{display:block;font-size:20px;color:#1a1a1a}
+.brace{position:absolute;top:30px;height:42px;border:2px solid #D6B656;border-bottom:none;border-radius:8px 8px 0 0;
+       display:flex;align-items:flex-start;justify-content:center}
+.brace span{margin-top:-15px;background:#fff;padding:0 10px;font-size:20.5px;font-weight:700;color:#1a1a1a}
+</style></head><body>
+<svg class="wires" width="1420" height="360" id="svg">
+  <line x1="100" y1="104" x2="1300" y2="104" stroke="#9aa3b2" stroke-width="4"/>
+</svg>
+<div class="brace" style="left:124px;width:598px"><span>P02 &middot; offer expiry reminder &middot; once per day for 15 days</span></div>
+<div class="ev" style="left:100px;top:186px;width:220px"><b>Day 0</b>First offer displayed<br>(P01)</div>
+<div class="ev" style="left:1300px;top:186px;width:230px"><b>Day 30</b>Offer validity ends<br>(P03)</div>
+<div class="n note" style="left:360px;top:220px;width:700px;height:110px"><i style="margin-top:0;font-size:19px;line-height:1.4;color:#333">P02 stops at once when the customer selects an offer, or when the application is expired, cancelled or rejected.</i></div>
+<script>
+const x = (d) => 100 + d * (1200 / 30);
+const svg = document.getElementById('svg');
+const add = (h) => svg.insertAdjacentHTML('beforeend', h);
+for (let d = 1; d <= 15; d++) add(`<circle cx="${x(d)}" cy="104" r="11" fill="#FFF2CC" stroke="#D6B656" stroke-width="2.2"/>`);
+add(`<circle cx="${x(0)}" cy="104" r="16" fill="#D5E8D4" stroke="#82B366" stroke-width="2.4"/>`);
+add(`<circle cx="${x(30)}" cy="104" r="16" fill="#E1D5E7" stroke="#9673A6" stroke-width="2.4"/>`);
+for (const d of [5, 10, 15, 20, 25])
+  document.body.insertAdjacentHTML('beforeend', `<div class="tick" style="left:${x(d)}px">Day ${d}</div>`);
+</script>
+</body></html>

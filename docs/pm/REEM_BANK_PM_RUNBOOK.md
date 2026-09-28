@@ -305,6 +305,14 @@ fresh container (every conversion fails identically, even on a `.txt`), and
 inline images are clipped to the inherited line height unless the image
 paragraph sets `lineRule: AT_LEAST`.
 
+House-template Word BRDs now build from `docs/brd/push_notification/build/` —
+copy that folder for the next feature (two-pass TOC, figure renderer, PDF
+protection). Two more traps it handles: LibreOffice breaks a line between the
+two `%` of a `%%MERGE_FIELD%%`, so size table columns from measured Arial
+widths and give each placeholder its own line (never word joiners — they ride
+along on copy-paste); and figure text must land at 6 pt or more at its placed
+width (px × placed inches ÷ canvas px × 72), so size the canvas for the page.
+
 ### 8.2 Email drafts
 
 The Microsoft 365 connector is read-only for mail. `outlook_create_draft` and
