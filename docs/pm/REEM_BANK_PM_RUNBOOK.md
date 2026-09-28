@@ -307,10 +307,19 @@ paragraph sets `lineRule: AT_LEAST`.
 
 ### 8.2 Email drafts
 
-The connector is read-only for sending, so an email is delivered as a
-**paste-ready HTML file** in `docs/email/` — Outlook-safe markup only: tables
-for layout, inline styles, padding never margin, Arial, no flexbox and no
-base64 images. A `.txt` twin ships beside it for a quick copy.
+The Microsoft 365 connector is read-only for mail. `outlook_create_draft` and
+`outlook_create_reply_all_draft` fail with a missing `Mail.ReadWrite` scope
+(tenant admin consent). Even with that scope, the connector's HTML allowlist
+rejects every `style`, `border` and `width` attribute, so a styled table would
+arrive bare. An email is therefore delivered as a **paste-ready HTML file** in
+`docs/email/` — Outlook-safe markup only: tables for layout, inline styles,
+padding never margin, Arial, no flexbox and no base64 images. A `.txt` twin
+ships beside it for a quick copy.
+
+Read access is still worth using: search the mailbox for the thread being
+answered and read it before drafting. The sender is not always the document's
+author (the Avanza push spec was written by Syed Saad but sent by Muhammad
+Fahad), and the CC list shows who must stay on a Reply-All (e.g. the bank).
 
 House voice: "Dear all," … "Thanks and Best regards, Hailey". Keep it to one
 screen: a milestone table, the two things that matter in callout blocks, the
