@@ -1,4 +1,27 @@
-# BRD — Push Notification (customer journey) · V1.0 · 28 September 2026
+# BRD — Push Notification (customer journey)
+
+## Current: V1.1 · 28 September 2026 — the PO's Word file is the master
+
+`BRD_Push_Notification_V1.1.docx` (editable) and `.pdf` (circulation copy) are built from the PO's
+own edited file, `po_review/BRD_Push_Notification_V1.1_PO_edit.docx`, by
+`build/v11_apply_po_review.py` — surgical edits only, never a regeneration over her work
+(her cuts, red TBC wording, cover and sensitivity labels are all kept). Her review comments:
+
+1. **3.1 and 3.2 in one table** — 7 columns on one landscape page with its own full-width
+   footer; widths balanced by a line-wrap simulation, every `%%PLACEHOLDER%%` kept whole.
+2. **No push on the audit trail — tracked in the backend** — section 7 and the Audit Trail
+   composite removed; wording updated in section 1, 4.4, 5, both flows and the impact table.
+3. **Sample request exactly as the middleware** — request and response verbatim from spec v0.1.
+
+Consistency: cover and version history V1.1; sections renumbered (8→6, 9→7), Figure 3→2; TOC
+rebuilt with measured page numbers; dangling references fixed (the removed Source templates
+column, section 10, section 6). Rebuild: `python3 build/v11_apply_po_review.py
+po_review/BRD_Push_Notification_V1.1_PO_edit.docx [--proof DIR]`.
+
+For the next revision, edit the V1.1 Word file (or her newer copy) — not `build_brd.js`,
+which is the V1.0 history below.
+
+## V1.0 · 28 September 2026 — generated
 
 Client-facing BRD for Reem Bank, built from the RF-3306 user story
 (`docs/us/RF-3306_US_Push_Notification.md`) and Avanza's *Reem Payments API — Push
