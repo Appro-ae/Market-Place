@@ -69,8 +69,6 @@ const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title>
 <div class="card" style="left:225px;top:1094px;width:476px;height:68px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
 <div class="sec" style="top:1174px;">Employment Information</div>
 ${card3(225, 476, 'on', 'Company Name', true, `AL FUTTAIM GROUP LLC<span class="caret"></span>`)}
-${card3(721, 476, 'ro', 'Company Name Source', false, `EFR (Sponsor Name)`)}
-${card3(1217, 494, 'ro', 'ALOC', false, `No (68.66%)`)}
 <div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
 <div class="annot" style="left:198px;top:1166px;width:1524px;height:146px;"></div>
 </body></html>`;
