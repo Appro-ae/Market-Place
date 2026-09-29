@@ -143,7 +143,7 @@ After AC2.3 step 1 the new value is the only Employer Name of the application. W
 
 ![SC5 – Application Details › Employment Information after the update](SC5_Application_Details_Employer_Name_Updated.png)
 
-The working value stays in the existing **Company Name** row of the **Employment Information** sub-block (expanded Application Details section); the change is made traceable by a new **Employer Name Update** sub-block below it. Both sub-blocks use the live expanded-section design: bold dark sub-header (same style as "Employment Information" / "Visa & Residency Information (from EFR)") + `Label : Value` rows with the value in bold:
+The working value stays in the existing **Company Name** row of the **Employment Information** sub-block (expanded Application Details section); the change is made traceable by a new **Employer Name Update** sub-block below it. Both sub-blocks use the live expanded-section design: bold dark sub-header (same style as "Employment Information" / "Visa & Residency Information (from EFR)") + `Label : Value` rows with the value in bold. **The view is the only place showing the full picture** (source, classification, original → updated trail) — the Edit pop-up carries the single editable field only (AC1):
 
 | Field (Application Details › Employment Information) | Value after the edit | Source |
 | --- | --- | --- |
