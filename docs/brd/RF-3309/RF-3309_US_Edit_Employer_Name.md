@@ -38,7 +38,7 @@
 
 ![SC2 – Credit Queue application details with the Edit button](SC2_Credit_Queue_Application_Details_Edit_Button.png)
 
-**SC3 – Edit Application pop-up, Employer Name section** (`SC3_Edit_Application_Popup_Employer_Name.png`)
+**SC3 – Edit Application pop-up, Employment Information section** (`SC3_Edit_Application_Popup_Employer_Name.png`)
 
 ![SC3 – Edit Application pop-up with the new Employer Name section](SC3_Edit_Application_Popup_Employer_Name.png)
 
@@ -176,7 +176,7 @@ The working value stays in the existing **Company Name** row of the **Employment
 | Area | Impact | Screen |
 | --- | --- | --- |
 | Role Management / Permission Matrix | **New permission "Edit Employer Name"** on Credit Queue L1, L2, L3 (Editor group; per product tab as the existing Edit permissions). Permission Matrix page updated. Distinct right — never bundled. | <img src="assets/ia_role_cq.png" width="290"><br>*Role Management › Credit Queue L1 (SC1)* |
-| Edit Application pop-up (Credit Queue) | New **Employer Name** section: editable field pre-populated with the finalized Employer Name, source and current classification as read-only labels; Customer Journey validation (IEM030 / IEM076 / IEM003). Confirmation pop-up note extended with the ALOC re-run. | <img src="assets/ia_edit_popup.png" width="290"><br>*Edit Application › Employer Name (SC3)* |
+| Edit Application pop-up (Credit Queue) | New **Employment Information** section: "Company Name" field pre-populated with the finalized Employer Name, "Company Name Source" and "ALOC" as read-only cards; Customer Journey validation (IEM030 / IEM076 / IEM003). Confirmation pop-up note extended with the ALOC re-run. | <img src="assets/ia_edit_popup.png" width="290"><br>*Edit Application › Employment Information (SC3)* |
 | Employer classification (ALOC / MOD / MOI / Pensioner) | The RF-424 / RF-869 classification step becomes **re-runnable on demand** for one application with a user-provided name; it must overwrite the previous classification results and the RF-869 AC2 fields atomically. | <img src="assets/ia_confirm.png" width="290"><br>*Confirmation before the re-run (SC4)* |
 | Rule Engine & Limit Assignment | Re-run on the new classification against the currently published versions; re-run counter shared with Edit Info / Re-fetch ECB / Retrigger FTS (RF-2682). Recalculation of Calculated Variables and Approved Limit Amount. | <img src="assets/ia_policy.png" width="290"><br>*Strategies › Versions / Audit Trails* |
 | Audit trail | "Edit Information" step with a **dynamic Step Detail** (original → updated Employer Name and classification change) — closes the RF-2827 gap for this field (CR 003). | <img src="assets/ia_history.png" width="290"><br>*Application History (SC6)* |
