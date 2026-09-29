@@ -67,10 +67,10 @@ const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title>
 <div class="cover"></div><div class="ext"></div>
 <div class="sec" style="top:1036px;">Length of Service</div>
 <div class="card" style="left:225px;top:1094px;width:476px;height:68px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
-<div class="sec" style="top:1174px;">Employer Name</div>
-${card3(225, 476, 'on', 'Employer Name', true, `AL FUTTAIM GROUP LLC<span class="caret"></span>`)}
-${card3(721, 476, 'ro', 'Employer Name Source', false, `EFR (Sponsor Name)`)}
-${card3(1217, 494, 'ro', 'Current ALOC Classification', false, `N-ALOC · Category N-ALOC`)}
+<div class="sec" style="top:1174px;">Employment Information</div>
+${card3(225, 476, 'on', 'Company Name', true, `AL FUTTAIM GROUP LLC<span class="caret"></span>`)}
+${card3(721, 476, 'ro', 'Company Name Source', false, `EFR (Sponsor Name)`)}
+${card3(1217, 494, 'ro', 'ALOC', false, `No (68.66%)`)}
 <div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
 <div class="annot" style="left:198px;top:1166px;width:1524px;height:146px;"></div>
 </body></html>`;
@@ -92,7 +92,7 @@ body{background:#5c5c5c;font-family:'Plus Jakarta Sans',sans-serif;position:rela
 .o{border:1px solid #008AAB;color:#008AAB}.f{background:#008AAB;color:#FFF}
 </style></head><body><div class="modal">
 <div class="title">Are you sure you want to update this Application?</div>
-<div class="sub">Employer Name of <b>APP_RB_10092600001281</b> will change from <b>AL FUTTAIM PRIVATE CO LLC</b> to <b>AL FUTTAIM GROUP LLC</b>.</div>
+<div class="sub">Company Name of <b>APP_RB_10092600001281</b> will change from <b>AL FUTTAIM PRIVATE CO LLC</b> to <b>AL FUTTAIM GROUP LLC</b>.</div>
 <div class="warn">Note that the system will re-run the ALOC classification, auto-recalculate the related fields and then re-run the Rule Engine. Please choose carefully!</div>
 <div class="buttons"><div class="btn o">No</div><div class="btn f">Yes</div></div>
 </div></body></html>`;
@@ -107,14 +107,14 @@ const A5_CSS = `
 html,body{margin:0;padding:0;width:1920px;height:1400px;overflow:hidden;background:#fff;}
 body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#404345;}
 .base{position:absolute;left:0;top:0;width:1920px;height:1400px;display:block;}
-.cover{position:absolute;left:140px;top:778px;width:1160px;height:530px;background:#FFF;}
+.cover{position:absolute;left:140px;top:778px;width:1160px;height:514px;background:#FFF;}
 .hdr{position:absolute;left:148px;top:784px;width:1138px;height:64px;border-radius:8px;background:#008AAB;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-sizing:border-box;font-size:15.5px;font-weight:600;color:#FFF;}
 .hdr svg{width:16px;height:9px;}
 .rw{position:absolute;left:148px;width:1138px;height:38px;display:flex;align-items:center;font-size:12.5px;color:#404345;}
 .rw .l{position:absolute;left:26px;font-weight:400;}
 .rw .r{position:absolute;left:462px;font-weight:700;}
 .rw .r.new{color:#008AAB;}
-.subh{position:absolute;left:174px;font-size:13px;font-weight:700;color:#008AAB;}
+.subh{position:absolute;left:174px;font-size:15px;font-weight:700;color:#1E1F20;}
 .toast{position:absolute;right:46px;top:120px;width:430px;height:54px;background:#FFF;border-left:5px solid #2BB673;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.16);display:flex;align-items:center;padding:0 16px;font-size:12.5px;font-weight:600;color:#404345;line-height:1.4;}
 .annot{position:absolute;border:3px solid #FF5500;border-radius:10px;box-sizing:border-box;}
 `;
@@ -123,18 +123,19 @@ const ec5 = `<!doctype html><html><head><meta charset="utf-8"><title>ec5</title>
 <img class="base" src="base/CQ-04f-section-liability-info.png">
 <div class="cover"></div>
 <div class="hdr">Application Details${chevDown('#FFFFFF')}</div>
-${r5(864, 'Employer Name', 'AL FUTTAIM GROUP LLC', true)}
-${r5(902, 'Employer Name Source', 'CREDIT USER', true)}
-${r5(940, 'ALOC Classification', 'ALOC', true)}
-${r5(978, 'Company Category', 'A', true)}
-<div class="subh" style="top:1030px;">Employer Name Update</div>
-${r5(1056, 'Original Employer Name', 'AL FUTTAIM PRIVATE CO LLC', false)}
-${r5(1094, 'Original ALOC Classification', 'N-ALOC · CATEGORY N-ALOC', false)}
-${r5(1132, 'Updated Employer Name', 'AL FUTTAIM GROUP LLC', true)}
-${r5(1170, 'Updated ALOC Classification', 'ALOC · CATEGORY A', true)}
-${r5(1208, 'Updated By', 'FERAS.MATAR@REEMBANK.AE', false)}
-${r5(1246, 'Updated On', '22/09/2026 10:42', false)}
-<div class="annot" style="left:154px;top:1018px;width:1126px;height:278px;"></div>
+<div class="subh" style="top:862px;">Employment Information</div>
+${r5(898, 'Company Name', 'AL FUTTAIM GROUP LLC', false)}
+${r5(932, 'Company Name Source', 'Credit User', false)}
+${r5(966, 'ALOC', 'Yes (95.40%)', false)}
+${r5(1000, 'Pensioner', 'No', false)}
+<div class="subh" style="top:1040px;">Employer Name Update</div>
+${r5(1078, 'Original Company Name', 'AL FUTTAIM PRIVATE CO LLC', false)}
+${r5(1112, 'Original ALOC', 'No (68.66%)', false)}
+${r5(1146, 'Updated Company Name', 'AL FUTTAIM GROUP LLC', false)}
+${r5(1180, 'Updated ALOC', 'Yes (95.40%) · Category A', false)}
+${r5(1214, 'Updated By', 'FERAS.MATAR@REEMBANK.AE', false)}
+${r5(1248, 'Updated On', '22/09/2026 10:42', false)}
+<div class="annot" style="left:154px;top:1030px;width:1126px;height:262px;"></div>
 <div class="toast">✓&nbsp;&nbsp;Application "APP_RB_10092600001281" is updated successfully!</div>
 </body></html>`;
 

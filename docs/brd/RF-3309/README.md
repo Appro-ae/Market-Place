@@ -63,3 +63,15 @@ node build_screens.js             # writes ec*.html and renders the PNGs at devi
 8. EastNets — no re-screening on the edit; the corrected name reaches EastNets through the
    post-decision CIF-update call (RF-2530 re-sends the RF-2194 Add KYC mapping).
 9. Product-tab treatment of the new permission mirrors the live *Edit Length of Service*.
+
+## Design audit (29/09) — aligned to the Credit_Queue_details captures
+
+10. Labels follow the live portal: the pop-up section is **"Employment Information"** (the name
+    of the display sub-block it edits), the input card is **"Company Name"** (the live label of
+    the finalized employer name in Application Details › Employment Information), the source
+    card is **"Company Name Source"** (mirrors the live *Finalized Income Source*), and ALOC
+    displays in the live format `Yes | No (<Rosette match %>)` — e.g. "No (68.66%)".
+11. The Employer Name Update block and the Employment Information rows use the live
+    expanded-section design: bold dark sub-headers (not teal) + `Label : Value` rows with the
+    value in bold. Verified against `Credit_Queue_details.zip` (edit-flow + detail-sections
+    captures, 29/09).
