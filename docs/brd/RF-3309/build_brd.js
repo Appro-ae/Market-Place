@@ -14,12 +14,15 @@ const {
   PageNumber, VerticalAlign, ImageRun,
 } = require('docx');
 
-const TEAL  = '156082';
+const NAVY  = '1A214D';
 const BLUE  = '3B7EF6';
-const BLACK = '000000';
-const GREY  = '595959';
-const BORD  = 'A6A6A6';
-const FONT  = 'Arial';
+const YELLOW= 'FDBA23';
+const LAVEND= 'EDF2FF';
+const TEAL  = NAVY;   // table header fill — Appro navy
+const BLACK = '1A214D';
+const GREY  = '666666';
+const BORD  = 'D9D9D9';
+const FONT  = 'Lato';
 const CONTENT_W = 9026;
 const DIR = __dirname;                       // docs/brd/RF-3309
 const SHARED = path.join(DIR, '..', 'assets'); // logo/contact assets
@@ -29,7 +32,7 @@ function runs(text, o = {}) {
   const out = [];
   for (const part of String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g)) {
     if (!part) continue;
-    if (part.startsWith('**') && part.endsWith('**')) out.push(new TextRun({ ...base, text: part.slice(2, -2), bold: true }));
+    if (part.startsWith('**') && part.endsWith('**')) out.push(new TextRun({ ...base, text: part.slice(2, -2), bold: true, color: NAVY }));
     else if (part.startsWith('*') && part.endsWith('*') && part.length > 2) out.push(new TextRun({ ...base, text: part.slice(1, -1), italics: true }));
     else out.push(new TextRun({ ...base, text: part, bold: !!o.allBold }));
   }
@@ -37,17 +40,25 @@ function runs(text, o = {}) {
 }
 const p = (text, o = {}) => new Paragraph({ children: runs(text, o), spacing: { before: o.before ?? 40, after: o.after ?? 120, line: 264 }, alignment: o.align });
 const spacer = (h = 120) => new Paragraph({ children: [], spacing: { after: h } });
-const h1 = t => new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 300, after: 140 }, children: [new TextRun({ text: t.toUpperCase(), bold: true, size: 26, color: BLACK, font: FONT })] });
-const h2 = t => new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 240, after: 120 }, children: [new TextRun({ text: t, bold: true, size: 22, color: BLACK, font: FONT })] });
+const rule = (hex, after = 120) => new Paragraph({
+  spacing: { before: 0, after },
+  border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: hex, space: 1 } },
+  children: [],
+});
+const h1 = t => [
+  new Paragraph({ heading: HeadingLevel.HEADING_1, spacing: { before: 320, after: 60 }, children: [new TextRun({ text: t.toUpperCase(), bold: true, size: 32, color: BLUE, font: FONT })] }),
+  rule(YELLOW, 140),
+];
+const h2 = t => new Paragraph({ heading: HeadingLevel.HEADING_2, spacing: { before: 260, after: 120 }, children: [new TextRun({ text: t, bold: true, size: 26, color: NAVY, font: FONT })] });
 const bullet = t => new Paragraph({ children: runs(t), bullet: { level: 0 }, spacing: { before: 30, after: 80, line: 264 } });
 const B = { style: BorderStyle.SINGLE, size: 4, color: BORD };
 function tbl(headers, rows, weights) {
   const total = weights.reduce((a, b) => a + b, 0);
   const widths = weights.map(w => Math.round(CONTENT_W * w / total));
   widths[widths.length - 1] = CONTENT_W - widths.slice(0, -1).reduce((a, b) => a + b, 0);
-  const cell = (txt, i, isH) => new TableCell({
+  const cell = (txt, i, isH, fill) => new TableCell({
     width: { size: widths[i], type: WidthType.DXA },
-    shading: { type: ShadingType.CLEAR, fill: isH ? TEAL : 'FFFFFF', color: 'auto' },
+    shading: { type: ShadingType.CLEAR, fill: isH ? TEAL : fill, color: 'auto' },
     margins: { top: 90, bottom: 90, left: 110, right: 110 }, verticalAlign: VerticalAlign.TOP,
     children: [new Paragraph({ spacing: { before: 0, after: 0, line: 252 },
       children: isH ? [new TextRun({ text: String(txt ?? ''), bold: true, size: 21, color: 'FFFFFF', font: FONT })] : runs(String(txt ?? ''), { size: 21 }) })],
@@ -56,8 +67,8 @@ function tbl(headers, rows, weights) {
     columnWidths: widths, width: { size: CONTENT_W, type: WidthType.DXA },
     borders: { top: B, bottom: B, left: B, right: B, insideHorizontal: B, insideVertical: B },
     rows: [
-      new TableRow({ tableHeader: true, cantSplit: true, children: headers.map((hd, i) => cell(hd, i, true)) }),
-      ...rows.map(r => new TableRow({ cantSplit: true, children: r.map((c, i) => cell(c, i, false)) })),
+      new TableRow({ tableHeader: true, cantSplit: true, children: headers.map((hd, i) => cell(hd, i, true, 'FFFFFF')) }),
+      ...rows.map((r, ri) => new TableRow({ cantSplit: true, children: r.map((c, i) => cell(c, i, false, ri % 2 ? 'EDF2FF' : 'FFFFFF')) })),
     ],
   });
 }
@@ -65,15 +76,15 @@ const imgAt = (abs, w, h) => new ImageRun({ data: fs.readFileSync(abs), transfor
 const img = (file, w, h) => imgAt(path.join(DIR, file), w, h);
 const simg = (file, w, h) => imgAt(path.join(SHARED, file), w, h);
 const imgP = (file, w, h, o = {}) => new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: o.before ?? 120, after: o.after ?? 60 }, children: [img(file, w, h)] });
-const caption = t => new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 220 }, children: [new TextRun({ text: t, size: 22, color: BLACK, font: FONT })] });
+const caption = t => new Paragraph({ alignment: AlignmentType.CENTER, spacing: { before: 0, after: 220 }, children: [new TextRun({ text: t, size: 20, italics: true, color: GREY, font: FONT })] });
 function impactTable(rows) {
   const weights = [19, 45, 36];
   const total = weights.reduce((a, b) => a + b, 0);
   const widths = weights.map(w => Math.round(CONTENT_W * w / total));
   widths[2] = CONTENT_W - widths[0] - widths[1];
-  const txtCell = (txt, i, isH) => new TableCell({
+  const txtCell = (txt, i, isH, fill = 'FFFFFF') => new TableCell({
     width: { size: widths[i], type: WidthType.DXA },
-    shading: { type: ShadingType.CLEAR, fill: isH ? TEAL : 'FFFFFF', color: 'auto' },
+    shading: { type: ShadingType.CLEAR, fill: isH ? TEAL : fill, color: 'auto' },
     margins: { top: 90, bottom: 90, left: 110, right: 110 }, verticalAlign: VerticalAlign.TOP,
     children: [new Paragraph({ spacing: { before: 0, after: 0, line: 252 },
       children: isH ? [new TextRun({ text: txt, bold: true, size: 21, color: 'FFFFFF', font: FONT })] : runs(txt, { size: 21 }) })],
@@ -94,7 +105,7 @@ function impactTable(rows) {
     borders: { top: B, bottom: B, left: B, right: B, insideHorizontal: B, insideVertical: B },
     rows: [
       new TableRow({ tableHeader: true, cantSplit: true, children: [txtCell('Area', 0, true), txtCell('Impact', 1, true), txtCell('Screen', 2, true)] }),
-      ...rows.map(r => new TableRow({ cantSplit: true, children: [txtCell(r[0], 0, false), txtCell(r[1], 1, false), imgCell(r[2])] })),
+      ...rows.map((r, ri) => new TableRow({ cantSplit: true, children: [txtCell(r[0], 0, false, ri % 2 ? 'EDF2FF' : 'FFFFFF'), txtCell(r[1], 1, false, ri % 2 ? 'EDF2FF' : 'FFFFFF'), imgCell(r[2])] })),
     ],
   });
 }
@@ -110,8 +121,8 @@ P(
   new Paragraph({ spacing: { after: 0 }, children: [simg('logo_block.png', 170, 102)] }),
   spacer(2300),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [
-    new TextRun({ text: 'Employer Name Edit in', bold: true, size: 56, color: BLUE, font: FONT }),
-    new TextRun({ break: 1, text: 'Credit Queue', bold: true, size: 56, color: BLUE, font: FONT }),
+    new TextRun({ text: 'Employer Name Edit in', bold: true, size: 56, color: NAVY, font: FONT }),
+    new TextRun({ break: 1, text: 'Credit Queue', bold: true, size: 56, color: NAVY, font: FONT }),
   ] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.0', bold: true, size: 44, color: BLUE, font: FONT })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '30 September 2026', size: 22, color: GREY, font: FONT })] }),
@@ -239,7 +250,7 @@ P(
     ['Field', 'Value after the edit'],
     [
       ['Company Name', 'Updated finalized Employer Name — the value the system uses'],
-      ['Company Name Source (new)', 'EFR (Sponsor Name) | Customer Journey | Credit Department (after an edit). AECB is not a source of the finalized Employer Name — the AECB employment-history name is used only for the cross-match inside the Length of Service logic (verified).'],
+      ['Company Name Source (new)', 'EFR (Sponsor Name) | Customer Journey | Credit Department (after an edit).'],
       ['ALOC / Pensioner', 'Re-classified result in the live display format: Yes | No (<match %>)'],
     ],
     [34, 66],

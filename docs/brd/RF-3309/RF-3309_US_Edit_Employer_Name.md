@@ -92,7 +92,7 @@ The fields below sit in the expanded **Application Details** section › **Emplo
 | Field | Value after the edit |
 | --- | --- |
 | Company Name | Updated finalized Employer Name |
-| Company Name Source *(new)* | EFR (Sponsor Name) \| Customer Journey \| **Credit Department** (after an edit). AECB is **not** a source of the finalized Employer Name — verified against RF-174 / RF-1241: the AECB Employment History name is used only for the Rosette cross-match in the Length of Service logic. |
+| Company Name Source *(new)* | EFR (Sponsor Name) \| Customer Journey \| **Credit Department** (after an edit). |
 | ALOC / Pensioner | Re-classified — live format `Yes` \| `No (<match %>)` |
 
 ![SC5 – Application Details after the update](SC5_Application_Details_Employer_Name_Updated.png)
