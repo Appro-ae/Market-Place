@@ -3,18 +3,15 @@
 @font-face{font-family:'Plus Jakarta Sans';font-weight:600;src:url('fonts/plus-jakarta-sans-latin-600-normal.woff2') format('woff2');}
 @font-face{font-family:'Plus Jakarta Sans';font-weight:700;src:url('fonts/plus-jakarta-sans-latin-700-normal.woff2') format('woff2');}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:760px;height:560px}
-body{background:#5c5c5c;font-family:'Plus Jakarta Sans',sans-serif;position:relative;overflow:hidden}
-.modal{position:absolute;left:80px;top:70px;width:600px;height:420px;background:#FFFFFF;border-radius:16px;padding:34px 38px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
-.title{font-size:21px;font-weight:700;line-height:31px;color:#1E1F20}
-.sub{margin-top:16px;font-size:13.5px;font-weight:400;color:#626567;line-height:21px}
-.sub b{color:#404345;font-weight:700}
-.warn{margin-top:18px;font-size:12.5px;color:#7A5A00;background:#FFF7E6;border:1px solid #F5D08A;border-radius:8px;padding:12px 16px;line-height:19px}
-.buttons{position:absolute;right:38px;bottom:32px;display:flex;gap:14px}
-.btn{height:47px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;padding:0 42px}
-.o{border:1px solid #008AAB;color:#008AAB}.f{background:#008AAB;color:#FFF}
+body{background:#5c5c5c;font-family:'Plus Jakarta Sans',sans-serif;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.modal{width:500px;background:#FFFFFF;border-radius:14px;padding:30px 30px 24px;box-shadow:0 6px 24px rgba(0,0,0,.4)}
+.txt{text-align:center;font-size:15px;font-weight:700;line-height:25px;color:#1E1F20}
+.div{border-top:1px solid #E8EAEB;margin:24px 0 18px}
+.buttons{display:flex;gap:14px}
+.btn{flex:1;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:700}
+.o{border:1.5px solid #367E9E;color:#367E9E}.f{background:#367E9E;color:#FFF}
 </style></head><body><div class="modal">
-<div class="title">Are you sure you want to update this Application?</div>
-<div class="sub">Company Name of <b>APP_RB_10092600001281</b> will change from <b>AL FUTTAIM PRIVATE CO LLC</b> to <b>AL FUTTAIM GROUP LLC</b>.</div>
-<div class="warn">Note that the system will re-run the ALOC classification, auto-recalculate the related fields and then re-run the Rule Engine. Please choose carefully!</div>
-<div class="buttons"><div class="btn o">No</div><div class="btn f">Yes</div></div>
+<div class="txt">Are you sure you want to update this APP_RB_10092600001281? Company Name will change from "AL FUTTAIM PRIVATE CO LLC" to "AL FUTTAIM GROUP LLC". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine.</div>
+<div class="div"></div>
+<div class="buttons"><div class="btn o">No</div><div class="btn f">Yes, Save</div></div>
 </div></body></html>

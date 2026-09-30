@@ -40,7 +40,7 @@ Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `
 
 **AC2.1 Validation** — IEM003 / IEM030 / IEM076 as AC1; other edited sections keep their own validations.
 
-**AC2.2 Confirmation** (SC4) — one confirmation for the whole pop-up: *"Are you sure you want to update this \<Application ID\>?"* — sub-text: *Company Name will change from "\<current\>" to "\<new\>"* — note: *Note that the system will re-run the ALOC classification, auto-recalculate the related fields and then re-run the Rule Engine. Please choose carefully!* **No** → back to the pop-up. **Yes** → AC2.3.
+**AC2.2 Confirmation** (SC4) — the existing Edit confirmation component (centered message, No / Yes, Save buttons), one confirmation for the whole pop-up. Message (professionalised — replaces the live "…Please choose carefully!" wording): *"Are you sure you want to update this \<Application ID\>? Company Name will change from "\<current\>" to "\<new\>". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine."* **No** → back to the pop-up. **Yes, Save** → AC2.3.
 
 ![SC4 – Confirmation](SC4_Edit_Employer_Name_Confirmation_Popup.png)
 
@@ -87,7 +87,7 @@ Every consumer reads [Finalized Employer Name] after the edit:
 
 ### AC6: Display in Credit Queue and Application Enquiry
 
-Application Details › **Employment Information** (SC5) — the Edit pop-up carries only the editable field; the full picture is view-only here:
+The fields below sit in the expanded **Application Details** section › **Employment Information** sub-block (SC5). The same section is shown in Credit Queue L1–L3, Risk Queue, Sale Queue, Compliance Queue and **Application Enquiry** (view only) — the enquiry details display the updated values identically, and its Application History shows the Edit Information step (SC6). The Edit pop-up carries only the editable field; the full picture is view-only here:
 
 | Field | Value after the edit |
 | --- | --- |

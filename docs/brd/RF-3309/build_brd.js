@@ -114,7 +114,7 @@ P(
     new TextRun({ break: 1, text: 'Credit Queue', bold: true, size: 56, color: BLUE, font: FONT }),
   ] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.0', bold: true, size: 44, color: BLUE, font: FONT })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '29 September 2026', size: 22, color: GREY, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '30 September 2026', size: 22, color: GREY, font: FONT })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 }, children: [simg('logo_navy.png', 165, 48)] }),
   spacer(3300),
   ctr('This is not a legally binding document', { size: 19 }),
@@ -122,6 +122,17 @@ P(
   spacer(200),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 }, children: [simg('contact_strip.png', 600, 71)] }),
   BREAK(),
+);
+
+/* ---- History of change ---- */
+P(
+  h1('History of Change'),
+  tbl(
+    ['Version', 'Date', 'Author', 'Description'],
+    [['1.0', '30 September 2026', 'Hailey (Appro)', 'Initial version']],
+    [12, 24, 22, 42],
+  ),
+  spacer(200),
 );
 
 /* ---- Feature overview ---- */
@@ -196,10 +207,10 @@ P(
 
 P(
   h2('3. Impact of saving the updated Employer Name'),
-  p("When the user clicks Save, the standard confirmation is shown for the whole pop-up — *'Are you sure you want to update this <Application ID>?'* — with the sub-text *Company Name will change from \"<current>\" to \"<new>\"* and the note *'Note that the system will re-run the ALOC classification, auto-recalculate the related fields and then re-run the Rule Engine. Please choose carefully!'*"),
+  p("When the user clicks Save, the existing Edit confirmation component is shown once for the whole pop-up (centered message, No / Yes, Save buttons): *'Are you sure you want to update this <Application ID>? Company Name will change from \"<current>\" to \"<new>\". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine.'*"),
   imgP('SC4_Edit_Employer_Name_Confirmation_Popup.png', 310, 228),
   caption('SC4: Confirmation before the re-run'),
-  p("On 'Yes', the system executes in order:"),
+  p("On 'Yes, Save', the system executes in order:"),
   tbl(
     ['#', 'System action'],
     [
@@ -221,7 +232,7 @@ P(
 
 P(
   h2('4. Display after the update'),
-  p('Application Details › **Employment Information** (Credit Queue, Risk / Sale / Compliance queues and Application Enquiry) shows the full picture — the Edit pop-up carries only the editable field:'),
+  p('The fields below sit in the expanded **Application Details** section › **Employment Information** sub-block of the application view. The same section is shown in **Credit Queue L1–L3, Risk Queue, Sale Queue, Compliance Queue and Application Enquiry** (view only) — the Edit pop-up carries only the editable field; the full picture is view-only here:'),
   imgP('SC5_Application_Details_Employer_Name_Updated.png', 600, 438),
   caption('SC5: Application Details — Employment Information after the update'),
   tbl(
@@ -236,7 +247,7 @@ P(
   ),
   spacer(120),
   bullet('Repeat edits: the block keeps the first original and the latest updated value; the intermediate values are in the application history.'),
-  bullet("The application history shows the 'Edit Information' step with the old → new values in the step details, followed by the system steps of the re-run."),
+  bullet("**Application Enquiry impact:** the enquiry details display the updated values identically in the same Application Details section, and its Application History shows the 'Edit Information' step with the old → new values in the step details, followed by the system steps of the re-run. No edit is possible from Application Enquiry."),
   imgP('SC6_Application_Enquiry_History_Edit_Employer_Name.png', 600, 338),
   caption('SC6: Application Enquiry — application history with the Edit Information step'),
 );
@@ -287,8 +298,6 @@ P(
     ['Rule Engine & Limit Assignment', 'Re-run on the new classification against the currently published versions; shared re-run counter; recalculation of calculated variables and approved limit.', ['ia_policy.png', 1132, 635, 'Rule Engine — published strategies']],
     ['Application Details display', 'Company Name Source row and the Employer Name Update block on all queue and enquiry views; classification fields refreshed.', ['ia_app_details.png', 1400, 637, 'Application Details › Employment Information (SC5)']],
     ['Audit trail', "'Edit Information' step with a dynamic old → new step detail; the re-run steps log with Action by = System.", ['ia_history.png', 1400, 104, 'Application history (SC6)']],
-    ['Documents', 'CAM report and Affordability Assessment Form regenerated on the edit; the Application Form stays the OTP-time record.', ['ia_services.png', 1160, 520, 'Document generation services']],
-    ['Status model / mobile app / Communication', 'No new Application Status, no mobile-app change, no new email template; the customer is not notified.', ['ia_status.png', 1160, 330, 'Status unchanged by the edit']],
   ]),
 );
 
