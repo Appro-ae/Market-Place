@@ -66,7 +66,7 @@ Cancel → existing confirmation → **Yes** closes the pop-up, nothing changes 
 
 ### AC4: Permission — Role Management (SC1)
 
-New permission **"Edit Employer Name"** — Editor group of Credit Queue L1 / L2 / L3, per product tab, same treatment as "Edit Length of Service" and listed **immediately before it** in the permission list (SC1). **The permissions stay separate** although both fields sit in the one Employment Information section: "Edit Length of Service" governs the Length Of Service field, "Edit Employer Name" governs the Company Name field; TRUE → the field is visible, FALSE → hidden, both FALSE → the section is hidden, all Edit permissions FALSE → Edit button hidden (RF-1501). Permission Matrix updated.
+New permission **"Edit Employer Name"** — Editor group of Credit Queue L1 / L2 / L3. **No product classification** — one permission per queue level, per the live Role Management design — listed **immediately before "Edit Length of Service"** (SC1), same treatment. **The permissions stay separate** although both fields sit in the one Employment Information section: "Edit Length of Service" governs the Length Of Service field, "Edit Employer Name" governs the Company Name field; TRUE → the field is visible, FALSE → hidden, both FALSE → the section is hidden, all Edit permissions FALSE → Edit button hidden (RF-1501). Permission Matrix updated.
 
 ![SC1 – Role Management permission](SC1_Role_Permission_Credit_Queue_Edit_Employer_Name.png)
 

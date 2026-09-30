@@ -172,37 +172,29 @@ ${rowsAEHtml}
 
 // ---------------------------------------------------------------------------
 // SC1 — Role Management › Add Role › Manually Queue › Credit Queue L1
-// (raw 43; card interior redrawn following the real Add Role geometry:
-// teal expanded bar h55, big submenu pills w283 h50 pitch63, Select All +
-// divider, two permission columns with a vertical divider, checkbox 19px)
+// Base: REAL current Role Management capture (no product classification —
+// one permission list per queue level). The right column is redrawn from
+// "Edit Length of Service" down so the new "Edit Employer Name" permission
+// sits immediately before it; checkbox sprite cropped from the base.
 // ---------------------------------------------------------------------------
 const RM_CSS = `
-.cover{position:absolute;left:150px;top:100px;width:1734px;height:800px;background:#FFF;}
-.bar{position:absolute;left:177px;top:125px;width:1682px;height:55px;border-radius:8px;background:#008AAB;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-sizing:border-box;font-size:16px;font-weight:600;color:#FFF;}
-.bar svg{width:17px;height:9px;}
-.srow{position:absolute;left:177px;width:283px;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-sizing:border-box;font-size:14px;font-weight:600;color:#0D0D0D;}
-.srow.sel{background:#008AAB;border-radius:8px;color:#FFF;}
-.cb{position:absolute;width:19px;height:19px;box-sizing:border-box;border-radius:5px;background:#008AAB;}
-.cb svg{position:absolute;left:0;top:0;}
-.lbl{position:absolute;font-size:13px;font-weight:400;color:#0D0D0D;line-height:19px;}
-.hdiv{position:absolute;left:488px;top:262px;width:1347px;height:1px;background:#E6F3F7;}
-.vdiv{position:absolute;left:923px;top:280px;width:1px;height:580px;background:#E6F3F7;}
+html,body{margin:0;padding:0;width:1382px;height:1112px;overflow:hidden;background:#fff;}
+body{position:relative;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+.base{position:absolute;left:0;top:0;width:1382px;height:1112px;display:block;}
+.cover{position:absolute;left:880px;top:320px;width:420px;height:145px;background:#FFF;}
+.prow{position:absolute;display:flex;align-items:center;gap:9px;font-size:15.5px;font-weight:500;color:#333333;}
+.prow img{width:20px;height:20px;display:block;}
+.annot{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
 `;
-const permsRM = ['View Application', 'Action in Application', 'Edit Limit Assignment', 'Edit Finalized Income', 'Edit Liability Info', 'Edit Employer Name', 'Edit Length of Service', 'Edit Other Income and Expenses', 'Delete Document', 'Evaluate Application', 'Refetch AECB', 'Retrigger FTS', 'Download Individual Credit Report'];
-const queuesRM = ['Credit Queue L1', 'Credit Queue L2', 'Credit Queue L3', 'Risk Queue L1', 'Risk Queue L2', 'Risk Queue L3', 'Transaction Posting Queue', 'Disbursement Maker', 'Disbursement Checker', 'Compliance Queue L1'];
-const permColRM = (x, prefix) => permsRM.map((p, i) =>
-  `<div class="cb" style="left:${x}px;top:${281 + i * 46}px;">${TICK}</div><div class="lbl" style="left:${x + 34}px;top:${281 + i * 46}px;">[${prefix}] ${p}</div>`).join('\n');
-const ec1 = `<!doctype html><html><head><meta charset="utf-8"><title>ec1</title><style>${FONT}${PAGE_CSS}${RM_CSS}</style></head><body>
-<img class="base" src="base/43-add-role-permissions-scrolled.png">
+const rmRow = (top, label) =>
+  `<div class="prow" style="left:886px;top:${top}px;"><img src="base/rm_cb.png"><span>${label}</span></div>`;
+const ec1 = `<!doctype html><html><head><meta charset="utf-8"><title>ec1</title><style>${FONT}${RM_CSS}</style></head><body>
+<img class="base" src="base/RM-credit-queue-l1.png">
 <div class="cover"></div>
-<div class="bar"><span>Manually Queue</span>${chevUp('#FFFFFF')}</div>
-${queuesRM.map((q, i) => `<div class="srow${q === 'Credit Queue L1' ? ' sel' : ''}" style="top:${198 + i * 63}px;"><span>${q}</span>${chevRight(q === 'Credit Queue L1' ? '#FFFFFF' : '#0D0D0D')}</div>`).join('\n')}
-<div class="cb" style="left:488px;top:222px;">${TICK}</div><div class="lbl" style="left:522px;top:222px;">Select All</div>
-<div class="hdiv"></div><div class="vdiv"></div>
-${permColRM(488, 'Credit Card')}
-${permColRM(960, 'Personal Loan')}
-<div class="annot" style="left:476px;top:503px;width:420px;height:38px;"></div>
-<div class="annot" style="left:948px;top:503px;width:420px;height:38px;"></div>
+${rmRow(326, 'Edit Employer Name')}
+${rmRow(378, 'Edit Length of Service')}
+${rmRow(430, 'Edit Other Income')}
+<div class="annot" style="left:876px;top:316px;width:280px;height:40px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------
@@ -248,7 +240,7 @@ const ecflow = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,bod
 </svg></body></html>`;
 
 const out = {
-  ec1: ['SC1_Role_Permission_Credit_Queue_Edit_Employer_Name', 1920, 1080, ec1],
+  ec1: ['SC1_Role_Permission_Credit_Queue_Edit_Employer_Name', 1382, 1112, ec1],
   ec2: ['SC2_Credit_Queue_Application_Details_Edit_Button', 1920, 1080, ec2],
   ec3: ['SC3_Edit_Application_Popup_Employer_Name', 1920, 1400, ec3],
   ec4: ['SC4_Edit_Employer_Name_Confirmation_Popup', 760, 560, ec4],

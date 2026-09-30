@@ -172,14 +172,14 @@ P(
 P(
   h1('End-to-End Employer Name Edit Flow from Super Portal'),
   h2('1. Role Management: Edit Employer Name Permission'),
-  bullet("A new role permission named **'Edit Employer Name'** shall be added to the Editor group of **Credit Queue L1, L2 and L3** under the Manually Queue section of Role Management — per product tab ([Credit Card] / [Personal Loan]), listed **immediately before 'Edit Length of Service'** and with the same product-tab treatment."),
+  bullet("A new role permission named **'Edit Employer Name'** shall be added to the Editor group of **Credit Queue L1, L2 and L3** under the Manually Queue section of Role Management — **no product classification**: one permission per queue level, per the live Role Management design — listed **immediately before 'Edit Length of Service'** and with the same treatment."),
   imgP('SC1_Role_Permission_Credit_Queue_Edit_Employer_Name.png', 600, 338),
   caption("SC1: Add Role screen: Manually Queue > Credit Queue > 'Edit Employer Name' permission"),
   tbl(
     ['Permission Value', 'Allowed Actions'],
     [
-      ['[Product] Edit Employer Name = TRUE', 'Users can view and update the Employment Information section of the Edit Application pop-up for that product.'],
-      ['[Product] Edit Employer Name = FALSE', 'The Employment Information section is hidden. A role with all Edit permissions FALSE does not see the Edit button.'],
+      ['Edit Employer Name = TRUE', 'Users can view and update the Company Name field of the Employment Information section in the Edit Application pop-up.'],
+      ['Edit Employer Name = FALSE', 'The Company Name field is hidden (the section is hidden when Edit Length of Service is FALSE too). A role with all Edit permissions FALSE does not see the Edit button.'],
     ],
     [30, 70],
   ),
@@ -291,7 +291,7 @@ P(
   h1('Additional Impact Analysis'),
   p('Beyond the direct scope above, the following areas of the Reem Bank platform are impacted and must be carried into estimation and test scope:'),
   impactTable([
-    ['Role Management / Permission Matrix', "New permission 'Edit Employer Name' on Credit Queue L1–L3 (Editor group, per product tab). A distinct right, never bundled. Permission Matrix page updated.", ['ia_role_cq.png', 1400, 190, 'Role Management › Credit Queue (SC1)']],
+    ['Role Management / Permission Matrix', "New permission 'Edit Employer Name' on Credit Queue L1–L3 (Editor group; one permission per queue level, no product classification). A distinct right, never bundled. Permission Matrix page updated.", ['ia_role_cq.png', 1400, 190, 'Role Management › Credit Queue (SC1)']],
     ['Edit Application pop-up', 'New Employment Information section with the single Company Name field and customer-journey validation.', ['ia_edit_popup.png', 1400, 168, 'Edit Application › Employment Information (SC3)']],
     ['Employer classification', 'The classification step becomes re-runnable on demand for one application with a user-provided name; it overwrites the previous results atomically.', ['ia_confirm.png', 760, 560, 'Confirmation before the re-run (SC4)']],
     ['Rule Engine & Limit Assignment', 'Re-run on the new classification against the currently published versions; shared re-run counter; recalculation of calculated variables and approved limit.', ['ia_policy.png', 1132, 635, 'Rule Engine — published strategies']],
