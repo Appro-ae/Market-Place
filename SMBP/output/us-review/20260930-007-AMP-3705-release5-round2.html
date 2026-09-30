@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release 5 Review — Round 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  h2{font-weight:900;font-size:19px;margin-bottom:10px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:820px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .rag{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .rag.g{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .rag.a{background:#fdba23;color:#1a214d}
+  .rag.r{background:#1a214d;color:#ffffff}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Release 5 CR <span class="b">— Round 2 Review</span></h1></div>
+  <p class="sub"><a href="https://scvaladdin.atlassian.net/browse/AMP-3705">AMP-3705</a> as updated 28 Sep (14 items), reviewed on behalf of Hailey PO against three fresh sources: the latest CJ prototype (offline_3 — <b>byte-identical to offline_2</b>, so all CJ conclusions stand), the FABL requirement set (FABL-1047/1145 First Instalment Date, both Done; FABL-308…1149 disbursement set), and the <a href="https://claude.ai/artifact/8BzA2XUNr7mZTiTChk63Xr">Super Portal mirror</a> latest version (three module changes read at code level). Round 1: <a href="https://claude.ai/artifact/Ce2sg4TWRgcFJexSExiZsi">27 Sep review</a>.</p>
+  <div class="meta"><span class="tag red">Verdict: NOT RELEASE-READY — 6 of 14 items RED</span><span class="tag">3 empty scopes · 1 declared blocker</span><span class="tag">30 Sep 2026 · Nothing posted</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · What changed since Round 1</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Change</th><th>Detail</th><th>Assessment</th></tr></thead>
+    <tbody>
+      <tr><td class="k">CR: +6 items</td><td>3759 (migration), 3760 (mock server), 3761/3762 (queue routing), and 3732/3753 pulled into the release</td><td>3760 is a strong story; 3761/3762 are <b>empty</b>; 3732/3753 carry open P1s from my 27-Sep reviews</td></tr>
+      <tr><td class="k">CR: −2 items</td><td>3754/3755 (ETL Covered-Card pair) removed</td><td><span class="rag g">✓</span> Removes the Round-1 F2 scope contradiction — but 3760's ETB path and the portal's Stage-1 CIF check still assume ETL/dedupe data; confirm sequencing with 3744 (still in, RfD)</td></tr>
+      <tr><td class="k">Portal: new module <code>fabn</code></td><td>Full FAB PL Disbursement Maker/Checker replica (MD08S12/13): CIF&amp;IBAN → STL (NT9 deep link) → Persona → Security Cheque → First Salary Credit; statuses Awaiting Disb. Maker/Checker/RR Account/Fund Holding/Loan Account/DMS/Expired; 30-day expiry (FABL-1149). Sources FABL-308/411/412/614/616/763/1000/1034/1149/306</td><td>This IS the design for empty 3761/3762 — write the USs from it. FAB-specific values (Expat · ≥15,000 · ≤14× · ≥711 · 30d) must become per-bank config</td></tr>
+      <tr><td class="k">Portal: doc matrix v0.8</td><td>13 → <b>23 documents</b> (PL-xx codes), each with stage PRE/AUTH/POST and an Ops O1–O10 / Fulfilment F/R gate; adds Pension Statement, Self-declaration, CASA pack, DDA (UAEDDS), UAEFTS consent, Islamic Murabaha docs, CC-cancellation + cheque-return trackers; new NTB/ETB attribute; per-doc conditions</td><td>DOC011 now "First Salary Transfer Letter" — Round-1 naming finding <span class="rag g">✓ fixed</span>. But 3728 AC2 / 3721 AC9 still describe the old 13-doc world — the engine-ownership P1 got bigger</td></tr>
+      <tr><td class="k">Portal: Ops queue v7</td><td>Checklists split <b>Maker (Ops) vs Checker (Fulfilment)</b> — four-eyes; Checker adds sanctions/PEP recency, no-third-party-beneficiary, offer-match checks</td><td><span class="rag g">✓</span> Sound banking control design; no US yet specifies it (3761/3762)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Item-by-item RAG</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Item</th><th>Status</th><th></th><th>Position</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3721">3721</a> PL Setup — Buyout/Top Up</td><td>Ready for Dev</td><td><span class="rag g">GREEN</span></td><td>Approved 27 Sep. Rider still open: 2× "First Settlement Letter" → "First Salary Transfer Letter" in AC1.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3731">3731</a> EIBOR rename · <a href="https://scvaladdin.atlassian.net/browse/AMP-3729">3729</a> Max-Elig split · <a href="https://scvaladdin.atlassian.net/browse/AMP-3748">3748</a> Product fetching</td><td>RfD / UAT / UAT</td><td><span class="rag g">GREEN</span></td><td>Progressing; no new findings from the fresh sources.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3744">3744</a> ETL table (PL)</td><td>Ready for Dev</td><td><span class="rag a">AMBER</span></td><td>3754/3755 dropped — confirm 3744 alone still feeds Stage-1 CIF (portal) and 3760's ETB dedupe path for this release.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3760">3760</a> Mock server T24</td><td>Draft v0.3</td><td><span class="rag a">AMBER</span></td><td>Best-written story in the CR. But: OQ5 (repayment account, §2.9) is a <b>declared blocker</b>; 13 OQs open; and one new P1 below (trigger vs cooling-off).</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3759">3759</a> SCB v2→v3 migration</td><td>Ready for Dev</td><td><span class="rag r">RED</span></td><td>RfD with a 2-line description + screenshot: no field mapping, no reconciliation ACs, "Channel:" left blank, no rollback plan. Not RfD-quality for a PROD migration.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">3732</a> Settlement screen · <a href="https://scvaladdin.atlassian.net/browse/AMP-3753">3753</a> AECB config</td><td>RtC / To Do</td><td><span class="rag r">RED</span></td><td>All P1s from my 27-Sep reviews open: category scope vs approved 3694, Buyout single-select, G4 'U'-status blocks every customer, 3461/3457 fixed defects re-introduced, G5 not computable. See <a href="https://claude.ai/artifact/UGWBCQthy7kBCAYb331iMH">3732 review</a> + <a href="https://claude.ai/artifact/KgvdcSDbfzcihtw5q8Dtph">gates check</a>.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3728">3728</a> Document mapping</td><td>RtC</td><td><span class="rag r">RED</span></td><td>Now three generations apart: 3728's pricing-factor resolution vs 3721 AC9 checklist vs portal matrix v0.8 (23 docs, stages, Ops/Fulfilment gates, NTB/ETB). Engine ownership must be decided before any of the three builds.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3757">3757</a> Security Cheque gen · <a href="https://scvaladdin.atlassian.net/browse/AMP-3761">3761</a> Ops Queue · <a href="https://scvaladdin.atlassian.net/browse/AMP-3762">3762</a> Fulfilment Queue</td><td>To Do</td><td><span class="rag r">RED</span></td><td><b>Three empty tickets in a PROD release CR.</b> For 3761/3762 the design already exists — the portal's fabn + Maker/Checker modules; write the USs from them (with FAB values as per-bank config). 3757 must also align with 3689 AC1.5 (CJ signs the cheque with the EID signature).</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3722">3722</a> UI feedback</td><td>To Do</td><td><span class="rag a">AMBER</span></td><td>Unchanged since Round 1.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · New findings from the three sources</span>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>Finding</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pr">P1</span></td><td class="k">3760 trigger vs CJ cooling-off</td><td>§2.7/§2.9 fire "after the customer accepts the offer and KFS/AIP". In the approved CJ, accept (3404 AC7) is followed by Insurance → Review → SoC → <b>Customer Declaration (AC11)</b> with a <b>5-day cooling-off option (AC12)</b>. Firing at accept creates a CIF + loan in core banking for a customer who may still cool off or abandon at declaration. Reem's own precedent fires after KFS e-sign + submit. Move the trigger to post-Declaration, after cooling-off is waived or expired, and define the compensating action if it is used.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Status dictionary — now three vocabularies</td><td>fabn statuses (Awaiting Disb. Maker/Checker Action, RR Account, Fund Holding, Loan Account, DMS, Expired), 3760's naming (Awaiting Temenos Response / AMP-3751 codes, OQ22 open) and the SSS model (2195) don't reconcile. One registered status set before 3757/3760/3761/3762 are written.</td></tr>
+      <tr><td><span class="pr">P1</span></td><td class="k">Doc matrix v0.8 has no US home</td><td>The 23-doc, stage-and-gate matrix is the richest definition yet and drives both queues — but no CR story owns it. Either 3728 is rewritten to carry it, or it becomes the config consumed by 3728/3721/3761/3762. Decide the owner now (Round-1 gap, grown).</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">First Instalment Date owner missing</td><td>FABL-1047/1145 (Done) define the FAB logic: salary day +1, 7-day gap rule, grace-period path, month-end → 1st of next month, FTS multi-salary → terminate. In this CR no story computes First Instalment Date for PL B2B (3404 AC9 shows it "retrieved from bank" — i.e. from THIS portal), yet fabn Stage 5 captures First Salary Credit and §2.9 needs effectiveDate. Adapt the FABL logic as the BP calculation story or name its owner.</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">FAB values hardcoded in the portal design</td><td>Persona (Expat · ≥15,000 · ≤14× · ≥711), 30-day expiry, NT9 template — FAB rules replicated as constants. The 3761/3762 USs must make all of them per-bank/per-product config (same lesson as the hard-gates review).</td></tr>
+      <tr><td><span class="pr p2">P2</span></td><td class="k">3760 mock-ID leakage risk</td><td>Own risks R2/R3 are right: mock CIF/loan IDs must be suppressed on customer-facing documents (SoC, letters, notifications) and the two mocks need one CIF number space. Carry both into the ACs, not the risk list.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Fixed since Round 1:</b> FSTL naming in the portal (DOC011) ✓ · 3721 approved and RfD ✓ · 3754/3755 contradiction out of the CR ✓ · Maker/Checker four-eyes added ✓. <b>CJ side:</b> prototype offline_3 is byte-identical to offline_2 — no new CJ behaviour to re-check.</p>
+</section>
+
+<section>
+  <span class="seclabel">04 · Draft CR comment — paste-ready (needs your go)</span>
+  <div class="cmt"><ol>
+    <li><b>Not release-ready:</b> 3 of 14 items are empty (3757, 3761, 3762) and 3759 is RfD with no mapping/reconciliation/rollback content. For 3761/3762 the Super Portal prototype already defines the full design (5-stage disbursement queue + Maker/Checker checklists, per FABL-308…1149) — the USs should be written from it, with the FAB-specific values (persona thresholds, 30-day expiry) as per-bank config.</li>
+    <li><b>3760:</b> good story; OQ5 (repayment account) is a declared blocker for §2.9 — close it at the design review before committing the CR. One addition: the §2.7/§2.9 trigger at offer-accept conflicts with the CJ's Customer Declaration + 5-day cooling-off (3404 AC11/AC12) — recommend firing post-declaration, after cooling-off is waived/expired.</li>
+    <li><b>3732/3753:</b> open P1s from the 27-Sep reviews (settlement scope vs approved 3694, G4 'U'-status default that fails every customer, two re-introduced validated fixes 3461/3457, G5 missing inputs) — must close before dev.</li>
+    <li><b>3728:</b> the portal's doc matrix v0.8 (23 documents with stages and Ops/Fulfilment gates) supersedes both 3728's and 3721 AC9's lists — decide the single document-engine owner.</li>
+    <li><b>Status dictionary:</b> disbursement statuses (fabn), mock-server statuses (3760 OQ22) and SSS (2195) are three vocabularies — register one set before 3757/3760/3761/3762 are specced.</li>
+    <li><b>First Instalment Date:</b> no CR story owns the calculation for PL B2B; adapt FABL-1047/1145.</li>
+  </ol></div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
