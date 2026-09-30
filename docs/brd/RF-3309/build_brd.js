@@ -172,7 +172,7 @@ P(
 P(
   h1('End-to-End Employer Name Edit Flow from Super Portal'),
   h2('1. Role Management: Edit Employer Name Permission'),
-  bullet("A new role permission named **'Edit Employer Name'** shall be added to the Editor group of **Credit Queue L1, L2 and L3** under the Manually Queue section of Role Management — per product tab ([Credit Card] / [Personal Loan]), alongside the existing Edit permissions and with the same product-tab treatment as 'Edit Length of Service'."),
+  bullet("A new role permission named **'Edit Employer Name'** shall be added to the Editor group of **Credit Queue L1, L2 and L3** under the Manually Queue section of Role Management — per product tab ([Credit Card] / [Personal Loan]), listed **immediately before 'Edit Length of Service'** and with the same product-tab treatment."),
   imgP('SC1_Role_Permission_Credit_Queue_Edit_Employer_Name.png', 600, 338),
   caption("SC1: Add Role screen: Manually Queue > Credit Queue > 'Edit Employer Name' permission"),
   tbl(
@@ -189,7 +189,7 @@ P(
 
 P(
   h2('2. Employer Name edit from Credit Queue'),
-  bullet('The existing **Edit** button on the Credit Queue Application Details screen is the entry point. In the Edit Application pop-up, the existing "Length of Service" section is renamed **Employment Information** and holds both employment fields — **Length Of Service (Months)** (existing, unchanged) and the new **Company Name**. Pop-up order: Application Details → Other Income And Expenses → Liability Info → Employment Information.'),
+  bullet('The existing **Edit** button on the Credit Queue Application Details screen is the entry point. In the Edit Application pop-up, the existing "Length of Service" section is renamed **Employment Information** and holds both employment fields — the new **Company Name** followed by **Length Of Service (Months)** (existing, unchanged). Pop-up order: Application Details → Other Income And Expenses → Liability Info → Employment Information.'),
   imgP('SC2_Credit_Queue_Application_Details_Edit_Button.png', 600, 338),
   caption('SC2: Credit Queue — Application Details, Edit entry point'),
   imgP('SC3_Edit_Application_Popup_Employer_Name.png', 600, 438),
@@ -198,7 +198,6 @@ P(
     ['Component', 'Type', 'Mandatory', 'Editable', 'Description'],
     [
       ['Employment Information', 'Section bar', 'N/A', 'N/A', "Renamed from 'Length of Service' — same style and position. Shown when 'Edit Length of Service' or 'Edit Employer Name' is TRUE; each field displays per its own permission."],
-      ['Length Of Service (Months)', 'Input field', 'Yes', 'Yes', "Existing field, behaviour unchanged; governed by the existing 'Edit Length of Service' permission."],
       ['Company Name', 'Input field', 'Yes', 'Yes', "New field, governed by 'Edit Employer Name'. Pre-populated with the current finalized Employer Name. Validation as the customer journey field: alphabetic characters only; maximum 200 characters; blank not allowed. An unchanged value on Save does not trigger the re-run."],
       ['Clear All / Cancel / Save', 'Existing controls', 'N/A', 'N/A', 'Unchanged behaviour: Clear All reloads the stored values; Cancel closes without saving; Save is disabled until a value changes.'],
     ],
@@ -215,12 +214,12 @@ P(
   tbl(
     ['#', 'System action'],
     [
-      ['1', "Override the finalized Employer Name with the input. The first system-derived value is kept as the Original Employer Name together with its original classification. Source is recorded as 'Credit User' with Updated By / Updated On. The government-record and customer-journey source data are not modified."],
+      ['1', "Override the finalized Employer Name with the input. The first system-derived value is kept as the Original Employer Name together with its original classification. Source is recorded as 'Credit Department' with Updated By / Updated On. The government-record and customer-journey source data are not modified."],
       ['2', 'Re-run the employer classification: match the new name against the Empaneled Company list — listed company → ALOC with its category, sector, industry and contact fields; otherwise N-ALOC. Re-evaluate the MOD / MOI / Pensioner flags.'],
       ['3', 'Recalculate the calculated variables and the limit assignment — the classification drives the maximum DBR and the income-multiplier group.'],
       ['4', 'Re-run the Rule Engine (segmentation, filtration, deviation) on the currently published versions. The existing shared re-run counter applies — the same rule as every edit action that re-triggers the Rule Engine (Edit Information, Re-fetch ECB, Retrigger FTS): if the application fails the Rule Engine more than 2 times in total, the system rejects it. Existing platform behaviour, unchanged by this feature.'],
       ['5', "Route the application per the standard routing logic. The status stays 'Awaiting Credit Approval' unless the routing changes it — no new Application Status, no mobile-app impact."],
-      ['6', "Audit trail: Step = 'Edit Information'; Step Detail = 'Employer Name updated from \"<old>\" to \"<new>\" by %Username%. Classification: <original> → <updated>'; Action by = user email."],
+      ['6', "Audit trail: Step = 'Edit Information'; Step Detail = 'Employer Name updated from \"<old>\" (Source: <old source>) to \"<new>\". ALOC updated from <original ALOC> to <updated ALOC>.'; Action by = user email. This step is the traceability record — the old → new trail lives in the application history, not in the Application Details display."],
       ['7', "Loading screen up to 15 seconds; the application is locked during the run ('The Application is in another request processing.')."],
       ['8', "Toaster 'Application \"<Application ID>\" is updated successfully!'; the Application Details, Rule Engine Result and Approve Limit Result sections reload."],
     ],
@@ -233,21 +232,20 @@ P(
 
 P(
   h2('4. Display after the update'),
-  p('The fields below sit in the expanded **Application Details** section › **Employment Information** sub-block of the application view. The same section is shown in **Credit Queue L1–L3, Risk Queue, Sale Queue, Compliance Queue and Application Enquiry** (view only) — the Edit pop-up carries only the editable field; the full picture is view-only here:'),
+  p('The fields below sit in the expanded **Application Details** section › **Employment Information** sub-block of the application view. **Application Details displays details only — no trail block**; the old → new trail lives in the Application Enquiry application history (section 3, step 6). The same section is shown, reading the finalized value, in every view that renders it: **Credit Queue L1–L3, Risk Queue, Sale Queue, Compliance Queue, Termination Queue, Disbursement Maker / Checker and Application Enquiry** (all view only):'),
   imgP('SC5_Application_Details_Employer_Name_Updated.png', 600, 438),
   caption('SC5: Application Details — Employment Information after the update'),
   tbl(
     ['Field', 'Value after the edit'],
     [
       ['Company Name', 'Updated finalized Employer Name — the value the system uses'],
-      ['Company Name Source (new)', 'EFR (Sponsor Name) | Customer Journey | Credit User'],
+      ['Company Name Source (new)', 'EFR (Sponsor Name) | Customer Journey | Credit Department (after an edit). AECB is not a source of the finalized Employer Name — the AECB employment-history name is used only for the cross-match inside the Length of Service logic (verified).'],
       ['ALOC / Pensioner', 'Re-classified result in the live display format: Yes | No (<match %>)'],
-      ['Employer Name Update (new sub-block, shown only after an edit)', 'Original Company Name · Original ALOC · Updated Company Name · Updated ALOC · Updated By · Updated On'],
     ],
     [34, 66],
   ),
   spacer(120),
-  bullet('Repeat edits: the block keeps the first original and the latest updated value; the intermediate values are in the application history.'),
+  bullet('Repeat edits: every edit writes its own Edit Information step — the application history carries the full trail.'),
   bullet("**Application Enquiry impact:** the enquiry details display the updated values identically in the same Application Details section, and its Application History shows the 'Edit Information' step with the old → new values in the step details, followed by the system steps of the re-run. No edit is possible from Application Enquiry."),
   imgP('SC6_Application_Enquiry_History_Edit_Employer_Name.png', 600, 338),
   caption('SC6: Application Enquiry — application history with the Edit Information step'),
@@ -259,7 +257,7 @@ P(
   tbl(
     ['Consumer', 'Behaviour after the edit'],
     [
-      ['Application details (all queues + Application Enquiry)', 'Updated name, re-classified ALOC and the Employer Name Update trail — section 4.'],
+      ['Application details — every view that renders it (Credit / Risk / Sale / Compliance queues, Termination Queue, Disbursement Maker / Checker, Application Enquiry)', 'Updated name and re-classified ALOC — section 4. No change needed per view: they all read the finalized value.'],
       ['CAM report + Affordability Assessment Form', 'Regenerated on the edit, carrying the updated name, classification and recalculated results.'],
       ['Application Form', 'Not regenerated — it remains the record of what the customer submitted at OTP time.'],
       ['Customer Document Stack', 'Generated after the decision — carries the updated value automatically.'],
@@ -297,7 +295,7 @@ P(
     ['Edit Application pop-up', 'New Employment Information section with the single Company Name field and customer-journey validation.', ['ia_edit_popup.png', 1400, 168, 'Edit Application › Employment Information (SC3)']],
     ['Employer classification', 'The classification step becomes re-runnable on demand for one application with a user-provided name; it overwrites the previous results atomically.', ['ia_confirm.png', 760, 560, 'Confirmation before the re-run (SC4)']],
     ['Rule Engine & Limit Assignment', 'Re-run on the new classification against the currently published versions; shared re-run counter; recalculation of calculated variables and approved limit.', ['ia_policy.png', 1132, 635, 'Rule Engine — published strategies']],
-    ['Application Details display', 'Company Name Source row and the Employer Name Update block on all queue and enquiry views; classification fields refreshed.', ['ia_app_details.png', 1400, 637, 'Application Details › Employment Information (SC5)']],
+    ['Application Details display', 'Company Name Source row on every view rendering the section (queues including Termination / Disbursement, Application Enquiry); classification fields refreshed. No trail block — the trail is in the application history only.', ['ia_app_details.png', 1400, 637, 'Application Details › Employment Information (SC5)']],
     ['Audit trail', "'Edit Information' step with a dynamic old → new step detail; the re-run steps log with Action by = System.", ['ia_history.png', 1400, 104, 'Application history (SC6)']],
   ]),
 );

@@ -66,10 +66,10 @@ const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title>
 <img class="base" src="base/CQ-05b-edit-flow-liability.png">
 <div class="cover"></div><div class="ext"></div>
 <div class="sec" style="top:1036px;">Employment Information</div>
-<div class="card" style="left:225px;top:1094px;width:476px;height:70px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
-<div class="card on" style="left:721px;top:1094px;width:476px;height:70px;"><div class="k">Company Name <span class="star">*</span></div><div class="v">AL FUTTAIM GROUP LLC<span class="caret"></span></div></div>
+<div class="card on" style="left:225px;top:1094px;width:476px;height:70px;"><div class="k">Company Name <span class="star">*</span></div><div class="v">AL FUTTAIM GROUP LLC<span class="caret"></span></div></div>
+<div class="card" style="left:721px;top:1094px;width:476px;height:70px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
 <div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
-<div class="annot" style="left:711px;top:1084px;width:496px;height:90px;"></div>
+<div class="annot" style="left:215px;top:1084px;width:496px;height:90px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------
@@ -117,19 +117,15 @@ const ec5 = `<!doctype html><html><head><meta charset="utf-8"><title>ec5</title>
 <img class="base" src="base/CQ-04f-section-liability-info.png">
 <div class="cover"></div>
 <div class="hdr">Application Details${chevDown('#FFFFFF')}</div>
-<div class="subh" style="top:862px;">Employment Information</div>
-${r5(898, 'Company Name', 'AL FUTTAIM GROUP LLC', false)}
-${r5(932, 'Company Name Source', 'Credit User', false)}
-${r5(966, 'ALOC', 'Yes (95.40%)', false)}
-${r5(1000, 'Pensioner', 'No', false)}
-<div class="subh" style="top:1040px;">Employer Name Update</div>
-${r5(1078, 'Original Company Name', 'AL FUTTAIM PRIVATE CO LLC', false)}
-${r5(1112, 'Original ALOC', 'No (68.66%)', false)}
-${r5(1146, 'Updated Company Name', 'AL FUTTAIM GROUP LLC', false)}
-${r5(1180, 'Updated ALOC', 'Yes (95.40%) · Category A', false)}
-${r5(1214, 'Updated By', 'FERAS.MATAR@REEMBANK.AE', false)}
-${r5(1248, 'Updated On', '22/09/2026 10:42', false)}
-<div class="annot" style="left:154px;top:1030px;width:1126px;height:262px;"></div>
+<div class="subh" style="top:866px;">Employment Information</div>
+${r5(906, 'Company Name', 'AL FUTTAIM GROUP LLC', false)}
+${r5(944, 'Company Name Source', 'Credit Department', false)}
+${r5(982, 'ALOC', 'Yes (95.40%)', false)}
+${r5(1020, 'Pensioner', 'No', false)}
+${r5(1058, 'Employment Joining Date', '18-09-2025', false)}
+${r5(1096, 'Contract Type', 'Full time', false)}
+${r5(1134, 'Employment Status', 'Permanent', false)}
+<div class="annot" style="left:154px;top:896px;width:1126px;height:134px;"></div>
 <div class="toast">✓&nbsp;&nbsp;Application "APP_RB_10092600001281" is updated successfully!</div>
 </body></html>`;
 
@@ -140,30 +136,38 @@ ${r5(1248, 'Updated On', '22/09/2026 10:42', false)}
 // columns per the live header positions.
 // ---------------------------------------------------------------------------
 const AE_CSS = `
-.statpatch{position:absolute;left:1488px;top:218px;width:280px;height:28px;background:#FFF;}
-.statval{position:absolute;left:1495px;top:225px;font-size:13px;font-weight:700;color:#404345;-webkit-text-stroke:0.3px #404345;white-space:pre;}
-.tcover{position:absolute;left:145px;top:483px;width:1160px;height:597px;background:#FFF;}
-.row{position:absolute;left:148px;width:1140px;height:74px;font-size:12px;color:#404345;border-bottom:1px solid #F1F2F4;box-sizing:border-box;}
-.row.odd{background:#F5FDFF;}
-.row span{position:absolute;top:50%;transform:translateY(-50%);line-height:1.5;}
-.c0{left:22px;} .c1{left:84px;width:120px;} .c2{left:222px;width:130px;} .c3{left:422px;width:130px;} .c4{left:568px;width:265px;} .c5{left:850px;width:120px;} .c6{left:986px;width:80px;} .c7{left:1085px;width:52px;word-break:break-all;font-size:11px;}
+.patch{position:absolute;background:#FFF;}
+.pv{position:absolute;font-size:12.5px;font-weight:700;color:#1E1F20;white-space:pre;}
+.tcover{position:absolute;left:149px;top:474px;width:1151px;height:566px;background:#FFF;border-radius:0 0 12px 12px;}
+.hrow{position:absolute;left:148px;width:1153px;font-size:12px;color:#404345;border-bottom:1px solid #F1F2F4;box-sizing:border-box;}
+.hrow.odd{background:#F5FDFF;}
+.hrow span{position:absolute;top:50%;transform:translateY(-50%);line-height:1.55;}
+.h0{left:17px;} .h1{left:70px;width:130px;} .h2{left:214px;width:155px;} .h3{left:388px;width:155px;} .h4{left:561px;width:250px;font-size:11.5px;} .h5{left:827px;width:145px;} .h6{left:992px;width:80px;} .h7{left:1082px;width:65px;}
+.pag{position:absolute;left:148px;width:1153px;top:902px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:13px;color:#9AA0A3;}
+.pag .cur{width:28px;height:28px;border-radius:6px;background:#008AAB;color:#FFF;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .annot2{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
 `;
-const rows42 = [
-  ['20', 'Rule Engine Execution', '22/09/2026 09:58:41', '22/09/2026 09:58:44', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', false],
-  ['21', 'Drop to Credit Queue', '22/09/2026 09:58:44', '22/09/2026 09:58:44', 'Different Employer Name than value from EFR', 'Awaiting Credit Approval', 'Successful', 'System', true],
-  ['22', 'Edit Information', '22/09/2026 10:42:10', '22/09/2026 10:42:10', 'Employer Name updated from "AL FUTTAIM PRIVATE CO LLC" to "AL FUTTAIM GROUP LLC". Classification: N-ALOC → ALOC (Category A)', 'Awaiting Credit Approval', 'Successful', 'feras.matar@reembank.ae', false],
-  ['23', 'ALOC Classification', '22/09/2026 10:42:11', '22/09/2026 10:42:12', 'ALOC = 1, Employer Category = A', 'Awaiting Credit Approval', 'Successful', 'System', true],
-  ['24', 'Rule Engine Execution', '22/09/2026 10:42:12', '22/09/2026 10:42:15', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', false],
-  ['25', 'Limit Assignment', '22/09/2026 10:42:15', '22/09/2026 10:42:16', 'Approved Limit Amount recalculated', 'Awaiting Credit Approval', 'Successful', 'System', true],
-  ['26', 'Routing Logic', '22/09/2026 10:42:16', '22/09/2026 10:42:16', 'Application remains in Credit Queue L1', 'Awaiting Credit Approval', 'Successful', 'System', false],
+const rowsAE = [
+  [140, '12', 'Edit Information', '30/09/2026 10:41:02', '30/09/2026 10:41:03', 'Employer Name updated from "AL FUTTAIM PRIVATE CO LLC" (Source: EFR (Sponsor Name)) to "AL FUTTAIM GROUP LLC". ALOC updated from No (68.66%) to Yes (95.40%).', 'Awaiting Credit Approval', 'Successful', 'Feras', true],
+  [64, '13', 'Auto Calculation', '30/09/2026 10:41:03', '30/09/2026 10:41:04', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', false],
+  [64, '14', 'Rule Engine Execution', '30/09/2026 10:41:04', '30/09/2026 10:41:07', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', true],
+  [64, '15', 'Limit Assignment', '30/09/2026 10:41:07', '30/09/2026 10:41:08', 'Approved Limit Amount recalculated', 'Awaiting Credit Approval', 'Successful', 'System', false],
+  [64, '16', 'Routing Logic', '30/09/2026 10:41:08', '30/09/2026 10:41:08', 'Application remains in Credit Queue L1', 'Awaiting Credit Approval', 'Successful', 'System', true],
 ];
+let aeTop = 474;
+const rowsAEHtml = rowsAE.map(r => {
+  const h = r[0], top = aeTop; aeTop += h;
+  return `<div class="hrow${r[9] ? ' odd' : ''}" style="top:${top}px;height:${h}px;">${r.slice(1, 9).map((c, j) => `<span class="h${j}">${c}</span>`).join('')}</div>`;
+}).join('\n');
 const ec6 = `<!doctype html><html><head><meta charset="utf-8"><title>ec6</title><style>${FONT}${PAGE_CSS}${AE_CSS}</style></head><body>
-<img class="base" src="base/42-application-detail.png">
-<div class="statpatch"></div><div class="statval">: AWAITING CREDIT APPROVAL</div>
+<img class="base" src="base/AE-application-details.png">
+<div class="patch" style="left:361px;top:220px;width:259px;height:24px;"></div><div class="pv" style="left:373px;top:225px;">: APP_RB_10092600001281</div>
+<div class="patch" style="left:927px;top:220px;width:269px;height:24px;"></div><div class="pv" style="left:939px;top:225px;">: CREDIT CARD</div>
+<div class="patch" style="left:1494px;top:220px;width:286px;height:24px;"></div><div class="pv" style="left:1506px;top:225px;">: AWAITING CREDIT APPROVAL</div>
 <div class="tcover"></div>
-${rows42.map((r, i) => `<div class="row${r[8] ? ' odd' : ''}" style="top:${483 + i * 74}px;">${r.slice(0, 8).map((c, j) => `<span class="c${j}">${c}</span>`).join('')}</div>`).join('\n')}
-<div class="annot2" style="left:145px;top:628px;width:1146px;height:80px;"></div>
+${rowsAEHtml}
+<div class="pag"><span>&#8592; Previous</span><span class="cur">1</span><span>Next &#8594;</span></div>
+<div class="annot2" style="left:152px;top:478px;width:1147px;height:134px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------
@@ -184,7 +188,7 @@ const RM_CSS = `
 .hdiv{position:absolute;left:488px;top:262px;width:1347px;height:1px;background:#E6F3F7;}
 .vdiv{position:absolute;left:923px;top:280px;width:1px;height:580px;background:#E6F3F7;}
 `;
-const permsRM = ['View Application', 'Action in Application', 'Edit Limit Assignment', 'Edit Finalized Income', 'Edit Liability Info', 'Edit Length of Service', 'Edit Other Income and Expenses', 'Edit Employer Name', 'Delete Document', 'Evaluate Application', 'Refetch AECB', 'Retrigger FTS', 'Download Individual Credit Report'];
+const permsRM = ['View Application', 'Action in Application', 'Edit Limit Assignment', 'Edit Finalized Income', 'Edit Liability Info', 'Edit Employer Name', 'Edit Length of Service', 'Edit Other Income and Expenses', 'Delete Document', 'Evaluate Application', 'Refetch AECB', 'Retrigger FTS', 'Download Individual Credit Report'];
 const queuesRM = ['Credit Queue L1', 'Credit Queue L2', 'Credit Queue L3', 'Risk Queue L1', 'Risk Queue L2', 'Risk Queue L3', 'Transaction Posting Queue', 'Disbursement Maker', 'Disbursement Checker', 'Compliance Queue L1'];
 const permColRM = (x, prefix) => permsRM.map((p, i) =>
   `<div class="cb" style="left:${x}px;top:${281 + i * 46}px;">${TICK}</div><div class="lbl" style="left:${x + 34}px;top:${281 + i * 46}px;">[${prefix}] ${p}</div>`).join('\n');
@@ -197,8 +201,8 @@ ${queuesRM.map((q, i) => `<div class="srow${q === 'Credit Queue L1' ? ' sel' : '
 <div class="hdiv"></div><div class="vdiv"></div>
 ${permColRM(488, 'Credit Card')}
 ${permColRM(960, 'Personal Loan')}
-<div class="annot" style="left:476px;top:596px;width:420px;height:38px;"></div>
-<div class="annot" style="left:948px;top:596px;width:420px;height:38px;"></div>
+<div class="annot" style="left:476px;top:503px;width:420px;height:38px;"></div>
+<div class="annot" style="left:948px;top:503px;width:420px;height:38px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------
