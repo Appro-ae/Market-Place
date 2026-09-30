@@ -207,3 +207,81 @@ after sign-off"):
 - Deliverables checklist: BRD .docx + .pdf (dated cover) · US markdown
   in repo (images inline) + Jira description in sync · screens zip ·
   everything committed and pushed · files sent to Hailey in chat.
+
+## RF-3309 learnings (Employer Name edit, Sep 2026) — approved output
+
+Rules corrected or confirmed explicitly during the RF-3309 engagement.
+They extend Set 1; where they conflict with older habits, these win.
+
+### US writing style — LEAN (her strongest correction)
+
+- **She hates long, redundant user stories.** Target ~1,500 words. Cut:
+  rationale prose, "PO decision" narrations, precedent explanations,
+  "naming mirrors X" justifications, duplicated statements across ACs.
+  A decision is stated ONCE, as a rule, in the AC it governs.
+- At most one load-bearing reference per table row; drop the rest.
+- Dependencies table: only the tickets a developer actually needs
+  (~6 rows), not the full board scan.
+- Verified facts are stated as facts — the verification method and the
+  negative findings stay OUT of the document (she deleted an "AECB is
+  not a source because…" explanation). Verify in the dashboard, write
+  only the conclusion.
+
+### Design verification before writing
+
+- Always audit requirements against the NEWEST UAT capture set before
+  finalising; ask for fresh zips when screens matter. Field labels and
+  value formats follow the live portal, not the business term: the
+  finalized employer name displays as **Company Name** (Employment
+  Information sub-block), ALOC displays as `Yes | No (<match %>)`,
+  source rows mirror the live "Finalized Income Source" pattern.
+- Measure captures with PIL pixel scans before compositing; composite
+  over the exact real surface (the newest capture of that screen), and
+  re-base old composites when she sends newer captures.
+
+### Edit pop-up patterns (Credit Queue)
+
+- An Edit section shows **only the editable field(s)** — no read-only
+  context cards; the full picture stays in the view (Application
+  Details).
+- Related fields merge into ONE section named after the display
+  sub-block it edits (e.g. Employment Information = Company Name +
+  Length Of Service), while the Role Management **permissions stay
+  separate per field**; a new permission is listed immediately beside
+  its sibling permission.
+- The Save confirmation is the existing component and stays **generic**
+  (one message for the whole pop-up, not field-specific): centered bold
+  text, No / "Yes, Save" buttons. Professionalise live wording — never
+  "Please choose carefully!".
+- The edit source value is **"Credit Department"** (not "Credit User").
+
+### Display and trail
+
+- **Application Details displays details only — never a trail block.**
+  The old → new trail lives solely in the Application Enquiry ›
+  Application History.
+- Audit Step Detail is structured, not a paragraph: bold field labels on
+  separate lines — `Employer Name: updated from "<old>" (Source: <old
+  source>) to "<new>"` / `ALOC: updated from <old> to <new>`.
+- When listing where a value displays, name EVERY view that renders the
+  section (Credit/Risk/Sale/Compliance queues, Termination Queue,
+  Disbursement Maker/Checker, Application Enquiry) and state that no
+  per-view change is needed when they all read the finalized value.
+
+### BRD additions (she approved this output)
+
+- **Keep the house template styling — never restyle.** A brand-styled
+  variant (Lato/blue-yellow) was explicitly reverted: Arial, black CAPS
+  H1s, `#156082` table headers, thin grey borders stay.
+- Add a **History of Change** table right after the cover: Version |
+  Date | Author | Description, author "Hailey (Appro)".
+- Per-feature generator `docs/brd/<TICKET>/build_brd.js` reusing the
+  shared helpers and `docs/brd/assets` cover/footer art; proof every
+  page via PDF renders (blank pages, mid-word header wraps → widen the
+  column, orphan rows).
+- Impact Analysis carries only rows with a real impact — a "no impact"
+  row (status model, unrelated documents diagram) is removed, not
+  explained.
+- One generic confirmation screenshot, real component style; SC images
+  re-rendered and the zip + `ia_*` crops refreshed on every content
+  change.
