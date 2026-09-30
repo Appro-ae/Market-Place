@@ -65,12 +65,11 @@ const card3 = (x, w, cls, label, star, inner) =>
 const ec3 = `<!doctype html><html><head><meta charset="utf-8"><title>ec3</title><style>${FONT}${M3_CSS}</style></head><body>
 <img class="base" src="base/CQ-05b-edit-flow-liability.png">
 <div class="cover"></div><div class="ext"></div>
-<div class="sec" style="top:1036px;">Length of Service</div>
-<div class="card" style="left:225px;top:1094px;width:476px;height:68px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
-<div class="sec" style="top:1174px;">Employment Information</div>
-${card3(225, 476, 'on', 'Company Name', true, `AL FUTTAIM GROUP LLC<span class="caret"></span>`)}
+<div class="sec" style="top:1036px;">Employment Information</div>
+<div class="card" style="left:225px;top:1094px;width:476px;height:70px;"><div class="k">Length Of Service (Months) <span class="star">*</span></div><div class="v">12</div></div>
+<div class="card on" style="left:721px;top:1094px;width:476px;height:70px;"><div class="k">Company Name <span class="star">*</span></div><div class="v">AL FUTTAIM GROUP LLC<span class="caret"></span></div></div>
 <div class="foot"><span class="clr" style="margin-right:auto;">Clear All</span><div class="fb o">Cancel</div><div class="fb f">Save</div></div>
-<div class="annot" style="left:198px;top:1166px;width:1524px;height:146px;"></div>
+<div class="annot" style="left:711px;top:1084px;width:496px;height:90px;"></div>
 </body></html>`;
 
 // ---------------------------------------------------------------------------

@@ -140,7 +140,7 @@ P(
   h1('Employer Name Edit in Credit Queue'),
   h2('FEATURE OVERVIEW'),
   p('This document describes the Super Portal capability that allows authorised Credit users to **correct the Employer Name** of an application while it sits in the Credit Queue. Today the Employer Name is system-derived and locked — from the government employment record (sponsor name) or from the customer input — although it drives the employer classification (ALOC), the related company attributes, the Rule Engine evaluation and the maximum DBR used by limit assignment. A wrong employer name today leaves the Credit user only two options: decide the case on non-listed-company terms, or reject it. Key steps are as following:'),
-  bullet("Credit user with the 'Edit Employer Name' permission opens the existing Edit Application pop-up in Credit Queue and corrects the Company Name in the new Employment Information section."),
+  bullet("Credit user with the 'Edit Employer Name' permission opens the existing Edit Application pop-up in Credit Queue and corrects the Company Name in the Employment Information section (the renamed Length of Service section, now holding both employment fields)."),
   bullet('On save and confirmation, the system overrides the finalized Employer Name, re-runs the employer classification (ALOC and MOD / MOI / Pensioner flags), recalculates the related fields and re-runs the Rule Engine.'),
   bullet('The application details display the updated name, the re-classified result and a full original → updated trail; every downstream consumer of the Employer Name reads the corrected value.'),
   imgP('Flow_Edit_Employer_Name.png', 600, 223, { before: 200 }),
@@ -184,12 +184,12 @@ P(
     [30, 70],
   ),
   spacer(80),
-  p('*The permission is a distinct right — never bundled with Evaluate Application or Send Application. The Permission Matrix reference page shall be updated.*', { size: 21 }),
+  p("*The permission is a distinct right — never bundled with Evaluate Application or Send Application, and it stays separate from 'Edit Length of Service' although both fields sit in the one Employment Information section: each permission governs its own field. The Permission Matrix reference page shall be updated.*", { size: 21 }),
 );
 
 P(
   h2('2. Employer Name edit from Credit Queue'),
-  bullet('The existing **Edit** button on the Credit Queue Application Details screen is the entry point. The Edit Application pop-up gains a new section **Employment Information**, placed after Length of Service, holding a single editable field.'),
+  bullet('The existing **Edit** button on the Credit Queue Application Details screen is the entry point. In the Edit Application pop-up, the existing "Length of Service" section is renamed **Employment Information** and holds both employment fields — **Length Of Service (Months)** (existing, unchanged) and the new **Company Name**. Pop-up order: Application Details → Other Income And Expenses → Liability Info → Employment Information.'),
   imgP('SC2_Credit_Queue_Application_Details_Edit_Button.png', 600, 338),
   caption('SC2: Credit Queue — Application Details, Edit entry point'),
   imgP('SC3_Edit_Application_Popup_Employer_Name.png', 600, 438),
@@ -197,8 +197,9 @@ P(
   tbl(
     ['Component', 'Type', 'Mandatory', 'Editable', 'Description'],
     [
-      ['Employment Information', 'Section bar', 'N/A', 'N/A', "Same style as the existing section bars. Shown only when the user's role has 'Edit Employer Name' = TRUE."],
-      ['Company Name', 'Input field', 'Yes', 'Yes', 'The only field of the section. Pre-populated with the current finalized Employer Name. Validation as the customer journey field: alphabetic characters only; maximum 200 characters; blank not allowed. An unchanged value on Save does not trigger the re-run.'],
+      ['Employment Information', 'Section bar', 'N/A', 'N/A', "Renamed from 'Length of Service' — same style and position. Shown when 'Edit Length of Service' or 'Edit Employer Name' is TRUE; each field displays per its own permission."],
+      ['Length Of Service (Months)', 'Input field', 'Yes', 'Yes', "Existing field, behaviour unchanged; governed by the existing 'Edit Length of Service' permission."],
+      ['Company Name', 'Input field', 'Yes', 'Yes', "New field, governed by 'Edit Employer Name'. Pre-populated with the current finalized Employer Name. Validation as the customer journey field: alphabetic characters only; maximum 200 characters; blank not allowed. An unchanged value on Save does not trigger the re-run."],
       ['Clear All / Cancel / Save', 'Existing controls', 'N/A', 'N/A', 'Unchanged behaviour: Clear All reloads the stored values; Cancel closes without saving; Save is disabled until a value changes.'],
     ],
     [16, 12, 16, 12, 44],
@@ -217,7 +218,7 @@ P(
       ['1', "Override the finalized Employer Name with the input. The first system-derived value is kept as the Original Employer Name together with its original classification. Source is recorded as 'Credit User' with Updated By / Updated On. The government-record and customer-journey source data are not modified."],
       ['2', 'Re-run the employer classification: match the new name against the Empaneled Company list — listed company → ALOC with its category, sector, industry and contact fields; otherwise N-ALOC. Re-evaluate the MOD / MOI / Pensioner flags.'],
       ['3', 'Recalculate the calculated variables and the limit assignment — the classification drives the maximum DBR and the income-multiplier group.'],
-      ['4', 'Re-run the Rule Engine (segmentation, filtration, deviation) on the currently published versions. The shared re-run counter applies; more than 2 Rule Engine failures reject the application.'],
+      ['4', 'Re-run the Rule Engine (segmentation, filtration, deviation) on the currently published versions. The existing shared re-run counter applies — the same rule as every edit action that re-triggers the Rule Engine (Edit Information, Re-fetch ECB, Retrigger FTS): if the application fails the Rule Engine more than 2 times in total, the system rejects it. Existing platform behaviour, unchanged by this feature.'],
       ['5', "Route the application per the standard routing logic. The status stays 'Awaiting Credit Approval' unless the routing changes it — no new Application Status, no mobile-app impact."],
       ['6', "Audit trail: Step = 'Edit Information'; Step Detail = 'Employer Name updated from \"<old>\" to \"<new>\" by %Username%. Classification: <original> → <updated>'; Action by = user email."],
       ['7', "Loading screen up to 15 seconds; the application is locked during the run ('The Application is in another request processing.')."],

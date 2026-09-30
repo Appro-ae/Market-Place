@@ -22,7 +22,7 @@
 
 ### AC1: Employment Information section in the Edit Application pop-up
 
-**Navigation:** Queue → Credit Queue (L1 / L2 / L3) → select application → **Edit** → Edit Application pop-up → new section **"Employment Information"** after "Length of Service" (SC3).
+**Navigation:** Queue → Credit Queue (L1 / L2 / L3) → select application → **Edit** → Edit Application pop-up → the existing "Length of Service" section is renamed **"Employment Information"** and holds both employment fields: **Length Of Service (Months)** (existing, unchanged) and the new **Company Name** (SC3). Pop-up order: Application Details → Other Income And Expenses → Liability Info → Employment Information.
 
 ![SC2 – Edit entry point](SC2_Credit_Queue_Application_Details_Edit_Button.png)
 
@@ -30,8 +30,9 @@
 
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
-| Employment Information | Section bar | N/A | N/A | Same style as the existing section bars. Shown only when the user's role has "Edit Employer Name" = TRUE (AC4). |
-| Company Name | Input field card | Yes | Yes | The only field of the section. Pre-populated with the current finalized Employer Name ([CompanyName], RF-174). Validation as the Customer Journey field: alphabetic only → **IEM030**; max 200 characters → **IEM076**; blank → **IEM003**. Unchanged value on Save → the Employer Name re-run is skipped. |
+| Employment Information | Section bar | N/A | N/A | Renamed from "Length of Service" — same style and position. Shown when "Edit Length of Service" or "Edit Employer Name" is TRUE; each field displays per its own permission (AC4). |
+| Length Of Service (Months) | Input field card | Yes | Yes | Existing field, behaviour unchanged (RF-1492); governed by the existing "Edit Length of Service" permission. |
+| Company Name | Input field card | Yes | Yes | New field, governed by "Edit Employer Name". Pre-populated with the current finalized Employer Name ([CompanyName], RF-174). Validation as the Customer Journey field: alphabetic only → **IEM030**; max 200 characters → **IEM076**; blank → **IEM003**. Unchanged value on Save → the Employer Name re-run is skipped. |
 | Clear All / Cancel / Save | Existing controls | N/A | N/A | Unchanged behaviour (RF-1492): Clear All reloads stored values; Cancel → AC3; Save disabled until a value changes → AC2. |
 
 Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `Awaiting Credit Approval`. Existing Edit restrictions apply unchanged (FTS pending, application locked by another request, no permission, other queues view-only).
@@ -51,7 +52,7 @@ Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `
 | 1 | Override [Finalized Employer Name] with the input; keep the first system-derived value as [Original Employer Name] + [Original ALOC]. Set [Employer Name Source] = "Credit User", Updated By / Updated On. EFR and Customer Journey source data are not modified. | RF-174 |
 | 2 | Re-run the employer classification: Rosette match vs Empaneled Company list (score ≥ 0.9, Category ≠ NON-ALOC → ALOC + company fields; else N-ALOC). Re-evaluate MOD / MOI / Pensioner flags. | RF-424, RF-869 |
 | 3 | Recalculate Calculated Variables and Limit Assignment (classification drives max DBR and multiplier group). | RF-2682 |
-| 4 | Re-run the Rule Engine (Segmentation / Filtration / Deviation) on the published versions. Shared re-run counter applies; > 2 failures → Rejected. | RF-2682 |
+| 4 | Re-run the Rule Engine (Segmentation / Filtration / Deviation) on the published versions. The existing shared re-run counter applies — same rule as every action that re-triggers the RE (Edit Information / Re-fetch ECB / Retrigger FTS): > 2 RE failures in total → system rejects (existing behaviour, unchanged). | RF-2682 |
 | 5 | Routing per current logic; status stays `Awaiting Credit Approval` unless routing changes it. No new status. | RF-177 |
 | 6 | Audit trail: [Step] = "Edit Information"; [Step Detail] = *Employer Name updated from "\<old\>" to "\<new\>" by %Username%. Classification: \<original\> → \<updated\>*; [Action by] = user email. | CR 003 |
 | 7 | Loading up to 15s; application locked during the run ("The Application is in another request processing."). | RF-2682 |
@@ -66,7 +67,7 @@ Cancel → existing confirmation → **Yes** closes the pop-up, nothing changes 
 
 ### AC4: Permission — Role Management (SC1)
 
-New permission **"Edit Employer Name"** — Editor group of Credit Queue L1 / L2 / L3, per product tab, same treatment as "Edit Length of Service". TRUE → section visible; FALSE → hidden; all Edit permissions FALSE → Edit button hidden (RF-1501). Permission Matrix updated.
+New permission **"Edit Employer Name"** — Editor group of Credit Queue L1 / L2 / L3, per product tab, same treatment as "Edit Length of Service". **The permissions stay separate** although both fields sit in the one Employment Information section: "Edit Length of Service" governs the Length Of Service field, "Edit Employer Name" governs the Company Name field; TRUE → the field is visible, FALSE → hidden, both FALSE → the section is hidden, all Edit permissions FALSE → Edit button hidden (RF-1501). Permission Matrix updated.
 
 ![SC1 – Role Management permission](SC1_Role_Permission_Credit_Queue_Edit_Employer_Name.png)
 
@@ -108,7 +109,7 @@ The fields below sit in the expanded **Application Details** section › **Emplo
 | Area | Impact | Screen |
 | --- | --- | --- |
 | Role Management / Permission Matrix | New permission "Edit Employer Name" on Credit Queue L1–L3 | SC1 |
-| Edit Application pop-up | New Employment Information section, single Company Name field | SC3 |
+| Edit Application pop-up | "Length of Service" section renamed Employment Information; new Company Name field beside Length Of Service (Months) | SC3 |
 | Employer classification | ALOC / MOD / MOI / Pensioner re-runnable on demand per application | SC4 |
 | Rule Engine & Limit Assignment | Re-run on the new classification; shared re-run counter | — |
 | Audit trail | "Edit Information" step with dynamic old → new Step Detail | SC6 |
