@@ -207,7 +207,7 @@ P(
 
 P(
   h2('3. Impact of saving the updated Employer Name'),
-  p("When the user clicks Save, the existing Edit confirmation component is shown once for the whole pop-up (centered message, No / Yes, Save buttons): *'Are you sure you want to update this <Application ID>? Company Name will change from \"<current>\" to \"<new>\". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine.'*"),
+  p("When the user clicks Save, the existing Edit confirmation component is shown once for the whole pop-up — one generic message, not specific to any edited field (centered message, No / Yes, Save buttons): *'Are you sure you want to update this <Application ID>? The system will automatically recalculate the related fields and re-run the Rule Engine.'*"),
   imgP('SC4_Edit_Employer_Name_Confirmation_Popup.png', 310, 228),
   caption('SC4: Confirmation before the re-run'),
   p("On 'Yes, Save', the system executes in order:"),

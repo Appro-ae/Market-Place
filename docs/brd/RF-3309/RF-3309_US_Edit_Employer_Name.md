@@ -40,7 +40,7 @@ Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `
 
 **AC2.1 Validation** — IEM003 / IEM030 / IEM076 as AC1; other edited sections keep their own validations.
 
-**AC2.2 Confirmation** (SC4) — the existing Edit confirmation component (centered message, No / Yes, Save buttons), one confirmation for the whole pop-up. Message (professionalised — replaces the live "…Please choose carefully!" wording): *"Are you sure you want to update this \<Application ID\>? Company Name will change from "\<current\>" to "\<new\>". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine."* **No** → back to the pop-up. **Yes, Save** → AC2.3.
+**AC2.2 Confirmation** (SC4) — the existing Edit confirmation component (centered message, No / Yes, Save buttons), one **generic** confirmation for the whole pop-up — not specific to any edited field. Message (professionalised — replaces the live "…Please choose carefully!" wording): *"Are you sure you want to update this \<Application ID\>? The system will automatically recalculate the related fields and re-run the Rule Engine."* **No** → back to the pop-up. **Yes, Save** → AC2.3.
 
 ![SC4 – Confirmation](SC4_Edit_Employer_Name_Confirmation_Popup.png)
 

@@ -87,7 +87,7 @@ body{background:#5c5c5c;font-family:'Plus Jakarta Sans',sans-serif;position:rela
 .btn{flex:1;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14.5px;font-weight:700}
 .o{border:1.5px solid #367E9E;color:#367E9E}.f{background:#367E9E;color:#FFF}
 </style></head><body><div class="modal">
-<div class="txt">Are you sure you want to update this APP_RB_10092600001281? Company Name will change from "AL FUTTAIM PRIVATE CO LLC" to "AL FUTTAIM GROUP LLC". The system will re-run the ALOC classification, recalculate the related fields and re-run the Rule Engine.</div>
+<div class="txt">Are you sure you want to update this APP_RB_10092600001281? The system will automatically recalculate the related fields and re-run the Rule Engine.</div>
 <div class="div"></div>
 <div class="buttons"><div class="btn o">No</div><div class="btn f">Yes, Save</div></div>
 </div></body></html>`;
