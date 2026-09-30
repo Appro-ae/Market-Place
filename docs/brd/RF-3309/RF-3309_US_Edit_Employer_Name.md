@@ -53,7 +53,7 @@ Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `
 | 3 | Recalculate Calculated Variables and Limit Assignment (classification drives max DBR and multiplier group). | RF-2682 |
 | 4 | Re-run the Rule Engine (Segmentation / Filtration / Deviation) on the published versions. The existing shared re-run counter applies — same rule as every action that re-triggers the RE (Edit Information / Re-fetch ECB / Retrigger FTS): > 2 RE failures in total → system rejects (existing behaviour, unchanged). | RF-2682 |
 | 5 | Routing per current logic; status stays `Awaiting Credit Approval` unless routing changes it. No new status. | RF-177 |
-| 6 | Audit trail: [Step] = "Edit Information"; [Step Detail] = *Employer Name updated from "\<old\>" (Source: \<old source\>) to "\<new\>". ALOC updated from \<original ALOC\> to \<updated ALOC\>.*; [Action by] = user email. This step is the traceability record — the old → new trail lives in the Application History, not in the Application Details display. | CR 003 |
+| 6 | Audit trail: [Step] = "Edit Information"; [Step Detail] on two lines — *Employer Name: updated from "\<old\>" (Source: \<old source\>) to "\<new\>"* / *ALOC: updated from \<original ALOC\> to \<updated ALOC\>*; [Action by] = user email. This step is the traceability record — the old → new trail lives in the Application History, not in the Application Details display. | CR 003 |
 | 7 | Loading up to 15s; application locked during the run ("The Application is in another request processing."). | RF-2682 |
 | 8 | Toaster **IM004**; Application Details, Rule Engine Result and Approve Limit Result reload (SC5). | IM004 |
 

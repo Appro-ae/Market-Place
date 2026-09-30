@@ -142,13 +142,13 @@ const AE_CSS = `
 .hrow{position:absolute;left:148px;width:1153px;font-size:12px;color:#404345;border-bottom:1px solid #F1F2F4;box-sizing:border-box;}
 .hrow.odd{background:#F5FDFF;}
 .hrow span{position:absolute;top:50%;transform:translateY(-50%);line-height:1.55;}
-.h0{left:17px;} .h1{left:70px;width:130px;} .h2{left:214px;width:155px;} .h3{left:388px;width:155px;} .h4{left:561px;width:250px;font-size:11.5px;} .h5{left:827px;width:145px;} .h6{left:992px;width:80px;} .h7{left:1082px;width:65px;}
+.h0{left:17px;} .h1{left:70px;width:130px;} .h2{left:214px;width:155px;} .h3{left:388px;width:155px;} .h4{left:561px;width:250px;font-size:11.5px;} .h4 b{font-weight:700;color:#1E1F20;} .h5{left:827px;width:145px;} .h6{left:992px;width:80px;} .h7{left:1082px;width:65px;}
 .pag{position:absolute;left:148px;width:1153px;top:902px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:13px;color:#9AA0A3;}
 .pag .cur{width:28px;height:28px;border-radius:6px;background:#008AAB;color:#FFF;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .annot2{position:absolute;border:3px solid #FF5500;border-radius:8px;box-sizing:border-box;}
 `;
 const rowsAE = [
-  [140, '12', 'Edit Information', '30/09/2026 10:41:02', '30/09/2026 10:41:03', 'Employer Name updated from "AL FUTTAIM PRIVATE CO LLC" (Source: EFR (Sponsor Name)) to "AL FUTTAIM GROUP LLC". ALOC updated from No (68.66%) to Yes (95.40%).', 'Awaiting Credit Approval', 'Successful', 'Feras', true],
+  [120, '12', 'Edit Information', '30/09/2026 10:41:02', '30/09/2026 10:41:03', '<b>Employer Name:</b> updated from "AL FUTTAIM PRIVATE CO LLC" (Source: EFR) to "AL FUTTAIM GROUP LLC"<br><b>ALOC:</b> updated from No (68.66%) to Yes (95.40%)', 'Awaiting Credit Approval', 'Successful', 'Feras', true],
   [64, '13', 'Auto Calculation', '30/09/2026 10:41:03', '30/09/2026 10:41:04', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', false],
   [64, '14', 'Rule Engine Execution', '30/09/2026 10:41:04', '30/09/2026 10:41:07', 'Successful', 'Awaiting Credit Approval', 'Successful', 'System', true],
   [64, '15', 'Limit Assignment', '30/09/2026 10:41:07', '30/09/2026 10:41:08', 'Approved Limit Amount recalculated', 'Awaiting Credit Approval', 'Successful', 'System', false],
