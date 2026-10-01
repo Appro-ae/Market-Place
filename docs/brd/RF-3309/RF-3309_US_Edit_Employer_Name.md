@@ -31,7 +31,7 @@
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
 | Employment Information | Section bar | N/A | N/A | Renamed from "Length of Service" — same style and position. Shown when "Edit Length of Service" or "Edit Employer Name" is TRUE; each field displays per its own permission (AC4). |
-| Company Name | Input field card | Yes | Yes | First field of the section, followed by Length Of Service (Months) (existing field, behaviour unchanged per RF-1492, governed by "Edit Length of Service"). Governed by "Edit Employer Name". Pre-populated with the current finalized Employer Name ([CompanyName], RF-174). Validation as the Customer Journey field: alphabetic only → **IEM030**; max 200 characters → **IEM076**; blank → **IEM003**. Unchanged value on Save → the Employer Name re-run is skipped. |
+| Company Name | Search-and-select field | Yes | Yes | Search-and-select over the Empaneled Company List (type-ahead), pre-populated with the current finalized Employer Name ([CompanyName], RF-174); free-text entry only as an exception path, flagged for review (Head of Retail item 1). First field of the section, followed by Length Of Service (Months) (existing field, unchanged per RF-1492, governed by "Edit Length of Service"). Governed by "Edit Employer Name". Validation as the Customer Journey field: alphabetic only → **IEM030**; max 200 characters → **IEM076**; blank → **IEM003**. Unchanged value on Save → the Employer Name re-run is skipped. |
 | Clear All / Cancel / Save | Existing controls | N/A | N/A | Unchanged behaviour (RF-1492): Clear All reloads stored values; Cancel → AC3; Save disabled until a value changes → AC2. |
 
 Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `Awaiting Credit Approval`. Existing Edit restrictions apply unchanged (FTS pending, application locked by another request, no permission, other queues view-only).
@@ -43,6 +43,8 @@ Applicable status: CC and PL — Credit Queue L1 / L2 / L3, Application Status `
 **AC2.2 Confirmation** (SC4) — the existing Edit confirmation component (centered message, No / Yes, Save buttons), one **generic** confirmation for the whole pop-up — not specific to any edited field. Message (professionalised — replaces the live "…Please choose carefully!" wording): *"Are you sure you want to update this \<Application ID\>? The system will automatically recalculate the related fields and re-run the Rule Engine."* **No** → back to the pop-up. **Yes, Save** → AC2.3.
 
 ![SC4 – Confirmation](SC4_Edit_Employer_Name_Confirmation_Popup.png)
+
+**Governing requirement (Head of Retail, 30 Sep):** validation-first, exception-based — a manual amendment never establishes classification by itself; the system validates independently against the Empaneled Company List before anything recalculates, and the whole run executes as one controlled transaction (no partial update).
 
 **AC2.3 System actions on confirmation**, in order:
 

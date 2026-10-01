@@ -113,8 +113,8 @@ P(
     new TextRun({ text: 'Employer Name Edit in', bold: true, size: 56, color: BLUE, font: FONT }),
     new TextRun({ break: 1, text: 'Credit Queue', bold: true, size: 56, color: BLUE, font: FONT }),
   ] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.0', bold: true, size: 44, color: BLUE, font: FONT })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '30 September 2026', size: 22, color: GREY, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.1', bold: true, size: 44, color: BLUE, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '1 October 2026', size: 22, color: GREY, font: FONT })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 }, children: [simg('logo_navy.png', 165, 48)] }),
   spacer(3300),
   ctr('This is not a legally binding document', { size: 19 }),
@@ -129,7 +129,8 @@ P(
   h1('History of Change'),
   tbl(
     ['Version', 'Date', 'Author', 'Description'],
-    [['1.0', '30 September 2026', 'Hailey (Appro)', 'Initial version']],
+    [['1.0', '30 September 2026', 'Hailey (Appro)', 'Initial version'],
+     ['1.1', '1 October 2026', 'Hailey (Appro)', 'Head of Retail review (30 Sep) incorporated — employer search-and-select with exception free-text path, matching rules documented, governing requirements stated, clarifications on re-run counter, concurrency, transaction integrity, source hierarchy and downstream consistency']],
     [12, 24, 22, 42],
   ),
   spacer(200),
@@ -143,6 +144,8 @@ P(
   bullet("Credit user with the 'Edit Employer Name' permission opens the existing Edit Application pop-up in Credit Queue and corrects the Company Name in the Employment Information section (the renamed Length of Service section, now holding both employment fields)."),
   bullet('On save and confirmation, the system overrides the finalized Employer Name, re-runs the employer classification (ALOC and MOD / MOI / Pensioner flags), recalculates the related fields and re-runs the Rule Engine.'),
   bullet('The application details display the updated name, the re-classified result and a full original → updated trail; every downstream consumer of the Employer Name reads the corrected value.'),
+  p('**Governing requirements (Head of Retail, 30 Sep 2026):** *Employer Name amendment follows a validation-first, exception-based model. A manual amendment does not by itself establish employer eligibility or classification: the system independently validates the amended employer against the approved Empaneled Company List before ALOC, the related variables, eligibility or limit are recalculated. Where validation is successful, processing continues straight through.*'),
+  p('*The Employer Name update, employer classification, calculated variables, limit assignment, Rule Engine execution and routing are treated as one controlled transaction: in case of any failure no partial update is committed and the application remains in its last successfully completed state or moves to a controlled recovery status.*'),
   imgP('Flow_Edit_Employer_Name.png', 600, 223, { before: 200 }),
   spacer(80),
   p('Applicable products: **CC, PL**. *(CASA is excluded — it has no credit decisioning; Mortgage Loan and Auto Loan are not yet part of the platform scope.)*'),
@@ -193,7 +196,7 @@ P(
   imgP('SC2_Credit_Queue_Application_Details_Edit_Button.png', 600, 338),
   caption('SC2: Credit Queue — Application Details, Edit entry point'),
   imgP('SC3_Edit_Application_Popup_Employer_Name.png', 600, 438),
-  caption('SC3: Edit Application pop-up — Employment Information section'),
+  caption('SC3: Edit Application pop-up — Employment Information section (employer search-and-select; manual entry as exception)'),
   tbl(
     ['Component', 'Type', 'Mandatory', 'Editable', 'Description'],
     [
@@ -202,6 +205,22 @@ P(
       ['Clear All / Cancel / Save', 'Existing controls', 'N/A', 'N/A', 'Unchanged behaviour: Clear All reloads the stored values; Cancel closes without saving; Save is disabled until a value changes.'],
     ],
     [16, 12, 16, 12, 44],
+  ),
+);
+
+P(
+  h2('Employer matching rules (as implemented)'),
+  tbl(
+    ['Rule', 'Behaviour'],
+    [
+      ['Candidate source', 'Approved Empaneled Company List — active employers only; inactive records are not matched.'],
+      ['Match method', "System matching with a 90% confidence threshold; the selected or typed name is matched against the list — classification is never taken from the typed text itself."],
+      ['Category rule', 'Matched employer must carry a category other than NON-ALOC for an ALOC result; otherwise the application remains N-ALOC.'],
+      ['Trade vs legal name, aliases, Arabic names', 'Matched through the names held in the Empaneled Company List; coverage grows with the Employer Master data (separate governance stream).'],
+      ['Duplicates', 'Highest-scoring active record wins; the matched employer and score are recorded.'],
+      ['No confident match', 'Application remains N-ALOC — no favourable classification can result from an unverified employer.'],
+    ],
+    [26, 74],
   ),
 );
 
@@ -217,10 +236,10 @@ P(
       ['1', "Override the finalized Employer Name with the input. The first system-derived value is kept as the Original Employer Name together with its original classification. Source is recorded as 'Credit Department' with Updated By / Updated On. The government-record and customer-journey source data are not modified."],
       ['2', 'Re-run the employer classification: match the new name against the Empaneled Company list — listed company → ALOC with its category, sector, industry and contact fields; otherwise N-ALOC. Re-evaluate the MOD / MOI / Pensioner flags.'],
       ['3', 'Recalculate the calculated variables and the limit assignment — the classification drives the maximum DBR and the income-multiplier group.'],
-      ['4', 'Re-run the Rule Engine (segmentation, filtration, deviation) on the currently published versions. The existing shared re-run counter applies — the same rule as every edit action that re-triggers the Rule Engine (Edit Information, Re-fetch ECB, Retrigger FTS): if the application fails the Rule Engine more than 2 times in total, the system rejects it. Existing platform behaviour, unchanged by this feature.'],
+      ['4', 'Re-run the Rule Engine (segmentation, filtration, deviation) on the currently published versions. The existing shared re-run counter applies — the same rule as every edit action that re-triggers the Rule Engine (Edit Information, Re-fetch ECB, Retrigger FTS): if the application fails the Rule Engine more than 2 times in total, the system rejects it. The counter counts business Rule Engine outcomes only — technical or integration failures are handled by the platform error handling and never consume the counter or reject the customer. Existing platform behaviour, unchanged by this feature.'],
       ['5', "Route the application per the standard routing logic. The status stays 'Awaiting Credit Approval' unless the routing changes it — no new Application Status, no mobile-app impact."],
       ['6', "Audit trail: Step = 'Edit Information'; Step Detail on two lines — line 1: *Employer Name: updated from \"<old>\" (Source: <old source>) to \"<new>\"* — line 2: *ALOC: updated from <original ALOC> to <updated ALOC>*; Action by = user email. This step is the traceability record — the old → new trail lives in the application history, not in the Application Details display."],
-      ['7', "Loading screen up to 15 seconds; the application is locked during the run ('The Application is in another request processing.')."],
+      ['7', "Loading screen up to 15 seconds; the application is locked during the run ('The Application is in another request processing.'); two users cannot amend simultaneously and a stale session cannot overwrite a newer update — version validation applies before save. The whole run executes as one controlled transaction: no partial update is committed; on failure the application remains in its last successfully completed state or moves to a controlled recovery status."],
       ['8', "Toaster 'Application \"<Application ID>\" is updated successfully!'; the Application Details, Rule Engine Result and Approve Limit Result sections reload."],
     ],
     [6, 94],
@@ -235,6 +254,18 @@ P(
   p('The fields below sit in the expanded **Application Details** section › **Employment Information** sub-block of the application view. **Application Details displays details only — no trail block**; the old → new trail lives in the Application Enquiry application history (section 3, step 6). The same section is shown, reading the finalized value, in every view that renders it: **Credit Queue L1–L3, Risk Queue, Sale Queue, Compliance Queue, Termination Queue, Disbursement Maker / Checker and Application Enquiry** (all view only):'),
   imgP('SC5_Application_Details_Employer_Name_Updated.png', 600, 438),
   caption('SC5: Application Details — Employment Information after the update'),
+  p('Source hierarchy — the four employer values, all preserved, and the one that decides:'),
+  tbl(
+    ['Employer value', 'Held where', 'Used for'],
+    [
+      ['Customer Declared Employer', 'Customer Journey input — never modified', 'Record of what the customer declared'],
+      ['System-derived Original', 'Kept from the first amendment onward', 'Reference / audit'],
+      ['Bank Validated Employer (finalized)', 'The working value, with its source attribute', 'The credit decision and every downstream consumer'],
+      ['Credit-amended attribution', "Source = 'Credit Department' + Updated By / Updated On", 'Shows who finalized the value'],
+    ],
+    [28, 40, 32],
+  ),
+  spacer(140),
   tbl(
     ['Field', 'Value after the edit'],
     [
@@ -253,7 +284,7 @@ P(
 
 P(
   h2('5. Downstream consumers of the corrected Employer Name'),
-  p('After the edit, every consumer of the Employer Name reads the corrected finalized value:'),
+  p('**Rule:** after a successful update, every downstream system and document consumes the same finalized Employer Name and classification — no consumer may show or decide on a different employer value. After the edit, every consumer reads the corrected finalized value:'),
   tbl(
     ['Consumer', 'Behaviour after the edit'],
     [
@@ -262,7 +293,7 @@ P(
       ['Application Form', 'Not regenerated — it remains the record of what the customer submitted at OTP time.'],
       ['Customer Document Stack', 'Generated after the decision — carries the updated value automatically.'],
       ['Core banking (CIF creation)', 'No impact — the CIF mapping carries no Employer Name.'],
-      ['AML screening', 'No re-screening on the edit; the corrected name reaches the screening system through the post-decision CIF-update call.'],
+      ['AML screening', 'No re-screening on the edit; the corrected name reaches the screening system through the post-decision CIF-update call. Treatment to be confirmed by Compliance — confirmed on [date].'],
       ['Length of Service', 'Not re-run — it has its own edit section.'],
       ['Customer communication', 'None — the customer is not notified of the correction.'],
     ],
@@ -292,7 +323,7 @@ P(
   p('Beyond the direct scope above, the following areas of the Reem Bank platform are impacted and must be carried into estimation and test scope:'),
   impactTable([
     ['Role Management / Permission Matrix', "New permission 'Edit Employer Name' on Credit Queue L1–L3 (Editor group; one permission per queue level, no product classification). A distinct right, never bundled. Permission Matrix page updated.", ['ia_role_cq.png', 1400, 190, 'Role Management › Credit Queue (SC1)']],
-    ['Edit Application pop-up', 'New Employment Information section with the single Company Name field and customer-journey validation.', ['ia_edit_popup.png', 1400, 168, 'Edit Application › Employment Information (SC3)']],
+    ['Edit Application pop-up', 'New Employment Information section: Company Name as search-and-select over the Empaneled Company List, free-text entry as exception (flagged for review); customer-journey validation on free text.', ['ia_edit_popup.png', 1400, 168, 'Edit Application › Employment Information (SC3)']],
     ['Employer classification', 'The classification step becomes re-runnable on demand for one application with a user-provided name; it overwrites the previous results atomically.', ['ia_confirm.png', 760, 560, 'Confirmation before the re-run (SC4)']],
     ['Rule Engine & Limit Assignment', 'Re-run on the new classification against the currently published versions; shared re-run counter; recalculation of calculated variables and approved limit.', ['ia_policy.png', 1132, 635, 'Rule Engine — published strategies']],
     ['Application Details display', 'Company Name Source row on every view rendering the section (queues including Termination / Disbursement, Application Enquiry); classification fields refreshed. No trail block — the trail is in the application history only.', ['ia_app_details.png', 1400, 637, 'Application Details › Employment Information (SC5)']],
@@ -317,7 +348,7 @@ P(
 /* ================= ASSEMBLE ================= */
 const doc = new Document({
   creator: 'Appro',
-  title: 'Employer Name Edit in Credit Queue V1.0',
+  title: 'Employer Name Edit in Credit Queue V1.1',
   styles: { default: { document: { run: { font: FONT, size: 22, color: BLACK } } } },
   sections: [{
     properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1440, right: 1440, bottom: 1440, left: 1440, header: 500, footer: 480 } } },
@@ -357,7 +388,7 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buf => {
-  const out = path.join(DIR, 'Appro_RF_Employer_Name_Edit_in_Credit_Queue_v1.0.docx');
+  const out = path.join(DIR, 'Appro_RF_Employer_Name_Edit_in_Credit_Queue_v1.1.docx');
   fs.writeFileSync(out, buf);
   console.log('WROTE', out, buf.length, 'bytes');
 });
