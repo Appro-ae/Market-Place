@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Management US Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:840px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .rag{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .rag.g{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .rag.a{background:#fdba23;color:#1a214d}
+  .rag.r{background:#1a214d;color:#ffffff}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .cmt h3{font-size:14px;font-weight:900;margin-bottom:4px;margin-top:10px}
+  .cmt h3:first-child{margin-top:0}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Document Management <span class="b">— US Set vs Portal Mirror v1.1</span></h1></div>
+  <p class="sub">The four Document Management stories — <a href="https://scvaladdin.atlassian.net/browse/AMP-3806">3806</a> Document List, <a href="https://scvaladdin.atlassian.net/browse/AMP-3807">3807</a> Disbursement Checklist, <a href="https://scvaladdin.atlassian.net/browse/AMP-3728">3728</a> Document Set Up / profiles, <a href="https://scvaladdin.atlassian.net/browse/AMP-3757">3757</a> document generation — reviewed against the uploaded <b>SMBP Portal Mirror v1.1</b> (dm v9 / oq v15 "spec v1.2" / new docv module, all read at code level and diffed against the previous portal version).</p>
+  <div class="meta"><span class="tag red">Verdict: CATALOGUE CONVERGED · QUEUE MODEL FORKED</span><span class="tag">2 P1 · 3 P2</span><span class="tag">3 Oct 2026 · Nothing posted</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The document catalogue has converged</b> — Portal v1.1 renamed its 23 documents to the exact 3806/3728 wording ("Liability letter from existing lender", "Pension evidence"…) and added the pensioner DOC024 row the profiles needed. <b>But the queue model forked again:</b> the portal's spec v1.2 keeps a 7-stage structure with the Settlement-to-Old-Lender, Clearance and Release controls — content-rich maker/checker checklists, per-stage TATs, an "Awaiting Old Bank" status, and documents that "release the hold" — while the v3 user stories ship flat queues with empty checklists and no release logic (F40). One of the two is the design intent; decide it before any of the four DM stories goes to dev.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Convergence check — US vs Portal v1.1</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Aspect</th><th>US set (v3, 3 Oct)</th><th>Portal Mirror v1.1 (spec v1.2)</th><th></th></tr></thead>
+    <tbody>
+      <tr><td class="k">Catalogue names</td><td>3806 IA2: 14 documents, DOC001–014</td><td>dm v9 renamed its rows to the 3806/3728 wording, word-for-word; +DOC024 "Pension-transfer undertaking… (replaces STL/FSTL for pensioners)" matching 3728 row 8d</td><td><span class="rag g">✓ CONVERGED</span></td></tr>
+      <tr><td class="k">Catalogue scope</td><td>3806: only customer-upload documents (14); Code/Name/Category/Status</td><td>23 documents incl. consents, CASA pack, DDA, stamped copies, Murabaha, Security Cheque upload; each with PL-xx code, stage PRE/AUTH/POST and an Ops/Fulfilment gate</td><td><span class="rag a">⚠ F48</span></td></tr>
+      <tr><td class="k">Profiles &amp; attributes</td><td>3728: filtration (All/Any, 2 levels), overlap check, S1–S12 seed, persona conditions</td><td>Same attribute set (Employment Type, Product Variant, Relationship NTB/ETB, Salary Transfer tri-state, system attrs)</td><td><span class="rag g">✓ CONVERGED</span></td></tr>
+      <tr><td class="k">Queue pairing</td><td>Ops Maker/Checker (CIF + IBAN + documents) → Fulfilment Maker/Checker (review, approve)</td><td>Ops Maker/Checker (<b>documents only</b>) + <b>Disbursement</b> Maker/Checker (CIF, IBAN, settlement, salary credit, clearance, release)</td><td><span class="rag r">✕ F47</span></td></tr>
+      <tr><td class="k">Stages &amp; controls</td><td>None — flat; Fund Holding → Loan Account Creation immediately; no release step (F40)</td><td>7 stages: Documents · Disbursement Details · <b>Settlement to Old Lender</b> · Persona · <b>First Salary Credit</b> · <b>Clearance &amp; Close-out</b> · <b>Account, Mandate &amp; Release</b>; DOC009/DOC013 gates "release the hold"; per-stage TATs (settlement 4h … clearance 24h)</td><td><span class="rag r">✕ F46</span></td></tr>
+      <tr><td class="k">Checklists</td><td>3807: 4 tabs, all start empty, empty never blocks</td><td>14 stage×role groups with real content ("Payee name and IBAN match the liability letter", "Repayment mandate in place before loan account creation", "All document versions queued for DMS")</td><td><span class="rag a">⚠ F45/F50</span></td></tr>
+      <tr><td class="k">Security Cheque handling</td><td>3757: generated PDF, no upload, customer OTP → "Signed"</td><td>Catalogue row DOC012 Security cheque, upload JPG/PNG/PDF, gate Ops O10 + DOC022 stamped copies</td><td><span class="rag a">⚠ F48</span></td></tr>
+      <tr><td class="k">Statuses</td><td>Awaiting Ops/Fulfillment Maker/Checker (×4)</td><td>Awaiting Maker/Checker Action (labelled per group) + Customer Upload, <b>Awaiting Old Bank</b>, Loan Account Creation, DMS Upload, Completed, Expired, Cancelled</td><td><span class="rag r">✕ F44 grows</span></td></tr>
+      <tr><td class="k">Document viewer</td><td>No story</td><td>New <code>docv</code> module: Document-panel count, expand-all, inline all-documents viewer (PDF.js)</td><td><span class="rag a">⚠ F49</span></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · Findings (F46–F50)</span>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th></th><th>Finding</th><th>Proposed solution</th><th>Ticket</th></tr></thead>
+    <tbody>
+      <tr><td class="k">F46</td><td><span class="pr">P1</span></td><td><b>Two competing target models.</b> Portal spec v1.2 keeps stages, settlement/clearance/release controls, hold-release documents and per-stage TATs; the v3 USs deleted all of it. This is F40 confirmed from the design side — the portal author still considers those controls required.</td><td>One decision meeting (Kha + Hailey): pick the model. If v1.2 stands, 3761/3762 need the Settlement, First-Salary-Credit, Clearance and Release content back (the portal checklists are the ready spec); if the flat model stands, strip the portal and record the business acceptance of no hold-release.</td><td class="k">3761 / 3762 / design</td></tr>
+      <tr><td class="k">F47</td><td><span class="pr">P1</span></td><td><b>Queue boundary contradiction:</b> USs put CIF+IBAN with Ops and make Fulfilment a pure reviewer; portal v1.2 makes Ops documents-only and gives a "Disbursement" pair CIF/IBAN/settlement/salary/release. Names, scope and statuses all differ.</td><td>Same decision as F46 — then align names ("Fulfillment" vs "Disbursement"), responsibilities and the status labels in one place.</td><td class="k">3761 / 3762</td></tr>
+      <tr><td class="k">F48</td><td><span class="pr p2">P2</span></td><td><b>Catalogue boundary differs:</b> 3806 holds 14 customer-upload docs with 4 fields; the portal catalogue holds 23 incl. consents/generated/old-bank items, each carrying PL-xx code, stage and gate metadata. And DOC012 keeps the Security Cheque as an <i>uploadable</i> item while 3757 makes it generated-only with no upload.</td><td>Define the inclusion rule (upload-only vs full document register). If gates/stages survive F46, 3806's data model needs the stage + gate columns; remove the cheque upload row or scope it to bank-side scans only (3757 IA1 note).</td><td class="k">3806 / 3757</td></tr>
+      <tr><td class="k">F49</td><td><span class="pr p2">P2</span></td><td><b>Document viewer has no US:</b> the new docv module (count, expand-all, inline PDF viewer on the Document panel) exists only in the portal.</td><td>Add it as an AC of 3722 (UI feedback) or a small story against ACP-262; otherwise it won't be built.</td><td class="k">3722 / new</td></tr>
+      <tr><td class="k">F50</td><td><span class="pr p2">P2</span></td><td><b>3807's 4-tab model depends on F46:</b> if stages return, checklists are per stage × role (the portal has 14 groups) and the 4-tab screen collapses. And the portal's filled checklists are the natural seed for F45's "all start empty" problem.</td><td>Hold 3807 until F46 is decided; whichever model wins, seed the checklists from the portal content at onboarding.</td><td class="k">3807</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Good and settled in the DM set:</b> catalogue naming convergence ✓ · 3728 profile engine with overlap check and S1–S12 seed ✓ · 3806 in-use guard and no-edit/no-delete catalogue hygiene ✓ · 3807 entry-time checklist snapshot ✓ · per-facility quantity rows for buyout/DC letters ✓. <b>Carried, still open on these tickets:</b> F31/F32 (cheque amount, "Signed" with no signature — 3757), F41 (3757's dead stage references — now partly answered if F46 restores stages), F38 (ETB-FSTL no-profile hole — 3728), F33 (Affordability CJ step).</p>
+</section>
+
+<section>
+  <span class="seclabel">04 · Draft comments — paste-ready (needs your go)</span>
+  <div class="cmt">
+    <h3>AMP-3761 / AMP-3762 (one comment, both tickets)</h3>
+    <ol>
+      <li><b>Model decision needed:</b> Portal Mirror v1.1 (spec v1.2) still carries 7 stages with Settlement-to-Old-Lender, First-Salary-Credit, Clearance and Release controls, hold-releasing documents and per-stage TATs — these stories ship flat queues with none of that. Please align with the design owner on which model is the target; if v1.2 stands, the settlement/salary/clearance/release content needs ACs here (the portal checklists are a ready spec).</li>
+      <li>Queue boundaries also differ (portal: Ops = documents only; Disbursement pair owns CIF/IBAN/settlement/release) — align names, scope and status labels in the same decision.</li>
+    </ol>
+    <h3>AMP-3806</h3>
+    <ol>
+      <li>Catalogue naming now matches the portal ✓. Two points: define the inclusion boundary (your 14 upload-only docs vs the portal's 23-row register with consents/generated items), and decide whether the portal's stage + gate metadata are requirements — if yes, the data model needs those columns.</li>
+      <li>The portal keeps "Security cheque" as an uploadable catalogue row; 3757 makes it generated-only. One rule, please.</li>
+    </ol>
+    <h3>AMP-3807</h3>
+    <ol>
+      <li>Hold until the stage decision: if stages return, checklists become per stage × role (portal has 14 groups), not 4 tabs. Either way, please seed from the portal's validated checklist content at onboarding — empty checklists that never block make four-eyes vacuous on day one.</li>
+    </ol>
+    <h3>AMP-3757 (rider)</h3>
+    <ol>
+      <li>Unchanged blockers: cheque amount rule (45k cheque securing 790k), "Signed" text with no signature, and the dead stage references — the portal v1.2 stages may be the re-anchor if F46 lands that way.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
