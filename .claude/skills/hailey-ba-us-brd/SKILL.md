@@ -285,3 +285,60 @@ They extend Set 1; where they conflict with older habits, these win.
 - One generic confirmation screenshot, real component style; SC images
   re-rendered and the zip + `ia_*` crops refreshed on every content
   change.
+
+## BRD approval round learnings (RF-3309 V1.0 → V1.1, Oct 2026)
+
+Rules from the Head-of-Retail review round that Hailey approved end to end.
+
+### Stakeholder response matrix (the deliverable she sends back)
+
+- Format: **Business requirements (original comment, verbatim) | Appro
+  feedbacks | Incorporated in BRD vX (Yes / No change / Not
+  incorporated) | Note/description | BRD reference | Evidence** — one
+  row per numbered item plus one for any highlighted "explicit
+  requirement" paragraphs. Excel, status column colour-coded (green =
+  incorporated, blue = no change, amber = out of scope).
+- Column 1 carries the stakeholder's ORIGINAL wording verbatim so she
+  can comment against his own text.
+- Every "already covered" answer carries **evidence embedded in the
+  row**: the SC screen or a rendered page of the BRD where it is
+  written, plus the section named in words.
+- **Language is PO business voice — never "push back" to the client.**
+  The three recurring argument patterns: (a) *"this is how the platform
+  behaves today"* + cite the BRD section/screen; (b) *platform
+  non-functional requirement governed by the Day-1 architecture — not
+  introduced by this feature* (her own example: failure handling /
+  resiliency); (c) *belongs to a broader design decided once,
+  consistently* — route authority matrices, caps, reason-code
+  conventions to a single separate initiative instead of per-field
+  bolt-ons. Posture is mostly declining, grounded in what the system
+  actually does — read the platform baseline before answering.
+- Mark "No change — already in BRD vX" explicitly wherever the baseline
+  covers an ask; incorporate cheap clarification sentences rather than
+  new scope.
+
+### Producing the next BRD version after a round
+
+- New version = new file (`..._v1.1.docx`), cover V bump + new date,
+  **History of Change row** naming what the round incorporated.
+- Stakeholder "explicit requirement" paragraphs he highlighted go in
+  **verbatim as governing statements** on the feature overview.
+- Accepted UI asks become concrete design: e.g. free-text field →
+  **search-and-select over the master list with free text as an
+  exception path "flagged for review"**, plus an "as implemented"
+  rules table (matching threshold, active-only candidates, category
+  rule, duplicates, no-match outcome) so the control is explicit.
+- Clarifications are woven into the existing actions/sections (counter
+  counts business outcomes only; stale-session/version check; one
+  controlled transaction, no partial commit; source-hierarchy table;
+  one-source downstream rule) — never new chapters.
+- Open third-party confirmations carry a placeholder in the text:
+  "confirmed by Compliance on [date]".
+
+### Role Management baseline (verified Oct 2026)
+
+- The live Add Role screen has **no product classification**: one plain
+  permission list per queue level. Never write "[Credit Card] / per
+  product tab" permissions; a new Edit permission is listed immediately
+  beside its sibling (e.g. Edit Employer Name right before Edit Length
+  of Service).
