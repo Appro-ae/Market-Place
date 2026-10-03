@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Release 5 — Round 4 Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:840px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .rag{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .rag.g{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .rag.a{background:#fdba23;color:#1a214d}
+  .rag.r{background:#1a214d;color:#ffffff}
+  .pr{display:inline-block;border-radius:6px;padding:1px 8px;font-size:10.5px;font-weight:900;color:#ffffff;background:#1a214d;white-space:nowrap}
+  .pr.p2{background:#3b7ef6}.pr.p3{background:#fdba23;color:#1a214d}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .cmt h3{font-size:14px;font-weight:900;margin-bottom:4px;margin-top:10px}
+  .cmt h3:first-child{margin-top:0}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Release 5 <span class="b">— Round 4: Full US Sweep</span></h1></div>
+  <p class="sub">All Super Portal stories in <a href="https://scvaladdin.atlassian.net/browse/AMP-3705">AMP-3705</a> re-reviewed (3 Oct state, now 20 items) against the reshared CJ prototype (offline_4_2 — decoded and diffed against offline_3). Fully read this round: <a href="https://scvaladdin.atlassian.net/browse/AMP-3761">3761</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-3762">3762</a> (restructured + new), <a href="https://scvaladdin.atlassian.net/browse/AMP-3806">3806</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-3807">3807</a>/<a href="https://scvaladdin.atlassian.net/browse/AMP-3808">3808</a> (new), <a href="https://scvaladdin.atlassian.net/browse/AMP-3728">3728</a> v3, <a href="https://scvaladdin.atlassian.net/browse/AMP-3757">3757</a> delta; 3730/3753 unchanged, 3732/3760 verified unchanged on the open points.</p>
+  <div class="meta"><span class="tag red">Verdict: 3 P1 regressions from the queue restructure</span><span class="tag">F34/F37 closed · F31/F32/F36 still open</span><span class="tag">3 Oct 2026 · Nothing posted</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The queue model was rebuilt (five stages → four flat maker/checker queues) and the config stories around it are genuinely good</b> (3806/3807 are clean, 3728 v3 unifies catalogue + persona). <b>But the restructure dropped the controls the stages used to enforce:</b> nothing now holds the loan until the security cheque is signed and the first salary credit lands — Fund Holding is never released by anything, and First Salary Credit capture vanished entirely. 3757 still triggers off the deleted stage model, and the routing between the four queues is "a separate story" that doesn't exist. The cheque amount (F31) and "Signed"-text (F32) blockers from Round 3 are untouched.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · What changed</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Change</th><th>Detail</th><th>Assessment</th></tr></thead>
+    <tbody>
+      <tr><td class="k">CJ prototype (offline_4_2)</td><td>Three real changes: ① customer now enters <b>Salary account IBAN</b> on the Details screen — format + mod-97 check only, Continue disabled until valid; ② Declaration screen shows an actual T&amp;C/KFS file list with View buttons; ③ cooling-off copy loses the hardcoded date</td><td>① collides with Ops re-keying the IBAN (F43); ② aligns with 3404 AC11 ✓; ③ cosmetic ✓</td></tr>
+      <tr><td class="k">Four-queue restructure</td><td>3761 = Ops Maker + Ops Checker (flat, no stages; CIF auto-filled from Dedupe/CIF-creation, checked vs ETL; IBAN via bank API; per-document Confirmed ticks). 3762 (now written) = Fulfilment Maker + Checker; Approve → Fund Holding (persona Not matched) → Loan Account Creation → Completed. New statuses ×4. Checker ≠ maker enforced via Queue Assignment ✓</td><td>Four-eyes done properly — but see F40/F42/F44</td></tr>
+      <tr><td class="k">New config stories</td><td><a href="https://scvaladdin.atlassian.net/browse/AMP-3806">3806</a> Document List (14-doc catalogue, codes, in-use guard, maker-checker) · <a href="https://scvaladdin.atlassian.net/browse/AMP-3807">3807</a> Disbursement Checklist (4 tabs, entry-time snapshot per application)</td><td><span class="rag g">GREEN</span> — house-standard quality; category taxonomy now consistent with 3728 v3 ✓</td></tr>
+      <tr><td class="k">3808 Final Offer Letter</td><td>FABL-269 template, per-bank text, B2B totals read from the SoC schedule, no-template = no letter</td><td><span class="rag g">GREEN</span> — closes the "no generator" gap for pack item #6</td></tr>
+      <tr><td class="k">3728 v3</td><td>Extended to CC/PL/AL/ML; catalogue = 3806's DOC001–014 (STL + DDA now profile rows); persona conditions live in Document Set Up</td><td><span class="rag g">GREEN</span> — one engine confirmed; ETB-FSTL hole (F38) still documented, not decided</td></tr>
+      <tr><td class="k">3757 delta</td><td>Contract pack trimmed 17 → 10 documents; SoC doubles as Facility Offer Letter; consents pulled from channel as PDFs</td><td><span class="rag a">AMBER</span> — still stage-based triggers (F41); F31/F32 unchanged</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · New findings (F40–F45)</span>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th></th><th>Finding</th><th>Proposed solution</th><th>Ticket</th></tr></thead>
+    <tbody>
+      <tr><td class="k">F40</td><td><span class="pr">P1</span></td><td><b>The security-control chain disappeared with the stages.</b> v2 enforced: cheque generated and signed before proceeding, First Salary Credit date captured, funds held until both done. v3: Fund Holding runs at Fulfilment approval, Loan Account Creation runs <i>immediately after Fund Holding succeeds</i> (3762 AC8) — nothing waits for the cheque signature, nothing captures or verifies the first salary credit, and <b>no step ever releases the hold</b>. The persona-fail path now holds funds forever or not at all.</td><td>Define the post-approval control flow: hold release trigger (cheque Signed + first salary credit verified), where the credit date is captured, and what blocks Loan Account Creation. If the business dropped these controls deliberately, record the decision.</td><td class="k">3762 AC8 (+3761)</td></tr>
+      <tr><td class="k">F41</td><td><span class="pr">P1</span></td><td><b>3757 triggers off the deleted stage model</b> — "Ops submits Stage 1 (AMP-3761 AC11)", "Stage 4 correction (AC12)", "AC14", "AC15", "validated at Stage 1" (~8 refs). Those ACs no longer exist; the cheque-generation trigger is undefined in the four-queue model.</td><td>Rewrite AC3.1/AC4.2: generate when the Ops Maker's IBAN verifies AND persona = Not matched; new version per Ops re-submit after send-back; "Completed" per 3762 AC8.</td><td class="k">3757</td></tr>
+      <tr><td class="k">F42</td><td><span class="pr">P1</span></td><td><b>Queue routing has no story.</b> Both 3761 IA1 and 3762 IA1 say routing "is specified in a separate story" — no key, nothing in the CR. v2's AC15 content (entry trigger at final submission, routing toggle per bank/product/channel, customer-wait transitions, TPQ/termination paths, TAT start) currently lives nowhere.</td><td>Create the routing story (v2 AC15 is 80% of the content) and add it to the CR, or fold routing back into 3761/3762.</td><td class="k">New US</td></tr>
+      <tr><td class="k">F43</td><td><span class="pr p2">P2</span></td><td><b>Two IBAN sources.</b> The CJ now captures the Salary account IBAN (mod-97 only) pre-submission; the Ops Maker types the Beneficiary IBAN from scratch (3761 AC3); 3757 prints the cheque from "the IBAN validated at Stage 1". Re-keying invites transposition errors the checker can't catch.</td><td>Pre-fill the maker's field with the journey IBAN (editable), bank-verify per AC4; one stored "validated IBAN" that cheque + Application Form + STL request all read.</td><td class="k">3761 / 3757 / 3694</td></tr>
+      <tr><td class="k">F44</td><td><span class="pr p2">P2</span></td><td><b>Third status vocabulary in three weeks</b> — four new "Awaiting Ops/Fulfillment Maker/Checker" codes; the customer-wait states (Awaiting Customer Upload / Signature) and Fund-Holding/Loan-Account states were dropped, so an application waiting on the customer still reads "Awaiting Ops Maker" and TAT runs against Ops. 3757 AC4.2 still cites dead "AMP-3761 AC15".</td><td>Register the final set in SSS once; decide whether customer-wait is a status or a sub-state excluded from TAT; fix 3757's reference.</td><td class="k">3761 / 3762 / 3757</td></tr>
+      <tr><td class="k">F45</td><td><span class="pr p2">P2</span></td><td><b>Four-eyes is vacuous on day one:</b> all four checklists start empty, and an empty checklist "does not block Submit" — Ops Maker can submit with zero checks, Fulfilment can approve a disbursement with zero checks.</td><td>Seed the four tabs with the portal's validated Maker/Checker content at bank onboarding; require ≥1 active item on the two checker tabs before the routing toggle can be On.</td><td class="k">3807 / 3762</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Closed this round:</b> F34 (3762 written) ✓ · F37 (type-collision wording gone from 3761) ✓ · F39-part (Final Offer Letter generator = 3808) ✓ · 3806/3728 category taxonomies aligned ✓. <b>Still open and untouched:</b> F31 cheque amount (own example: 45k cheque for a 790k loan), F32 "Signed" text with no signature, F33 Affordability acknowledgement CJ story, F36 3760 trigger (3762 IA7 itself says "must be re-aligned"), F38 scope mismatches, F3 (3759), F5–F14 (3732/3753 gates &amp; settlement — both tickets unchanged), F17, F35.</p>
+</section>
+
+<section>
+  <span class="seclabel">04 · Draft comments — paste-ready (needs your go)</span>
+  <div class="cmt">
+    <h3>AMP-3762 (+3761)</h3>
+    <ol>
+      <li><b>Control chain:</b> after Approve, Fund Holding runs and Loan Account Creation follows "straight away" — nothing waits for the cheque signature or the first salary credit, nothing captures the credit date, and no step releases the hold. The old stages 4–5 enforced exactly this. Please define the post-approval flow (hold-release trigger, credit-date capture, what blocks loan creation) or record the business decision to drop these controls.</li>
+      <li><b>Routing:</b> both IA1s defer routing to "a separate story" that has no key and isn't in the CR — the entry trigger, per-bank toggle, customer-wait transitions and TPQ paths from the old AC15 live nowhere. Please raise it and link it.</li>
+      <li><b>Statuses:</b> third naming generation — please register the final four (plus the customer-wait decision: status or TAT-excluded sub-state?) in the SSS model.</li>
+      <li><b>Empty checklists:</b> an empty checklist doesn't block Submit/Approve, and all four start empty — seed them at onboarding and require ≥1 active checker item before routing is switched On.</li>
+      <li>Good: checker-≠-maker via Queue Assignment, entry-time checklist snapshot, ETL-based CIF check, and the channel "Verified" results only on final approval.</li>
+    </ol>
+    <h3>AMP-3757</h3>
+    <ol>
+      <li><b>Dead references:</b> ~8 citations of the deleted stage model (Stage 1 / Stage 4 / 3761 AC11-AC15). The cheque trigger is undefined in the four-queue model — suggest: generate when the Ops Maker's IBAN verifies AND persona = Not matched; regenerate per Ops re-submit; "Completed" per 3762 AC8.</li>
+      <li><b>Still open from last round:</b> cheque amount "lower of monthly income and 120% of finance" (your example yields a 45,000 cheque for a 790,000 loan — expected 120% × finance per CBUAE Art. 7) and the "Signed" text with no signature (not a negotiable instrument — needs the legal call).</li>
+      <li>One IBAN source: the CJ now captures the salary IBAN — the cheque should print the single validated IBAN, not a re-keyed one.</li>
+    </ol>
+    <h3>AMP-3806 / 3807 / 3808</h3>
+    <ol>
+      <li>Clean stories — no blocking findings. 3807: consider requiring ≥1 active item on checker tabs (see 3762 comment). 3808: confirm the B2C trigger reference (ALD-2000) is in scope for this CR.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
