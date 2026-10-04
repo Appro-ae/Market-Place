@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Cheque Amount</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:22px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:780px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .formula{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px}
+  .formula .f{font-size:17px;font-weight:900}
+  .note{font-size:12px;margin-top:10px}
+  .bad{color:#8f1d12;font-weight:700}.good{color:#0b6b4f;font-weight:700}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Security Cheque <span class="b">— Amount Rule</span></h1></div>
+  <p class="sub">How the security cheque amount should be calculated for B2B Personal Loan (<a href="https://scvaladdin.atlassian.net/browse/AMP-3757">AMP-3757</a>, finding F31) — checked against the UAE regulation, market practice and the FABL deployment.</p>
+  <div class="meta"><span class="tag red">Recommendation: 120% × approved finance amount, income out</span><span class="tag">4 Oct 2026 · Verified sources only</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · The problem (F31)</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Rule</th><th>Example: salary 45,000 / loan 790,000</th><th>Assessment</th></tr></thead>
+    <tbody>
+      <tr><td class="k">AMP-3757 today: lower of declared monthly income and 120% × finance amount</td><td>min(45,000 · 948,000) = <span class="bad">AED 45,000 cheque on a 790,000 loan</span></td><td>Security covers 5.7% of the exposure. Monthly income is an affordability measure, not a security basis — mixing the two breaks the cheque exactly when the loan is large.</td></tr>
+      <tr><td class="k">Proposed: 120% × approved finance amount</td><td>1.2 × 790,000 = <span class="good">AED 948,000</span></td><td>Covers principal + interest, legal and admin cost on default. Sits exactly on the regulatory ceiling.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Business base — regulation and market</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Source</th><th>What it says</th><th>Implication</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><a href="https://rulebook.centralbank.ae/en/rulebook/regulation-no-292011-regarding-bank-loans-other-services-offered-individual-customers">CBUAE Regulation 29/2011</a></td><td>Banks and finance companies may only take from the customer post-dated cheques covering the installments, "of value not exceeding 120% of value of the loan or the debit balance".</td><td>120% is a <b>regulatory ceiling</b>, not a formula — the system must validate ≤ 120%; the configured value decides the actual %.</td></tr>
+      <tr><td class="k"><a href="https://kashwanilaw.com/case/court-of-cassation-clarifies-sufficiency-of-security-cheques-as-independent-guarantees-in-banking-disputes">ADJD Circular 1/2023 · Court of Cassation</a></td><td>A cheque-backed loan claim is admissible where the cheque covers up to 120% of the loan or debt; the security cheque stands as an independent guarantee.</td><td>A cheque at 120% is enforceable in court as drafted — staying at or under the cap maximises enforceability.</td></tr>
+      <tr><td class="k"><a href="https://gulfnews.com/amp/story/business%2Fbanking%2Fbanks-in-uae-no-longer-demand-blank-cheques-1.1563688">Market practice (Gulf News)</a> · <a href="https://dhanguard.com/blogs/questions-and-answers/personal-loan/why-banks-always-ask-security-cheque">Dhanguard</a></td><td>UAE banks take security cheques of 100–120% of the loan principal; the extra 20% covers interest, legal and administrative costs on default. Blank cheques are no longer accepted.</td><td>Principal-based, never income-based. 120% is the common upper choice for unsecured PL.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · FABL precedent</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Ticket</th><th>What FAB does</th><th>Implication for 3757</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/FABL-1000">FABL-1000</a> (Done)</td><td>The security cheque is a <b>physical document collected from the customer and uploaded</b> by the Disbursement Maker; the Checker validates it. Submit is blocked until it is uploaded. No amount is computed by the portal.</td><td>FAB has <b>no system formula</b> — the bank fills the cheque per its credit policy. If SMBP generates the cheque digitally (3757's new approach), SMBP must define the formula FAB never needed.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/FABL-1859">FABL-1859</a> (Done)</td><td>Cheque + first salary credit are mandatory before fund release for every customer who misses the Unicorn persona (Expat, private, ≥15k, ECB ≥711, &lt;14×); app cannot leave the Maker queue without it.</td><td>Confirms the cheque is a <b>pre-release control tied to exposure</b>, applied per persona — consistent with keeping it principal-based.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">04 · Conclusion — proposed AC wording for AMP-3757</span>
+  <div class="verdict"><p><b>Drop monthly income from the formula.</b> The regulation caps the cheque at 120% of the loan; the market writes it on the principal; FAB leaves the amount to the bank because the cheque is physical. Since SMBP generates the cheque, the rule must be explicit and principal-based.</p></div>
+  <div class="formula">
+    <p class="f">Security Cheque Amount = Security Cheque % × Approved Finance Amount</p>
+    <p>1. Security Cheque % is a product-level configuration, default <b>120%</b>, validated at <b>0.01%–120%</b> (hard cap per CBUAE Regulation 29/2011).<br>
+    2. Approved Finance Amount = the approved loan principal (for Buyout/Top Up: the total facility amount).<br>
+    3. Monthly income plays no role in the cheque amount.<br>
+    4. Rounding: up to the nearest AED 1 (never round a security down).</p>
+  </div>
+  <p class="note">Example check: 790,000 loan → cheque AED 948,000 (not 45,000). A 100% bank preference is a config change, not a story change.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Research note; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
