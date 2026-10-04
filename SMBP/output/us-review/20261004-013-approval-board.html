@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>US Approval Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:840px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .v{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .v.go{background:#abf5d1;color:#0b6b4f}
+  .v.cond{background:#fdba23;color:#1a214d}
+  .v.no{background:#ffbdad;color:#8f1d12}
+  .v.na{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Release 5 <span class="b">— US Approval Board</span></h1></div>
+  <p class="sub">Approve / hold decision per Super Portal story, based on the latest <a href="https://claude.ai/artifact/8BzA2XUNr7mZTiTChk63Xr">Portal Mirror</a> version (4 Oct, read at code level) and every finding verified this cycle (<a href="https://claude.ai/artifact/SfbtG9iBHP6EeKtCHbZ3Rh">register</a>). Rule: a P1 blocks approval; P2s can be approved with the condition that they close before dev; P3s ride.</p>
+  <div class="meta"><span class="tag">APPROVE: 2</span><span class="tag">APPROVE WITH CONDITIONS: 3</span><span class="tag red">CANNOT APPROVE: 9</span><span class="tag">4 Oct 2026 · Nothing posted</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Can be approved</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Ticket</th><th>Verdict</th><th>Why</th><th>Suggestion</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3796">AMP-3796</a> ETL failed-reason codes</td><td><span class="v go">APPROVE</span></td><td>Clean: 14 codes, message variants, PRYPCO sync, catalogue update; locked to 3744's attribute list.</td><td>Approve as is.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3808">AMP-3808</a> Final Offer Letter</td><td><span class="v go">APPROVE</span></td><td>Precedent-mapped (FABL-269), values read not recalculated, no-template behaviour defined.</td><td>Approve; one rider — confirm the B2C trigger (ALD-2000) is in this release's scope.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3806">AMP-3806</a> Document List</td><td><span class="v cond">APPROVE WITH CONDITIONS</span></td><td>Clean screens, in-use guard, maker-checker; the portal now implements it. Open P2 (F48): inclusion boundary — 14 upload-only docs vs the portal's 23-row register, and the uploadable Security-Cheque row vs 3757's generated-only rule.</td><td>Approve; close the boundary + cheque rule with Kha before dev starts.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3728">AMP-3728</a> Document profiles</td><td><span class="v cond">APPROVE WITH CONDITIONS</span></td><td>One engine, overlap check, S1–S12 seed; the portal now carries its full AC2 attribute list. Open P2s: the documented ETB-FSTL no-profile hole (F38) and two scope nits (portal shows Casa; stores "New" / displays "Fresh" vs 3721's "Fresh").</td><td>Approve; decide the ETB-FSTL profile and the enum/Casa nits before dev.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3722">AMP-3722</a> UI feedback</td><td><span class="v cond">APPROVE WITH CONDITIONS</span></td><td>Low-risk UI list; unchanged since Round 1 (P2 completeness notes only).</td><td>Approve once Anto confirms the feedback list is final; add the portal's document-panel navigation helper here (F49's remainder).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">02 · Cannot be approved yet</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Ticket</th><th>Verdict</th><th>Blocking finding(s)</th><th>Suggestion — what flips it</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3761">AMP-3761</a> Ops Queue</td><td><span class="v no">HOLD</span></td><td>F46/F47: the portal (4 Oct) keeps 7 stages with settlement/clearance/release controls and parks CIF/IBAN with Fulfilment; the story is flat and gives CIF/IBAN to Ops. F42: routing story unraised.</td><td>One decision meeting (you + Kha): stage model and CIF/IBAN owner. Then a one-day edit approves it.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3762">AMP-3762</a> Fulfilment Queue</td><td><span class="v no">HOLD</span></td><td>F40: after Approve, nothing waits for the cheque signature or first salary credit, the hold is never released, and the credit date is captured nowhere.</td><td>Same decision; if the controls stay (they should for Buyout/DC), lift the portal's settlement/salary/clearance/release checklists into ACs.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3757">AMP-3757</a> Cheque + SoC + pack</td><td><span class="v no">HOLD</span></td><td>F31: cheque = lower of monthly income and 120% × finance (own example: 45k cheque on a 790k loan). F32: signed version prints "Signed" with no signature — not a negotiable instrument. F41: ~8 references to the deleted stage model.</td><td>Fix the amount to 120% × finance; get the legal call on the e-signature; re-anchor the trigger to the agreed queue model.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3730">AMP-3730</a> App Form + Affordability</td><td><span class="v no">HOLD</span></td><td>F33: the OTP acknowledgement that drives the signature version has no CJ story — its own IA1 says so.</td><td>Raise and link the CJ acknowledgement story (3404/3689 extension); approve immediately after.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3807">AMP-3807</a> Disbursement Checklist</td><td><span class="v no">HOLD</span></td><td>F50: the 4-tab model collapses if stages return — the portal keys checklists by queue × stage (12 groups). F45: all tabs start empty and empty never blocks.</td><td>Decide the stage model first; then approve with the portal checklist content as onboarding seed and ≥1-active-item rule.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3760">AMP-3760</a> T24 mock server</td><td><span class="v no">HOLD</span></td><td>Own declared blocker OQ5 (repayment account) + 13 open questions; F36: trigger "at accept" contradicts 3762 (creation at queue exit — 3762 itself says re-align).</td><td>Close OQ5 at the design review and fix the trigger wording; the story is otherwise strong.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3759">AMP-3759</a> v2→v3 migration</td><td><span class="v no">HOLD</span></td><td>F3: Ready-for-Dev with a 2-line description — no mapping, reconciliation, scope or rollback.</td><td>Return to draft; needs full migration content before any approval.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a> Settlement screen</td><td><span class="v no">HOLD</span></td><td>F8/F10–F14 unchanged since 30 Sep: category scope vs approved 3694, Buyout single-select, variant gating vs bank-returned, DC ≥1-CC gate, self-references, undefined fallback metric.</td><td>Apply the 30 Sep review list — mostly alignment edits with Trang + pointer fixes.</td></tr>
+      <tr><td class="k"><a href="https://scvaladdin.atlassian.net/browse/AMP-3753">AMP-3753</a> AECB config</td><td><span class="v no">HOLD</span></td><td>F6/F7/F9 unchanged: 'U' (Active Payments) in the G4 blocked list fails every customer; G4 band-code input 1–9 re-introduces fixed bug 3461; G5 validation re-introduces 3457 and lacks rate/tenure inputs.</td><td>Three precise fixes, all specced in the gates review — a half-day edit, then approvable.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Not in scope for an approval decision</b> (already past it, in UAT): 3721, 3731, 3729, 3744, 3748 — plus the 3721 FSTL wording rider still waiting for your go. <b>Fastest path to green:</b> the single stage-model + CIF/IBAN decision unblocks four tickets at once (3761, 3762, 3807, and 3757's trigger); the 3753 and 3732 edits are mechanical after that.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Decision board; nothing posted to Jira, no status transitioned.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
