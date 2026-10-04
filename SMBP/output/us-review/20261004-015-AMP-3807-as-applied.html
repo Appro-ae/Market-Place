@@ -1,0 +1,638 @@
+<h2><a name="ContextofBusiness"></a>Context of Business</h2>
+
+<p>Before a loan is disbursed, the users of the Ops Queue and the Fulfillment Queue confirm a list of checks. Each queue has a Maker and a Checker version, and each of the four queues has its own checklist. Disbursement Checklist lets the bank maintain these four checklists without a deployment.</p>
+
+<p><b>Note:</b> <font color="#97a0af"><del>There is one set of checklists per bank, shared by all channels and loan products. The screen has no Channel dropdown and no product tabs.</del></font> <font color="#6554c0">Updated 04/10/2026 (PO): Checklists are maintained per product type. The screen shows one tab per product type — same products and order as Document List (
+    <span class="jira-issue-macro" data-jira-key="AMP-3806" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-3806" class="jira-issue-macro-key issue-link"  title="[Bank Portal][Document Management] Add Document List to maintain the list for view documents of all Queues area" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-3806
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">Ready for Dev</span>
+            </span>
+). Each queue has one checklist per product type. There is no Channel dropdown.</font></p>
+
+<h2><a name="Navigation"></a>Navigation</h2>
+
+<ol>
+	<li>Login into Bank Portal.</li>
+	<li>Click on “Document Management” in the left menu.</li>
+	<li>Click on “Disbursement Checklist” (after “Document List”) to go to the Screen: Disbursement Checklist.</li>
+</ol>
+
+
+<h2><a name="UserStory"></a>User Story</h2>
+
+<p><b>As</b> a Bank Administrator,<br/>
+<b>I want to</b> add, <font color="#1565c0"><b>edit</b></font>, activate, deactivate and delete the checklist items of each disbursement queue,<br/>
+<b>So that</b> each queue shows the bank’s current checks before a loan is disbursed, without a deployment.</p>
+
+<h2><a name="AcceptanceCriteria"></a>Acceptance Criteria</h2>
+
+<p><font color="#1565c0"><b>■ Changed on 03/10/2026</b></font></p>
+
+<h3><a name="AC1.DisbursementChecklistScreen"></a>AC1. Disbursement Checklist Screen</h3>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Screenshot</b></th>
+<th class='confluenceTh'><b>Section (mockup)</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><span class="image-wrap" style=""><img src="https://scvaladdin.atlassian.net/rest/api/3/attachment/content/136223" height="246" width="1290" style="border: 0px solid black" /></span></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Queue dropdown, search and Add button (mockup). The mockup labels read “Disbursement …”; this story uses the queue names below.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><span class="image-wrap" style=""><img src="https://scvaladdin.atlassian.net/rest/api/3/attachment/content/136224" height="370" width="1264" style="border: 0px solid black" /></span></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Checklist table with one inactive row, greyed out (mockup demo items). The mockup has no status or delete confirmation.</b></font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Component</b></th>
+<th class='confluenceTh'><b>Component Type</b></th>
+<th class='confluenceTh'><b>Editable</b></th>
+<th class='confluenceTh'><b>Mandatory</b></th>
+<th class='confluenceTh'><b>Default Value / Description</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'>Label 1 (Disbursement Checklist)</td>
+<td class='confluenceTd'>Label</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>Text: “Disbursement Checklist”</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Breadcrumb</td>
+<td class='confluenceTd'>Label</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>Text: “Document Management” › “Disbursement Checklist”</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Label 2 (Checklist items)</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Label</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Text: “Checklist items”</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#6554c0"><b>Product Type</b></font></td>
+<td class='confluenceTd'><font color="#6554c0">Tabs</font></td>
+<td class='confluenceTd'><font color="#6554c0">Yes</font></td>
+<td class='confluenceTd'><font color="#6554c0">N/A</font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#6554c0">One tab per product type — same values and order as Document List (
+    <span class="jira-issue-macro" data-jira-key="AMP-3806" >
+                <a href="https://scvaladdin.atlassian.net/browse/AMP-3806" class="jira-issue-macro-key issue-link"  title="[Bank Portal][Document Management] Add Document List to maintain the list for view documents of all Queues area" >
+            <img class="icon" src="https://scvaladdin.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10315?size=medium" />
+            AMP-3806
+        </a>
+                                                    <span class="aui-lozenge aui-lozenge-subtle aui-lozenge-current jira-macro-single-issue-export-pdf">Ready for Dev</span>
+            </span>
+).</font></li>
+	<li><font color="#6554c0">Default: the first tab.</font></li>
+	<li><font color="#6554c0">On change: show the selected product type’s checklist for the selected queue, on page 1. An unsaved row is discarded. The search text is kept.</font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Queue</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Dropdown</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Yes</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#1565c0"><b>Values, in order: “Ops Queue Maker”, “Ops Queue Checker”, “Fulfillment Maker”, “Fulfillment Checker”.</b></font></li>
+	<li><b>Default:</b> “Ops Queue Maker”.</li>
+	<li><font color="#1565c0"><b>On change: show that queue’s checklist, on page 1.</b></font> <font color="#6554c0">The product type tab is unchanged.</font></li>
+	<li><font color="#1565c0"><b>An unsaved row is discarded. The search text is kept.</b></font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Search</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Search Bar</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Yes</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>No</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#1565c0"><b>Placeholder: “Search checklist items”.</b></font></li>
+	<li><font color="#1565c0"><b>Rule: on Enter, partial, case-insensitive match on the item text, within the selected</b></font> <font color="#6554c0">product type and</font> <font color="#1565c0"><b>queue, per CR 004.</b></font></li>
+	<li><font color="#1565c0"><b>Blank + Enter: all items of the queue are shown.</b></font></li>
+	<li><font color="#1565c0"><b>No match: display IM005 “No results found”.</b></font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Add Checklist Item</b></font></td>
+<td class='confluenceTd'>Button</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>On click → AC2.</td>
+</tr>
+<tr>
+<td class='confluenceTd'>#</td>
+<td class='confluenceTd'>Grid View</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>Position of the item, starting from 1. <font color="#1565c0"><b>Numbering continues across pages.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Checklist item</td>
+<td class='confluenceTd'><font color="#1565c0"><b>Grid View</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'><font color="#1565c0"><b>Text of the item. Edit → AC3.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Active</b></font></td>
+<td class='confluenceTd'>Toggle</td>
+<td class='confluenceTd'>Yes</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'><ul>
+	<li><b>On:</b> Active. <b>Off:</b> Inactive.</li>
+	<li><b>On click:</b> AC4.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Edit</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Button</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>On click → AC3.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Delete</td>
+<td class='confluenceTd'>Button</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>On click → <font color="#1565c0"><b>AC5</b></font><br/>
+.</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Pagination</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Paging</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Per CR 005. Maximum 10 records per page.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'>Empty state</td>
+<td class='confluenceTd'>Label</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'>N/A</td>
+<td class='confluenceTd'><font color="#1565c0"><b>When the selected queue has no item: “No checklist items yet.”</b></font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>Checklist rules</b></p>
+
+<ul>
+	<li><font color="#97a0af"><del>Each queue has one checklist, shared by all loan products.</del></font> <font color="#6554c0">Each queue has one checklist per product type.</font></li>
+	<li><font color="#1565c0"><b>The four queues are fixed.</b></font> Only their items can be changed.</li>
+	<li>The list shows Active and Inactive items, <font color="#1565c0"><b>in the order they were added</b></font>.</li>
+	<li><font color="#1565c0"><b>Inactive rows are shown greyed out.</b></font></li>
+	<li><font color="#1565c0"><b>New items are added at the end.</b></font></li>
+	<li>The queue shows the Active items in the same order.</li>
+	<li>Duplicate texts are allowed. There is no limit on the number of items.</li>
+	<li><font color="#1565c0"><b>Only one row can be added or edited at a time.</b></font></li>
+	<li><font color="#1565c0"><b>Meanwhile, Add Checklist Item, Edit and Delete are disabled.</b></font></li>
+</ul>
+
+
+<p><font color="#1565c0"><b>Default items</b></font></p>
+
+<ul>
+	<li><font color="#1565c0"><b>Each checklist starts with a set of default items.</b></font></li>
+	<li><font color="#6554c0">The defaults are seeded on every product type tab (same list per product at go-live).</font></li>
+	<li><font color="#1565c0"><b>The bank can edit, deactivate or delete them like any other item.</b></font></li>
+	<li><font color="#1565c0"><b>Ops Queue Maker: 6 items, 2 optional. Example: “All pages uploaded and legible”.</b></font></li>
+	<li><font color="#1565c0"><b>Ops Queue Checker: 5 items, none optional. Example: “Employer, salary, amounts and IBAN match the application”.</b></font></li>
+	<li><font color="#1565c0"><b>Fulfillment Maker: 22 items, 11 optional. Example: “Payee is the lender — never the customer”.</b></font></li>
+	<li><font color="#1565c0"><b>Fulfillment Checker: 16 items, 2 optional. Example: “No lien or restraint on the account”.</b></font></li>
+	<li><font color="#1565c0"><b>The full default list is in the BDD attachment.</b></font></li>
+</ul>
+
+
+<p><font color="#1565c0"><b>Optional items</b></font></p>
+
+<ul>
+	<li><font color="#1565c0"><b>An optional item can be left unticked in the queue.</b></font></li>
+	<li><font color="#1565c0"><b>It does not block Submit or Approve.</b></font></li>
+	<li><font color="#1565c0"><b>Items added on this screen are mandatory.</b></font></li>
+	<li><font color="#1565c0"><b>This screen has no control to make an item optional or mandatory.</b></font></li>
+</ul>
+
+
+<p><b>How changes apply</b></p>
+
+<ul>
+	<li>An application keeps the checklist as it was when the application entered the queue.</li>
+	<li>A change applies only to applications that enter the queue afterwards.</li>
+</ul>
+
+
+<p><b>When Checker Review is On</b> (IA2)</p>
+
+<ul>
+	<li>Each change in <font color="#1565c0"><b>AC2–AC5</b></font> becomes a request ( <font color="#1565c0"><b>AC6</b></font>).</li>
+	<li>It applies only after the checker approves it.</li>
+</ul>
+
+
+<h3><a name="AC2.AddaChecklistItem"></a>AC2. Add a Checklist Item</h3>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Screenshot</b></th>
+<th class='confluenceTh'><b>Section (mockup)</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><span class="image-wrap" style=""><img src="https://scvaladdin.atlassian.net/rest/api/3/attachment/content/136225" height="522" width="1288" style="border: 0px solid black" /></span></td>
+<td class='confluenceTd'><font color="#1565c0"><b>New row at the end of the checklist; the other actions are disabled (mockup). In this story its toggle cannot be changed.</b></font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>On click of “</b> <font color="#1565c0"><b>Add Checklist Item</b></font><font color="#1565c0"> </font><b>”</b></p>
+
+<ul>
+	<li>Add <font color="#1565c0"><b>an editable</b></font> row at the end of the <font color="#1565c0"><b>selected queue’s</b></font> checklist.</li>
+	<li><font color="#1565c0"><b>The search is cleared and the last page is shown.</b></font></li>
+</ul>
+
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Component</b></th>
+<th class='confluenceTh'><b>Component Type</b></th>
+<th class='confluenceTh'><b>Editable</b></th>
+<th class='confluenceTh'><b>Mandatory</b></th>
+<th class='confluenceTh'><b>Default Value / Description</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Checklist item</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Input Field</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Yes</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Yes</b></font></td>
+<td class='confluenceTd'><ul>
+	<li><font color="#1565c0"><b>Placeholder: “Checklist item”.</b></font></li>
+	<li><font color="#1565c0"><b>Max 160 characters; leading and trailing spaces removed.</b></font></li>
+	<li><font color="#1565c0"><b>Blank on Save: show error message IEM003 “Please fill in the required field”.</b></font></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Active</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Toggle</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>No</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Shown On. Saved as Active.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Save</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Button</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>On click, or Enter → save as below.</b></font></td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Cancel</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Button</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>N/A</b></font></td>
+<td class='confluenceTd'><font color="#1565c0"><b>On click, or Esc → remove the row without saving.</b></font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><b>When Checker Review is Off</b></p>
+
+<ul>
+	<li>Save the item.</li>
+	<li>Display <b>IM003</b> “Checklist item is created successfully!”.</li>
+</ul>
+
+
+<p><b>When Checker Review is On</b></p>
+
+<ul>
+	<li>Create a <b>Create</b> request ( <font color="#1565c0"><b>AC6</b></font>).</li>
+	<li>The row is removed; the item is listed only after approval.</li>
+	<li>Display message “Your request for updated information is created successfully!”.</li>
+</ul>
+
+
+<p><b>Audit</b></p>
+
+<ul>
+	<li>Basic audit trail per <b>CR 003</b>.</li>
+	<li>Audit Trail:
+	<ul>
+		<li><span class="error">&#91;Step&#93;</span> = “Add Checklist Item”</li>
+		<li><span class="error">&#91;State&#93;</span> = the item’s status, or “Pending Review” when Checker Review is On</li>
+		<li><span class="error">&#91;Step Detail&#93;</span> = <font color="#1565c0"><b>queue name</b></font>, <font color="#6554c0">product type,</font> position and item text; old and new values for a change</li>
+		<li><span class="error">&#91;Step Status&#93;</span> = “Successful”</li>
+	</ul>
+	</li>
+</ul>
+
+
+<h3><a name="AC3.aChecklistItem"></a>AC3. <font color="#1565c0"><b>Edit</b></font> a Checklist Item</h3>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Screenshot</b></th>
+<th class='confluenceTh'><b>Section (mockup)</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><span class="image-wrap" style=""><img src="https://scvaladdin.atlassian.net/rest/api/3/attachment/content/136226" height="376" width="1264" style="border: 0px solid black" /></span></td>
+<td class='confluenceTd'><font color="#1565c0"><b>Row in edit mode; the other actions are disabled (mockup).</b></font></td>
+</tr>
+</tbody></table>
+</div>
+
+
+<ul>
+	<li><font color="#1565c0"><b>On clicking Edit, the row’s text becomes an input.</b></font></li>
+	<li><font color="#1565c0"><b>Input, validation, Save and Cancel: same as AC2.</b></font></li>
+	<li><font color="#1565c0"><b>Cancel keeps the current text.</b></font></li>
+	<li><font color="#1565c0"><b>Save with unchanged text: nothing is saved and no message is shown.</b></font></li>
+</ul>
+
+
+<p><b>When Checker Review is Off</b></p>
+
+<ul>
+	<li>Save the new text.</li>
+	<li>Display <b>IM004</b> “Checklist item is updated successfully!”.</li>
+</ul>
+
+
+<p><b>When Checker Review is On</b></p>
+
+<ul>
+	<li>Create an <b>Update</b> request ( <font color="#1565c0"><b>AC6</b></font>).</li>
+	<li>The item keeps its current text until approval.</li>
+	<li>Display message “Your request for updated information is created successfully!”.</li>
+</ul>
+
+
+<p><b>Audit:</b> as in AC2, with <span class="error">&#91;Step&#93;</span> = “Edit Checklist Item”.</p>
+
+<h3><a name="AC4.ActivateandDeactivateaChecklistItem"></a>AC4. Activate and Deactivate a Checklist Item</h3>
+
+<ul>
+	<li>A click on the <font color="#1565c0"><b>Active</b></font> toggle opens a confirmation pop-up.</li>
+	<li>An Inactive item stays in the list.</li>
+	<li>An Inactive item is not shown in the queue.</li>
+</ul>
+
+
+<p><b>Deactivate pop-up</b> (Active item)</p>
+
+<ul>
+	<li>Message: <b>CM005</b> “Are you sure you want to deactivate this checklist item?”</li>
+	<li>Buttons: “Cancel”, “Yes, Deactivate”.</li>
+</ul>
+
+
+<p><b>Activate pop-up</b> (Inactive item)</p>
+
+<ul>
+	<li>Message: <b>CM006</b> “Are you sure you want to activate this checklist item?”</li>
+	<li>Buttons: “Cancel”, “Yes, Activate”.</li>
+</ul>
+
+
+<p>“Cancel” → close the pop-up; the status is unchanged.</p>
+
+<p><b>On confirm — Checker Review Off</b></p>
+
+<ul>
+	<li>Apply the new status.</li>
+	<li>Deactivate: display <b>IM034</b> “‘
+{Checklist item}’ has been deactivated”.<br/>
+* Activate: display <b>IM035</b> “‘{Checklist item}
+<p>’ has been activated”.</p></li>
+	<li>{Checklist item}
+<p> = the item text.</p></li>
+</ul>
+
+
+<p><b>On confirm — Checker Review On</b></p>
+
+<ul>
+	<li>Create an <b>Update</b> request ( <font color="#1565c0"><b>AC6</b></font>).</li>
+	<li>The status is unchanged until approval.</li>
+	<li>Display message “Your request for updated information is created successfully!”.</li>
+</ul>
+
+
+<p><b>Audit:</b> as in AC2, with <span class="error">&#91;Step&#93;</span> = “Activate Checklist Item” or “Deactivate Checklist Item”.</p>
+
+<h3><a name=".DeleteaChecklistItem"></a><font color="#1565c0"><b>AC5</b></font>. Delete a Checklist Item</h3>
+
+<p><b>Confirmation pop-up</b></p>
+
+<ul>
+	<li>Title: “Delete checklist item?”</li>
+	<li>Message: <b>CM011</b> “Are you sure you want to delete this checklist item?”</li>
+	<li>Buttons: “Cancel”, “Yes, Delete”.</li>
+	<li>“Cancel” → close the pop-up; nothing changes.</li>
+</ul>
+
+
+<p><b>On “Yes, Delete” — Checker Review Off</b></p>
+
+<ul>
+	<li>Remove the item from the checklist.</li>
+	<li>The positions (#) are renumbered.</li>
+	<li>Display <b>IM033</b> “Checklist item is deleted successfully!”.</li>
+</ul>
+
+
+<p><b>On “Yes, Delete” — Checker Review On</b></p>
+
+<ul>
+	<li>Create a <b>Delete</b> request ( <font color="#1565c0"><b>AC6</b></font>).</li>
+	<li>The item stays in the list until approval.</li>
+	<li>Display message “Your request for updated information is created successfully!”.</li>
+</ul>
+
+
+<p><b>Audit:</b> as in AC2, with <span class="error">&#91;Step&#93;</span> = “Delete Checklist Item” and <span class="error">&#91;State&#93;</span> = “Deleted” (or “Pending Review”).</p>
+
+<h3><a name=".MakerCheckerFlow%28CheckerReviewOn%29"></a><font color="#1565c0"><b>AC6</b></font>. Maker-Checker Flow (Checker Review On)</h3>
+
+<p>Applies only when Checker Review is On for Disbursement Checklist (IA2).</p>
+
+<h4><a name="RequestsandLock"></a><font color="#1565c0"><b>AC6.1</b></font> Requests and Lock</h4>
+
+<div class='table-wrap'>
+<table class='confluenceTable'><tbody>
+<tr>
+<th class='confluenceTh'><b>Action</b></th>
+<th class='confluenceTh'><b>Request Type</b></th>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Save on a new row</b></font><br/>
+(AC2)</td>
+<td class='confluenceTd'>Create</td>
+</tr>
+<tr>
+<td class='confluenceTd'><font color="#1565c0"><b>Save on an edited row</b></font><br/>
+(AC3), status change (AC4)</td>
+<td class='confluenceTd'>Update</td>
+</tr>
+<tr>
+<td class='confluenceTd'>Yes, Delete ( <font color="#1565c0"><b>AC5</b></font><br/>
+)</td>
+<td class='confluenceTd'>Delete</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<ul>
+	<li>Each change is its own request.</li>
+	<li>Requests are raised per <a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-245</a> AC3 under Module “Document Management / Disbursement Checklist”.</li>
+	<li>Requests carry no channel <font color="#97a0af"><del>and no product type</del></font><font color="#6554c0">; they carry the product type and the queue</font>.</li>
+	<li><b>Lock:</b> while any request for a <font color="#1565c0"><b>queue’s checklist</b></font> is Pending Review or On Hold, that <font color="#1565c0"><b>whole checklist</b></font> is read-only. <font color="#6554c0">The lock applies per product type × queue checklist; the other product tabs stay editable.</font></li>
+	<li>Read-only = <font color="#1565c0"><b>“Add Checklist Item”, Edit, Delete and the Active toggles</b></font> are disabled.</li>
+	<li>The other <font color="#1565c0"><b>queues’ checklists</b></font> stay editable.</li>
+</ul>
+
+
+<h4><a name="MakerQueue"></a><font color="#1565c0"><b>AC6.2</b></font> Maker Queue</h4>
+
+<p>Navigation: Queue &gt; Maker Queue. Same as <a href="https://scvaladdin.atlassian.net/browse/ACP-248" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-248</a> / <a href="https://scvaladdin.atlassian.net/browse/ACP-249" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-249</a>. The maker sees only their own requests (<a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-245</a> AC4).</p>
+
+<ul>
+	<li><b>List:</b> same columns as <a href="https://scvaladdin.atlassian.net/browse/ACP-248" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-248</a>.</li>
+	<li>Module = “Document Management / Disbursement Checklist”.</li>
+	<li>Request Type = Create, Update or Delete.</li>
+	<li><b>Details</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-249" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-249</a>): Application Details show the <font color="#1565c0"><b>queue name</b></font>, <font color="#6554c0">product type,</font> position, item text and status.</li>
+	<li>View/Add Comment follows <a href="https://scvaladdin.atlassian.net/browse/ACP-263" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-263</a>.</li>
+</ul>
+
+
+<h4><a name="CheckerQueue"></a><font color="#1565c0"><b>AC6.3</b></font> Checker Queue</h4>
+
+<p>Navigation: Queue &gt; Checker Queue. Same as <a href="https://scvaladdin.atlassian.net/browse/ACP-250" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-250</a> / <a href="https://scvaladdin.atlassian.net/browse/ACP-251" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-251</a>.</p>
+
+<ul>
+	<li><b>List:</b> same columns as <a href="https://scvaladdin.atlassian.net/browse/ACP-250" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-250</a>, with the <font color="#1565c0"><b>AC6.2</b></font> Module value.</li>
+	<li><b>Routing:</b> shown when Request Type and Module match the checker’s Checker Group authority set (<a href="https://scvaladdin.atlassian.net/browse/ACP-250" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-250</a> AC4).</li>
+	<li>The maker never sees their own request (<a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-245</a> AC4).</li>
+	<li><b>Concurrent access:</b> same as <a href="https://scvaladdin.atlassian.net/browse/ACP-250" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-250</a> AC5.</li>
+	<li><b>Details:</b> the <font color="#1565c0"><b>AC6.2</b></font> details plus Reject and Approve (<a href="https://scvaladdin.atlassian.net/browse/ACP-251" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-251</a>).</li>
+	<li><b>Compare</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-251" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-251</a> AC2): Create shows new values only.</li>
+	<li>Update shows new and old values. Delete shows old values only.</li>
+</ul>
+
+
+<p><b>No authorised checker</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-245</a> AC5)</p>
+
+<ul>
+	<li>The request becomes On Hold.</li>
+	<li>Send ET30 to the maker.</li>
+	<li>Send ET31 to the Checker Admin.</li>
+</ul>
+
+
+<h4><a name="CheckerDecision"></a><font color="#1565c0"><b>AC6.4</b></font> Checker Decision</h4>
+
+<p><b>Approve</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-246" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-246</a> AC1)</p>
+
+<ul>
+	<li>Confirmation pop-up per <a href="https://scvaladdin.atlassian.net/browse/ACP-246" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-246</a>.</li>
+	<li>Buttons: “Cancel”, “Yes, Approve”.</li>
+	<li><b>Create:</b> the item is added at the end of its checklist, Active.</li>
+	<li><b>Update:</b> the new text <font color="#1565c0"><b>or status</b></font> applies.</li>
+	<li><b>Delete:</b> the item is removed; positions are renumbered.</li>
+	<li>Request Status = Approved.</li>
+	<li>Send ET28 to the maker.</li>
+	<li>Release the lock.</li>
+</ul>
+
+
+<p><b>Reject</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-246" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-246</a> AC2)</p>
+
+<ul>
+	<li>Confirmation pop-up per <a href="https://scvaladdin.atlassian.net/browse/ACP-246" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-246</a>.</li>
+	<li>Buttons: “Cancel”, “Yes, Reject”.</li>
+	<li>The reason is mandatory.</li>
+	<li>The checklist is unchanged.</li>
+	<li>Request Status = Rejected.</li>
+	<li>Send ET27 to the maker.</li>
+	<li>Release the lock.</li>
+</ul>
+
+
+<p><b>Expired</b> (<a href="https://scvaladdin.atlassian.net/browse/ACP-246" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-246</a> AC3)</p>
+
+<ul>
+	<li>Same effect as Reject.</li>
+	<li>Request Status = Expired.</li>
+	<li>Send ET29 to the maker.</li>
+</ul>
+
+
+<p>An approved change follows the AC1 “How changes apply” rule. Each decision is stored per <b>CR 003</b>.</p>
+
+<h2><a name="ImpactAnalysis"></a>Impact Analysis</h2>
+
+<h3><a name="IA1.RoleManagement"></a>IA1. Role Management</h3>
+
+<ul>
+	<li>New permissions in Role Management, module “Document Management”, sub-menu “Disbursement Checklist”:
+	<ul>
+		<li><b>View Disbursement Checklist</b> — see the screen and its four <font color="#1565c0"><b>checklists</b></font>;</li>
+		<li><b>Edit Disbursement Checklist</b> — add, <font color="#1565c0"><b>edit</b></font>, activate, deactivate and delete items.</li>
+	</ul>
+	</li>
+	<li>The permissions are bank-wide, not per product type.</li>
+	<li>Without Edit, <font color="#1565c0"><b>“Add Checklist Item”, Edit</b></font> and Delete are hidden.</li>
+	<li>Without Edit, the <font color="#1565c0"><b>Active</b></font> toggles are read-only.</li>
+</ul>
+
+
+<h3><a name="IA2.MakerCheckerConfiguration%28https%3A%2F%2Fscvaladdin.atlassian.net%2Fbrowse%2FACP245https%3A%2F%2Fscvaladdin.atlassian.net%2Fbrowse%2FACP245smartlink%29"></a>IA2. Maker-Checker Configuration (<a href="https://scvaladdin.atlassian.net/browse/ACP-245" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-245</a>)</h3>
+
+<ul>
+	<li>Add “Document Management / Disbursement Checklist” to the Checker Review configuration table, with Yes / No.</li>
+	<li>Request types: as in <font color="#1565c0"><b>AC6.1</b></font>.</li>
+	<li>Add Create, Update and Delete of Disbursement Checklist to the Approving Authority Set in Checker Management (<a href="https://scvaladdin.atlassian.net/browse/ACP-247" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-247</a>, <a href="https://scvaladdin.atlassian.net/browse/ACP-278" title="smart-link" class="external-link" rel="nofollow noreferrer">https://scvaladdin.atlassian.net/browse/ACP-278</a>).</li>
+	<li>The Maker Queue and Checker Queue screens themselves are unchanged.</li>
+</ul>
+
+
+<h2><a name="MockupReference"></a>Mockup Reference</h2>
+
+<p>Attached: <font color="#1565c0"><b>SMBP Portal Mirror v1.1 .html</b></font>. Where it differs, this story applies:</p>
+
+<ul>
+	<li><font color="#97a0af"><del>No product tabs: one set of checklists for all loan products.</del></font> <font color="#6554c0">Product type tabs as in the mockup: one checklist per product type × queue.</font></li>
+	<li><font color="#1565c0"><b>Queue names as in AC1. The mockup’s “Disbursement …” labels are prototype labels.</b></font></li>
+	<li><font color="#1565c0"><b>One checklist per queue; the mockup’s hidden stages are not used.</b></font></li>
+	<li><font color="#1565c0"><b>Singular name.</b></font></li>
+	<li><font color="#1565c0"><b>Search runs on Enter, on the item text only, and shows IM005.</b></font></li>
+	<li>Status changes and Delete ask for confirmation.</li>
+	<li>Each change shows a success message.</li>
+	<li>Changes can need checker approval.</li>
+	<li>Applications keep the checklist they had when they entered the queue.</li>
+</ul>
+
