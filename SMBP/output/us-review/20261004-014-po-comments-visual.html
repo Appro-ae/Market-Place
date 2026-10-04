@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PO Comments — Visual Pack</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  .card{background:#ffffff;border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04),0 4px 12px rgba(16,24,40,.06)}
+  .chd{background:#1a214d;color:#ffffff;padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .chd h2{font-size:16px;font-weight:900}
+  .chd .hold{background:#ffbdad;color:#8f1d12;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900}
+  .chd a{color:#fdba23}
+  .cbody{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:0}
+  .cbody.single{grid-template-columns:1fr}
+  @media(max-width:860px){.cbody{grid-template-columns:1fr}}
+  .ctext{padding:16px 20px}
+  .ctext h3{font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#3b7ef6;margin-bottom:6px}
+  .cmt{background:#edf2ff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px}
+  .cmt ol{padding-left:18px}
+  .cmt li{margin-bottom:6px}
+  .cvis{padding:16px 20px;background:#f6f8ff;border-left:1px solid #e3e9fb}
+  @media(max-width:860px){.cvis{border-left:0;border-top:1px solid #e3e9fb}}
+  .cvis h3{font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#3b7ef6;margin-bottom:8px}
+  .shot{border:1px solid #d9dadc;border-radius:10px;width:100%;display:block;background:#fff}
+  .shot+.shot{margin-top:10px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .call{margin-top:8px;font-size:12px}
+  .call b{display:inline-block;background:#be1522;color:#fff;border-radius:50%;width:17px;height:17px;text-align:center;line-height:17px;font-size:10.5px;margin-right:6px}
+  .call .ok b{background:#28a745}
+  .call div{margin-bottom:3px}
+  /* drawn cheque */
+  .chq{background:#fdfcf7;border:1.5px solid #9aa4c0;border-radius:8px;padding:14px 16px;font-size:12px;position:relative;font-family:Georgia,serif}
+  .chq .bk{font-weight:900;font-size:13px;letter-spacing:1px;color:#1a214d}
+  .chq .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;gap:8px}
+  .chq .lbl{color:#73787b;font-size:10.5px}
+  .chq .fill{border-bottom:1px dotted #9aa4c0;flex:1;padding:0 6px;white-space:nowrap;overflow:hidden}
+  .chq .amt{border:1.5px solid #be1522;border-radius:6px;padding:2px 10px;font-weight:900;background:#fff;position:relative}
+  .chq .sig{border:1.5px dashed #be1522;border-radius:6px;padding:2px 14px;font-style:italic;background:#fff}
+  .badge{position:absolute;background:#be1522;color:#fff;border-radius:50%;width:18px;height:18px;text-align:center;line-height:18px;font-size:11px;font-weight:900;font-family:'Lato',sans-serif}
+  /* drawn config card */
+  .cfg{background:#fff;border:1px solid #d9dadc;border-radius:10px;padding:12px 14px;font-size:12.5px}
+  .cfg .t{font-weight:900;margin-bottom:6px}
+  .cfg .fld{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+  .cfg .in{border:1.5px solid #be1522;border-radius:6px;padding:2px 10px;background:#fff;font-weight:700;position:relative}
+  .cfg .chip{display:inline-block;border:1px solid #9aa4c0;border-radius:999px;padding:1px 9px;font-size:11px;margin:2px}
+  .cfg .chip.bad{border-color:#be1522;background:#fce9ea;color:#b02a31;font-weight:900}
+  .note{font-size:12px;margin-top:10px}
+  .quote{background:#fff;border:1px dashed #9aa4c0;border-radius:10px;padding:12px 16px;font-size:13px;color:#404345;font-style:italic}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>PO Comments <span class="b">— Visual Pack for the Held Stories</span></h1></div>
+  <p class="sub">One card per not-approved ticket: the paste-ready PO comment on the left, the evidence on the right — live screenshots captured today from the <a href="https://claude.ai/artifact/8BzA2XUNr7mZTiTChk63Xr">Portal Mirror</a> and the CJ prototype, plus drawn figures where the defect is inside a document. Red numbers in the captions match the comment points.</p>
+  <div class="meta"><span class="tag red">9 held tickets · comments drafted, nothing posted</span><span class="tag">4 Oct 2026</span></div>
+</header>
+
+<!-- 3761 / 3762 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3761">AMP-3761</a> + <a href="https://scvaladdin.atlassian.net/browse/AMP-3762">AMP-3762</a> — Ops &amp; Fulfilment Queues</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>The dropped controls are not optional — the bank itself expects them.</b> In the portal's own queue, Credit's approval comment reads <i>"Security cheque and first salary credit required"</i> (screenshot ①), yet after Fulfilment approves, the story creates the loan account straight after Fund Holding: nothing waits for the cheque, nothing captures or verifies the first salary credit, and no step ever releases the hold. Please add the post-approval flow (hold-release trigger = cheque Signed + salary credit verified) or record the business decision to drop it.</li>
+        <li><b>Settlement execution is also homeless:</b> the Fulfilment document panel carries a "Settlement instruction" row (screenshot ②) — paying off the old lender in Buyout/DC — but no AC in either story executes or verifies it.</li>
+        <li><b>Who owns CIF/IBAN:</b> the portal gives documents to Ops and CIF/IBAN to the Fulfilment pair; your story has the Ops Maker entering them. One decision, then align both sides.</li>
+        <li><b>Routing:</b> both IA1s defer routing to a "separate story" that doesn't exist — raise it and link it (the entry trigger, per-bank toggle, customer-wait transitions, TPQ paths).</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — live portal, captured today</h3>
+      <img class="shot" src="img-014/portal-ops-disb-1.jpeg" alt="Ops Maker Application Details — documents panel and credit comment">
+      <div class="call">
+        <div><b>1</b>Credit's own comment: "Security cheque and first salary credit required" — the control the story no longer enforces.</div>
+        <div class="ok"><b>✓</b>"Security cheque — Mandatory — System generated" supports 3757's generated model.</div>
+      </div>
+      <img class="shot" src="img-014/portal-fulc-2.jpeg" alt="Fulfilment Checker — settlement instruction row">
+      <div class="call"><div><b>2</b>"Settlement instruction — Mandatory — Not yet uploaded" in the Fulfilment checker view: the old-lender payout step with no AC home.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3757 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3757">AMP-3757</a> — Security Cheque + SoC + Contract Pack</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>Cheque amount (AC3.2 #8):</b> "lower of declared monthly income and 120% × finance" produces, in your own example, a <b>45,000 cheque securing a 790,000 loan</b> (figure ①). A security cheque sizes on the loan, not one month's salary — expected: 120% × accepted Finance Amount (CBUAE Art. 7 cap). Please confirm the business base or remove the income term.</li>
+        <li><b>Signature (AC3.2 #10):</b> the post-OTP version prints the word <b>"Signed"</b> — no signature image (figure ②). A cheque with no drawer signature is not a negotiable instrument: it cannot be presented or bounced, which is its entire purpose. Either apply the EID signature image the customer already has in eKYC (the CJ screen ③ is built for exactly that) or declare the digital cheque evidential-only and name the real enforcement instrument. Needs legal's call.</li>
+        <li><b>Dead references:</b> ~8 citations of the deleted stage model ("Ops submits Stage 1", "Stage 4 correction", 3761 AC11–AC15). Re-anchor: generate when the Ops Maker's IBAN verifies AND persona = Not matched; new version per Ops re-submit; "Completed" per 3762 AC8.</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — drawn from the US's own field spec + CJ screen</h3>
+      <div class="chq">
+        <div class="bk">EMIRATES ISLAMIC &nbsp;·&nbsp; CHEQUE — A/C PAYEE ONLY</div>
+        <div class="row"><span class="lbl">Date</span><span class="fill">&nbsp;(blank — undated)</span><span class="lbl">No.</span><span class="fill" style="flex:0 0 80px">1035260</span></div>
+        <div class="row"><span class="lbl">Pay to</span><span class="fill">Emirates Islamic Bank P.J.S.C. ************</span></div>
+        <div class="row"><span class="lbl">Dirhams</span><span class="fill">Forty-Five Thousand Only *****************</span><span class="amt">AED 45,000.00<span class="badge" style="top:-10px;right:-10px">1</span></span></div>
+        <div class="row"><span class="lbl">Loan being secured</span><span class="fill" style="font-weight:900">AED 790,000.00 — cheque covers 5.7%</span></div>
+        <div class="row" style="justify-content:flex-end"><span class="lbl">Drawer</span><span class="fill" style="flex:0 1 260px">OMAR KHALID AL NUAIMI · A/C No. 0001012345678901</span><span class="sig">"Signed"<span class="badge" style="top:-10px;right:-10px">2</span></span></div>
+      </div>
+      <div class="call">
+        <div><b>1</b>AC3.2 #8 own example: min(45,000 income; 948,000 = 120%×finance) → 45,000.</div>
+        <div><b>2</b>AC3.2 #10: the word "Signed" replaces a signature — no image, no EID signature.</div>
+      </div>
+      <img class="shot" style="max-width:290px;margin:10px auto 0" src="img-014/s-34.jpeg" alt="CJ Sign your security cheque screen">
+      <div class="call"><div><b>3</b>The CJ already has the signing screen (3689 AC1.5) built around the EID signature — keep it.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3730 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3730">AMP-3730</a> — Application Form + Affordability Assessment</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>The acknowledgement step has no home.</b> Element 31 fires "when the channel confirms the customer's OTP acknowledgement of this document" — your own IA1 says no B2B PL channel step shows the Affordability Assessment or records that acknowledgement. The CJ's declaration screen (screenshot ①) lists T&amp;C and KFS only. Until a CJ story adds the Affordability step, the acknowledgement version, the Digital Signature block and contract-pack item #7 can never exist. Please raise the CJ story (3404/3689 extension) and link it here.</li>
+        <li>Minor: Section 4 overdraft row prints Credit Limit as "Outstanding Amount" — confirm vs the ADIB model (balance expected).</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — CJ prototype</h3>
+      <img class="shot" style="max-width:300px;margin:0 auto" src="img-014/s-27.jpeg" alt="CJ Customer declaration screen">
+      <div class="call"><div><b>1</b>Customer declaration shows the T&amp;C / KFS files — no Affordability Assessment, no OTP acknowledgement of it anywhere in the journey.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3807 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3807">AMP-3807</a> — Disbursement Checklist</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>The screen model doesn't match the design.</b> Your story: 4 flat queue tabs, no product tabs, all checklists start empty. The portal (screenshot ①): <b>product tabs</b> (Personal / Auto / Mortgage Loan) + a <b>Queue selector</b>, and the items are <b>stage-coded (O1, O2, O3…)</b> and <b>seeded with real checks</b>. Please align the information architecture with the design owner — it also depends on the stage decision on 3761/3762.</li>
+        <li><b>Empty must not mean open:</b> with all tabs empty and "no active items → doesn't block", four-eyes is vacuous on day one. Seed the checklists at bank onboarding from the portal content (screenshot ① is the ready seed) and require ≥1 active item on the checker tabs before the routing toggle can be On.</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — live portal, captured today</h3>
+      <img class="shot" src="img-014/portal-checklists.jpeg" alt="Portal Disbursement Checklists screen">
+      <div class="call"><div><b>1</b>Product tabs + Queue dropdown + stage-coded, pre-seeded items ("O2 Salary certificate issued ≤30 days, addressed to the acquiring bank…") — vs the story's 4 empty queue tabs.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3732 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3732">AMP-3732</a> — PL B2B Settlement Screen</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>Category scope vs the approved CJ:</b> 3694 AC6 (US Approved) struck Credit Card and Overdraft — the CJ settlement screen shows <b>unsecured installments only</b> (screenshot ②). Your DC variant shows all 3 categories and Buyout keeps Overdraft. Align with Trang, or declare the Bank-Portal divergence explicitly like your AC1 omission note.</li>
+        <li><b>Buyout selection:</b> single-select here vs "at least 1 contract" multi-select in 3694/3404 — one rule for the product.</li>
+        <li><b>Variant availability:</b> 3694 AC5 renders only bank-returned variants (screenshot ① — cards come from product matching); you hardcode Fresh and gate the rest by AECB. State it as an intentional BP divergence and define the no-Fresh case.</li>
+        <li><b>DC gate "≥1 credit card"</b> blocks a PL-only consolidation the CJ allows — relax to "≥2 in-scope contracts" or justify.</li>
+        <li><b>Housekeeping:</b> the ~8 "per AMP-3732" self-references should point to AMP-3753; define the fallback's "highest cost-to-balance ratio" or mirror 3404 AC6a's manual re-scope.</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — CJ prototype</h3>
+      <div class="two">
+        <img class="shot" src="img-014/s-17b-buyout-selected.jpeg" alt="CJ Choose your product with buyout selected">
+        <img class="shot" src="img-014/s-18c-settlement-on.jpeg" alt="CJ settlement screen with toggles on">
+      </div>
+      <div class="call">
+        <div><b>1</b>CJ variant cards are bank-returned products, nothing hardcoded (3694 AC5).</div>
+        <div><b>2</b>CJ settlement lists unsecured installments only, multi-toggle, default OFF (3694 AC6 as approved).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3753 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3753">AMP-3753</a> — AECB Contract Scope Configuration</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>'U' kills DC for everyone:</b> the G4 default blocked-status list includes <b>U (Active Payments)</b> — per AMP-3461's fixture that's the WorstStatus of every performing contract, so any customer with one active facility fails G4 and the DC card never appears (figure ①). Remove U; align with the DP's validated set.</li>
+        <li><b>G4 threshold re-introduces fixed bug AMP-3461:</b> a numeric input with range 1–9 against an AECB <b>band code 0–7</b> (8–9 don't exist; 0 can't be blocked). Use the band dropdown with labels ("3 — 60–89 days") as 3461 ruled.</li>
+        <li><b>G5 re-introduces fixed bug AMP-3457:</b> ceiling validated 0.01–100% — the validated rule is <b>30–60</b> (50% = CBUAE cap). And the gate has no consolidation rate / tenure / scope inputs, so the projected DBR cannot be computed — source them from the PL product config (2320 Auto pattern).</li>
+        <li>Also: G2/G3 defaults (2 / 30%) vs the DP's validated 3 / 70%; add the ΣLimit=0 NC rule; persist per-gate results + measured values so the RM can see why DC is hidden.</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — the config as specced (annotated)</h3>
+      <div class="cfg">
+        <div class="t">G4 — Clean Payment History &nbsp;<span style="font-weight:400;color:#73787b">(as written in AC6)</span></div>
+        <div class="fld"><span>Max Days Payment Delay:</span><span class="in">3 &nbsp;· range 1–9<span class="badge" style="top:-10px;right:-10px">2</span></span><span style="color:#73787b;font-size:11px">AECB codes are 0–7 (3461)</span></div>
+        <div class="fld" style="align-items:flex-start"><span>Blocked statuses (17):</span><span style="flex:1">
+          <span class="chip">D Deceased</span><span class="chip">B Bankrupt</span><span class="chip">W Write Off</span><span class="chip">F Default</span><span class="chip">C Settlement</span><span class="chip bad">U Active Payments ①</span><span class="chip">…</span></span></div>
+        <div class="fld"><span>G5 DBR ceiling:</span><span class="in">0.01 – 100.00 %<span class="badge" style="top:-10px;right:-10px">3</span></span><span style="color:#73787b;font-size:11px">validated rule: 30–60 (3457 D7)</span></div>
+      </div>
+      <div class="call">
+        <div><b>1</b>'U' = the normal status of a performing contract — blocking it fails every customer.</div>
+        <div><b>2</b>Numeric day-threshold against a band code — the exact defect 3461 closed.</div>
+        <div><b>3</b>100% ceiling means obligations equal to the whole income still pass.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3760 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3760">AMP-3760</a> — T24 Mock Server</h2><span class="hold">HOLD</span></div>
+  <div class="cbody">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>Trigger vs cooling-off:</b> §2.7/§2.9 fire "after the customer accepts the offer and KFS/AIP" — but the CJ continues to Customer Declaration (screenshot ①) and the customer can take the <b>5-day cooling-off</b> (screenshot ②). Firing at accept creates a CIF and a loan in core banking for a customer who may still pause or abandon. 3762 IA7 already places creation at the queue exit — please update the trigger table to match.</li>
+        <li><b>OQ5 (repayment account)</b> is your own declared blocker for §2.9 — close it at the design review before the CR commits.</li>
+        <li>Mock IDs: move risks R2/R3 into ACs — suppress mock-flagged IDs on customer documents; one CIF number space across both mocks.</li>
+      </ol></div>
+    </div>
+    <div class="cvis"><h3>Evidence — CJ prototype</h3>
+      <div class="two">
+        <img class="shot" src="img-014/s-27.jpeg" alt="CJ Customer declaration">
+        <img class="shot" src="img-014/s-28.jpeg" alt="CJ Application paused — cooling-off">
+      </div>
+      <div class="call">
+        <div><b>1</b>Declaration comes after offer acceptance…</div>
+        <div><b>2</b>…and cooling-off pauses the application — after the mock would already have booked the loan.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3759 -->
+<div class="card">
+  <div class="chd"><h2><a href="https://scvaladdin.atlassian.net/browse/AMP-3759">AMP-3759</a> — Migrate SCB v2 → v3</h2><span class="hold">HOLD</span></div>
+  <div class="cbody single">
+    <div class="ctext"><h3>Comment for the BA</h3>
+      <div class="cmt"><ol>
+        <li><b>This is the entire description of a PROD migration currently marked Ready for Dev:</b></li>
+      </ol>
+      <div class="quote">"This activity is step 2 of AMP-2437. All data from SMBP v2 needs to be move to SMBP v3. Channel: &nbsp;[blank] &nbsp;Expected data to be shown in Super Portal v3: [one screenshot]"</div>
+      <ol start="2" style="margin-top:8px">
+        <li>Before any approval it needs: the source→target entity/field mapping, reconciliation ACs (counts and amount totals per entity, pass/fail thresholds), the channel scope (the "Channel:" line is blank), cut-over sequence and rollback plan, and the handling of in-flight applications. Suggest returning it to Draft and building it from the AMP-2437 step-1 inventory.</li>
+      </ol></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Comments drafted only; posting needs your explicit per-ticket go. Screenshots: Portal Mirror (4 Oct version) + CJ prototype offline_4_2.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
