@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggested Review — Portal v1.2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:24px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .verdict p{font-size:14px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:820px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:10px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .rag{display:inline-block;border-radius:20px;padding:2px 11px;font-size:10.5px;font-weight:900;white-space:nowrap}
+  .rag.g{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .rag.a{background:#fdba23;color:#1a214d}
+  .rag.r{background:#1a214d;color:#ffffff}
+  .cmt{background:#ffffff;border-left:4px solid #fdba23;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:8px;font-size:13.5px}
+  .cmt ol{padding-left:20px}
+  .cmt li{margin-bottom:6px}
+  .cmt h3{font-size:14px;font-weight:900;margin-bottom:4px;margin-top:10px}
+  .cmt h3:first-child{margin-top:0}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Suggested Review <span class="b">— USs vs Portal Mirror (4 Oct)</span></h1></div>
+  <p class="sub">The latest <a href="https://claude.ai/artifact/8BzA2XUNr7mZTiTChk63Xr">Portal Mirror</a> version (4 Oct: dm v14, oq v19, docv trimmed — all diffed at code level against yesterday's v1.1) checked against the queue + Document Management stories (3761/3762/3728/3806/3807/3757 — 3761 re-fetched today, text unchanged; the update was the mockup attachment swap).</p>
+  <div class="meta"><span class="tag red">Design is converging — one decision left: the stages</span><span class="tag">F49 closed · F47 half-closed</span><span class="tag">4 Oct 2026 · Nothing posted</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · Verdict</span>
+  <div class="verdict">
+    <p><b>The portal moved toward the USs on almost every open point</b> — queue names and the four status labels now match 3761/3762 exactly, the DM module implements Document List + maker-checker (3806/3807), the profile attributes now include the full Strategies/Filtration list exactly as 3728 AC2 requires, and the oversized document viewer was dropped. <b>What's left is the one real decision:</b> the portal still runs 7 stages inside the queues (Settlement to Old Lender, First Salary Credit, Clearance, Release — with "Awaiting Old Bank" and filled stage×role checklists), and it still parks CIF/IBAN with the Fulfilment pair while the USs put them with Ops. Settle those two points and the design and the stories finally describe the same system.</p>
+  </div>
+</section>
+
+<section>
+  <span class="seclabel">02 · What the new portal version changed</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Area</th><th>Change (4 Oct version)</th><th>Effect on findings</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Queue names &amp; statuses</td><td>"Disbursement Maker/Checker" renamed <b>Fulfillment Maker/Checker Queue</b>; status labels now exactly "Awaiting Ops Maker / Ops Checker / Fulfillment Maker / Fulfillment Checker"</td><td><span class="rag g">F47 half-closed</span> — naming aligned; the split of work is not (below)</td></tr>
+      <tr><td class="k">Work split</td><td>Portal: Ops pair = <b>Documents only</b>; Fulfilment pair = Disbursement details (CIF/IBAN) + Settlement + Salary + Clearance + Release</td><td><span class="rag r">Still contradicts</span> 3761 (Ops Maker enters CIF/IBAN) — decide who owns CIF/IBAN</td></tr>
+      <tr><td class="k">Stages</td><td>7 stages kept (S1 Documents … S2b Settlement to Old Lender … S5b Clearance … S6 Account/Mandate/Release), "Awaiting Old Bank" status, per-stage TATs, 12 filled stage×role checklists now named with the US queue names</td><td><span class="rag r">F40/F46 remain the open decision</span> — the design author is clearly keeping the controls</td></tr>
+      <tr><td class="k">DM module</td><td>Attributes = the <b>full Strategies/Filtration list</b> (implements 3728 AC2 "every Rule Engine Filtration attribute"); attribute renamed "Transaction Type"; Document List + Checker Review flows present; products now include <b>Casa</b></td><td><span class="rag g">Aligned with 3728/3806/3807</span> — two nits: Casa is outside 3728's product scope; enum stored "New", displayed "Fresh" (3721 says the value IS Fresh)</td></tr>
+      <tr><td class="k">Document viewer</td><td>The 13KB viewer module was cut to a small "jump to document row" helper</td><td><span class="rag g">F49 CLOSED</span> — no US needed</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · Suggested review — paste-ready comments (needs your go)</span>
+  <div class="cmt">
+    <h3>AMP-3761 + AMP-3762 (one comment on each)</h3>
+    <ol>
+      <li><b>Good convergence:</b> the latest portal design now uses exactly this story's queue names and the four statuses — naming is settled.</li>
+      <li><b>Decision 1 — who owns CIF/IBAN:</b> the portal gives Documents to the Ops pair and CIF/IBAN + disbursement to the Fulfilment pair; this story has the Ops Maker entering CIF/IBAN. Pick one split and align both sides.</li>
+      <li><b>Decision 2 — the stages:</b> the portal still runs Settlement-to-Old-Lender, First-Salary-Credit, Clearance and Release inside the Fulfilment pair, with "Awaiting Old Bank", per-stage TATs and filled checklists — i.e. the buyout settlement execution, the hold-release and the salary-credit verification that this story currently has nowhere. If those controls are required (I believe they are for Buyout/DC), the Fulfilment story needs them as ACs; if not, strip them from the design and record the business acceptance.</li>
+      <li>Reminder: the queue-routing story is still unraised, and the four checklists still start empty with empty-never-blocks.</li>
+    </ol>
+    <h3>AMP-3728</h3>
+    <ol>
+      <li>The portal now implements your AC2 attribute list in full (all Strategies/Filtration criteria + the 7 profile attributes) — aligned ✓.</li>
+      <li>Two scope nits: the portal's product tabs include <b>Casa</b>, your scope is CC/PL/AL/ML — align; and it stores Transaction Type "New" while displaying "Fresh" — 3721 AC1 defines the value as "Fresh", so store Fresh and drop the dual enum.</li>
+    </ol>
+    <h3>AMP-3806 / AMP-3807</h3>
+    <ol>
+      <li>3806: the portal now carries Document List with Checker Review — matched ✓. Keep the 14-doc inclusion-boundary question from the last round (portal still registers 23 incl. non-upload items).</li>
+      <li>3807: the portal's checklists are keyed by <b>queue + stage</b> (12 groups), not 4 flat tabs — this depends on Decision 2; hold the screen design until it lands, then seed from the portal content.</li>
+    </ol>
+    <h3>AMP-3757 (unchanged reminder)</h3>
+    <ol>
+      <li>Still blocked by: cheque amount rule (45k cheque vs 790k loan — expect 120% × finance), the "Signed"-text-without-signature legal question, and the dead stage references — which Decision 2 will settle one way or the other.</li>
+    </ol>
+  </div>
+  <p class="note"><b>Net position:</b> after this portal version, the open P1 list on the queue/DM cluster reduces to: the stage/controls decision (F40/F46), the CIF/IBAN ownership half of F47, the routing story (F42), 3757's cheque blockers (F31/F32/F41), and the Affordability CJ step (F33). Register updated: F49 closed, F47 marked partial.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Review only; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
