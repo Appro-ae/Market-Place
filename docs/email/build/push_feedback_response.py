@@ -9,7 +9,10 @@ feedback). PO principles for this reply (04/10):
   1. non-functional requirements are not discussed (item 12 keeps a neutral one-liner only);
   2. the approved CR covers the current scope only - anything beyond it is delivered later by the
      dedicated development team (no CR), so nothing is "lost" and nothing is added to MVP 1.1.
-[bracketed] values are for the PO to fill or confirm before sending.
+PO decisions of 05/10 folded in: retry 5x3, P02/P03 send 10:00 UAE, backend tracking + support bridge,
+Arabic not yet received, BRD V1.2 on Tue 06 Oct. Avanza spec v0.2 (05/10) and the 05/10 call close stan
+length, mobile format, message field, language values, action types and the error-code list.
+[bracketed] values remain for the PO to confirm before sending.
 """
 import html, os, re
 
@@ -66,14 +69,16 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
     ('3', 'Deep-linking defined per notification', ['MVP 1.1 scope', 'Dependency – Avanza'],
      'Agreed — the destination screen per Push ID is part of the MVP scope, and BRD V1.2 will carry the table: '
      'Push ID, trigger, destination screen, and the screen when the application is no longer active '
-     '[the application’s current status screen]. Logged in or logged out is the same from Appro’s side: the '
+     '(the application’s current status screen). Per the alignment call of 05/10, P03 and P09 carry action '
+     'type NONE — the tap opens the Super App, with no deep link — and every other Push ID uses APPRO_JOURNEY. '
+     'Logged in or logged out is the same from Appro’s side: the '
      'Super App completes the login, then hands over to the Appro journey, which opens at the destination '
      'screen. Avanza to confirm the hand-over keeps the destination after login.',
      'Deep-link table for all Push IDs.'),
     ('4', 'Reminder logic and suppression rules', ['MVP 1.1 scope', 'Later – dedicated team'],
      'P02 runs once per day for 15 days, as agreed. It stops immediately when the customer selects the offer, '
      'or when the application is completed, cancelled or withdrawn, rejected or expired — the full list goes '
-     'into the BRD. The reminder interval and count are [backend parameters] in MVP 1.1; Business-managed '
+     'into the BRD. The reminder interval and count are backend parameters in MVP 1.1; Business-managed '
      'configuration follows as an enhancement (item 1).',
      'Reminder and stop rules stated explicitly.'),
     ('5', 'Duplicate notification prevention', ['MVP 1.1 scope', 'Dependency – Avanza'],
@@ -83,38 +88,42 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'section 4 of the BRD).',
      'Business rule BR5 — one notification per event.'),
     ('6', 'Arabic content before sign-off', ['Input – Reem Bank'],
-     'English and Arabic are one requirement and are tested together in UAT. [We have not yet received the '
-     'approved Arabic titles and bodies.] Please share them against the final English wording (item 7) and we '
+     'English and Arabic are one requirement and are tested together in UAT. We have not yet received the '
+     'approved Arabic titles and bodies. Please share them against the final English wording (item 7) and we '
      'will add them to the BRD before sign-off.',
      'Arabic column in the content table.'),
     ('7', 'Customer communication wording', ['MVP 1.1 scope', 'Input – Reem Bank'],
      'Accepted as proposed for P01, P04 and P09 — all within the 40 / 100 character limits and with no '
      'personal data on the lock screen. P05 depends on how the customer provides the document (Shurafa’s '
-     'comment S6) and will be finalised with it. Please confirm the final English wording for all eleven '
-     'notifications by [date], so the Arabic can follow.',
+     'comment S6) and will be finalised with it. The full updated wording is in BRD V1.2 for your '
+     'confirmation, so the Arabic can follow.',
      'Updated content table.'),
     ('8', 'Push timing and customer experience', ['MVP 1.1 scope', 'Later – dedicated team'],
      'Event-driven pushes are sent immediately. The scheduled ones — the P02 reminder and P03 (offer expired) — '
-     'are sent at a fixed time of day, [10:00] UAE time. Configurable sending hours and customer local time '
+     'are sent at a fixed time of day, 10:00 UAE time. Configurable sending hours and customer local time '
      'are an enhancement for the dedicated team.',
      'Timing rule per Push ID.'),
     ('9', 'Audit trail and operational visibility', ['MVP 1.1 scope', 'Later – dedicated team', 'Dependency – Avanza'],
      'In MVP 1.1 each push is tracked in the backend against the application: Push ID, date and time, attempts, '
-     'final status (sent / failed) and the failure reason. [Until the Super Portal view is available, Appro '
-     'support provides the status of a push for a given application on request from the Contact Centre.] '
+     'final status (sent / failed) and the failure reason. Until the Super Portal view is available, Appro '
+     'support provides the status of a push for a given application on request from the Contact Centre. '
      'Showing it in Super Portal — an audit-trail entry or a notification report — is the next enhancement for '
      'the dedicated team. Delivery to the device, opened / clicked and deep-link success are Super App events '
      'that Appro does not receive; Avanza to confirm what the Super App can report.',
      'Tracking fields listed; Super Portal view under “Future enhancements”.'),
     ('10', 'Retry rules finalised', ['MVP 1.1 scope', 'Dependency – Avanza'],
-     'Baseline values go into BRD V1.2: retry every [5] minutes, up to [3] attempts; a timeout counts as a '
+     'Baseline values go into BRD V1.2: retry every 5 minutes, up to 3 attempts; a timeout counts as a '
      'failed attempt and is retried; the same request ID is reused on every retry; after the last attempt the '
-     'push is recorded as failed and the application continues unaffected. Which error codes are retryable or '
-     'final follows Avanza’s error-code list, still pending.',
+     'push is recorded as failed and the application continues unaffected. Avanza’s error-code list arrived '
+     'with specification v0.2 on 05/10; we propose 429, 500 and a timeout as retryable, and 403 and 404 as '
+     'final with no retry — to be confirmed with Avanza.',
      'Retry baseline values.'),
     ('11', 'Avanza / technical TBCs closed before sign-off', ['Dependency – Avanza', 'Input – Reem Bank'],
-     'Our questions on the specification were sent to Avanza on 28/09 with the BRD [and are still open as of '
-     'today]; BRD V1.2 will carry the answers as received. On the sign-off condition, we propose that Business '
+     'Good progress here: against our questions of 28/09, Avanza shared specification v0.2 on 05/10, and the '
+     'alignment call of 05/10 closed the action-type behaviour, the mobile number format, the message field, '
+     'the language values and the error-code list — all carried into BRD V1.2. Still open with Avanza: the '
+     'environment endpoint and credentials, the channel id assigned to Appro, the request id on retry, and '
+     'the Super App hand-over into the Appro journey. On the sign-off condition, we propose that Business '
      'signs off the functional requirements (sections 1–3 and 5–7), so development and the Expleo handover can '
      'start, while the interface items in section 4 are closed with Avanza and Reem Bank IT before SIT. Tying '
      'the business sign-off to the interface items would hold the timeline on Avanza’s answers.',
@@ -172,7 +181,7 @@ SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
      'sees today when the application is rejected. The push text stays neutral and never shows the decision on '
      'the lock screen (item 7).'),
     ('S8', 'p.5', 'P10 “Tap for details” — when he taps, where will it take him?', ['MVP 1.1 scope'],
-     'P10 opens the [existing loan status screen, showing the disbursement]. The destination for every Push ID '
+     'P10 opens the existing loan status screen in the Appro journey. The destination for every Push ID '
      'is in the deep-link table (item 3).'),
     ('S9', 'p.5', 'P03 (30 days) — as discussed, this is to be changed; the customer can apply five times.',
      ['Input – Reem Bank'],
@@ -184,10 +193,11 @@ SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
 NEXT = [
     ('Reem Bank', 'Final English wording for the eleven notifications and the Arabic content (items 6–7); the '
      'P05 document channel (S6); the offer validity period (S9); confirmation of the sign-off approach (item 11).'),
-    ('Avanza', 'Answers to the specification questions sent on 28/09 (item 11); the Super App behaviour for '
-     'login, routing, devices and permissions (items 2–3); what delivery or open data it can report (item 9).'),
-    ('Appro', 'BRD V1.2 by [date] with the above incorporated, Avanza’s answers added as they arrive. '
-     '[Updated delivery plan with the revised SIT / UAT dates once BRD V1.2 is signed off.]'),
+    ('Avanza', 'The remaining items of 28/09 (item 11): environment endpoint and credentials, channel id, request '
+     'id on retry; the Super App behaviour for login, routing, devices and permissions (items 2–3); what delivery '
+     'or open data it can report (item 9).'),
+    ('Appro', 'BRD V1.2 by Tuesday, 06 October with the above and specification v0.2 incorporated. An updated '
+     'delivery plan with the revised SIT / UAT dates follows once BRD V1.2 is signed off.'),
 ]
 
 F = "font-family:Arial,Helvetica,sans-serif"

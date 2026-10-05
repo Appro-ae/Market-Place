@@ -1,4 +1,19 @@
-# BRD — Push Notification (customer journey)
+# BRD — Push Notification (Reem Bank)
+
+## V1.2 — current (06 October 2026)
+
+`BRD_Push_Notification_V1.2.docx` (editable) and `BRD_Push_Notification_V1.2.pdf` (protected
+circulation copy) incorporate the Reem Bank business review of 29/09 (Head of Retail items 1–15,
+PM comments on the PDF) under the PO's decisions of 05/10, plus middleware specification v0.2
+(05/10) and the 05/10 alignment call (P03/P09 action type NONE; stan 6–12 chars; mobile
+9715XXXXXXXX; language "EN"/"AR"; error-code list).
+
+Build: `python3 build/v12_update_business_review.py [--proof DIR]` — starts from the repo
+V1.1 docx, FIRST aligns it to the PO's final PDF (she removed the "Opens at" column and the
+"Priority" note in her own last edit; her final also lost the 1.1 version-history row, restored
+here and disclosed), then applies the review. New: 3.4 destinations, 3.5 scenarios, 3.6 stop
+rules, 3.7 sending time, 4.5 error codes, 4.6 open items, BR5, section 8 acceptance criteria,
+section 9 future enhancements. Figures 1 and 2 re-rendered with the 5-min × 3-attempt baseline.
 
 ## FINAL: `BRD_Push_Notification_V1.1_FINAL.pdf` — the PO's circulated version (28/09, 10 pages)
 

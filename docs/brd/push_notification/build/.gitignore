@@ -2,3 +2,4 @@
 .outlined.pdf
 .pdfout/
 .toc.json
+__pycache__/
