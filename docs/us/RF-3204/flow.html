@@ -1,0 +1,42 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{margin:0;background:#fff}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="520" font-family="Liberation Sans, Arial, sans-serif" font-size="14">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+<style>.n{fill:#fff;stroke:#333;stroke-width:1.5}.s{fill:#ffe6cc;stroke:#d79b00;stroke-width:1.5}.q{fill:#f8cecc;stroke:#b85450;stroke-width:1.5}.l{stroke:#333;stroke-width:1.5;fill:none;marker-end:url(#a)}.t{text-anchor:middle}.b{font-weight:bold}.lab{font-size:13px;fill:#333;font-weight:bold}</style>
+<!-- start -->
+<circle cx="50" cy="210" r="28" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/><text x="50" y="215" class="t b">START</text>
+<path class="l" d="M78,210 H118"/>
+<rect class="n" x="120" y="175" width="170" height="70" rx="8"/>
+<text x="205" y="203" class="t b">T24 Customer Search</text><text x="205" y="223" class="t">Dedupe by EID (RF-23)</text>
+<path class="l" d="M290,210 H328"/>
+<polygon class="n" points="395,155 460,210 395,265 330,210"/>
+<text x="395" y="206" class="t b">Relation</text><text x="395" y="223" class="t b">Status?</text>
+<!-- NTB -->
+<path class="l" d="M395,155 V95 H498"/><text x="420" y="88" class="lab">NTB</text>
+<rect class="s" x="500" y="60" width="270" height="70" rx="8"/>
+<text x="635" y="88" class="t b">T24 CIF Creation</text><text x="635" y="108" class="t">POST createCustomerProfile</text>
+<!-- ETB -->
+<path class="l" d="M395,265 V325 H498"/><text x="420" y="345" class="lab">ETB</text>
+<rect class="s" x="500" y="290" width="270" height="70" rx="8"/>
+<text x="635" y="318" class="t b">T24 CIF Update</text><text x="635" y="338" class="t">PUT amendCustomerProfile/{customerId}</text>
+<!-- merge to success -->
+<path class="l" d="M770,95 H880 V148"/><path class="l" d="M770,325 H790 V210 H808"/>
+<polygon class="n" points="880,150 950,210 880,270 810,210"/>
+<text x="880" y="206" class="t b">Success?</text><text x="880" y="223" class="t" font-size="12">20x + "success"</text>
+<path class="l" d="M950,210 H1018"/><text x="965" y="200" class="lab">Yes</text>
+<rect class="n" x="1020" y="170" width="210" height="80" rx="8"/>
+<text x="1125" y="196" class="t b">Next API</text><text x="1125" y="216" class="t" font-size="13">CC → RF-30 · PL → RF-29</text><text x="1125" y="234" class="t" font-size="13">CASA → RF-489</text>
+<path class="l" d="M1230,210 H1262"/>
+<circle cx="1288" cy="210" r="24" fill="#fff" stroke="#333" stroke-width="3"/><text x="1288" y="215" class="t b" font-size="12">END</text>
+<!-- failure -->
+<path class="l" d="M880,270 V378"/><text x="890" y="300" class="lab">No</text>
+<polygon class="n" points="880,380 960,435 880,490 800,435"/>
+<text x="880" y="428" class="t b" font-size="13">Technical error</text><text x="880" y="445" class="t b" font-size="13">&amp; attempt &lt; 5?</text>
+<path class="l" d="M800,435 H772"/><text x="796" y="425" class="lab" text-anchor="end">Yes</text>
+<rect class="n" x="560" y="410" width="210" height="50" rx="8"/>
+<text x="665" y="432" class="t b">Wait 30s (configurable)</text><text x="665" y="450" class="t" font-size="13">re-send same request</text>
+<path class="l" d="M560,435 H485 V210 H462" stroke-dasharray="5,4"/>
+<path class="l" d="M960,435 H1018"/><text x="968" y="425" class="lab">No</text>
+<rect class="q" x="1020" y="400" width="210" height="70" rx="8"/>
+<text x="1125" y="428" class="t b">Transaction Post Queue</text><text x="1125" y="448" class="t" font-size="13">Step Status = Failed</text>
+<text x="20" y="505" font-size="12" fill="#73787B">Business error (status "failed", error.type BUSINESS) is not retried — goes straight to Transaction Post Queue.</text>
+</svg></body></html>
