@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document Time Attributes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Lato',sans-serif;background:#edf2ff;color:#1a214d;padding-bottom:56px;font-size:14.5px;line-height:1.6}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  a{color:#3b7ef6;text-decoration:none} a:hover{text-decoration:underline}
+  header{padding:38px 0 20px}
+  .cls{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+  .pillrow{position:relative;display:inline-block}
+  .pill{position:absolute;left:-6px;bottom:3px;width:210px;height:15px;background:#fdba23;border-radius:10px}
+  h1{position:relative;font-weight:900;font-size:clamp(24px,4vw,32px)}
+  h1 .b{color:#3b7ef6}
+  .sub{margin-top:10px;max-width:84ch}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .tag{background:#ffffff;border:1px solid #3b7ef6;color:#3b7ef6;border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700}
+  .tag.red{border-color:#1a214d;background:#1a214d;color:#ffffff}
+  section{padding:22px 0 2px}
+  .seclabel{display:inline-block;background:#3b7ef6;color:#ffffff;font-weight:700;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+  .tbl{background:#ffffff;border-radius:12px;overflow:hidden;overflow-x:auto;margin-bottom:8px}
+  table{border-collapse:collapse;width:100%;min-width:800px;font-size:12.5px}
+  thead th{background:#1a214d;color:#ffffff;font-weight:700;font-size:11px;text-align:left;padding:10px 13px;white-space:nowrap}
+  tbody td{padding:9px 13px;vertical-align:top}
+  tbody tr:nth-child(even) td{background:#edf2ff}
+  td.k{font-weight:700;white-space:nowrap}
+  .a{display:inline-block;border-radius:20px;padding:1px 9px;font-size:10px;font-weight:900;white-space:nowrap}
+  .a1{background:#fdba23;color:#1a214d}.a2{background:#1a214d;color:#fff}.a3{background:#3b7ef6;color:#fff}.a4{background:#edf2ff;color:#3b7ef6;border:1px solid #3b7ef6}
+  .verdict{background:#1a214d;color:#ffffff;border-radius:14px;padding:18px 22px}
+  .verdict b{color:#fdba23}
+  .note{font-size:12px;margin-top:10px}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid #3b7ef6;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+  .icon4{display:flex;gap:5px}.icon4 i{width:12px;height:12px;border-radius:50%;background:#3b7ef6;display:block}.icon4 i:last-child{margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="cls">Appro – Internal &amp; Approved Domains | Controlled Distribution</div>
+  <div class="pillrow"><span class="pill"></span><h1>Document Management <span class="b">— Time Attributes</span></h1></div>
+  <p class="sub">Which document attributes need a time range in the Document Management module (<a href="https://scvaladdin.atlassian.net/browse/AMP-3806">AMP-3806</a> Document List, <a href="https://scvaladdin.atlassian.net/browse/AMP-3728">AMP-3728</a> profiles), checked against the portal's 53-document register and UAE market practice.</p>
+  <div class="meta"><span class="tag red">Gap: no time attribute exists anywhere today</span><span class="tag">4 time attributes, 2 belong in DM config</span><span class="tag">6 Oct 2026</span></div>
+</header>
+
+<section>
+  <span class="seclabel">01 · The gap</span>
+  <div class="verdict"><p>The Document List (3806), the profiles (3728) and the portal's 53-document register all carry the same attribute set — <b>id, code, name, category, formats, stage, gate, active</b>. <b>No time attribute exists.</b> The time rules are buried as free text in document names ("AECB credit report (within staleness limit)", "Payslips (last 3 months)") — unenforceable and invisible to the upload validation. Four time concepts need a home; only two of them belong in Document Management.</p></div>
+</section>
+
+<section>
+  <span class="seclabel">02 · The four time attributes</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Attribute</th><th>Applies to</th><th>Rule</th><th>Where it lives</th></tr></thead>
+    <tbody>
+      <tr><td class="k"><span class="a a1">A1</span> Max Document Age (days)</td><td>Customer-supplied evidence</td><td>Issue date must be within N days of upload; blank = no limit. Validated at upload (Ops Maker re-checks).</td><td><b>New column in 3806 Document List</b> (per document, config)</td></tr>
+      <tr><td class="k"><span class="a a2">A2</span> Expiry Check (Yes/No)</td><td>Identity documents</td><td>Document's own expiry date must be ≥ submission date (config option: ≥ N days remaining).</td><td><b>New column in 3806 Document List</b></td></tr>
+      <tr><td class="k"><span class="a a3">A3</span> Validity Period (days from generation)</td><td>Generated documents (offers, letters)</td><td>Document expires N days after generation; expired → regenerate before use.</td><td>The generating story (3721 config, 3757, 3808) — not a DM column</td></tr>
+      <tr><td class="k"><span class="a a4">A4</span> Retention Period (years)</td><td>All archived documents</td><td>Minimum archive period after loan closure.</td><td>DMS-level policy, one value per category — not per document</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="seclabel">03 · Mapping — which documents get which value</span>
+  <div class="tbl"><table>
+    <thead><tr><th>Document (register code)</th><th>Attr</th><th>Recommended value</th><th>Base</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Salary certificate (PL-04)</td><td><span class="a a1">A1</span></td><td><b>30 days</b></td><td>UAE banks near-universally require issue within 30 days for loans</td></tr>
+      <tr><td class="k">Bank statements (PL-05)</td><td><span class="a a1">A1</span></td><td>Coverage: last <b>3 months</b> (6 for variable income); issued ≤ 30 days</td><td>Market standard 3–6 months</td></tr>
+      <tr><td class="k">Payslips (PL-06)</td><td><span class="a a1">A1</span></td><td>Last 3 months</td><td>Already in the name — make it the attribute</td></tr>
+      <tr><td class="k">Pension evidence (PL-07B) · UAEFTS report (PL-24)</td><td><span class="a a1">A1</span></td><td>30 days</td><td>Same income-evidence logic</td></tr>
+      <tr><td class="k">Liability letter from old lender (PL-10)</td><td><span class="a a1">A1</span></td><td><b>15 days</b> (config)</td><td>Settlement figures move monthly; a stale letter breaks the Buyout settlement amount</td></tr>
+      <tr><td class="k">AECB credit / liability report (PL-23, PL-23B)</td><td><span class="a a1">A1</span></td><td><b>30 days</b> staleness (bank config)</td><td>"Within staleness limit" already in the register — give it a number</td></tr>
+      <tr><td class="k">Emirates ID (PL-01) · Passport + visa (PL-03)</td><td><span class="a a2">A2</span></td><td>Expiry ≥ submission date (option: ≥ 30 days remaining)</td><td>KYC baseline; eKYC captures the expiry field already</td></tr>
+      <tr><td class="k">AIP (PL-20E) · FOL (PL-20E2)</td><td><span class="a a3">A3</span></td><td><b>30 days</b> from generation</td><td>FABL precedent: 30-day offer expiry (FABL-1149)</td></tr>
+      <tr><td class="k">STL / FSTL (PL-08, PL-08B)</td><td><span class="a a3">A3</span></td><td>Per 3721 config: Settlement Letter Validity <b>1–365 days</b></td><td>Already configured in AMP-3721 — DM must read it, not redefine it</td></tr>
+      <tr><td class="k">Cooling-off notice (PL-20I)</td><td><span class="a a3">A3</span></td><td><b>5 complete business days — fixed, not config</b></td><td>CBUAE Consumer Protection regulation</td></tr>
+      <tr><td class="k">Disbursement delay notice (PL-20M)</td><td><span class="a a3">A3</span></td><td><b>10 business days — fixed, not config</b></td><td>Regulatory; already in the register name</td></tr>
+      <tr><td class="k">CAM report (PL-25) · contracts · consents</td><td><span class="a a4">A4</span></td><td><b>≥ 5 years</b> after loan closure</td><td>CBUAE record-keeping; CAM already marked "RETAIN ≥5 years"</td></tr>
+      <tr><td class="k">Security cheque (PL-17)</td><td>—</td><td><b>No time attribute — undated by design</b></td><td>An undated cheque has no expiry; dating it starts the 6-month presentment clock</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note"><b>Recommendation to Kha:</b> add two columns to the 3806 Document List config — <b>Max Document Age (days, optional)</b> and <b>Expiry Check (Yes/No)</b> — validated at customer upload and re-checked at Ops Maker. A3 values stay with the stories that generate those documents; A4 is one DMS retention policy, not a per-document column. Regulatory values (cooling-off 5 days, delay notice 10 days, retention 5 years) are fixed text, never editable config.</p>
+</section>
+
+<footer>
+  <span>Confidential — Appro Onboarding Solutions FZ-LLC. Research note; nothing posted to Jira.</span>
+  <span class="icon4"><i></i><i></i><i></i><i></i></span>
+</footer>
+
+</div>
+</body>
+</html>
