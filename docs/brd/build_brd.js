@@ -1,5 +1,7 @@
 /*
- * Application Revert in Super Portal — BRD generator (V1.0, client-facing)
+ * Application Revert in Super Portal — BRD generator (V1.1, client-facing)
+ * V1.1 (06 Oct 2026): Retail Credit feedback — §4.6 rework + document upload after revert,
+ * no AECB/FTS re-trigger; §4.7 multiple reverts; changes rendered in purple (§§…§§ markers).
  * Mimics the styling/structure of "Application Cancellation in Super Portal V1.0":
  *   Arial body · black CAPS headings · #156082 table headers · appro logo assets
  *   (extracted from the reference PDF) · SC screenshots with #FF5500 annotation ·
@@ -26,8 +28,9 @@ const CONTENT_W = 9026;   // A4 11906 - 2x1440 margins
 const DIR = __dirname;
 const A = f => path.join(DIR, 'assets', f);
 
-/* ---------- inline **bold** / *italic* ---------- */
-function runs(text, o = {}) {
+/* ---------- inline **bold** / *italic* / §§V1.1 purple highlight§§ ---------- */
+const PURPLE = '6554C0'; // V1.1 change highlight (Reem Bank re-review); strip markers after sign-off
+function runsInner(text, o = {}) {
   const base = { font: FONT, size: o.size || 22, color: o.color || BLACK };
   const out = [];
   for (const part of String(text).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g)) {
@@ -35,6 +38,15 @@ function runs(text, o = {}) {
     if (part.startsWith('**') && part.endsWith('**')) out.push(new TextRun({ ...base, text: part.slice(2, -2), bold: true }));
     else if (part.startsWith('*') && part.endsWith('*') && part.length > 2) out.push(new TextRun({ ...base, text: part.slice(1, -1), italics: true }));
     else out.push(new TextRun({ ...base, text: part, bold: !!o.allBold }));
+  }
+  return out;
+}
+function runs(text, o = {}) {
+  const out = [];
+  for (const part of String(text).split(/(§§[^§]+§§)/g)) {
+    if (!part) continue;
+    if (part.startsWith('§§') && part.endsWith('§§')) out.push(...runsInner(part.slice(2, -2), { ...o, color: PURPLE }));
+    else out.push(...runsInner(part, o));
   }
   return out;
 }
@@ -160,8 +172,8 @@ P(
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [
     new TextRun({ text: 'Application Revert in', bold: true, size: 56, color: BLUE, font: FONT }), new TextRun({ break: 1, text: 'Super Portal', bold: true, size: 56, color: BLUE, font: FONT }),
   ] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.0', bold: true, size: 44, color: BLUE, font: FONT })] }),
-  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '19 September 2026', size: 22, color: GREY, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 60 }, children: [new TextRun({ text: 'V1.1', bold: true, size: 44, color: BLUE, font: FONT })] }),
+  new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 200 }, children: [new TextRun({ text: '06 October 2026', size: 22, color: GREY, font: FONT })] }),
   new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 0 }, children: [img('assets/logo_navy.png', 165, 48)] }),
   spacer(3300),
   ctr('This is not a legally binding document', { size: 19 }),
@@ -179,6 +191,7 @@ P(
   bullet("Bank user with '[Product] Revert Application' permission initiates the revert request from Application Enquiry, with a mandatory Revert Reason."),
   bullet("Revert Queue user with 'Evaluate Application' permission approves or rejects the request within a configurable time window."),
   bullet("If no decision is made within a configurable timeout period, the request is **auto-approved by the System** — the same timeout behaviour as Application Cancellation. For example, if a timeout period is defined as 5 days, when there is no approve/ reject decision for a revert request in Revert Queue, the system approves the request and the application status changes from 'Rejected' to **'Awaiting Credit Approval'** (Credit Queue L1)."),
+  bullet("§§After an approved revert, the **Credit user reworks the case in Credit Queue** — editing the application details and uploading additional supporting documents where required — **without triggering a new AECB enquiry or FTS request**. The same application may be reverted more than once, and every revert cycle is maintained in the audit trail (sections 4.6 and 4.7).§§"),
   imgP('Flow_Application_Revert.png', 600, 223, { before: 200 }),
   spacer(80),
   p('Applicable products: **CC, PL**. *(CASA is excluded — it has no credit decisioning; Mortgage Loan and Auto Loan are not yet part of the platform scope.)*'),
@@ -363,6 +376,20 @@ P(
 );
 
 P(
+  h2('4.6 Credit rework after an approved revert'),
+  p("§§Once the revert is approved and the application has returned to 'Awaiting Credit Approval' — Credit Queue Level 1, the Credit user works the case under the existing Credit Queue capability:§§"),
+  bullet('§§**Edit / rework the application details:** the Credit user can edit and rework the application details (credit parameters) after the revert, as per the current Credit Queue behaviour, before re-decisioning the case.§§'),
+  bullet('§§**Upload additional supporting documents:** the Credit user can upload additional supporting documents against the application after the revert (Documents section of the application details). Uploaded documents follow the existing document type, size and audit rules and are visible to all subsequent reviewers of the case.§§'),
+  bullet('§§**No external re-triggers:** reverting or reworking the case does **not** trigger a new AECB enquiry and does **not** trigger a new FTS request. The re-assessment re-runs the Rule Engine, DBR calculation and Limit Assignment on the data already held against the application. Where the validity of a data item has expired, the refresh approach is agreed with Credit/Risk — no external call is fired automatically by the revert.§§'),
+);
+
+P(
+  h2('4.7 Multiple reverts'),
+  bullet('§§The same application **can be reverted more than once** — no cap applies to the number of reverts per application in this version.§§'),
+  bullet("§§**Each revert is maintained in the audit trail:** every revert cycle writes its own complete audit set — initiation ('Manually initiate revert'), the Checker decision ('Revert Queue') or the timeout ('Auto Revert Approval on timeout'), and the outcome. The original rejection record is never modified, so the full history of every revert remains visible in the application history in chronological order.§§"),
+);
+
+P(
   h2('5. Revert target status determination'),
   p('The revertibility of an application is determined by **how it became Rejected** — the system derives the rejection root cause from the audit step recorded at the point of rejection, and resolves it when the request is raised. Only **Credit-root-cause** rejections are revertible, so in this scope the target is always **‘Awaiting Credit Approval’ — Credit Queue Level 1**; the case then escalates through levels under the standard queue rules. No new data capture is required:'),
   tbl(
@@ -383,6 +410,7 @@ P(
   spacer(160),
   p('**System change — DBR parking.** Today, a breach of the DBR safety nets — **Existing DBR > 50%** after calculation, or **Gross DBR > 100%** — auto-rejects the application with Action by = <system>, leaving no previous queue status to restore. The system shall instead **park the case into Credit Queue L1** (‘Awaiting Credit Approval’) for both safety nets: the **Failed Reason continues to show the same message** as the current auto-rejection, and the system shall **complete the Rule Engine run and Limit Assignment** so the RE result and limit-assignment result are available in the Credit Queue view — the Credit user must have enough information to decide. If the Credit user then rejects the case, that rejection carries a named owner and is revertible under the standard rule (row 1). This parking applies to every safety-net breach, not only cases later reverted — Credit Queue volume impact should be sized during estimation.'),
   p('**No change to the other auto-rejections.** The “fails all segmentations” and “approved limit < Min Boundary” cases keep their current auto-rejection logic — no parking is introduced for them. A revert of such a case returns it to ‘Awaiting Credit Approval’ — Credit Queue L1, where a Credit user takes ownership of the re-decision.'),
+  p('§§**No external re-triggers on re-assessment.** The post-revert re-assessment re-runs the Rule Engine, DBR calculation and Limit Assignment on the data already held — reverting or reworking a case does not fire a new AECB enquiry or FTS request (section 4.6).§§'),
 );
 
 P(
@@ -415,7 +443,7 @@ P(
       ['3a', 'Checker (Revert Queue)', "Clicks 'Approve' and confirms", 'Awaiting Credit Approval', 'Application re-enters Credit Queue at Level 1; email notification sent to Maker; application removed from queue'],
       ['3b', 'Checker (Revert Queue)', "Clicks 'Reject' and confirms", 'Rejected', 'Email notification sent to Maker; application removed from queue; Revert_App = FALSE'],
       ['3c', 'System (auto-timeout)', 'No checker action within [X] days — request auto-approved (same as cancellation timeout)', 'Awaiting Credit Approval', 'Application re-enters Credit Queue at Level 1; email notification sent to Maker; Revert_App = FALSE'],
-      ['4', 'Queue User (Credit)', 'Works the case as normal — edits credit parameters, then approves, overrides or rejects', 'Awaiting Credit Approval', 'Application re-decisioned against the currently published credit policy; the client receives exactly one re-assessment email either way — approval or rejection (section 6); on rejection the 30-day window restarts'],
+      ['4', 'Queue User (Credit)', 'Works the case as normal — §§edits/reworks the application details and uploads additional supporting documents where required (section 4.6),§§ then approves, overrides or rejects§§ — no new AECB enquiry or FTS request is triggered§§', 'Awaiting Credit Approval', 'Application re-decisioned against the currently published credit policy; the client receives exactly one re-assessment email either way — approval or rejection (section 6); on rejection the 30-day window restarts'],
     ],
     [8, 17, 31, 20, 24],
   ),
@@ -430,7 +458,7 @@ P(
       ['Role Management / Permission Matrix', "Six new permission entries, per product: [CC]/[PL] × 'Revert Application' (Enquiry > Application Enquiry) and [CC]/[PL] × View / Evaluate Application (Manually Queue > Revert Queue). Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
       ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.', ['ia_queue.png', 940, 430, 'Queue menu — Revert Queue (SC4)']],
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
-      ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
+      ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.§§ Each revert cycle writes its own complete audit set, so repeated reverts remain fully traceable end-to-end (section 4.7).§§", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
       ['Communication Setup','**Four templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and two **Email (Client)** templates — approval after re-assessment and rejection after re-assessment, both mentioning the further review (section 6). English, banking tone, signing off as Reem Bank. **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.', ['ia_comm.png', 2000, 770, 'Communication Setup › Email Templates — Type: Client / Bank']],
   ]),
 );
@@ -454,7 +482,7 @@ P(
 /* ================= ASSEMBLE ================= */
 const doc = new Document({
   creator: 'Appro',
-  title: 'Application Revert in Super Portal V1.0',
+  title: 'Application Revert in Super Portal V1.1',
   styles: { default: { document: { run: { font: FONT, size: 22, color: BLACK } } } },
   sections: [{
     properties: {
@@ -496,7 +524,7 @@ const doc = new Document({
 });
 
 Packer.toBuffer(doc).then(buf => {
-  const out = process.argv[2] || path.join(DIR, 'Appro_RF_Application_Revert_in_Super_Portal_v1.0.docx');
+  const out = process.argv[2] || path.join(DIR, 'Appro_RF_Application_Revert_in_Super_Portal_v1.1.docx');
   fs.writeFileSync(out, buf);
   console.log('WROTE', out, buf.length, 'bytes');
 });
