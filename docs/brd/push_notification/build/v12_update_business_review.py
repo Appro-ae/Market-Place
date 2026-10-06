@@ -167,7 +167,47 @@ def apply():
         Doc.set_cell_text(tc, val)
     vh.append(row)
 
-    # ---------- 2. overview note ----------
+    # ---------- 2. overview: tap behaviour per the PO (06/10) ----------
+    def set_para_text(el, old_sent, new_sent):
+        full = text(el)
+        assert old_sent in full, old_sent
+        new_full = full.replace(old_sent, new_sent)
+        base = None
+        for r in el.findall('w:r', NS):
+            if r.find('w:rPr', NS) is not None:
+                base = copy.deepcopy(r.find('w:rPr', NS))
+                break
+        for r in [r for r in el if r.tag not in (q('pPr'), q('bookmarkStart'), q('bookmarkEnd'))]:
+            el.remove(r)
+        r = etree.SubElement(el, q('r'))
+        if base is not None:
+            r.append(base)
+        t = etree.SubElement(r, q('t'))
+        t.text = new_full
+        t.set('{http://www.w3.org/XML/1998/namespace}space', 'preserve')
+
+    set_para_text(d.top('Push Notification adds a device-level alert', starts=True),
+                  'When the customer taps the notification, the Appro journey opens at the screen where '
+                  'the application continues.',
+                  'When the customer taps the notification, the customer is navigated to the Super App login '
+                  'screen, and the Appro journey opens at the screen where the application continues (Resume '
+                  'screen) or the Super App, depending on the event.')
+    set_para_text(d.top('The customer taps the notification, and the Appro journey opens at the screen for '
+                        'that event.'),
+                  'The customer taps the notification, and the Appro journey opens at the screen for that event.',
+                  'The customer taps the notification and is navigated to the Super App login screen; after '
+                  'login, the Appro journey opens at the screen where the application continues (Resume screen) '
+                  'or the Super App, depending on the event.')
+
+    ks = d.top('Key steps')                                 # figure grew: section 1 is two pages,
+    ks_ppr = ks.find('w:pPr', NS)                             # break cleanly before Key steps
+    if ks_ppr is None:
+        ks_ppr = etree.Element(q('pPr'))
+        ks.insert(0, ks_ppr)
+    pst = ks_ppr.find('w:pStyle', NS)
+    pbb = etree.Element(q('pageBreakBefore'))
+    ks_ppr.insert(1 if pst is not None else 0, pbb)
+
     note1 = d.top('Note: Push content is fixed per notification', starts=True)
     note1.append(Doc.run(' Business-managed configuration and Super Portal visibility are planned as post-MVP '
                          'enhancements (section 8).',
@@ -315,10 +355,15 @@ def apply():
     cap2 = d.top('Figure 2 —', starts=True)
 
     # ---------- figures re-rendered with the baseline values ----------
-    for cap, png in ((d.top('Figure 1 —', starts=True), 'Flow_Push_Notification_End_to_End.png'),
-                     (cap2, 'Flow_Push_Response_and_Retry.png')):
-        blip = cap.getprevious().find('.//a:blip', NS)
+    WP = 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing'
+    for cap, png, aspect in ((d.top('Figure 1 —', starts=True), 'Flow_Push_Notification_End_to_End.png', 560 / 1440),
+                             (cap2, 'Flow_Push_Response_and_Retry.png', None)):
+        holder = cap.getprevious()
+        blip = holder.find('.//a:blip', NS)
         shutil.copy(os.path.join(ROOT, 'assets', png), d.p('word', d.rel_target(blip.get('{%s}embed' % R))))
+        if aspect:                                            # the figure grew taller: keep the width, fix cy
+            for ext in list(holder.iter('{%s}extent' % WP)) + list(holder.iter('{%s}ext' % A)):
+                ext.set('cy', str(round(int(ext.get('cx')) * aspect)))
 
     # ---------- 6. BR5 ----------
     br_row = copy.deepcopy(br_tbl.findall('w:tr', NS)[-1])
@@ -436,8 +481,8 @@ if __name__ == '__main__':
         problems.append('TOC moved between passes')
     if blank:
         problems.append(f'blank pages {blank}')
-    if land != [5]:
-        problems.append(f'landscape pages {land}, expected [5]')
+    if land != [6]:
+        problems.append(f'landscape pages {land}, expected [6]')
     if '--proof' in sys.argv:
         out = sys.argv[sys.argv.index('--proof') + 1]
         os.makedirs(out, exist_ok=True)
