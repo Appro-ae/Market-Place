@@ -42,7 +42,7 @@
 
 | Name | Component Type | Mandatory | Editable | Description |
 | --- | --- | --- | --- | --- |
-| Revert Button | Button | NA | NA | User with "[Product] Revert Application" role permission should be able to view the "Revert" button on the Application Details screen, next to the existing "Cancel Application" button. **Enabled only when Application Status = "Rejected" AND the rejection origin is revertible per AC5 AND no revert request is already pending (Revert_App = FALSE).** Disabled (greyed) otherwise. |
+| Revert Button | Button | NA | NA | User with the "Revert Application" role permission should be able to view the "Revert" button on the Application Details screen, next to the existing "Cancel Application" button. **Enabled only when Application Status = "Rejected" AND the rejection origin is revertible per AC5 AND no revert request is already pending (Revert_App = FALSE).** Disabled (greyed) otherwise. |
 | Revert confirmation (Are you sure you want to revert the Application) | Modal popup | NA | NA | SC3: User should confirm the revert request. Sub-text: "The request will be sent to the Revert Queue for Checker approval." Click on **Yes, Revert** to submit the request and enter the Revert Reason for approval from Checker (see AC1.1). Click on **Back** to close the popup with no change. |
 
 | Product Type | Applicable Status for Revert in Super Portal |
@@ -98,7 +98,7 @@ When user submits the revert request:
 
 ![SC5 – Role Management > Manually Queue > Revert Queue permissions](SC5_Role_Permission_Revert_Queue.png)
 
-* Role Management also gains **'[Credit Card] Revert Application'** and **'[Personal Loan] Revert Application'** under **Enquiry > Application Enquiry** (Maker permission — mirrors RF-2366) (SC1, `SC1_Role_Permission_Application_Enquiry.png`). These are distinct permissions, kept separate from Cancel Application and from Evaluate Application (RF-2781 / RF-2785 precedent).
+* Role Management also gains a single **'Revert Application'** permission under **Enquiry > Application Enquiry** — no per-product split, matching the existing product-agnostic View Application / Cancel Application layout (Maker permission) (SC1, `SC1_Role_Permission_Application_Enquiry.png`). These are distinct permissions, kept separate from Cancel Application and from Evaluate Application (RF-2781 / RF-2785 precedent).
 
 ![SC1 – Add Role: Enquiry > Application Enquiry > Revert Application permissions](SC1_Role_Permission_Application_Enquiry.png)
 * Revert Queue details view (SC6, `SC6_Revert_Queue_Approve_Reject.png`) = same layout as Termination Queue details (RF-2367): application detail sections, **Comments tab selected by default** (so the REVERT REASON comment is the first thing the Checker sees), Documents tab. The Checker view is read-only apart from the decision — no Edit / Override / Send / FTS Retrigger here.
@@ -179,7 +179,7 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 
 | Area | Impact | Screen |
 | --- | --- | --- |
-| Role Management / Permission Matrix | **4 new permissions:** [CC]/[PL] × Revert Application (per product, Enquiry > Application Enquiry) + View Application / Evaluate Application on the Revert Queue (Manually Queue — product-agnostic, one permission each across CC and PL). Permission Matrix page to be updated. Distinct rights — never bundled. | <img src="assets/ia_role.png" width="290"><br>*Role Management › Application Enquiry (SC1)* |
+| Role Management / Permission Matrix | **3 new permissions:** Revert Application (Enquiry > Application Enquiry) + View Application / Evaluate Application on the Revert Queue (Manually Queue). All product-agnostic — a single permission each across CC and PL, matching the existing permission layout. Permission Matrix page to be updated. Distinct rights — never bundled. | <img src="assets/ia_role.png" width="290"><br>*Role Management › Application Enquiry (SC1)* |
 | Queue model / drop points | New **Revert Queue** in the Queue menu and the Manually Queue role section. Drop-points matrix: approved revert → **Credit Queue L1**; parking of **both DBR safety nets** (Existing DBR > 50%, Gross DBR > 100%) → Credit Queue L1 — **volume increases for every breach**, not only reverted cases. Parked cases carry the completed Rule Engine + Limit Assignment results into the queue view. | <img src="assets/ia_queue.png" width="290"><br>*Queue menu — Revert Queue (SC4)* |
 | Status model / mobile app | No new Application Status (**Revert_App flag** only) → **no mobile app change**; avoids status-not-reflecting-reality defects. | <img src="assets/ia_status.png" width="290"><br>*Status transition on approved revert* |
 | Audit trail | 3 new steps — "Manually initiate revert", "Revert Queue", "Auto Revert Approval on timeout". The original rejection record is never modified. | <img src="assets/ia_audit.png" width="290"><br>*Application history steps* |

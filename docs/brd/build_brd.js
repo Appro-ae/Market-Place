@@ -188,7 +188,7 @@ P(
   h1('Application Revert in Super Portal'),
   h2('FEATURE OVERVIEW'),
   p('This document describes the Super Portal **Application Revert** capability which allows authorised bank staff to return a **rejected** application to the queue it was rejected from, so that the responsible team can correct the credit parameters and re-decision the case without the customer reapplying. Once an application is rejected, the pre-dedupe *Existing Application Check* blocks any new application for the same customer for **30 days** — reverting the same application is the only remedy inside that window. The capability complements the existing Application Cancellation function and follows the same maker–checker governance. Key steps are as following:'),
-  bullet("Bank user with '[Product] Revert Application' permission initiates the revert request from Application Enquiry, with a mandatory Revert Reason."),
+  bullet("Bank user with '§§Revert Application§§' permission initiates the revert request from Application Enquiry, with a mandatory Revert Reason."),
   bullet("Revert Queue user with 'Evaluate Application' permission approves or rejects the request within a configurable time window."),
   bullet("If no decision is made within a configurable timeout period, the request is **auto-approved by the System** — the same timeout behaviour as Application Cancellation. For example, if a timeout period is defined as 5 days, when there is no approve/ reject decision for a revert request in Revert Queue, the system approves the request and the application status changes from 'Rejected' to **'Awaiting Credit Approval'** (Credit Queue L1)."),
   bullet("§§After an approved revert, the **Credit user reworks the case in Credit Queue** — editing the application details and uploading additional supporting documents where required — **without triggering a new AECB enquiry or FTS request**. The same application may be reverted more than once, and every revert cycle is maintained in the audit trail (sections 4.6 and 4.7).§§"),
@@ -243,15 +243,14 @@ P(
   h1('End-to-End Application Revert Flow from Super Portal'),
   h2('1. Role Management: Revert Application Permission'),
   bullet("Bank users must only be able to request a revert if they have been explicitly granted the 'Revert Application' permission within their Super Portal role."),
-  bullet("A new role permission named **'Revert Application'** shall be added under the **Enquiry** module, **Application Enquiry** sub-module in the Role Management section of the Super Portal — **per product tab**, alongside the existing 'View Application' and 'Cancel Application' permissions: '[Credit Card] Revert Application' and '[Personal Loan] Revert Application'."),
+  bullet("A new role permission named **'Revert Application'** shall be added under the **Enquiry** module, **Application Enquiry** sub-module in the Role Management section of the Super Portal — §§a **single permission with no per-product split**, alongside the existing 'View Application' and 'Cancel Application' permissions and matching their existing product-agnostic layout§§."),
   imgP('SC1_Role_Permission_Application_Enquiry.png', 600, 338),
   caption("SC1: Add Role screen: Enquiry > Application Enquiry > “Revert Application” permission"),
   tbl(
     ['Component', 'Type', 'Editable', 'Mandatory', 'Description'],
     [
-      ['[Credit Card] Revert Application Checkbox', 'Checkbox', 'Yes', 'N/A', "Selectable checkbox to grant or revoke the 'Revert Application' permission for Credit Card applications. It indicates whether the role holder can request application reverts."],
-      ['[Personal Loan] Revert Application Checkbox', 'Checkbox', 'Yes', 'N/A', "Selectable checkbox to grant or revoke the 'Revert Application' permission for Personal Loan applications."],
-      ['Revert Application Label', 'Label', 'N/A', 'N/A', 'Descriptive label shown alongside each checkbox, identifying the permission name.'],
+      ['§§Revert Application Checkbox§§', 'Checkbox', 'Yes', 'N/A', "§§Selectable checkbox to grant or revoke the 'Revert Application' permission. It indicates whether the role holder can request application reverts for the applicable products (CC and PL).§§"],
+      ['Revert Application Label', 'Label', 'N/A', 'N/A', '§§Descriptive label shown alongside the checkbox, identifying the permission name.§§'],
     ],
     [21, 14, 13, 16, 36],
   ),
@@ -260,8 +259,8 @@ P(
   tbl(
     ['Permission Value', 'Allowed Actions'],
     [
-      ['[Product] Revert Application = TRUE', "Users can view the 'Revert' button on the Application Enquiry details screen for that product and submit revert requests for Checker approval."],
-      ['[Product] Revert Application = FALSE', "Users cannot view the 'Revert' button. Users cannot request application reverts."],
+      ['§§Revert Application = TRUE§§', "Users can view the 'Revert' button on the Application Enquiry details screen §§for the applicable products§§ and submit revert requests for Checker approval."],
+      ['§§Revert Application = FALSE§§', "Users cannot view the 'Revert' button. Users cannot request application reverts."],
     ],
     [30, 70],
   ),
@@ -283,7 +282,7 @@ P(
   tbl(
     ['Component', 'Type', 'Mandatory', 'Editable', 'Description'],
     [
-      ['Revert Button', 'Button', 'N/A', 'N/A', "Visible only to users with the '[Product] Revert Application' role. Enabled only for a revertible rejected application with no request already pending. It initiates the revert request for the selected application."],
+      ['Revert Button', 'Button', 'N/A', 'N/A', "Visible only to users with the '§§Revert Application§§' role. Enabled only for a revertible rejected application with no request already pending. It initiates the revert request for the selected application."],
       ['Revert Confirmation Popup (SC3)', 'Modal Popup', 'N/A', 'N/A', 'Presented when the Revert button is clicked. Requires the user to confirm and provide a Revert Reason before proceeding.'],
       ['Confirmation Message', 'Static Text', 'N/A', 'N/A', "'Are you sure you want to revert the Application? The request will be sent to the Revert Queue for Checker approval.'"],
       ['Revert Reason', 'Text input', 'Yes', 'Yes', "Free-text mandatory field labelled 'Revert Reason *'. Help text: 'Enter your comment'. Users must enter a reason before confirming; the reason is shown to the Checker."],
@@ -465,7 +464,7 @@ P(
   h1('Additional Impact Analysis'),
   p('Beyond the direct scope above, the following areas of the Reem Bank platform are impacted and must be carried into estimation and test scope:'),
   impactTable([
-      ['Role Management / Permission Matrix', "§§Four new permission entries:§§ [CC]/[PL] × 'Revert Application' (per product, Enquiry > Application Enquiry) §§plus 'View Application' and 'Evaluate Application' on the Revert Queue (Manually Queue) — product-agnostic, one permission each across CC and PL§§. Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
+      ['Role Management / Permission Matrix', "§§Three new permission entries — 'Revert Application' (Enquiry > Application Enquiry), plus 'View Application' and 'Evaluate Application' on the Revert Queue (Manually Queue). All three are product-agnostic: a single permission each across CC and PL, matching the existing permission layout.§§ Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
       ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.', ['ia_queue.png', 940, 430, 'Queue menu — Revert Queue (SC4)']],
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
       ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.§§ Each revert cycle writes its own complete audit set, so repeated reverts remain fully traceable end-to-end (section 4.7).§§", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
