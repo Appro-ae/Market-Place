@@ -325,6 +325,7 @@ P(
     ],
     [30, 10, 60],
   ),
+  p('§§**Maker–checker control — self-approval technically prevented:** the Checker must be a different user from the requester. A user who submitted a revert request cannot approve or reject that same request, even if they hold the Evaluate Application permission — the system blocks the action for the requesting user id.§§'),
 );
 
 P(
@@ -373,6 +374,7 @@ P(
     ],
     [30, 70],
   ),
+  p('§§Queue ageing, reminders and escalation for the Revert Queue follow the platform-wide **Queue Assignment Management (TAT)** enhancement currently in delivery — the Revert Queue receives its TAT configuration once that capability lands (configuration, not new build). The [X]-day auto-approval behaviour above remains **subject to Credit/Risk confirmation**; should Credit/Risk prefer no auto-action or an auto-expiry of the request on timeout, this section will be revised accordingly.§§'),
 );
 
 P(
@@ -380,13 +382,20 @@ P(
   p("§§Once the revert is approved and the application has returned to 'Awaiting Credit Approval' — Credit Queue Level 1, the Credit user works the case under the existing Credit Queue capability:§§"),
   bullet('§§**Edit / rework the application details:** the Credit user can edit and rework the application details (credit parameters) after the revert, as per the current Credit Queue behaviour, before re-decisioning the case.§§'),
   bullet('§§**Upload additional supporting documents:** the Credit user can upload additional supporting documents against the application after the revert (Documents section of the application details). Uploaded documents follow the existing document type, size and audit rules and are visible to all subsequent reviewers of the case.§§'),
-  bullet('§§**No external re-triggers:** reverting or reworking the case does **not** trigger a new AECB enquiry and does **not** trigger a new FTS request. The re-assessment re-runs the Rule Engine, DBR calculation and Limit Assignment on the data already held against the application. Where the validity of a data item has expired, the refresh approach is agreed with Credit/Risk — no external call is fired automatically by the revert.§§'),
+  bullet('§§**No external re-triggers:** reverting or reworking the case does **not** trigger a new AECB enquiry and does **not** trigger a new FTS request. The re-assessment re-runs the **Rule Engine (segmentation / strategy evaluation), DBR calculation, Limit Assignment and eligibility checks** on the data already held against the application. Where the validity of a data item has expired, the refresh approach is agreed with Credit/Risk — no external call is fired automatically by the revert.§§'),
+  bullet('§§**Versioning and edit audit:** the re-assessment evaluates against the currently published strategy, score-check and income-multiplier versions, and the applied versions are recorded in the audit trail. Parameter edits made in Credit Queue remain audit-trailed under the existing Credit Queue behaviour (before/after values).§§'),
 );
 
 P(
   h2('4.7 Multiple reverts'),
   bullet('§§The same application **can be reverted more than once** — no cap applies to the number of reverts per application in this version.§§'),
   bullet("§§**Each revert is maintained in the audit trail:** every revert cycle writes its own complete audit set — initiation ('Manually initiate revert'), the Checker decision ('Revert Queue') or the timeout ('Auto Revert Approval on timeout'), and the outcome. The original rejection record is never modified, so the full history of every revert remains visible in the application history in chronological order.§§"),
+);
+
+P(
+  h2('4.8 Exception handling and duplicate prevention'),
+  bullet('§§**Atomic transitions:** if any step of a revert action fails — queue movement, status update, Rule Engine / Limit Assignment run or notification — the application remains in its previous consistent state and the action can be safely retried. No application may remain stuck or partially processed between states.§§'),
+  bullet('§§**Duplicate and concurrent actions prevented:** a single pending revert request per application is enforced (Revert_App flag — the Revert button is disabled while a request is pending), and a request that has already been decided cannot be decided again. The detailed retry / rollback design is elaborated in the technical design document for this feature.§§'),
 );
 
 P(
@@ -424,6 +433,7 @@ P(
   ] }),
   caption('SC7 / SC8: Customer resume after an approved revert — application under process (CC / PL)'),
   bullet('**If the application is rejected again after a revert:** the 30-day re-application window **restarts from the latest rejection** — the countdown begins again at the new rejection date.'),
+  bullet('§§**Disclosures on the reopened journey:** after an approved re-assessment, the application proceeds through the **standard offer and acceptance journey** — AIP, cooling-off and KFS/DDA signature stages are generated afresh by the existing flow, so every disclosure the customer receives reflects the final approved terms (no change to existing KFS behaviour).§§'),
   bullet('**Customer communication — final confirmation only, exactly one email (Credit User note):** the customer already received the rejection notification at the point of decision and is **not** notified of the reopen. When the re-assessment completes, the system sends the client **exactly one email**, whether the outcome is Approve or Reject — and **both templates mention the further review (re-assessment)**: on approval, the first Email (Client) template below; on a **repeat rejection, the client is also emailed**, using the second template below (not the generic first-rejection notification), and the 30-day window restarts. The reopened run must **not** double-send decision notifications to the client (the original rejection email has already gone out once).'),
   spacer(60),
   tbl(
