@@ -243,7 +243,7 @@ P(
   h1('End-to-End Application Revert Flow from Super Portal'),
   h2('1. Role Management: Revert Application Permission'),
   bullet("Bank users must only be able to request a revert if they have been explicitly granted the 'Revert Application' permission within their Super Portal role."),
-  bullet("A new role permission named **'Revert Application'** shall be added under the **Enquiry** module, **Application Enquiry** sub-module in the Role Management section of the Super Portal — §§a **single permission with no per-product split**, alongside the existing 'View Application' and 'Cancel Application' permissions and matching their existing product-agnostic layout§§."),
+  bullet("A new role permission named **'Revert Application'** shall be added under the **Enquiry** module, **Application Enquiry** sub-module in the Role Management section of the Super Portal."),
   imgP('SC1_Role_Permission_Application_Enquiry.png', 600, 338),
   caption("SC1: Add Role screen: Enquiry > Application Enquiry > “Revert Application” permission"),
   tbl(
@@ -313,7 +313,7 @@ P(
   h2('4.2. Role Information for Revert Queue'),
   imgP('SC5_Role_Permission_Revert_Queue.png', 600, 338),
   caption('SC5: Role permission for Revert Queue'),
-  p("A new queue entry, 'Revert Queue', shall be added under the Manually Queue section in Role Management (Add Role screen). §§Two role permissions — **View Application** and **Evaluate Application** — apply to the Revert Queue **without a per-product split**: each is a single permission covering all applicable products (CC and PL), consistent with the queue listing all products in one view§§:"),
+  p("A new queue entry, 'Revert Queue', shall be added under the Manually Queue section in Role Management (Add Role screen). §§Two role permissions — **View Application** and **Evaluate Application** — apply to the Revert Queue.§§"),
   tbl(
     ['Permission', 'Value', 'Access Granted'],
     [
@@ -324,7 +324,6 @@ P(
     ],
     [30, 10, 60],
   ),
-  p('§§**Maker–checker control — self-approval technically prevented:** the Checker must be a different user from the requester. A user who submitted a revert request cannot approve or reject that same request, even if they hold the Evaluate Application permission — the system blocks the action for the requesting user id.§§'),
 );
 
 P(
@@ -373,7 +372,6 @@ P(
     ],
     [30, 70],
   ),
-  p('§§Queue ageing, reminders and escalation for the Revert Queue follow the platform-wide **Queue Assignment Management (TAT)** enhancement currently in delivery — the Revert Queue receives its TAT configuration once that capability lands (configuration, not new build). The [X]-day auto-approval behaviour above remains **subject to Credit/Risk confirmation**; should Credit/Risk prefer no auto-action or an auto-expiry of the request on timeout, this section will be revised accordingly.§§'),
 );
 
 P(
@@ -381,8 +379,7 @@ P(
   p("§§Once the revert is approved and the application has returned to 'Awaiting Credit Approval' — Credit Queue Level 1, the Credit user works the case under the existing Credit Queue capability:§§"),
   bullet('§§**Edit / rework the application details:** the Credit user can edit and rework the application details (credit parameters) after the revert, as per the current Credit Queue behaviour, before re-decisioning the case.§§'),
   bullet('§§**Upload additional supporting documents:** the Credit user can upload additional supporting documents against the application after the revert (Documents section of the application details). Uploaded documents follow the existing document type, size and audit rules and are visible to all subsequent reviewers of the case.§§'),
-  bullet('§§**No external or system re-triggers:** reverting a case does **not** trigger a new AECB enquiry, a new FTS request, or a **Rule Engine / Limit Assignment re-run**. The previously captured application data and results remain **unchanged** when the application is reverted back to Credit Queue — the Credit user reworks the case on the data as it stands. Where the validity of a data item has expired, the refresh approach is agreed with Credit/Risk — no external call is fired automatically by the revert.§§'),
-  bullet('§§**Versioning and edit audit:** where the Credit user’s rework triggers a re-run under the existing Credit Queue behaviour (e.g. a parameter edit), it evaluates against the currently published strategy, score-check and income-multiplier versions, with the applied versions recorded in the audit trail. Parameter edits made in Credit Queue remain audit-trailed under the existing Credit Queue behaviour (before/after values).§§'),
+  bullet('§§**No external or system re-triggers:** reverting a case does **not** trigger a new AECB enquiry, a new FTS request, or a **Rule Engine / Limit Assignment re-run**. The previously captured application data and results remain **unchanged** when the application is reverted back to Credit Queue — the Credit user reworks the case on the data as it stands.§§'),
 );
 
 P(
@@ -393,7 +390,6 @@ P(
 
 P(
   h2('4.8 Exception handling and duplicate prevention'),
-  bullet('§§**Atomic transitions:** if any step of a revert action fails — queue movement, status update, Rule Engine / Limit Assignment run or notification — the application remains in its previous consistent state and the action can be safely retried. No application may remain stuck or partially processed between states.§§'),
   bullet('§§**Duplicate and concurrent actions prevented:** a single pending revert request per application is enforced (Revert_App flag — the Revert button is disabled while a request is pending), and a request that has already been decided cannot be decided again. The detailed retry / rollback design is elaborated in the technical design document for this feature.§§'),
 );
 
@@ -418,7 +414,6 @@ P(
   spacer(160),
   p('**System change — DBR parking.** Today, a breach of the DBR safety nets — **Existing DBR > 50%** after calculation, or **Gross DBR > 100%** — auto-rejects the application with Action by = <system>, leaving no previous queue status to restore. The system shall instead **park the case into Credit Queue L1** (‘Awaiting Credit Approval’) for both safety nets: the **Failed Reason continues to show the same message** as the current auto-rejection, and the system shall **complete the Rule Engine run and Limit Assignment** so the RE result and limit-assignment result are available in the Credit Queue view — the Credit user must have enough information to decide. If the Credit user then rejects the case, that rejection carries a named owner and is revertible under the standard rule (row 1). This parking applies to every safety-net breach, not only cases later reverted — Credit Queue volume impact should be sized during estimation.'),
   p('**No change to the other auto-rejections.** The “fails all segmentations” and “approved limit < Min Boundary” cases keep their current auto-rejection logic — no parking is introduced for them. A revert of such a case returns it to ‘Awaiting Credit Approval’ — Credit Queue L1, where a Credit user takes ownership of the re-decision.'),
-  p('§§**No re-triggers on revert.** An approved revert returns the application to Credit Queue with its previously captured data and results unchanged — no AECB enquiry, FTS request or Rule Engine / Limit Assignment run is fired by the revert (section 4.6).§§'),
 );
 
 P(
@@ -469,7 +464,7 @@ P(
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
       ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.§§ Each revert cycle writes its own complete audit set, so repeated reverts remain fully traceable end-to-end (section 4.7).§§", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],
       ['Communication Setup','**Four templates newly added in Communication Setup:** two **Email (Bank)** templates per product (revert approved / not approved) and two **Email (Client)** templates — approval after re-assessment and rejection after re-assessment, both mentioning the further review (section 6). English, banking tone, signing off as Reem Bank. **Exactly one client email per re-assessment decision** — Approve or Reject — with duplicate decision notifications suppressed on the reopened run. The Compliance / Risk reject confirmation texts stay as they are — those rejections remain non-revertible.', ['ia_comm.png', 2000, 770, 'Communication Setup › Email Templates — Type: Client / Bank']],
-      ['Reporting / MIS (Report Enquiry)', '§§**Covered by the existing Report Enquiry module.** Within this scope, the existing **Approved Transactions** report gains the revert fields: **Revert Reason**, **Repeated Reverts** (number of revert cycles) and **Updated (latest) Rejection Reason**. Exceptions are already served by the existing Exception Report. Root-cause trend analysis is performed by the team from the report data — it is not a system output. SLA achievement / turnaround time reporting is not part of this feature — it follows later with the Queue Assignment product upgrade. Reopened cases must remain consistent in the existing reports (no double-counting in E2E).§§', ['ia_report.png', 1145, 940, 'Report Enquiry › Report Type — Approved Transactions']],
+      ['Reporting / MIS (Report Enquiry)', '§§Within this scope, the existing **Approved Transactions** report gains the revert fields: **Revert Reason**, **Repeated Reverts** (number of revert cycles) and **Updated (latest) Rejection Reason**.§§', ['ia_report.png', 1145, 940, 'Report Enquiry › Report Type — Approved Transactions']],
   ]),
 );
 
