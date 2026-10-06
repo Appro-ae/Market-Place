@@ -259,8 +259,10 @@ def apply():
          ['Device token invalid or expired', 'Middleware',
           'The middleware returns 404 UNREGISTERED — tracked in the backend as Failed, no retry (section 4.5).'],
          ['Application completed, cancelled, withdrawn, rejected or expired', 'Appro',
-          'No further push is sent and reminders stop immediately (section 3.5). On a late tap, the journey '
-          'opens the application status screen.'],
+          'The outcome notification for the event itself is sent once (e.g. P03 offer expired, P04 '
+          'application update, P11 product ready). After the terminal status, the P02 reminders stop '
+          'immediately and no further push is sent for the application (section 3.5). On a late tap, the '
+          'journey opens the application status screen.'],
          ['Customer no longer eligible', 'Appro',
           'A push is built only at its trigger event on a live application — no event, no push.']])
     for el in [h2('3.4 Device and session scenarios'),
@@ -270,8 +272,12 @@ def apply():
                h2('3.5 Reminder and stop rules (P02)'),
                li('P02 is sent once per day for 15 days, starting after the first offer is displayed. The '
                   'interval and the maximum count are backend configuration parameters (default: daily, 15).'),
-               li('P02 stops immediately when the customer selects an offer, or when the application is '
-                  'completed, cancelled or withdrawn, rejected or expired, or the product is booked or issued.'),
+               li('P02 stops immediately when the customer selects or rejects the offer, or when the '
+                  'application is completed, cancelled or withdrawn, rejected or expired, or the product is '
+                  'booked or issued.'),
+               li('A terminal status still sends its own outcome notification once — P03 (offer expired), '
+                  'P04 (application update), P11 (product ready). The stop rules apply to the reminders and '
+                  'to any further push after that notification.'),
                li('One push per Push ID per trigger occurrence per application (BR5).'),
                h2('3.6 Sending time'),
                li('Event-driven pushes are sent immediately at the trigger event.'),

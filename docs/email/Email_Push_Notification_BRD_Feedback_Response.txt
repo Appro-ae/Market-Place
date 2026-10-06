@@ -6,8 +6,8 @@ WHAT IS IN BRD V1.2 (ATTACHED)
 • 1. Feature overview: Note updated: business-managed configuration and Super Portal visibility are post-MVP enhancements (section 8). [Item 1]
 • 3.1 Trigger events and push content: New wording for P01, P04 and P09 as proposed; P05 proposed wording, pending the document channel. [Item 7 · S6]
 • 3.3 Language: Arabic titles and bodies to be added on receipt of the approved content, before sign-off. [Item 6]
-• 3.4 Device and session scenarios — new: Each device and session case with one owner (Appro / Super App / middleware). [Item 2]
-• 3.5 Reminder and stop rules — new: The full P02 stop list; interval and count as backend parameters. [Item 4]
+• 3.4 Device and session scenarios — new: Each device and session case with one owner (Appro / Super App / middleware); one outcome notification per terminal event, nothing after it. [Items 2, 16]
+• 3.5 Reminder and stop rules — new: The full P02 stop list, including offer rejection; interval and count as backend parameters. [Items 4, 16]
 • 3.6 Sending time — new: Event pushes immediate; scheduled pushes (P02, P03) at 10:00 UAE time. [Item 8]
 • 4. API integration: Specification v0.2 folded in: stan 6–12 characters, mobile 9715XXXXXXXX, language "EN" / "AR", message field, action types. [—]
 • 4.5 Error codes — new: The middleware error-code list with the proposed handling. [Item 10]
@@ -83,6 +83,10 @@ RESPONSE TO MR. FADEL’S COMMENTS
 15. Future-proofing [Later – dedicated team]
    Agreed as a design principle: new Push IDs, journeys and products are added on the same framework without redesign. MVP 1.1 covers the ten agreed Push IDs for Credit Card, Personal Loan and CASA; additions can be brainstormed and are easy to scale up, delivered by the dedicated team after the MVP 1.1 sign-off.
    In BRD V1.2: Design principle under “Future enhancements”.
+
+16. Terminal-status notifications and suppression [MVP 1.1 scope]
+   Agreed — the wording in section 3.4 was broader than intended; the behaviour is unchanged. The rule: the outcome notification for a terminal event is itself sent once — P03 when the offer expires, P04 when the application is rejected, P11 when the product is ready. What stops at a terminal status is everything after that notification: the P02 reminders stop immediately and no further push is sent for the application. The customer rejecting the offer is now an explicit P02 stop condition.
+   In BRD V1.2: Sections 3.4 and 3.5 clarified: one outcome notification per terminal event, reminders and further pushes stop after it; offer rejection added to the stop list.
 
 RESPONSE TO SHURAFA’S COMMENTS ON THE BRD
 S1 (p.3) Login first and then route to the application journey. [MVP 1.1 scope · Dependency – Avanza]

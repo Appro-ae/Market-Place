@@ -130,6 +130,14 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'redesign. MVP 1.1 covers the ten agreed Push IDs for Credit Card, Personal Loan and CASA; additions can '
      'be brainstormed and are easy to scale up, delivered by the dedicated team after the MVP 1.1 sign-off.',
      'Design principle under “Future enhancements”.'),
+    ('16', 'Terminal-status notifications and suppression', ['MVP 1.1 scope'],
+     'Agreed — the wording in section 3.4 was broader than intended; the behaviour is unchanged. The rule: '
+     'the outcome notification for a terminal event is itself sent once — P03 when the offer expires, P04 '
+     'when the application is rejected, P11 when the product is ready. What stops at a terminal status is '
+     'everything after that notification: the P02 reminders stop immediately and no further push is sent '
+     'for the application. The customer rejecting the offer is now an explicit P02 stop condition.',
+     'Sections 3.4 and 3.5 clarified: one outcome notification per terminal event, reminders and further '
+     'pushes stop after it; offer rejection added to the stop list.'),
 ]
 
 SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
@@ -188,9 +196,9 @@ BRDMAP = [  # (BRD V1.2 section, what changed, which comments it answers)
     ('3.3 Language', 'Arabic titles and bodies to be added on receipt of the approved content, before sign-off.',
      'Item 6'),
     ('3.4 Device and session scenarios — new', 'Each device and session case with one owner (Appro / Super App / '
-     'middleware).', 'Item 2'),
-    ('3.5 Reminder and stop rules — new', 'The full P02 stop list; interval and count as backend parameters.',
-     'Item 4'),
+     'middleware); one outcome notification per terminal event, nothing after it.', 'Items 2, 16'),
+    ('3.5 Reminder and stop rules — new', 'The full P02 stop list, including offer rejection; interval and '
+     'count as backend parameters.', 'Items 4, 16'),
     ('3.6 Sending time — new', 'Event pushes immediate; scheduled pushes (P02, P03) at 10:00 UAE time.', 'Item 8'),
     ('4. API integration', 'Specification v0.2 folded in: stan 6–12 characters, mobile 9715XXXXXXXX, language '
      '"EN" / "AR", message field, action types.', '—'),
