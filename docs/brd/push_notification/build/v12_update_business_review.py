@@ -7,16 +7,17 @@ and disclosed). Then the review package, per the PO's decisions of 05/10:
 
   Fadel 1/15  -> section 9 Future enhancements (dedicated team, post-MVP, no CR)
   Fadel 2     -> section 3.5 device and session scenarios with owner
-  Fadel 3     -> section 3.4 tap behaviour and destination screens (P03/P09 = NONE
-                 per the 05/10 alignment call; the rest APPRO_JOURNEY)
+  Fadel 3     -> per the PO's 06/10 reply: deep-link detail beyond the Avanza API
+                 structure is next phase (no destinations section; P03/P09 = NONE
+                 noted in 4.3 per the 05/10 alignment call)
   Fadel 4     -> section 3.6 reminder and stop rules (interval/count backend params)
   Fadel 5     -> BR5 duplicates / same requestId on retry
   Fadel 7     -> new wording P01, P04, P09; P05 proposed (pending document channel)
   Fadel 8     -> section 3.7 sending time (scheduled pushes 10:00 UAE)
   Fadel 9     -> backend tracking fields + Contact-Centre support bridge (section 5)
-  Fadel 10    -> retry baseline 5 min x 3; error codes 4.5 (spec v0.2, 05/10)
+  Fadel 10    -> retry values to be confirmed by RB Business (06/10); error codes 4.5
   Fadel 11    -> spec v0.2 values folded into section 4; open items in 4.6
-  Fadel 13/14 -> section 8 acceptance criteria (UAT)
+  Fadel 14    -> acceptance criteria are outside the business BRD (06/10)
   Fadel 12    -> not in the business BRD (PO principle: no NFRs)
 
     python3 build/v12_update_business_review.py [--proof DIR]
@@ -159,17 +160,17 @@ def apply():
     vh = d.table('Date', 'Version', 'Author', 'Change Description')
     row = copy.deepcopy(vh.findall('w:tr', NS)[-1])
     for tc, val in zip(row.findall('w:tc', NS), ['06-10-2026', '1.2', 'Hailey (Appro)',
-            'Business review of 29/09 incorporated: updated wording for P01, P04, P05 and P09; tap behaviour '
-            'and destination screens; device and session scenarios; reminder stop rules and sending time; retry '
-            'baseline and error codes per middleware specification v0.2 (05/10); duplicate-prevention rule BR5; '
-            'acceptance criteria; future enhancements (post-MVP, dedicated development team)']):
+            'Business review of 29/09 incorporated: updated wording for P01, P04, P05 and P09; device and '
+            'session scenarios; reminder stop rules and sending time; middleware specification v0.2 values and '
+            'error codes (05/10), retry values to be confirmed by Business; duplicate-prevention rule BR5; '
+            'future enhancements (post-MVP, dedicated development team)']):
         Doc.set_cell_text(tc, val)
     vh.append(row)
 
     # ---------- 2. overview note ----------
     note1 = d.top('Note: Push content is fixed per notification', starts=True)
     note1.append(Doc.run(' Business-managed configuration and Super Portal visibility are planned as post-MVP '
-                         'enhancements (section 9).',
+                         'enhancements (section 8).',
                          '<w:rPr xmlns:w="%s"><w:i/><w:iCs/></w:rPr>' % W))
 
     # ---------- 3. wording (Fadel 7, PO-accepted 05/10) ----------
@@ -205,26 +206,12 @@ def apply():
                 etree.SubElement(rpr, q('b'))
         return p
 
-    # ---------- 3.4–3.7 (Fadel 2, 3, 4, 8) ----------
+    # ---------- 3.4–3.6 (Fadel 2, 4, 8; deep-link detail deferred per the PO, 06/10) ----------
     sec4 = d.top('4. PUSH NOTIFICATION API INTEGRATION')
-    STATUS = 'Application status screen'
-    dest = make_table(br_tbl, [1250, 2050, 3400, 2940],
-        ['Push ID', 'Action type', 'On tap, opens at', 'If no longer active'],
-        [['P01', 'APPRO_JOURNEY', 'Offer review screen', STATUS],
-         ['P01 (CASA)', 'APPRO_JOURNEY', 'Account opening continuation screen', STATUS],
-         ['P02', 'APPRO_JOURNEY', 'Offer review screen', STATUS],
-         ['P03', 'NONE', 'Super App — no Appro screen is opened', '—'],
-         ['P04', 'APPRO_JOURNEY', STATUS, STATUS],
-         ['P05', 'APPRO_JOURNEY', 'Document request screen', STATUS],
-         ['P06', 'APPRO_JOURNEY', 'Offer review screen', STATUS],
-         ['P08', 'APPRO_JOURNEY', 'Loan status screen', STATUS],
-         ['P09', 'NONE', 'Super App — no Appro screen is opened', '—'],
-         ['P10', 'APPRO_JOURNEY', 'Loan status screen', STATUS],
-         ['P11', 'APPRO_JOURNEY', STATUS, STATUS]])
     scen = make_table(br_tbl, [2700, 1500, 5440],
         ['Scenario', 'Owner', 'Behaviour'],
         [['Customer logged out or session expired', 'Super App',
-          'The Super App completes the login first, then opens the destination screen of section 3.4.'],
+          'The Super App completes the login first, then opens the Appro journey at the screen for the event.'],
          ['Customer changed device, or multiple registered devices', 'Super App',
           'The push follows the device-token registration held by the Super App.'],
          ['Push permission disabled on the device', 'Super App',
@@ -232,29 +219,21 @@ def apply():
          ['Device token invalid or expired', 'Middleware',
           'The middleware returns 404 UNREGISTERED — tracked in the backend as Failed, no retry (section 4.5).'],
          ['Application completed, cancelled, withdrawn, rejected or expired', 'Appro',
-          'No further push is sent and reminders stop immediately (section 3.6). On a late tap, the journey '
-          'opens the application status screen (section 3.4).'],
+          'No further push is sent and reminders stop immediately (section 3.5). On a late tap, the journey '
+          'opens the application status screen.'],
          ['Customer no longer eligible', 'Appro',
           'A push is built only at its trigger event on a live application — no event, no push.']])
-    for el in [h2('3.4 Tap behaviour and destination screens'),
-               body('Every push carries an action type (section 4.3). APPRO_JOURNEY opens the Appro journey at '
-                    'the destination screen below. NONE — used for P03 and P09, per the alignment call of '
-                    '05/10 — opens the Super App without forcing a screen. If the customer is logged out, the '
-                    'Super App completes the login first, then opens the destination screen.'),
-               dest,
-               body([('The Super App hand-over of action.id and action.value to the Appro journey, and keeping '
-                      'the destination through the login — TBC by Avanza.', TBC_RPR)]),
-               h2('3.5 Device and session scenarios'),
+    for el in [h2('3.4 Device and session scenarios'),
                body([('Each scenario has one owner. Appro rows are covered by this BRD; the Super App and '
                       'middleware rows are ', None), ('TBC by Avanza', TBC_RPR), ('.', None)]),
                scen,
-               h2('3.6 Reminder and stop rules (P02)'),
+               h2('3.5 Reminder and stop rules (P02)'),
                li('P02 is sent once per day for 15 days, starting after the first offer is displayed. The '
                   'interval and the maximum count are backend configuration parameters (default: daily, 15).'),
                li('P02 stops immediately when the customer selects an offer, or when the application is '
                   'completed, cancelled or withdrawn, rejected or expired, or the product is booked or issued.'),
                li('One push per Push ID per trigger occurrence per application (BR5).'),
-               h2('3.7 Sending time'),
+               h2('3.6 Sending time'),
                li('Event-driven pushes are sent immediately at the trigger event.'),
                li('Scheduled pushes — the P02 reminder and P03 (offer expired) — are released at 10:00 UAE '
                   'time (backend configuration parameter).')]:
@@ -275,7 +254,7 @@ def apply():
     set_cell_runs(rows5['requestId'][4], [('Generated by Appro, unique per push. Every retry reuses the same '
                                            'requestId. ', None),
                                           ('TBC by Avanza: middleware de-duplication on the requestId.', TBC_RPR)])
-    set_cell_runs(rows5['action.type'][4], [('APPRO_JOURNEY: a tap opens the Appro journey (section 3.4). NONE: '
+    set_cell_runs(rows5['action.type'][4], [('APPRO_JOURNEY: a tap opens the Appro journey at the screen for the event. NONE: '
                                              'no forced action — the tap opens the Super App; used for P03 and '
                                              'P09 (call of 05/10). POPUP: not used by Appro. ', None),
                                             ('TBC by Avanza: Super App hand-over of action.id and action.value '
@@ -316,8 +295,6 @@ def apply():
 
     # ---------- 5. retry baseline ----------
     rt = d.top('Else → the system retries automatically', starts=True)
-    d.replace(rt, 'X minutes', '5 minutes')                     # bold run
-    d.replace(rt, 'N attempts', '3 attempts')                   # bold run
     d.replace(rt, '. X and N are configurable.',
               '. The interval and the number of attempts are backend configuration parameters.')
     ec = d.top('The full error-code list, and any code that should not be retried', starts=True)
@@ -327,14 +304,15 @@ def apply():
     rid = para_from(ec, [('Every retry reuses the same requestId, so a retry never creates a duplicate '
                           'notification (BR5).', None)])
     ec.addprevious(rid)
+    ec.addprevious(para_from(ec, [('Retry interval (X) and number of attempts (N) – To be confirmed by RB '
+                                   'Business', TBC_RPR)]))
     d.remove(ec)
     trk = d.top('The system tracks the API delivery result only,', starts=True)
     trk.append(Doc.run(' The backend record per push: Push ID, date and time, number of attempts, final status '
                        '(Success / Failed) and the failure reason. Until a Super Portal view is available '
-                       '(section 9), Appro support provides the status of a push for a given application on '
+                       '(section 8), Appro support provides the status of a push for a given application on '
                        'request from the Contact Centre.'))
     cap2 = d.top('Figure 2 —', starts=True)
-    d.replace(cap2, '(X and N configurable)', '(default: retry every 5 minutes, up to 3 attempts)')
 
     # ---------- figures re-rendered with the baseline values ----------
     for cap, png in ((d.top('Figure 1 —', starts=True), 'Flow_Push_Notification_End_to_End.png'),
@@ -357,7 +335,7 @@ def apply():
     Doc.set_cell_text(rowsI['Audit trail'].findall('w:tc', NS)[1],
                       'No change in this release. Push results are tracked in the backend only; Appro support '
                       'provides the status of a push on request (section 5). A Super Portal view is a post-MVP '
-                      'enhancement (section 9).')
+                      'enhancement (section 8).')
 
     # ---------- 8 + 9: acceptance criteria, future enhancements ----------
     app = d.top('APPENDIX 1: SAMPLE REQUEST/RESPONSE')
@@ -376,30 +354,7 @@ def apply():
             t.text = ''
         return p
 
-    for el in [h1('8. ACCEPTANCE CRITERIA (UAT)', 'sec14', '914'),
-               body('UAT passes when the criteria below hold; the detailed test cases follow in the UAT plan. '
-                    'The second group is executed end to end with Avanza, because the behaviour sits in the '
-                    'Super App or the middleware.'),
-               body([('Verified on the Appro platform', BOLD_RPR)]),
-               li('Each push fires at its trigger event only, for the right product, customer and language, '
-                  'with the exact title and body of section 3.1 — and never for a completed, cancelled, '
-                  'rejected or expired application.'),
-               li('A tap opens the destination screen of section 3.4, on iOS and Android.'),
-               li('Arabic content renders correctly, and no personal data appears in any title or body (BR2).'),
-               li('A failed call is retried every 5 minutes up to 3 attempts; 403 and 404 are not retried; the '
-                  'final failure is tracked with its reason (sections 4.5 and 5).'),
-               li('No duplicate notification for one event — including on retry, timeout or reprocessing (BR5).'),
-               li('P02 stops immediately on every stop condition of section 3.6; scheduled pushes respect the '
-                  '10:00 sending time (section 3.7).'),
-               li('A push failure never blocks, delays or changes the application (section 5).'),
-               li('The backend record is complete per section 5 for every sent and failed push.'),
-               body([('Verified end to end with Avanza', BOLD_RPR)]),
-               li('Delivery on iOS and Android through the Super App.'),
-               li('Notification permission disabled, invalid or expired token, changed device, multiple '
-                  'devices (section 3.5).'),
-               li('Logged-out tap: login first, then the destination screen of section 3.4.'),
-               li('P03 and P09 (action type NONE) open the Super App only.'),
-               h1('9. FUTURE ENHANCEMENTS (POST-MVP)', 'sec15', '915'),
+    for el in [h1('8. FUTURE ENHANCEMENTS (POST-MVP)', 'sec14', '914'),
                body('The items below are agreed as enhancements after the MVP 1.1 sign-off, delivered by the '
                     'dedicated development team based on launch feedback — not as change requests. The MVP '
                     'design is scalable, so they are added on the same framework, without redesign.'),
@@ -422,8 +377,7 @@ def apply():
             if hl is not None and hl.get(q('anchor')) == 'sec13':
                 toc_app = el
                 break
-    for anchor, title in (('sec14', '8. ACCEPTANCE CRITERIA (UAT)'),
-                          ('sec15', '9. FUTURE ENHANCEMENTS (POST-MVP)')):
+    for anchor, title in (('sec14', '8. FUTURE ENHANCEMENTS (POST-MVP)'),):
         line = copy.deepcopy(toc_app)
         hl = line.find('w:hyperlink', NS)
         hl.set(q('anchor'), anchor)

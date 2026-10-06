@@ -55,7 +55,8 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'parameters are backend settings. Any wording change before sign-off is simply incorporated. '
      'Business-managed configuration from Super Portal — enable / disable, content, reminder frequency and '
      'count, product mapping, validity, priority, English and Arabic, new Push IDs — is the next enhancement, '
-     'picked up by the dedicated team after the MVP sign-off, with no CR.',
+     'picked up by the dedicated team after the MVP 1.1 sign-off. Of note, this is considered an enhancement '
+     'since our original product scope has SMS and Email only — push notification is a new request by the Bank.',
      'A “Future enhancements” section listing these parameters; your requirement statement is carried there as '
      'the target design.'),
     ('2', 'Complete end-to-end push notification journey', ['MVP 1.1 scope', 'Dependency – Avanza'],
@@ -66,15 +67,10 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'device changed, multiple devices, notification permission off, invalid token — sit with the Super App '
      'and the middleware; Avanza to confirm the behaviour and we will document it as received.',
      'Extended flow and a scenario table with the owner of each case.'),
-    ('3', 'Deep-linking defined per notification', ['MVP 1.1 scope', 'Dependency – Avanza'],
-     'Agreed — the destination screen per Push ID is part of the MVP scope, and BRD V1.2 will carry the table: '
-     'Push ID, trigger, destination screen, and the screen when the application is no longer active '
-     '(the application’s current status screen). Per the alignment call of 05/10, P03 and P09 carry action '
-     'type NONE — the tap opens the Super App, with no deep link — and every other Push ID uses APPRO_JOURNEY. '
-     'Logged in or logged out is the same from Appro’s side: the '
-     'Super App completes the login, then hands over to the Appro journey, which opens at the destination '
-     'screen. Avanza to confirm the hand-over keeps the destination after login.',
-     'Deep-link table for all Push IDs.'),
+    ('3', 'Deep-linking defined per notification', ['Later – dedicated team'],
+     'Currently we follow the Avanza API structure. Any parameters beyond the documentation will be included '
+     'in the next phase of Push Notification.',
+     '—'),
     ('4', 'Reminder logic and suppression rules', ['MVP 1.1 scope', 'Later – dedicated team'],
      'P02 runs once per day for 15 days, as agreed. It stops immediately when the customer selects the offer, '
      'or when the application is completed, cancelled or withdrawn, rejected or expired — the full list goes '
@@ -91,13 +87,13 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'English and Arabic are one requirement and are tested together in UAT. We have not yet received the '
      'approved Arabic titles and bodies. Please share them against the final English wording (item 7) and we '
      'will add them to the BRD before sign-off.',
-     'Arabic column in the content table.'),
+     'Arabic column in the content table for review.'),
     ('7', 'Customer communication wording', ['MVP 1.1 scope', 'Input – Reem Bank'],
      'Accepted as proposed for P01, P04 and P09 — all within the 40 / 100 character limits and with no '
      'personal data on the lock screen. P05 depends on how the customer provides the document (Shurafa’s '
      'comment S6) and will be finalised with it. The full updated wording is in BRD V1.2 for your '
      'confirmation, so the Arabic can follow.',
-     'Updated content table.'),
+     'Updated content table based on the suggestions.'),
     ('8', 'Push timing and customer experience', ['MVP 1.1 scope', 'Later – dedicated team'],
      'Event-driven pushes are sent immediately. The scheduled ones — the P02 reminder and P03 (offer expired) — '
      'are sent at a fixed time of day, 10:00 UAE time. Configurable sending hours and customer local time '
@@ -111,50 +107,35 @@ FADEL = [  # (no, topic, tags, response, what changes in BRD V1.2 or '—')
      'the dedicated team. Delivery to the device, opened / clicked and deep-link success are Super App events '
      'that Appro does not receive; Avanza to confirm what the Super App can report.',
      'Tracking fields listed; Super Portal view under “Future enhancements”.'),
-    ('10', 'Retry rules finalised', ['MVP 1.1 scope', 'Dependency – Avanza'],
-     'Baseline values go into BRD V1.2: retry every 5 minutes, up to 3 attempts; a timeout counts as a '
-     'failed attempt and is retried; the same request ID is reused on every retry; after the last attempt the '
-     'push is recorded as failed and the application continues unaffected. Avanza’s error-code list arrived '
-     'with specification v0.2 on 05/10; we propose 429, 500 and a timeout as retryable, and 403 and 404 as '
-     'final with no retry — to be confirmed with Avanza.',
-     'Retry baseline values.'),
-    ('11', 'Avanza / technical TBCs closed before sign-off', ['Dependency – Avanza', 'Input – Reem Bank'],
-     'Good progress here: against our questions of 28/09, Avanza shared specification v0.2 on 05/10, and the '
-     'alignment call of 05/10 closed the action-type behaviour, the mobile number format, the message field, '
-     'the language values and the error-code list — all carried into BRD V1.2. Still open with Avanza: the '
-     'environment endpoint and credentials, the channel id assigned to Appro, the request id on retry, and '
-     'the Super App hand-over into the Appro journey. On the sign-off condition, we propose that Business '
-     'signs off the functional requirements (sections 1–3 and 5–7), so development and the Expleo handover can '
-     'start, while the interface items in section 4 are closed with Avanza and Reem Bank IT before SIT. Tying '
-     'the business sign-off to the interface items would hold the timeline on Avanza’s answers.',
-     'Open interface items listed with owner and status.'),
+    ('10', 'Retry rules finalised', ['MVP 1.1 scope'],
+     'Retry rule: to be confirmed by RB Business.',
+     '—'),
+    ('11', 'Avanza / technical TBCs closed before sign-off', [],
+     'Technical item, outside the business BRD — handled in the integration design with Reem Bank IT and '
+     'Avanza.',
+     '—'),
     ('12', 'Security, privacy and logging', [],
      'Technical item, outside the business BRD — handled in the integration design with Reem Bank IT and '
      'Avanza.',
      '—'),
     ('13', 'Push failure must not impact the journey', ['MVP 1.1 scope'],
      'Already a mandatory rule (BRD section 5): a push that is not sent never blocks, delays or changes the '
-     'application. It stays in BRD V1.2 and in the acceptance checklist (item 14).',
+     'application. It stays in BRD V1.2.',
      '—'),
-    ('14', 'Acceptance criteria / UAT', ['MVP 1.1 scope', 'Dependency – Avanza'],
-     'BRD V1.2 will carry an acceptance checklist for the MVP 1.1 scope: correct trigger, product, customer, '
-     'language and content; deep-link destination; Android and iOS; retry success and failure; no duplicate '
-     'push; reminder stop; completed or expired application; Arabic display; no personal data on the lock '
-     'screen; no impact on the application. Device-side cases — notification disabled, invalid token, multiple '
-     'devices, logged-out routing — are tested end to end with Avanza. The detailed test cases come with the '
-     'UAT plan.',
-     'Acceptance checklist section.'),
+    ('14', 'Acceptance criteria / UAT', [],
+     'Acceptance criteria are outside the business BRD scope.',
+     '—'),
     ('15', 'Future-proofing', ['Later – dedicated team'],
      'Agreed as a design principle: new Push IDs, journeys and products are added on the same framework without '
-     'redesign. MVP 1.1 covers the ten agreed Push IDs for Credit Card, Personal Loan and CASA; additions are '
-     'delivered by the dedicated team after the MVP sign-off, with no CR.',
+     'redesign. MVP 1.1 covers the ten agreed Push IDs for Credit Card, Personal Loan and CASA; additions can '
+     'be brainstormed and are easy to scale up, delivered by the dedicated team after the MVP 1.1 sign-off.',
      'Design principle under “Future enhancements”.'),
 ]
 
 SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
     ('S1', 'p.3', 'Login first and then route to the application journey.', ['MVP 1.1 scope', 'Dependency – Avanza'],
      'Agreed. On tap, the Super App completes the login, then the Appro journey opens at the screen for the '
-     'event (item 3).'),
+     'event (item 2).'),
     ('S2', 'p.3', 'Keep room for further enhancement in the future without CR, since this is not fully optimised.',
      ['Later – dedicated team'],
      'Noted — enhancements after the MVP are handled by the dedicated team, with no CR (see the commercial '
@@ -181,8 +162,7 @@ SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
      'sees today when the application is rejected. The push text stays neutral and never shows the decision on '
      'the lock screen (item 7).'),
     ('S8', 'p.5', 'P10 “Tap for details” — when he taps, where will it take him?', ['MVP 1.1 scope'],
-     'P10 opens the existing loan status screen in the Appro journey. The destination for every Push ID '
-     'is in the deep-link table (item 3).'),
+     'P10 opens the existing loan status screen in the Appro journey.'),
     ('S9', 'p.5', 'P03 (30 days) — as discussed, this is to be changed; the customer can apply five times.',
      ['Input – Reem Bank'],
      'Noted. Please confirm the new offer validity period that replaces 30 days [as agreed on 28/09]; P03 '
@@ -192,40 +172,36 @@ SHURAFA = [  # (no, page, comment as written in the PDF, tags, response)
 
 NEXT = [
     ('Reem Bank', 'Final English wording for the eleven notifications and the Arabic content (items 6–7); the '
-     'P05 document channel (S6); the offer validity period (S9); confirmation of the sign-off approach (item 11).'),
-    ('Avanza', 'The remaining items of 28/09 (item 11): environment endpoint and credentials, channel id, request '
-     'id on retry; the Super App behaviour for login, routing, devices and permissions (items 2–3); what delivery '
-     'or open data it can report (item 9).'),
+     'retry rule (item 10); the P05 document channel (S6); the offer validity period (S9).'),
+    ('Avanza', 'The remaining integration items with Reem Bank IT: environment endpoint and credentials, channel '
+     'id, request id on retry; the Super App behaviour for login, routing, devices and permissions (item 2); '
+     'what delivery or open data it can report (item 9).'),
     ('Appro', 'BRD V1.2 is attached to this email, with the above and specification v0.2 incorporated. An '
      'updated delivery plan with the revised SIT / UAT dates follows once BRD V1.2 is signed off.'),
 ]
 
 BRDMAP = [  # (BRD V1.2 section, what changed, which comments it answers)
     ('1. Feature overview', 'Note updated: business-managed configuration and Super Portal visibility are '
-     'post-MVP enhancements (section 9).', 'Item 1'),
+     'post-MVP enhancements (section 8).', 'Item 1'),
     ('3.1 Trigger events and push content', 'New wording for P01, P04 and P09 as proposed; P05 proposed wording, '
      'pending the document channel.', 'Item 7 · S6'),
     ('3.3 Language', 'Arabic titles and bodies to be added on receipt of the approved content, before sign-off.',
      'Item 6'),
-    ('3.4 Tap behaviour and destination screens — new', 'Destination screen per Push ID, logged-out handling and '
-     'the fallback when the application is no longer active; P03 and P09 carry action type NONE (call of 05/10).',
-     'Items 2–3 · S1 · S7 · S8'),
-    ('3.5 Device and session scenarios — new', 'Each device and session case with one owner (Appro / Super App / '
+    ('3.4 Device and session scenarios — new', 'Each device and session case with one owner (Appro / Super App / '
      'middleware).', 'Item 2'),
-    ('3.6 Reminder and stop rules — new', 'The full P02 stop list; interval and count as backend parameters.',
+    ('3.5 Reminder and stop rules — new', 'The full P02 stop list; interval and count as backend parameters.',
      'Item 4'),
-    ('3.7 Sending time — new', 'Event pushes immediate; scheduled pushes (P02, P03) at 10:00 UAE time.', 'Item 8'),
+    ('3.6 Sending time — new', 'Event pushes immediate; scheduled pushes (P02, P03) at 10:00 UAE time.', 'Item 8'),
     ('4. API integration', 'Specification v0.2 folded in: stan 6–12 characters, mobile 9715XXXXXXXX, language '
-     '"EN" / "AR", message field.', 'Item 11'),
-    ('4.5 Error codes — new', 'The middleware error-code list with the proposed retry classification.', 'Item 10'),
-    ('4.6 Open items with Avanza — new', 'The four remaining items: endpoint and credentials, channel id, '
-     'requestId on retry, Super App hand-over.', 'Item 11'),
-    ('5. Response handling and retry', 'Baseline documented: retry every 5 minutes, up to 3 attempts; the backend '
-     'record fields; Contact Centre support until a Super Portal view.', 'Items 9, 10, 13'),
+     '"EN" / "AR", message field, action types.', '—'),
+    ('4.5 Error codes — new', 'The middleware error-code list with the proposed handling.', 'Item 10'),
+    ('4.6 Open items with Avanza — new', 'The remaining integration items: endpoint and credentials, channel id, '
+     'requestId on retry, Super App hand-over.', '—'),
+    ('5. Response handling and retry', 'Automatic retry with backend parameters — retry values to be confirmed '
+     'by RB Business; the backend record fields; Contact Centre support until a Super Portal view.',
+     'Items 9, 10, 13'),
     ('6. Business rules', 'BR5 — one notification per event; every retry reuses the same requestId.', 'Item 5'),
-    ('8. Acceptance criteria (UAT) — new', 'The UAT checklist: Appro-verified criteria and the end-to-end group '
-     'with Avanza.', 'Item 14'),
-    ('9. Future enhancements (post-MVP) — new', 'Delivered by the dedicated development team, no CR: Super Portal '
+    ('8. Future enhancements (post-MVP) — new', 'Delivered by the dedicated development team: Super Portal '
      'configuration and sending, push visibility, sending hours, new products and Push IDs.',
      'Items 1, 15 · S2–S5'),
 ]
@@ -253,7 +229,7 @@ def build_html():
     rows_f = ''.join(
         f'<tr><td style="{TD}width:22px;font-weight:bold;">{n}</td>'
         f'<td style="{TD}width:165px;font-weight:bold;">{e(title)}</td>'
-        f'<td style="{TD}width:118px;">{"".join(pill(t) for t in tags) or "—"}</td>'
+        f'<td style="{TD}width:118px;">{"".join(pill(t) for t in tags) or "N/A"}</td>'
         f'<td style="{TD}">{e(resp)}'
         + (f'<br><span style="color:#6b6b6b;font-style:italic;">In BRD V1.2: {e(brd)}</span>' if brd != '—' else '')
         + '</td></tr>'
@@ -319,7 +295,7 @@ def build_txt():
     L += ['', 'COMMERCIAL POSITION', SCOPE_LINE] + [f'• {b}' for b in COMMERCIAL] + [DEDICATED, '',
           'RESPONSE TO MR. FADEL’S COMMENTS']
     for n, title, tags, resp, brd in FADEL:
-        L += [f'{n}. {title} [{" · ".join(tags) or "—"}]', f'   {resp}'] + ([f'   In BRD V1.2: {brd}'] if brd != '—' else []) + ['']
+        L += [f'{n}. {title} [{" · ".join(tags) or "N/A"}]', f'   {resp}'] + ([f'   In BRD V1.2: {brd}'] if brd != '—' else []) + ['']
     L += ['RESPONSE TO SHURAFA’S COMMENTS ON THE BRD']
     for n, pg, c, tags, resp in SHURAFA:
         L += [f'{n} ({pg}) {c} [{" · ".join(tags)}]', f'   {resp}', '']
