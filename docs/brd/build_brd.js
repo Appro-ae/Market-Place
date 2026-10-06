@@ -314,12 +314,12 @@ P(
   h2('4.2. Role Information for Revert Queue'),
   imgP('SC5_Role_Permission_Revert_Queue.png', 600, 338),
   caption('SC5: Role permission for Revert Queue'),
-  p("A new queue entry, 'Revert Queue', shall be added under the Manually Queue section in Role Management (Add Role screen). Two role permissions are available per product ([Credit Card] / [Personal Loan]) — View Application & Evaluate Application:"),
+  p("A new queue entry, 'Revert Queue', shall be added under the Manually Queue section in Role Management (Add Role screen). §§Two role permissions — **View Application** and **Evaluate Application** — apply to the Revert Queue **without a per-product split**: each is a single permission covering all applicable products (CC and PL), consistent with the queue listing all products in one view§§:"),
   tbl(
     ['Permission', 'Value', 'Access Granted'],
     [
-      ['View Application (Revert Queue)', 'TRUE', 'Users can access Revert Queue list view AND view Application Details for that product.'],
-      ['', 'FALSE', 'Users cannot see the Revert Queue in the Queue menu for that product.'],
+      ['View Application (Revert Queue)', 'TRUE', 'Users can access Revert Queue list view AND view Application Details §§for all applicable products§§.'],
+      ['', 'FALSE', 'Users cannot see the Revert Queue in the Queue menu.'],
       ['Evaluate Application (Revert Queue)', 'TRUE', 'Users can see and click the Approve / Reject buttons in Revert Queue Application Details.'],
       ['', 'FALSE', 'Users cannot see the Approve or Reject buttons.'],
     ],
@@ -455,7 +455,7 @@ P(
   h1('Additional Impact Analysis'),
   p('Beyond the direct scope above, the following areas of the Reem Bank platform are impacted and must be carried into estimation and test scope:'),
   impactTable([
-      ['Role Management / Permission Matrix', "Six new permission entries, per product: [CC]/[PL] × 'Revert Application' (Enquiry > Application Enquiry) and [CC]/[PL] × View / Evaluate Application (Manually Queue > Revert Queue). Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
+      ['Role Management / Permission Matrix', "§§Four new permission entries:§§ [CC]/[PL] × 'Revert Application' (per product, Enquiry > Application Enquiry) §§plus 'View Application' and 'Evaluate Application' on the Revert Queue (Manually Queue) — product-agnostic, one permission each across CC and PL§§. Each is a distinct right — bundling permissions that cover different actions has previously required production hotfixes. The Permission Matrix reference page must be updated.", ['ia_role.png', 2260, 620, 'Role Management › Application Enquiry (SC1)']],
       ['Queue model / drop points', 'One new queue (Revert Queue) in the Queue menu and the Manually Queue role section. The drop-points matrix gains a new entry (approved revert → Credit Queue L1), plus the parking of both DBR safety nets (Existing DBR > 50% and Gross DBR > 100%) → Credit Queue L1, which increases Credit Queue volume for every breach — not only reverted cases. Parked cases must carry the completed Rule Engine and Limit Assignment results into the queue view. The new parking drop points must be aligned with the drop-point / Failed Reason updates currently in delivery, and the DBR thresholds with the in-flight two-DBR calculation change.', ['ia_queue.png', 940, 430, 'Queue menu — Revert Queue (SC4)']],
       ['Status model / mobile app', 'No new Application Status is introduced (Revert_App flag only, mirroring Cancel_App), so the mobile application requires no change and never displays a state that misrepresents the case.', ['ia_status.png', 1160, 330, 'Status transition on approved revert']],
       ['Audit trail', "Three new audit steps — 'Manually initiate revert', 'Revert Queue', 'Auto Revert Approval on timeout' — each writing the full standard field set. The original rejection record is never modified. Revertibility is derived from the audit step recorded at rejection, so the known defect in the audit trail written for Financial-DBR rejections must be resolved before this feature relies on it.§§ Each revert cycle writes its own complete audit set, so repeated reverts remain fully traceable end-to-end (section 4.7).§§", ['ia_audit.png', 2390, 620, 'Application history steps — Application Enquiry']],

@@ -92,7 +92,7 @@ When user submits the revert request:
 
 **AC2.2: Landing the revert request into Revert Queue (Checker)**
 
-* A new queue, **'Revert Queue'**, appears in the Queue menu alongside the existing queues (SC4, `SC4_Queue_Menu_Revert_Queue.png`), and under the **Manually Queue** section in Role Management (Add Role screen) with two role permissions per product — **View Application** and **Evaluate Application** ([Credit Card] / [Personal Loan]) (SC5, `SC5_Role_Permission_Revert_Queue.png`).
+* A new queue, **'Revert Queue'**, appears in the Queue menu alongside the existing queues (SC4, `SC4_Queue_Menu_Revert_Queue.png`), and under the **Manually Queue** section in Role Management (Add Role screen) with two role permissions — **View Application** and **Evaluate Application** — **without a per-product split**: each is a single permission covering all applicable products (CC and PL), consistent with the queue listing all products in one view (SC5, `SC5_Role_Permission_Revert_Queue.png`).
 
 ![SC4 – Queue menu with the new Revert Queue entry](SC4_Queue_Menu_Revert_Queue.png)
 
@@ -179,7 +179,7 @@ Revertibility is derived from **how it became Rejected** — from the audit step
 
 | Area | Impact | Screen |
 | --- | --- | --- |
-| Role Management / Permission Matrix | **6 new permissions, per product:** [CC]/[PL] × Revert Application (Enquiry > Application Enquiry); [CC]/[PL] × View Application + Evaluate Application (Manually Queue > Revert Queue). Permission Matrix page to be updated. Distinct rights — never bundled. | <img src="assets/ia_role.png" width="290"><br>*Role Management › Application Enquiry (SC1)* |
+| Role Management / Permission Matrix | **4 new permissions:** [CC]/[PL] × Revert Application (per product, Enquiry > Application Enquiry) + View Application / Evaluate Application on the Revert Queue (Manually Queue — product-agnostic, one permission each across CC and PL). Permission Matrix page to be updated. Distinct rights — never bundled. | <img src="assets/ia_role.png" width="290"><br>*Role Management › Application Enquiry (SC1)* |
 | Queue model / drop points | New **Revert Queue** in the Queue menu and the Manually Queue role section. Drop-points matrix: approved revert → **Credit Queue L1**; parking of **both DBR safety nets** (Existing DBR > 50%, Gross DBR > 100%) → Credit Queue L1 — **volume increases for every breach**, not only reverted cases. Parked cases carry the completed Rule Engine + Limit Assignment results into the queue view. | <img src="assets/ia_queue.png" width="290"><br>*Queue menu — Revert Queue (SC4)* |
 | Status model / mobile app | No new Application Status (**Revert_App flag** only) → **no mobile app change**; avoids status-not-reflecting-reality defects. | <img src="assets/ia_status.png" width="290"><br>*Status transition on approved revert* |
 | Audit trail | 3 new steps — "Manually initiate revert", "Revert Queue", "Auto Revert Approval on timeout". The original rejection record is never modified. | <img src="assets/ia_audit.png" width="290"><br>*Application history steps* |
