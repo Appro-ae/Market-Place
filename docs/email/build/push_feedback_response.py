@@ -196,8 +196,38 @@ NEXT = [
     ('Avanza', 'The remaining items of 28/09 (item 11): environment endpoint and credentials, channel id, request '
      'id on retry; the Super App behaviour for login, routing, devices and permissions (items 2–3); what delivery '
      'or open data it can report (item 9).'),
-    ('Appro', 'BRD V1.2 by Tuesday, 06 October with the above and specification v0.2 incorporated. An updated '
-     'delivery plan with the revised SIT / UAT dates follows once BRD V1.2 is signed off.'),
+    ('Appro', 'BRD V1.2 is attached to this email, with the above and specification v0.2 incorporated. An '
+     'updated delivery plan with the revised SIT / UAT dates follows once BRD V1.2 is signed off.'),
+]
+
+BRDMAP = [  # (BRD V1.2 section, what changed, which comments it answers)
+    ('1. Feature overview', 'Note updated: business-managed configuration and Super Portal visibility are '
+     'post-MVP enhancements (section 9).', 'Item 1'),
+    ('3.1 Trigger events and push content', 'New wording for P01, P04 and P09 as proposed; P05 proposed wording, '
+     'pending the document channel.', 'Item 7 · S6'),
+    ('3.3 Language', 'Arabic titles and bodies to be added on receipt of the approved content, before sign-off.',
+     'Item 6'),
+    ('3.4 Tap behaviour and destination screens — new', 'Destination screen per Push ID, logged-out handling and '
+     'the fallback when the application is no longer active; P03 and P09 carry action type NONE (call of 05/10).',
+     'Items 2–3 · S1 · S7 · S8'),
+    ('3.5 Device and session scenarios — new', 'Each device and session case with one owner (Appro / Super App / '
+     'middleware).', 'Item 2'),
+    ('3.6 Reminder and stop rules — new', 'The full P02 stop list; interval and count as backend parameters.',
+     'Item 4'),
+    ('3.7 Sending time — new', 'Event pushes immediate; scheduled pushes (P02, P03) at 10:00 UAE time.', 'Item 8'),
+    ('4. API integration', 'Specification v0.2 folded in: stan 6–12 characters, mobile 9715XXXXXXXX, language '
+     '"EN" / "AR", message field.', 'Item 11'),
+    ('4.5 Error codes — new', 'The middleware error-code list with the proposed retry classification.', 'Item 10'),
+    ('4.6 Open items with Avanza — new', 'The four remaining items: endpoint and credentials, channel id, '
+     'requestId on retry, Super App hand-over.', 'Item 11'),
+    ('5. Response handling and retry', 'Baseline documented: retry every 5 minutes, up to 3 attempts; the backend '
+     'record fields; Contact Centre support until a Super Portal view.', 'Items 9, 10, 13'),
+    ('6. Business rules', 'BR5 — one notification per event; every retry reuses the same requestId.', 'Item 5'),
+    ('8. Acceptance criteria (UAT) — new', 'The UAT checklist: Appro-verified criteria and the end-to-end group '
+     'with Avanza.', 'Item 14'),
+    ('9. Future enhancements (post-MVP) — new', 'Delivered by the dedicated development team, no CR: Super Portal '
+     'configuration and sending, push visibility, sending hours, new products and Push IDs.',
+     'Items 1, 15 · S2–S5'),
 ]
 
 F = "font-family:Arial,Helvetica,sans-serif"
@@ -237,6 +267,13 @@ def build_html():
     bullets = ''.join(f'<tr><td style="padding:3px 8px 3px 0;vertical-align:top;">•</td><td style="padding:3px 0;">{e(b)}</td></tr>'
                       for b in COMMERCIAL)
     nxt = ''.join(f'<tr><td style="{TD}width:90px;font-weight:bold;">{o}</td><td style="{TD}">{e(t)}</td></tr>' for o, t in NEXT)
+    headm = (f'<tr><td style="{TH}">BRD V1.2 section</td><td style="{TH}">What changed</td>'
+             f'<td style="{TH}">Answers</td></tr>')
+    rows_m = ''.join(
+        f'<tr><td style="{TD}width:215px;font-weight:bold;">{e(sec)}</td>'
+        f'<td style="{TD}">{e(what)}</td>'
+        f'<td style="{TD}width:120px;">{e(ans)}</td></tr>'
+        for sec, what, ans in BRDMAP)
     head = (f'<tr><td style="{TH}">#</td><td style="{TH}">{{c1}}</td><td style="{TH}">Classification</td>'
             f'<td style="{TH}">Appro response</td></tr>')
     label = lambda t: (f'<tr><td style="padding:0 0 8px 0;font-size:12px;letter-spacing:1.2px;color:#6b6b6b;'
@@ -247,8 +284,10 @@ def build_html():
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="760" style="width:760px;border-collapse:collapse;{F};font-size:14px;line-height:1.5;color:#1a1a1a;">
 <tr><td style="padding:0 0 18px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="height:4px;background:#3278FF;font-size:0;line-height:0;">&nbsp;</td></tr></table></td></tr>
 <tr><td style="padding:0 0 14px 0;">Dear Mr. Fadel and Shurafa,</td></tr>
-<tr><td style="padding:0 0 14px 0;">Thank you both for the detailed review. We share the same objective: a push notification feature that is complete and customer-friendly. Please find our response below, item by item in your numbering, followed by Shurafa’s comments on the BRD.</td></tr>
+<tr><td style="padding:0 0 14px 0;">Thank you both for the detailed review. We share the same objective: a push notification feature that is complete and customer-friendly. <b>Please find BRD V1.2 (06 October 2026) attached</b>, with every agreed point incorporated. The first table below shows exactly what is in BRD V1.2 and which of your comments it answers; our item-by-item response follows in your numbering, then Shurafa’s comments.</td></tr>
 <tr><td style="padding:0 0 18px 0;">Each item is classified so the scope stays transparent:<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:6px;font-size:12.5px;">{legend}</table></td></tr>
+{label('WHAT IS IN BRD V1.2 (ATTACHED)')}
+<tr><td style="padding:0 0 20px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.45;">{headm}{rows_m}</table></td></tr>
 {label('COMMERCIAL POSITION')}
 <tr><td style="padding:0 0 18px 0;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="border-left:4px solid #1A214D;background:#F4F6FA;padding:12px 16px;">
 {e(SCOPE_LINE)}
@@ -270,9 +309,12 @@ def build_html():
 def build_txt():
     L = ['Dear Mr. Fadel and Shurafa,', '',
          'Thank you both for the detailed review. We share the same objective: a push notification feature that '
-         'is complete and customer-friendly. Please find our response below, item by item in your numbering, '
-         'followed by Shurafa’s comments on the BRD.', '',
-         'Each item is classified so the scope stays transparent:']
+         'is complete and customer-friendly. BRD V1.2 (06 October 2026) is attached, with every agreed point '
+         'incorporated. Below: what is in BRD V1.2, then our response item by item in your numbering, followed '
+         'by Shurafa’s comments on the BRD.', '',
+         'WHAT IS IN BRD V1.2 (ATTACHED)']
+    L += [f'• {sec}: {what} [{ans}]' for sec, what, ans in BRDMAP]
+    L += ['', 'Each item is classified so the scope stays transparent:']
     L += [f'• {t} — {m}' for t, (_, _, m) in TAGS.items()]
     L += ['', 'COMMERCIAL POSITION', SCOPE_LINE] + [f'• {b}' for b in COMMERCIAL] + [DEDICATED, '',
           'RESPONSE TO MR. FADEL’S COMMENTS']
