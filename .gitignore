@@ -1,2 +1,7 @@
 # Client inputs and outputs: local only (public repo)
 workspace/
+
+# Uploaded Appro skills: contain environment hosts, internal emails and client names.
+# Keep local until a sanitised version is approved for this public repo.
+.claude/skills/appro-user-manual/
+.claude/skills/marketing-walkthrough-video/

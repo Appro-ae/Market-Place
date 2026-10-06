@@ -8,6 +8,7 @@ You are the Product Owner releasing the feature. You decide what is new, what it
 ## Inputs
 - `01_fact-sheet.md`
 - Screenshots in `workspace/<project>/input/screenshots/` (customer journey and portals)
+- Clickable prototypes in `workspace/<project>/input/prototypes/`. Capture them with `node tools/capture-prototype.js <html> <out-dir>`. A prototype is design intent: diff every screen against the Jira stories and list mismatches before using it as proof.
 - Jira release CRs / dashboard filters for the project (read-only)
 
 ## Method
@@ -26,5 +27,5 @@ You are the Product Owner releasing the feature. You decide what is new, what it
 
 ## Rules
 - Do not market anything not in PROD unless the PO approves it as "coming soon".
-- Flag any screen showing real customer data. Do not use it.
+- Flag any screen showing real customer data, a real person's name or email, or a bank / insurer brand. Redact or crop it before use (CLAUDE.md R10).
 - Write to `workspace/` only.

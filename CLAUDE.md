@@ -16,7 +16,8 @@ Owner: Product Owner (PO). Agents act as the PO's product-marketing squad.
 | R5 | **Verified facts only.** Every claim traces to a ticket, KB section or screenshot in the Fact Sheet. Unverified → mark *inferred* or ask. Never invent numbers, features or benefits. |
 | R6 | **Release truth.** A feature is "live" only if Jira shows it shipped to PROD (or the PO confirms). UAT / To Do items are "coming soon" — and only with PO approval. |
 | R7 | **PII.** Screenshots use test data only. Mask names, EID, mobile, email, IBAN, bureau data, account numbers before use. Never copy passwords, tokens or environment URLs into any file. |
-| R8 | **Brand wins.** Appro brand skill overrides any reference file, template or consulting example. |
+| R8 | **Brand wins.** Appro brand skill overrides any reference file, template or consulting example. Format skills that carry their own Appro template (`appro-user-manual`, `marketing-walkthrough-video`) are already brand-aligned: follow them. |
+| R10 | **De-brand by default.** Client-facing material shows a generic "Bank" / "Your Bank". No bank, channel, insurer or person name appears unless the PO names the client edition. Prototype or demo screens that show real names are redacted or cropped first. |
 | R9 | **Ask, don't assume.** Any gap in scope, audience, status or data → question to the PO before building. |
 
 ---
@@ -49,7 +50,7 @@ Agents 1 and 2 can run in parallel once screenshots arrive. 3 → 4 → 5 are se
 |---|---|---|---|
 | **0. Intake** | Orchestrator | Capture: deliverable type, audience (bank client / channel partner / end customer / internal), objective, project, feature(s), language (EN / AR), format, deadline, release status. Fill the Brief template (§6). | Every brief field filled or asked. **Questions sent to PO in one numbered list.** |
 | **1. Knowledge** | `mkt-knowledge-researcher` | Read `workspace/portfolio-overview.md` → every `workspace/<project>/input/knowledge-base.md` (start with the most advanced project). Verify against Jira when the KB is stale (KB header carries the pull date). Pull release CRs, epics, stories in scope. | Fact Sheet: feature · what it does · who benefits · rules shown to users · status (PROD / UAT / To Do) · source key. |
-| **2. Release (PO lens)** | `mkt-release-po` | Walk the real product via screenshots in `workspace/<project>/input/screenshots/`. Map each screen to a flow step. Cross-check Jira release CRs / dashboard for what actually ships. List what is new vs changed vs unchanged. | Release Brief + Screen Map. Every screen in the storyline has a real screenshot, or is flagged "screenshot missing". |
+| **2. Release (PO lens)** | `mkt-release-po` | Walk the real product via screenshots in `workspace/<project>/input/screenshots/`. Clickable prototypes (`input/prototypes/*.html`) are captured with `node tools/capture-prototype.js <html> <out-dir>`; a prototype is design intent, not the live product, so diff it against Jira before use. Map each screen to a flow step. Cross-check Jira release CRs / dashboard for what actually ships. List what is new vs changed vs unchanged. | Release Brief + Screen Map. Every screen in the storyline has a real screenshot, or is flagged "screenshot missing". |
 | **3. Storyline** | `mkt-storyliner` | Build the storyline per §3 playbook. One message per page / scene. Action titles. Write script (narration, speaker notes or copy). | Storyboard approved by **PO** before any build. |
 | **4. Build** | `mkt-designer` | Load `updated-appro-branding-guidelines` skill first (Create / Design mode), then the format skill (§3). Place screenshots with numbered callouts. | File renders; every page passes the brand checklist in the skill. |
 | **5. QA** | `mkt-qa-reviewer` | Run §5 checklist. Return fix list; designer fixes; re-run until clean. | QA Report = PASS. PO sign-off. |
@@ -62,8 +63,9 @@ Agents 1 and 2 can run in parallel once screenshots arrive. 3 → 4 → 5 are se
 |---|---|---|---|---|
 | **Presentation / pitch deck** | Bank clients, partners, exec | Business context → Problem → Base / rationale → Solution (feature walkthrough with screenshots) → Benefits / pros-cons → Next steps | `pptx` (Appro Yellow-led for sales, Blue-led for formal / regulatory) or `slideshow` for HTML deck | 8–15 slides |
 | **Release notes / newsletter** | Clients, partners, internal | Headline value → What's new (3–5 items, screenshot each) → Who benefits → How to use → What's next | HTML email (`artifact-design` + brand §6C) or `docx` / `pdf` | 1–2 pages |
-| **User manual** | Portal users (bank ops, credit, sales, admins) | Purpose → Roles & access → Step-by-step by task (screenshot + numbered callouts per step) → Rules & validations → Statuses → FAQ / errors | `docx` (brand template) → `pdf` | Per module |
-| **Marketing / feature video** | Prospects, end customers | Hook (pain) → Product moment (screens in motion) → Proof (only verified facts) → CTA | `hyperframes` → `product-launch-video` / `website-to-video` / `faceless-explainer`; captions via `embedded-captions` | 30–90 s |
+| **User manual** | Portal users (bank ops, credit, sales, admins) | Per module: What it is for (Background → Problem → What the bank gets → At a glance → Business impact) → screens in the order users meet them → rules & statuses | **`appro-user-manual`** (A4 PDF, Appro manual template, redaction + release gate). Fallback: `docx` brand template | Per module |
+| **Portal walkthrough video** | Bank clients, prospects | Module-by-module walkthrough with captions; narration unchanged | **`marketing-walkthrough-video`** (de-brand to generic "Bank", quality bar, capture spec) | ~3–6 min |
+| **Marketing / feature video** (customer journey) | Prospects, end customers | Hook (pain) → Product moment (screens in motion) → Proof (only verified facts) → CTA | `hyperframes` → `product-launch-video` / `faceless-explainer`; captions via `embedded-captions` | 30–90 s |
 | **One-pager / feature sheet** | Sales | Value headline → 3 benefits → How it works (flow) → Key screens → Contact CTA (only if PO provides) | HTML / `pdf` | 1 page |
 | **Demo script** | Sales / PO doing live demo | Persona & scenario → click path per screen → talk track → objection handling | `docx` / markdown | 1–3 pages |
 
@@ -124,7 +126,7 @@ workspace/                                   ← gitignored, local only
 ├── config.md                                ← Jira site, project keys, KB paths (local)
 ├── portfolio-overview.md
 └── <project>/
-    ├── input/  knowledge-base.md · screenshots/ · brand-assets/
+    ├── input/  knowledge-base.md · screenshots/ · prototypes/ · brand-assets/
     └── output/marketing/YYYY-MM-DD_<deliverable>_<feature>/
         ├── 00_brief.md         ← intake brief + PO answers
         ├── 01_fact-sheet.md    ← cited facts
