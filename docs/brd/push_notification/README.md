@@ -1,5 +1,16 @@
 # BRD — Push Notification (Reem Bank)
 
+## V1.3 — current (07 October 2026)
+
+`BRD_Push_Notification_V1.3.docx` / `.pdf` (protected) carry the Business-approved event content of
+07/10 (loopmail "Push Notifications - Event Content", approved by the Head of Retail): English AND
+Arabic title/body for nine notifications, a "Resuming screen" per notification, P09/P10/P11 wording
+per the approval. P05 and P08 are not part of the approved content and are removed from the MVP
+scope (noted in 2.3, deliverable post-MVP by the dedicated team). New section 3.2 Arabic content
+(RTL); subsections renumbered 3.3–3.7.
+
+Build: `python3 build/v13_apply_event_content.py [--proof DIR]` — chains on the V1.2 docx.
+
 ## V1.2 — current (06 October 2026)
 
 `BRD_Push_Notification_V1.2.docx` (editable) and `BRD_Push_Notification_V1.2.pdf` (protected
