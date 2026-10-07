@@ -1,5 +1,17 @@
 # BRD — Push Notification (Reem Bank)
 
+## V1.3 — current (07 October 2026), built on the PO's master
+
+`BRD_Push_Notification_V1.3.docx` / `.pdf` (protected). Master: the PO's own edited V1.2
+(`po_review/BRD_Push_Notification_V1.2_PO_edit.docx`) — her edits kept in full: resuming-screen
+column in 3.1, P05/P08 removed, scope rewrite (Auto/Mortgage future), every "TBC by Avanza"
+deleted (integration items tracked with RB IT / Avanza outside the BRD), section-1 note removed.
+Added on top (build/v13_po_master.py): Arabic content as new 3.2 (approved loopmail 07/10,
+Head of Retail "ok"), P09/P10/P11 wording per the approval, item-16 terminal-status clarification
+re-applied on her wording, "selects or rejects the offer", two dangling fragments completed,
+eleven→nine, cover/history V1.3. build/v13_apply_event_content.py was the pre-master draft of
+the same change and is superseded.
+
 ## V1.3 — current (07 October 2026)
 
 `BRD_Push_Notification_V1.3.docx` / `.pdf` (protected) carry the Business-approved event content of
