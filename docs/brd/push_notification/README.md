@@ -1,6 +1,13 @@
 # BRD — Push Notification (Reem Bank)
 
-## V1.3 — current (07 October 2026), built on the PO's master
+## V1.4 — current (08 October 2026), baseline for MVP 1.1 development
+
+`BRD_Push_Notification_V1.4.docx` / `.pdf` (protected). Baseline version for MVP 1.1
+development — Business approval to proceed received (Head of Retail, 08/10). No content
+change from V1.3: cover and version-history row only. Build: `python3 build/v14_baseline.py`
+— chains on the V1.3 docx.
+
+## V1.3 (07 October 2026), built on the PO's master
 
 `BRD_Push_Notification_V1.3.docx` / `.pdf` (protected). Master: the PO's own edited V1.2
 (`po_review/BRD_Push_Notification_V1.2_PO_edit.docx`) — her edits kept in full: resuming-screen
@@ -12,7 +19,7 @@ re-applied on her wording, "selects or rejects the offer", two dangling fragment
 eleven→nine, cover/history V1.3. build/v13_apply_event_content.py was the pre-master draft of
 the same change and is superseded.
 
-## V1.3 — current (07 October 2026)
+## V1.3 — superseded pre-master draft (07 October 2026)
 
 `BRD_Push_Notification_V1.3.docx` / `.pdf` (protected) carry the Business-approved event content of
 07/10 (loopmail "Push Notifications - Event Content", approved by the Head of Retail): English AND
