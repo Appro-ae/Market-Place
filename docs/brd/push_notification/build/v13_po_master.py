@@ -45,7 +45,8 @@ def apply():
     for tc, val in zip(row.findall('w:tc', NS), ['07-10-2026', '1.3', 'Hailey (Appro)',
             'Business-approved event content of 07/10: Arabic title and body per notification (new section '
             '3.2); P09, P10 and P11 wording per the approval; resuming screen per notification and scope '
-            'updates; integration items tracked with Reem Bank IT and Avanza outside the BRD']):
+            'updates; automatic retry capped at a maximum of 10 attempts (interval remains a backend parameter); '
+            'integration items tracked with Reem Bank IT and Avanza outside the BRD']):
         Doc.set_cell_text(tc, val)
     vh.append(row)
 
@@ -112,6 +113,20 @@ def apply():
     Doc.set_cell_text(rowsS['Customer no longer eligible'][2],
                       'A push is built only at its trigger event on a live application. On a tap, the customer '
                       'is navigated to the Super App screen.')
+
+    # ---- 5. retry: automatic retrigger, maximum 10 attempts (PO, 08/10) ----
+    rt = d.top('Else → the system retries automatically', starts=True)
+    d.replace(rt, 'N attempts', '10 attempts')                   # bold run
+    d.replace(rt, ', up to ', ', up to a maximum of ')
+    d.replace(rt, '. The interval and the number of attempts are backend configuration parameters.',
+              '. The retry interval is a backend configuration parameter.')
+    d.remove(d.top('Retry interval (X) and number of attempts (N) – To be confirmed by RB Business'))
+    cap2 = d.top('Figure 2 —', starts=True)
+    d.replace(cap2, '(X and N configurable)', '(automatic retry — maximum 10 attempts; interval configurable)')
+    for cap, png in ((d.top('Figure 1 —', starts=True), 'Flow_Push_Notification_End_to_End.png'),
+                     (cap2, 'Flow_Push_Response_and_Retry.png')):
+        blip = cap.getprevious().find('.//a:blip', NS)
+        shutil.copy(os.path.join(ROOT, 'assets', png), d.p('word', d.rel_target(blip.get('{%s}embed' % R))))
 
     # ---- 3.6 stop rules: offer rejection explicit (item 16) ----
     d.replace(d.top('P02 stops immediately when the customer selects an offer', starts=True),
