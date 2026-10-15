@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Check Manual CIF — Interim Solution Proposal</title>
+<style>
+@font-face { font-family:'Lato'; src:url('assets/Lato-Regular.ttf'); font-weight:400; }
+@font-face { font-family:'Lato'; src:url('assets/Lato-Bold.ttf');    font-weight:700; }
+@font-face { font-family:'Lato'; src:url('assets/Lato-Black.ttf');   font-weight:900; }
+@font-face { font-family:'Lato'; src:url('assets/Lato-Italic.ttf');  font-weight:400; font-style:italic; }
+
+:root { --navy:#1a214d; --blue:#3b7ef6; --yellow:#fdba23; --lavender:#edf2ff; --white:#ffffff; }
+* { margin:0; padding:0; box-sizing:border-box; }
+@page { size:1280px 720px; margin:0; }
+body { font-family:'Lato',sans-serif; }
+
+.slide { width:1280px; height:720px; position:relative; overflow:hidden;
+         background:#1a214d; page-break-after:always; display:flex; flex-direction:column; }
+.slide.dark { background:#0f1530; }
+
+/* ---------- chrome ---------- */
+.slide-header { padding:30px 72px 16px; display:flex; align-items:center; gap:14px; flex-shrink:0;
+                border-bottom:1px solid rgba(255,255,255,0.07); }
+.slide-title  { font-size:26px; font-weight:900; color:#ffffff; letter-spacing:0.2px; }
+.header-logo  { margin-left:auto; height:30px; }
+.content { flex:1; padding:24px 72px 14px; display:flex; flex-direction:column; gap:14px; min-height:0; }
+.content.center { justify-content:center; }
+.slide-footer { flex-shrink:0; height:44px; padding:0 72px; display:flex; align-items:center; gap:18px; }
+.dots { display:flex; align-items:center; gap:5px; }
+.dots i { width:9px; height:9px; border-radius:50%; background:var(--yellow); display:block; }
+.dots i:last-child { margin-left:5px; }
+.conf { flex:1; text-align:center; font-size:9.5px; color:rgba(255,255,255,0.40); }
+.pageno { font-size:11px; color:rgba(255,255,255,0.55); font-weight:700; }
+
+.tag { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
+       padding:4px 12px; border-radius:20px; display:inline-block; white-space:nowrap; }
+.tag-blue  { color:#3b7ef6; border:1px solid rgba(59,126,246,0.35); background:rgba(59,126,246,0.09); }
+.tag-gold  { color:#fdba23; border:1px solid rgba(253,186,35,0.35); background:rgba(253,186,35,0.07); }
+.tag-light { color:#edf2ff; border:1px solid rgba(237,242,255,0.25); background:rgba(237,242,255,0.07); }
+
+/* ---------- components ---------- */
+.banner { border-radius:12px; padding:13px 18px; display:flex; align-items:center; gap:14px;
+          font-size:13.5px; color:rgba(255,255,255,0.72); line-height:1.5; }
+.banner-blue { background:rgba(59,126,246,0.07); border:1px solid rgba(59,126,246,0.25); }
+.banner-gold { background:rgba(253,186,35,0.06); border:1px solid rgba(253,186,35,0.22); }
+.banner b { color:#ffffff; }
+
+.card { background:rgba(255,255,255,0.04); border-radius:14px; padding:20px;
+        border-left:4px solid #3b7ef6; display:flex; flex-direction:column; gap:9px; }
+.card-gold { border-left-color:#fdba23; }
+.card-top { background:rgba(255,255,255,0.04); border-radius:16px; padding:22px;
+            border-top:3px solid #3b7ef6; display:flex; flex-direction:column; gap:10px; }
+.card-top-gold { border-top-color:#fdba23; }
+.card-title { font-size:16px; font-weight:900; color:#ffffff; line-height:1.3; }
+.card-body  { font-size:13.5px; color:rgba(255,255,255,0.62); line-height:1.6; }
+
+.parent { border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+.parent-blue { background:rgba(59,126,246,0.07); border:1.5px solid rgba(59,126,246,0.30); }
+.parent-gold { background:rgba(253,186,35,0.05); border:1.5px solid rgba(253,186,35,0.30); }
+.parent-head { font-size:13.5px; font-weight:900; color:#ffffff; display:flex; gap:9px; align-items:center; }
+.child { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.06);
+         border-radius:10px; padding:10px 13px; }
+.child-title { font-size:12px; font-weight:900; color:#ffffff; line-height:1.3; }
+.child-body  { font-size:10.8px; color:rgba(255,255,255,0.46); line-height:1.45; margin-top:2px; }
+
+.icon-circle { width:30px; height:30px; border-radius:50%; display:flex; align-items:center;
+               justify-content:center; font-size:13px; font-weight:900; flex-shrink:0; }
+.ic-blue { background:rgba(59,126,246,0.22); color:#3b7ef6; }
+.ic-gold { background:rgba(253,186,35,0.20); color:#fdba23; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+
+.phase-flow { display:flex; gap:10px; align-items:stretch; }
+.phase-box  { border-radius:12px; padding:16px 18px; flex:1; }
+.phase-blue { background:rgba(59,126,246,0.10); border:1px solid rgba(59,126,246,0.25); }
+.phase-gold { background:rgba(253,186,35,0.08); border:1px solid rgba(253,186,35,0.25); }
+.phase-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+               margin-bottom:6px; color:rgba(255,255,255,0.45); }
+.phase-title { font-size:14.5px; font-weight:900; color:#ffffff; line-height:1.3; }
+.phase-sub   { font-size:11px; color:rgba(255,255,255,0.50); line-height:1.45; margin-top:5px; }
+.phase-arrow { align-self:center; font-size:18px; color:rgba(255,255,255,0.22); flex-shrink:0; }
+
+.ring { position:absolute; width:580px; height:580px; border:1.5px solid rgba(59,126,246,0.09);
+        border-radius:50%; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<!-- ================= 1 · COVER ================= -->
+<div class="slide dark">
+  <div class="ring" style="top:-140px; right:-160px;"></div>
+  <div class="ring" style="top:-60px; right:-80px; width:420px; height:420px; border-color:rgba(253,186,35,0.09);"></div>
+  <div style="padding:54px 80px 0; display:flex; align-items:flex-start;">
+    <div>
+      <img src="assets/appro_wordmark_white.png" style="height:44px;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.55); letter-spacing:2.5px; text-transform:uppercase; margin-top:8px;">Onboarding Powerhouse</div>
+    </div>
+  </div>
+  <div style="padding:0 80px; margin-top:140px; max-width:950px;">
+    <span class="tag tag-gold">Proposal · Interim Solution</span>
+    <div style="font-size:46px; font-weight:900; color:#ffffff; line-height:1.14; margin-top:22px;">
+      Check Manual CIF
+    </div>
+    <div style="font-size:21px; font-weight:700; color:#3b7ef6; line-height:1.4; margin-top:12px;">
+      A controlled digital-journey path for customers whose CIF<br>was created manually in T24 by Operations
+    </div>
+  </div>
+  <div style="padding:0 80px; margin-top:auto; margin-bottom:52px; display:flex; align-items:flex-end;">
+    <div>
+      <div style="font-size:14px; font-weight:700; color:#ffffff;">Prepared for Reem Bank — Executive Review</div>
+      <div style="font-size:12px; color:rgba(255,255,255,0.55); margin-top:6px;">Appro Onboarding Solutions FZ-LLC &nbsp;·&nbsp; 15 October 2026</div>
+    </div>
+    <div class="dots" style="margin-left:auto;"><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+
+<!-- ================= 2 · EXECUTIVE SUMMARY ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-gold">Executive summary</span>
+    <div class="slide-title">One check, placed early, closes the gap</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content center">
+    <div class="grid-3">
+      <div class="card-top">
+        <span class="tag tag-blue" style="align-self:flex-start;">Where we are</span>
+        <div class="card-title">A customer base the journey cannot see</div>
+        <div class="card-body">Reem Bank holds a list of CIFs created manually in T24 by Operations — customers with an existing banking relationship who have not availed any product through the digital journey.</div>
+      </div>
+      <div class="card-top card-top-gold">
+        <span class="tag tag-gold" style="align-self:flex-start;">The gap</span>
+        <div class="card-title">The journey assumes net-new customers</div>
+        <div class="card-body">There is no controlled path for these customers today: the journey runs its full check chain and, at fulfilment, creates a new CIF in T24 — for a customer who already has one.</div>
+      </div>
+      <div class="card-top">
+        <span class="tag tag-blue" style="align-self:flex-start;">The proposal</span>
+        <div class="card-title">Check Manual CIF — interim solution</div>
+        <div class="card-body">A backend-configured list of manually-onboarded CIFs, checked at the start of the Pre-Dedupe step right after EID scanning. A match ends the journey gracefully — screen, Email/SMS, dedicated status, full audit visibility — and hands the customer to Operations.</div>
+      </div>
+    </div>
+    <div class="banner banner-gold">
+      <div class="icon-circle ic-gold">3w</div>
+      <div><b>Tentative delivery: 2 weeks development + 1 week Reem Bank SIT,</b> then deployment to RB UAT for Expleo testing — delivered within the dedicated Appro squad, no separate change request. BRD sign-off starts the clock.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">2</div>
+  </div>
+</div>
+
+<!-- ================= 3 · CONTEXT ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-blue">Context</span>
+    <div class="slide-title">Two ways a customer exists in T24 today</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content">
+    <div class="grid-2" style="flex:1;">
+      <div class="parent parent-blue">
+        <div class="parent-head"><div class="icon-circle ic-blue">1</div>Digitally onboarded</div>
+        <div class="child">
+          <div class="child-title">CIF created by the journey</div>
+          <div class="child-body">The digital journey runs the full verification and decisioning chain and creates the CIF in T24 at fulfilment.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Fully visible to the Bank</div>
+          <div class="child-body">Application, status, failed reasons and every step are available in Super Portal Enquiry and the Audit Trail.</div>
+        </div>
+      </div>
+      <div class="parent parent-gold">
+        <div class="parent-head"><div class="icon-circle ic-gold">2</div>Manually onboarded by Operations</div>
+        <div class="child">
+          <div class="child-title">CIF created directly in T24</div>
+          <div class="child-body">An existing banking relationship, created by the Operations team — with no product availed through the digital journey.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Invisible to the journey today</div>
+          <div class="child-body">The digital journey has no awareness of these CIFs — nothing recognises the relationship when such a customer starts an application.</div>
+        </div>
+      </div>
+    </div>
+    <div class="banner banner-blue">
+      <div class="icon-circle ic-blue">→</div>
+      <div>Appro proposes an <b>interim, configuration-led solution</b> to handle this segment now. Maintaining the list on the Super Portal front end is a different customization with a longer timeline — available as a follow-on phase.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">3</div>
+  </div>
+</div>
+
+<!-- ================= 4 · PROPOSED SOLUTION ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-gold">Proposed solution</span>
+    <div class="slide-title">Check Manual CIF — one check, three layers</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content center">
+    <div class="grid-3" style="align-items:start;">
+      <div class="parent parent-blue">
+        <div class="parent-head"><div class="icon-circle ic-blue">1</div>Backend configuration</div>
+        <div class="child">
+          <div class="child-title">The Manual CIF list</div>
+          <div class="child-body">The list of CIFs manually onboarded in T24 is configured in the backend — the so-called <b style="color:#fff;">Check Manual CIF</b>.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Part of the Pre-Dedupe step</div>
+          <div class="child-body">The logic check is added into the Pre-Dedupe step, triggered after EID scanning — the earliest point at which the customer is identified.</div>
+        </div>
+      </div>
+      <div class="parent parent-gold">
+        <div class="parent-head"><div class="icon-circle ic-gold">2</div>Customer journey</div>
+        <div class="child">
+          <div class="child-title">Termination screen</div>
+          <div class="child-body">The customer sees a termination screen — text and design prepared by Appro and shared for the Bank team's review.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Email / SMS</div>
+          <div class="child-body">The customer is reassured in writing: the Bank already holds the relationship and the team will contact them to complete the account opening.</div>
+        </div>
+      </div>
+      <div class="parent parent-blue">
+        <div class="parent-head"><div class="icon-circle ic-blue">3</div>Back office &amp; portal</div>
+        <div class="child">
+          <div class="child-title">Configurable communications</div>
+          <div class="child-body">Email/SMS content is configured in Super Portal, so the text can be updated by the Bank.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">New application status</div>
+          <div class="child-body">A dedicated status for this group — to be defined in the BRD (e.g. within the Lead or Rejected family).</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Enquiry &amp; Audit Trail</div>
+          <div class="child-body">Failed reasons and related data points are shown in Enquiry and the Audit Trail of the Super Portal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">4</div>
+  </div>
+</div>
+
+<!-- ================= 5 · BLUEPRINT / TRIGGER POINT ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-blue">Solution blueprint</span>
+    <div class="slide-title">Triggered at the earliest possible point</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content" style="flex-direction:row; gap:20px;">
+    <div style="flex:0 0 420px; display:flex; flex-direction:column; gap:8px; justify-content:center;">
+      <div class="card" style="padding:14px 16px;">
+        <div class="card-title" style="font-size:13.5px;">Customer scans EID — front &amp; back</div>
+        <div class="card-body" style="font-size:11px;">Journey steps 6–7. The scan identifies the customer — no integration call needed for the check itself.</div>
+      </div>
+      <div style="text-align:center; color:rgba(255,255,255,0.25); font-size:15px; line-height:1;">▼</div>
+      <div class="card card-gold" style="padding:14px 16px; background:rgba(253,186,35,0.08);">
+        <div class="card-title" style="font-size:13.5px; color:#fdba23;">★ Check Manual CIF</div>
+        <div class="card-body" style="font-size:11px; color:rgba(255,255,255,0.72);">New first gate of the Pre-Dedupe step: the scanned identity is checked against the configured Manual CIF list.</div>
+      </div>
+      <div style="text-align:center; color:rgba(255,255,255,0.25); font-size:15px; line-height:1;">▼</div>
+      <div class="grid-2" style="gap:8px;">
+        <div class="card" style="padding:12px 14px; gap:5px;">
+          <div class="child-title" style="color:#3b7ef6;">Not on the list</div>
+          <div class="child-body">The journey continues exactly as today — EFR verification, remaining Pre-Dedupe checks, Dedupe, AML, bureau and decisioning.</div>
+        </div>
+        <div class="card card-gold" style="padding:12px 14px; gap:5px;">
+          <div class="child-title" style="color:#fdba23;">On the list</div>
+          <div class="child-body">The journey ends gracefully — termination screen, Email/SMS, dedicated status with audit entry, Operations follow-up.</div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:10px; min-width:0;">
+      <div class="banner banner-gold" style="padding:11px 16px;">
+        <div><b>Why this point:</b> on a match, EFR 1.2 / EFR 1.12, the remaining Pre-Dedupe checks and every other integration are no longer called — no spend on a journey that will not proceed.</div>
+      </div>
+      <div style="flex:1; position:relative; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.10); background:#ffffff; min-height:0;">
+        <img src="assets/blueprint_crop.png" style="position:absolute; inset:0; width:100%; height:100%; object-fit:fill; opacity:0.92;">
+        <div style="position:absolute; left:14.18%; top:39.02%; width:8.59%; height:5.64%; border:3px solid #fdba23; border-radius:8px; box-shadow:0 0 0 3px rgba(253,186,35,0.30);"></div>
+        <div style="position:absolute; left:41.47%; top:8.53%; width:14.37%; height:5.64%; border:2px dashed #3b7ef6; border-radius:8px;"></div>
+        <div style="position:absolute; left:14.3%; top:46.6%; background:#fdba23; color:#1a214d; font-size:12px; font-weight:900; padding:4px 11px; border-radius:14px;">Check Manual CIF lands here</div>
+        <div style="position:absolute; left:41.6%; top:2.2%; background:#3b7ef6; color:#ffffff; font-size:11px; font-weight:900; padding:3px 10px; border-radius:14px;">EID scanned</div>
+      </div>
+      <div style="font-size:10px; font-style:italic; color:rgba(255,255,255,0.40);">Credit Card digital journey blueprint (final, 25/09) — trigger point highlighted at the Pre-Dedupe step.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">5</div>
+  </div>
+</div>
+
+<!-- ================= 6 · CUSTOMER EXPERIENCE ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-gold">Customer experience</span>
+    <div class="slide-title">A graceful stop, not a dead end</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content" style="flex-direction:row; gap:20px;">
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+      <div class="card" style="flex:1;">
+        <span class="tag tag-blue" style="align-self:flex-start;">In the app</span>
+        <div class="card-title">Termination screen</div>
+        <div class="card-body">The customer is informed on screen that the Bank already holds their relationship and the journey cannot continue digitally for now.</div>
+        <div style="flex:1; border:1.5px dashed rgba(255,255,255,0.22); border-radius:12px; display:flex; align-items:center; justify-content:center; text-align:center; padding:16px; margin-top:4px;">
+          <div style="font-size:12px; font-style:italic; color:rgba(255,255,255,0.45); line-height:1.6;">Screen text and design will be prepared by Appro<br>and shared for the Bank team's review</div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+      <div class="card card-gold" style="flex:1;">
+        <span class="tag tag-gold" style="align-self:flex-start;">Email / SMS</span>
+        <div class="card-title">The message the customer receives</div>
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px;">
+          <div style="background:rgba(253,186,35,0.08); border:1px solid rgba(253,186,35,0.25); border-radius:14px 14px 14px 3px; padding:22px 24px;">
+            <div style="font-size:16.5px; color:#ffffff; line-height:1.7; font-style:italic;">“You already have a banking relationship with us. Our team will contact you shortly to help complete your account opening. Thank you for banking with us.”</div>
+          </div>
+          <div class="card-body">Content is configured in Super Portal, so the Bank can update the wording.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">6</div>
+  </div>
+</div>
+
+<!-- ================= 7 · DELIVERY PLAN ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-blue">Delivery plan</span>
+    <div class="slide-title">Three weeks from BRD sign-off</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content center" style="gap:22px;">
+    <div class="phase-flow">
+      <div class="phase-box phase-gold" style="flex:1.1;">
+        <div class="phase-label" style="color:#fdba23;">Gate</div>
+        <div class="phase-title">BRD prepared &amp; signed off</div>
+        <div class="phase-sub">Appro prepares the BRD; Reem Bank reviews and signs off. Development starts on sign-off.</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-box phase-blue" style="flex:1;">
+        <div class="phase-label" style="color:#3b7ef6;">2 weeks</div>
+        <div class="phase-title">Development</div>
+        <div class="phase-sub">Check Manual CIF configuration, journey behaviour, communications, status and audit visibility.</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-box phase-blue" style="flex:1;">
+        <div class="phase-label" style="color:#3b7ef6;">1 week</div>
+        <div class="phase-title">Reem Bank SIT</div>
+        <div class="phase-sub">System integration testing by Reem Bank.</div>
+      </div>
+      <div class="phase-arrow">→</div>
+      <div class="phase-box phase-gold" style="flex:1;">
+        <div class="phase-label" style="color:#fdba23;">Deploy</div>
+        <div class="phase-title">RB UAT — Expleo testing</div>
+        <div class="phase-sub">Deployed to the Reem Bank UAT environment for Expleo testing.</div>
+      </div>
+    </div>
+    <div class="banner banner-blue">
+      <div class="icon-circle ic-blue">✓</div>
+      <div>Delivered <b>within the dedicated Appro squad — no separate change request.</b> The timeline is tentative and starts at BRD sign-off.</div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">7</div>
+  </div>
+</div>
+
+<!-- ================= 8 · DECISIONS & NEXT STEPS ================= -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="tag tag-gold">Decisions &amp; next steps</span>
+    <div class="slide-title">What we need from Reem Bank</div>
+    <img class="header-logo" src="assets/appro_wordmark_white.png">
+  </div>
+  <div class="content" style="flex-direction:row; gap:20px; align-items:center;">
+    <div style="flex:1.1; display:flex; flex-direction:column; gap:12px;">
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px;">
+        <div class="icon-circle ic-blue">1</div>
+        <div>
+          <div class="card-title">BRD review and sign-off</div>
+          <div class="card-body">The BRD is prepared and signed off before development — sign-off starts the two-week development clock.</div>
+        </div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px;">
+        <div class="icon-circle ic-blue">2</div>
+        <div>
+          <div class="card-title">The Manual CIF list</div>
+          <div class="card-body">The list of manually-created CIFs from Operations, for the backend configuration.</div>
+        </div>
+      </div>
+      <div class="card" style="flex-direction:row; align-items:flex-start; gap:14px;">
+        <div class="icon-circle ic-blue">3</div>
+        <div>
+          <div class="card-title">Review of screen and message content</div>
+          <div class="card-body">Termination-screen text and design, and the Email/SMS wording — shared by Appro for the Bank team's review.</div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+      <div class="parent parent-gold">
+        <div class="parent-head"><div class="icon-circle ic-gold">+</div>Beyond the interim</div>
+        <div class="child">
+          <div class="child-title">Portal-maintained list</div>
+          <div class="child-body">If Reem Bank prefers to maintain the Manual CIF list on the Super Portal front end, that is a different customization requiring a longer timeline — it can be scoped as a follow-on phase once the interim solution is live.</div>
+        </div>
+        <div class="child">
+          <div class="child-title">Status naming</div>
+          <div class="child-body">The dedicated application status for this segment is an open design decision, finalised together in the BRD (e.g. within the Lead or Rejected family).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <div class="dots"><i></i><i></i><i></i><i></i></div>
+    <div class="conf">Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.</div>
+    <div class="pageno">8</div>
+  </div>
+</div>
+
+<!-- ================= 9 · CLOSING ================= -->
+<div class="slide dark" style="page-break-after:auto;">
+  <div class="ring" style="bottom:-180px; left:-180px;"></div>
+  <div class="ring" style="bottom:-100px; left:-100px; width:400px; height:400px; border-color:rgba(253,186,35,0.09);"></div>
+  <div style="margin:auto; text-align:center;">
+    <div style="font-size:58px; font-weight:900; color:#ffffff;">Thank you</div>
+    <div class="dots" style="justify-content:center; margin-top:26px;"><i style="width:16px;height:16px;"></i><i style="width:16px;height:16px;"></i><i style="width:16px;height:16px;"></i><i style="width:16px;height:16px;"></i></div>
+    <img src="assets/appro_wordmark_white.png" style="height:36px; margin-top:34px;">
+  </div>
+  <div style="position:absolute; bottom:26px; left:0; right:0; text-align:center; font-size:9.5px; color:rgba(255,255,255,0.40);">
+    Confidential document between Appro Onboarding Solutions FZ-LLC and Reem Bank — not to be shared outside both organizations.
+  </div>
+</div>
+
+</body>
+</html>
