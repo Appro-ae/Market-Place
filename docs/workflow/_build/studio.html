@@ -1,0 +1,204 @@
+<title>RF Workflow Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one column console — header band, three workflow cards, version registry, update loop. */
+:root{
+  --bg:#f4f6fd; --surface:#ffffff; --ink:#1a214d; --muted:#5b6185;
+  --accent:#3b7ef6; --gold:#fdba23; --line:#dce1f2; --chip:#edf2ff;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12172e; --surface:#1a214d; --ink:#edf2ff; --muted:#9aa3c7;
+  --accent:#6ea1f8; --gold:#fdba23; --line:#2b3366; --chip:#232b5c; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#12172e; --surface:#1a214d; --ink:#edf2ff; --muted:#9aa3c7;
+  --accent:#6ea1f8; --gold:#fdba23; --line:#2b3366; --chip:#232b5c; color-scheme:dark }
+body{background:var(--bg); color:var(--ink); font-family:'Lato',-apple-system,'Segoe UI',sans-serif;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0}
+.wrap{max-width:1080px; margin:0 auto; display:flex; flex-direction:column; gap:28px; padding-block:34px 60px}
+.dots{display:inline-flex; align-items:center; gap:5px}
+.dots i{width:11px;height:11px;border-radius:50%;background:var(--gold);display:block}
+.dots i:last-child{margin-left:5px}
+header .kicker{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent)}
+h1{font-size:30px;font-weight:900;margin:6px 0 4px;text-wrap:balance}
+header p{margin:0;color:var(--muted);font-size:14.5px;max-width:62ch;line-height:1.55}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;min-width:0}
+.shot{display:block;background:#ffffff;border-bottom:1px solid var(--line)}
+.shot img{display:block;width:100%;height:190px;object-fit:cover;object-position:left top}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.rowline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card h2{font-size:17px;font-weight:900;margin:0}
+.pill{font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:999px;
+  background:var(--gold);color:#1a214d;white-space:nowrap}
+.meta{font-size:12.5px;color:var(--muted);line-height:1.5}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.btn{font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--line);background:var(--chip);color:var(--ink);text-decoration:none;display:inline-block}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn[disabled]{opacity:.45;cursor:default}
+section h3{font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  padding:6px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+td.v{font-weight:900;white-space:nowrap}
+td.d{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--muted)}
+.empty{color:var(--muted);font-size:13.5px;padding:10px 2px}
+ol.loop{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;font-size:14px;line-height:1.55}
+ol.loop b{color:var(--accent)}
+.note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+footer{font-size:11.5px;color:var(--muted);text-align:center}
+.tablewrap{overflow-x:auto}
+@media (max-width:700px){ .shot img{height:150px} h1{font-size:24px} }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap">
+
+<div class="wrap">
+  <header>
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <div class="kicker">Reem Finance · digital journey</div>
+    <h1>RF Workflow Studio</h1>
+    <p>The three product workflows as editable draw.io masters, with their full renders and a
+    shared version registry. Download a master, edit it in draw.io, send it back — the registry
+    tracks every version.</p>
+  </header>
+
+  <section class="grid" id="cards"></section>
+
+  <section>
+    <h3>Version registry</h3>
+    <div class="panel">
+      <div class="tablewrap">
+        <table id="vtable" hidden>
+          <thead><tr><th>Date</th><th>Workflow</th><th>Version</th><th>By</th><th>What changed</th></tr></thead>
+          <tbody id="vbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="vempty">Loading the version log… (it appears for signed-in members)</div>
+      <div class="note">New rows are added whenever a workflow is updated — by the agent on each
+      rebuild, so the history stays complete.</div>
+    </div>
+  </section>
+
+  <section>
+    <h3>How a version moves</h3>
+    <div class="panel">
+      <ol class="loop">
+        <li><b>Download</b> the product's .drawio master from its card (or take it from the repo
+        under <span style="font-family:ui-monospace,monospace;font-size:12.5px">docs/workflow/</span>).</li>
+        <li><b>Edit</b> in draw.io (app.diagrams.net or desktop) — or describe the change to the
+        agent, which edits the master directly.</li>
+        <li><b>Send the file back</b> (the .drawio itself, or a draw.io PDF export — the PDF
+        carries the diagram source). The repo, the renders, this page and the registry are updated
+        and the version is bumped.</li>
+      </ol>
+      <div class="note">Step badges sit on their boxes as of 28/10 per the PO's instruction; the
+      Credit Card flow carries the step-11 change (Biometric &amp; MPIN verification).</div>
+    </div>
+  </section>
+
+  <footer>Appro Onboarding Solutions — internal working tool · masters live in the Market-Place
+  repo, branch claude/reem-bank-pm-g9x84k</footer>
+</div>
+
+<script>
+const PRODUCTS = [
+  { key:'cc',  name:'Credit Card — NSTL NTB', version:'v1.6', date:'28 Oct 2026',
+    png:'cc.png', drawio:'cc.drawio',
+    file:'Reem_Finance_NSTL_NTB_CC_Workflow_v1.6.drawio',
+    blurb:'EastNets spine, NTB/ETB split, Check Existing Product (CC), step 11 = Biometric & MPIN.' },
+  { key:'casa', name:'CASA', version:'v1.0', date:'28 Oct 2026',
+    png:'casa.png', drawio:'casa.drawio',
+    file:'Reem_Finance_CASA_Workflow_v1.0.drawio',
+    blurb:'FATCA/CRS with US-indicia split, US logic checks, dual Compliance Queues, debit-card fulfilment.' },
+  { key:'pl',  name:'Personal Loan', version:'v1.0', date:'28 Oct 2026',
+    png:'pl.png', drawio:'pl.drawio',
+    file:'Reem_Finance_Personal_Loan_Workflow_v1.0.drawio',
+    blurb:'Loan creation on T24, DDA e-sign with status polling, disbursement maker–checker.' },
+];
+const names = Object.fromEntries(PRODUCTS.map(p => [p.key, p.name]));
+
+const cards = document.getElementById('cards');
+for (const p of PRODUCTS) {
+  const el = document.createElement('article');
+  el.className = 'card';
+  el.innerHTML = `
+    <a class="shot" href="${p.png}" target="_blank" rel="noopener"><img src="${p.png}" alt="${p.name} workflow render"></a>
+    <div class="body">
+      <div class="rowline"><h2>${p.name}</h2><span class="pill" data-pill="${p.key}">${p.version}</span></div>
+      <div class="meta">${p.blurb}</div>
+      <div class="meta" data-latest="${p.key}">Updated ${p.date}</div>
+      <div class="btns">
+        <button class="btn primary" data-dl="${p.key}" hidden>Download .drawio</button>
+        <a class="btn" href="${p.png}" target="_blank" rel="noopener">Open full render</a>
+      </div>
+    </div>`;
+  cards.appendChild(el);
+}
+
+(async () => {
+  const downloads = await claude.use('downloads');
+  if (downloads) {
+    for (const p of PRODUCTS) {
+      const b = document.querySelector(`[data-dl="${p.key}"]`);
+      b.hidden = false;
+      b.addEventListener('click', async () => {
+        const was = b.textContent;
+        try {
+          b.disabled = true; b.textContent = 'Preparing…';
+          const res = await fetch(p.drawio);
+          const data = await res.blob();
+          await downloads.save({ filename: p.file, data });
+          b.textContent = 'Saved';
+        } catch (e) {
+          b.textContent = 'Could not save';
+        } finally {
+          setTimeout(() => { b.disabled = false; b.textContent = was; }, 1800);
+        }
+      });
+    }
+  }
+})();
+
+(async () => {
+  const db = await claude.use('db');
+  const empty = document.getElementById('vempty');
+  const table = document.getElementById('vtable');
+  if (!db) { empty.textContent = 'The version log appears when the page is opened signed in.'; return; }
+  try {
+    db.collection('versions').orderBy('date', 'desc').onSnapshot(snap => {
+      const rows = [];
+      snap.forEach(doc => rows.push(doc.data()));
+      if (!rows.length) { empty.textContent = 'No versions logged yet.'; table.hidden = true; return; }
+      const body = document.getElementById('vbody');
+      body.textContent = '';
+      const latest = {};
+      for (const r of rows) {
+        if (!latest[r.product]) latest[r.product] = r;
+        const tr = document.createElement('tr');
+        for (const [cls, val] of [['d', r.date], ['', names[r.product] || r.product],
+                                  ['v', r.version], ['', r.author], ['', r.note]]) {
+          const td = document.createElement('td');
+          if (cls) td.className = cls;
+          td.textContent = val || '';
+          tr.appendChild(td);
+        }
+        body.appendChild(tr);
+      }
+      for (const [k, r] of Object.entries(latest)) {
+        const pill = document.querySelector(`[data-pill="${k}"]`);
+        const meta = document.querySelector(`[data-latest="${k}"]`);
+        if (pill) pill.textContent = r.version;
+        if (meta) meta.textContent = 'Updated ' + r.date + (r.author ? ' · ' + r.author : '');
+      }
+      table.hidden = false; empty.hidden = true;
+    });
+  } catch (e) {
+    empty.textContent = 'Version log unavailable right now.';
+  }
+})();
+</script>
