@@ -1,0 +1,30 @@
+@font-face{font-family:Lato;font-weight:400;src:url(../assets/fonts/Lato-Regular.ttf)}
+@font-face{font-family:Lato;font-weight:700;src:url(../assets/fonts/Lato-Bold.ttf)}
+@font-face{font-family:Lato;font-weight:900;src:url(../assets/fonts/Lato-Black.ttf)}
+@font-face{font-family:Lato;font-weight:400;font-style:italic;src:url(../assets/fonts/Lato-Italic.ttf)}
+:root{--navy:#1a214d;--blue:#3b7ef6;--yellow:#fdba23;--lav:#edf2ff;--white:#ffffff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Lato,sans-serif;color:var(--navy);background:var(--white);width:1000px;padding:8px 4px 8px}
+.kicker{font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.title{font-size:27px;font-weight:900;margin-bottom:18px;line-height:1.2}
+.legend{display:flex;gap:26px;margin-top:16px;font-size:18px;align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:9px}
+.dot{width:20px;height:20px;border-radius:50%;display:inline-block}
+/* vertical steps */
+.steps{display:flex;flex-direction:column;gap:0}
+.s{display:grid;grid-template-columns:54px 1fr;gap:16px;align-items:stretch}
+.rail{display:flex;flex-direction:column;align-items:center}
+.n{width:46px;height:46px;border-radius:50%;background:var(--yellow);color:var(--navy);font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.line{flex:1;width:4px;background:var(--lav);margin:4px 0;border-radius:2px}
+.box{background:var(--lav);border-radius:14px;padding:14px 18px;margin-bottom:12px}
+.box.on{background:var(--blue);color:#fff}.box.end{background:var(--navy);color:#fff}
+.bt{font-weight:900;font-size:21px;margin-bottom:3px}
+.bd{font-size:19px;line-height:1.38}
+.owner{display:inline-block;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:20px;padding:3px 10px;margin-bottom:6px;background:var(--white);color:var(--navy)}
+.owner.d{background:var(--yellow)}
+.exh{margin:12px 0 10px;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue)}
+.exs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ex{border:2.5px solid var(--navy);border-radius:14px;padding:12px 14px;font-size:18px;line-height:1.35}
+.ex b{display:block;font-weight:900;font-size:19px;margin-bottom:3px}
+.ex.y{border-color:var(--yellow)}
+.s:last-child .line{visibility:hidden}

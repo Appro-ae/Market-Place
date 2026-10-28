@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="common.css"></head><body><div class="kicker">Figure 3</div><div class="title">Signing in with single sign-on</div><div class="steps">
+<div class="s"><div class="rail"><div class="n">1</div><div class="line"></div></div><div class="box "><div class="bt">Select Login with SSO</div><div class="bd">Shown on the login page only while single sign-on is On.</div></div></div>
+<div class="s"><div class="rail"><div class="n">2</div><div class="line"></div></div><div class="box "><div class="bt">Sign in at the bank’s identity provider</div><div class="bd">Corporate credentials, plus multi-factor authentication if the bank has set it up there. The portal never sees this password.</div></div></div>
+<div class="s"><div class="rail"><div class="n">3</div><div class="line"></div></div><div class="box "><div class="bt">The portal checks the account</div><div class="bd">The email belongs to a directory account, and its status is Active. Nothing else.</div></div></div>
+<div class="s"><div class="rail"><div class="n">4</div><div class="line"></div></div><div class="box on"><div class="bt">Session created</div><div class="bd">The landing screen opens. Roles and permissions are applied by the portal.</div></div></div>
+<div class="s"><div class="rail"><div class="n">5</div><div class="line"></div></div><div class="box end"><div class="bt">Session</div><div class="bd">Same inactivity timeout as a password sign-in.</div></div></div>
+</div><div class="exh">When the attempt does not go through</div><div class="exs">
+<div class="ex"><b>Email not registered</b>Not a directory account in the portal. No session; told to contact the bank’s directory administrator.</div>
+<div class="ex"><b>Account deactivated</b>Disabled in the directory. No session; told to contact the bank’s directory administrator.</div>
+<div class="ex y"><b>Single sign-on switched off</b>Button hidden. A return from the identity provider is told single sign-on is off.</div>
+<div class="ex"><b>Sign-in fails at the identity provider</b>Returned to the portal login page and asked to try again.</div>
+</div></body></html>

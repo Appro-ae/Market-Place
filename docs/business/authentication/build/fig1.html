@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="common.css"><style>
+.g{display:grid;grid-template-columns:270px 1fr 1fr;gap:8px}
+.hd{background:var(--navy);color:#fff;border-radius:12px;padding:12px 14px;font-size:20px;font-weight:900}
+.hd small{display:block;font-size:15px;font-weight:400;margin-top:2px}
+.grp{grid-column:1/-1;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue);padding:10px 2px 0}
+.acc{background:var(--lav);border-radius:12px;padding:12px 14px;font-size:19px;font-weight:900;display:flex;align-items:center}
+.c{border-radius:12px;padding:11px 14px;font-size:17px;line-height:1.33}
+.c b{display:block;font-size:19px;font-weight:900;margin-bottom:2px}
+.ok{background:var(--blue);color:#fff}.go{background:var(--yellow)}.no{border:2.5px solid var(--navy)}
+</style></head><body>
+<div class="kicker">Figure 1</div>
+<div class="title">What each person sees, by account and by button</div>
+<div class="g">
+ <div></div><div class="hd">Login<small>email + password</small></div><div class="hd">Login with SSO<small>shown only while single sign-on is On</small></div>
+ <div class="grp">Portal account</div>
+ <div class="acc">Password correct and valid</div><div class="c ok"><b>Signs in</b>after the email one-time code</div><div class="c no"><b>Refused</b>Not registered</div>
+ <div class="acc">Wrong password</div><div class="c no"><b>Refused</b>“Your Email or Password is incorrect!”</div><div class="c no"><b>Refused</b>Not registered</div>
+ <div class="acc">Password expired or account locked</div><div class="c go"><b>Told how to recover</b>Reset through “Forgot password?”</div><div class="c no"><b>Refused</b>Not registered</div>
+ <div class="grp">Directory account</div>
+ <div class="acc">Single sign-on On</div><div class="c go"><b>Sent to the right route</b>Told to select “Login with SSO”</div><div class="c ok"><b>Signs in</b>No portal password rule is checked</div>
+ <div class="acc">Single sign-on Off</div><div class="c go"><b>Told why</b>Single sign-on is switched off — contact the administrator</div><div class="c go"><b>Button hidden</b>A late return from the identity provider is told it is off</div>
+ <div class="grp">Not in the portal</div>
+ <div class="acc">Email unknown</div><div class="c no"><b>Refused</b>Same message and timing as a wrong password</div><div class="c no"><b>Refused</b>Not registered</div>
+</div>
+<div class="legend"><span><i class="dot" style="background:var(--blue)"></i>Signs in</span><span><i class="dot" style="background:var(--yellow)"></i>Told which way to go</span><span><i class="dot" style="border:2.5px solid var(--navy)"></i>Refused</span></div>
+</body></html>
