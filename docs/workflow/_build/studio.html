@@ -62,9 +62,9 @@ footer{font-size:11.5px;color:var(--muted);text-align:center}
     <span class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
     <div class="kicker">Reem Finance · digital journey</div>
     <h1>RF Workflow Studio</h1>
-    <p>The three product workflows as editable draw.io masters, with their full renders and a
-    shared version registry. Download a master, edit it in draw.io, send it back — the registry
-    tracks every version.</p>
+    <p>The product workflows and design summaries as editable draw.io masters, with their full
+    renders and a shared version registry. Download a master, edit it in draw.io, send it back —
+    the registry tracks every version.</p>
   </header>
 
   <section class="grid" id="cards"></section>
@@ -119,6 +119,10 @@ const PRODUCTS = [
     png:'pl.png', drawio:'pl.drawio',
     file:'Reem_Finance_Personal_Loan_Workflow_v1.0.drawio',
     blurb:'Loan creation on T24, DDA e-sign with status polling, disbursement maker–checker.' },
+  { key:'stl', name:'PL Salary Transfer — flow summary', version:'v0.1', date:'03 Nov 2026',
+    png:'stl.png', drawio:'stl.drawio',
+    file:'Reem_Finance_PL_STL_Flow_Summary_v0.1.drawio',
+    blurb:'One-page agreed design: one toggle, four customer cases, fulfilment that creates the CASA along the way — APIs verified against MW spec v4.5.' },
 ];
 const names = Object.fromEntries(PRODUCTS.map(p => [p.key, p.name]));
 
