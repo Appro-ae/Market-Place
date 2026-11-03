@@ -1,0 +1,265 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="pl-stl-summary">
+    <mxGraphModel dx="2000" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="2" value="&lt;b&gt;Reem Finance — Personal Loan · Salary Transfer (STL / FSTL) — Agreed Flow Summary&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="40" y="14" width="1600" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="3" value="&lt;font color=&quot;#595959&quot;&gt;v0.1 · 03 Nov 2026 · PO design decisions 28/10–03/11 · every API name and product code verified against REEM Middleware API Specification v4.5&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="40" y="44" width="1600" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="&lt;b&gt;A — CUSTOMER JOURNEY · one toggle, four cases&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="40" y="94" width="800" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Start" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="40" y="172" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="EID scan → Pre-dedupe / Dedupe&lt;br&gt;&lt;b&gt;NTB or ETB?&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="130" y="150" width="230" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="J1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="118" y="132" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="&lt;b&gt;BE classification (silent, before the toggle renders)&lt;/b&gt;&lt;br&gt;has CASA? — /api/T24/getCustProdListingNest&lt;br&gt;salary credit in T / T-1? — /api/T24/getCustAccountTransactions&lt;br&gt;AECB IBAN match — confirmatory" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;align=left;spacing=8;" parent="1" vertex="1">
+          <mxGeometry x="420" y="135" width="360" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="J2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="408" y="117" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="&lt;b&gt;Salary-transfer toggle&lt;/b&gt; — stays in the details screen&lt;br&gt;(no screen-1 gate · no eject-to-home)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" parent="1" vertex="1">
+          <mxGeometry x="840" y="150" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="J3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="828" y="132" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="Which&lt;br&gt;case?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="1210" y="125" width="150" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="5" target="6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="6" target="8">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="8" target="10">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="10" target="12">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="&lt;b&gt;C1 — NTB · no Reem relationship&lt;/b&gt;&lt;br&gt;&lt;br&gt;Toggle ON → &lt;b&gt;FSTL&lt;/b&gt; — ask: expected 1st salary credit date&lt;br&gt;Toggle OFF → &lt;b&gt;NSTL&lt;/b&gt; — ask: salary IBAN (external)&lt;br&gt;&lt;br&gt;&lt;i&gt;Fulfilment: create CIF + CASA + IBAN&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;align=left;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="120" y="390" width="450" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="C1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="108" y="372" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" source="12" target="17">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1285" y="340"/>
+              <mxPoint x="345.0" y="340"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="20" value="&lt;b&gt;C2 — ETB · has CASA · salary already credits (T / T-1)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Toggle ON → &lt;b&gt;STL confirmed&lt;/b&gt; — ask nothing, all data with bank&lt;br&gt;Copy: “Salary already credits to Reem — STL pricing applied”&lt;br&gt;&lt;br&gt;&lt;i&gt;Fulfilment: loan to existing CASA — no letter, no hold&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;align=left;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="610" y="390" width="450" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="C2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="598" y="372" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" source="12" target="20">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1285" y="340"/>
+              <mxPoint x="835.0" y="340"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="23" value="&lt;b&gt;C3 — ETB · has CASA · no qualifying salary credit&lt;/b&gt;&lt;br&gt;&lt;br&gt;Toggle ON → &lt;b&gt;FSTL&lt;/b&gt; — ask: expected 1st salary credit date&lt;br&gt;Toggle OFF → &lt;b&gt;NSTL&lt;/b&gt; — ask: salary IBAN (external)&lt;br&gt;&lt;br&gt;&lt;i&gt;Fulfilment: reuse existing CASA — letter carries existing IBAN&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;align=left;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="1100" y="390" width="450" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="C3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1088" y="372" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" source="12" target="23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1285" y="340"/>
+              <mxPoint x="1325.0" y="340"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="26" value="&lt;b&gt;C4 — ETB · no CASA (loan / card-only customer)&lt;/b&gt;&lt;br&gt;&lt;br&gt;Toggle ON → &lt;b&gt;FSTL&lt;/b&gt; — ask: expected 1st salary credit date&lt;br&gt;Toggle OFF → &lt;b&gt;NSTL&lt;/b&gt; — ask: salary IBAN (external)&lt;br&gt;&lt;br&gt;&lt;i&gt;Fulfilment: &lt;b&gt;create CASA along the way&lt;/b&gt; — AGREED 03/11; no eject-to-home (a second application would invalidate this one, RF-1718)&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=10;align=left;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="1590" y="390" width="450" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="27" value="C4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1578" y="372" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="28" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" source="12" target="26">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1285" y="340"/>
+              <mxPoint x="1815.0" y="340"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="29" value="&lt;b&gt;Asked vs derived:&lt;/b&gt; expected 1st salary credit date — asked on FSTL only · salary IBAN — asked on NSTL only · grace period / 1st EMI date — &lt;b&gt;derived&lt;/b&gt; from the salary credit date, never asked · NTB/ETB, has-CASA, qualifying credit — detected by BE, never asked" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=left;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="520" y="630" width="1520" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="&lt;b&gt;B — FULFILMENT · create the CASA along the way (FSTL)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;" parent="1" vertex="1">
+          <mxGeometry x="40" y="722" width="1000" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="31" value="&lt;b&gt;Offer accepted —&lt;br&gt;application submitted&lt;/b&gt;&lt;br&gt;&lt;br&gt;pricing locked to case + toggle" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="40" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="F1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="28" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="33" value="&lt;font color=&quot;#595959&quot;&gt;applies: all cases&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="40" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="34" value="&lt;b&gt;Create CIF&lt;/b&gt;&lt;br&gt;/api/T24/createCustomerProfile" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="330" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="35" value="F2" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="318" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="36" value="&lt;font color=&quot;#595959&quot;&gt;applies: C1 (NTB) — ETB skips&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="330" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="31" target="34">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="38" value="&lt;b&gt;Create salary CASA + IBAN — one call&lt;/b&gt;&lt;br&gt;/api/T24/createLoanRepaymentAccount&lt;br&gt;productId = REFN.RET.CURR.ACCOUNT&lt;br&gt;returns aaaId · arrangementId · accountId · &lt;b&gt;IBAN&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="620" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="39" value="F3" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="608" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="40" value="&lt;font color=&quot;#595959&quot;&gt;applies: C1 ON · C4 — C2 / C3 skip (existing CASA reused)&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="620" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="34" target="38">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="42" value="&lt;b&gt;Create loan on T24&lt;/b&gt;&lt;br&gt;/api/T24/createLoan&lt;br&gt;settlement: payinAccount / payoutAccount = salary CASA" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="910" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="43" value="F4" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="898" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="44" value="&lt;font color=&quot;#595959&quot;&gt;applies: all — funds held on FSTL only; C2 &amp;amp; NSTL disburse immediately&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="910" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="38" target="42">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="46" value="&lt;b&gt;Salary-transfer letter&lt;/b&gt;&lt;br&gt;generated with the account IBAN (new C1/C4 · existing C3) — upload mandatory in-journey" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1200" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="47" value="F5" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1188" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="48" value="&lt;font color=&quot;#595959&quot;&gt;applies: FSTL — reminders D7·10·13·26 · cut-off D28 · expiry D30&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="1200" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="49" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="42" target="46">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="&lt;b&gt;Ops validate letter&lt;/b&gt;&lt;br&gt;Sales / Ops queue — employer letter checked against application data" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1490" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="51" value="F6" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1478" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="52" value="&lt;font color=&quot;#595959&quot;&gt;applies: FSTL&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="1490" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="53" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="46" target="50">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="54" value="&lt;b&gt;Salary watcher (BE)&lt;/b&gt;&lt;br&gt;/api/T24/getCustAccountTransactions&lt;br&gt;poll the salary CASA until the first salary credit lands" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1780" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="55" value="F7" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="1768" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="56" value="&lt;font color=&quot;#595959&quot;&gt;applies: FSTL&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="1780" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="57" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="50" target="54">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="58" value="&lt;b&gt;Release funds&lt;/b&gt;&lt;br&gt;STL pricing confirmed — loan active" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="2070" y="770" width="250" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="59" value="F8" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="2058" y="752" width="30" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="60" value="&lt;font color=&quot;#595959&quot;&gt;applies: FSTL — C2 releases at F4&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=8;" parent="1" vertex="1">
+          <mxGeometry x="2070" y="916" width="250" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="61" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="54" target="58">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="62" value="Complete" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="2360" y="805" width="70" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="63" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" edge="1" source="58" target="62">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="64" value="" style="shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#4495D1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam.2d.letter;" parent="1" vertex="1">
+          <mxGeometry x="1416" y="778" width="26" height="17" as="geometry"/>
+        </mxCell>
+        <mxCell id="65" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/iconoir-vol-3/24/one-finger-select-hand-gesture-128.png;rotation=90;" parent="1" vertex="1">
+          <mxGeometry x="1706" y="778" width="22" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="66" value="&lt;b&gt;submit&lt;/b&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" source="17" target="31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="67" value="&lt;b&gt;Order agreed:&lt;/b&gt; account + IBAN are created BEFORE the loan — createLoan needs a valid T24 settlement account and the letter needs the IBAN. Sanity check: /api/T24/getIbanStatus on the new IBAN before the letter is issued." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;align=left;spacing=8;" parent="1" vertex="1">
+          <mxGeometry x="620" y="964" width="540" height="64" as="geometry"/>
+        </mxCell>
+        <mxCell id="68" value="&lt;b&gt;NSTL (toggle OFF — C1 / C3)&lt;/b&gt; · existing PL flow unchanged: repayment account — /api/T24/createLoanRepaymentAccount · productId = &lt;b&gt;REFN.CA.GEN&lt;/b&gt; → /api/T24/createLoan → DDA e-sign on the external salary IBAN → immediate disbursal (no hold, no letter)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=10;align=left;spacing=10;" parent="1" vertex="1">
+          <mxGeometry x="330" y="1056" width="1130" height="72" as="geometry"/>
+        </mxCell>
+        <mxCell id="69" value="toggle OFF" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;exitX=0.08;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1" source="31" target="68">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="1092"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="70" value="&lt;b&gt;&lt;font color=&quot;#B20000&quot;&gt;Open with Middleware / T24 — not found in spec v4.5&lt;/font&gt;&lt;/b&gt;&lt;br&gt;• Standing-order creation API — FSTL repayment method (INT-1) has no endpoint&lt;br&gt;• Debit-card creation for the new CASA — only NI CardDetailsEnquiry (read) exists&lt;br&gt;• Fund-hold / release mechanics — createLoan has settlement fields, no hold flag&lt;br&gt;• /api/T24/repay is Tabby-SME-scoped — retail PL repayment posting TBC&lt;br&gt;• WPS rails exist (createInwardWps / createOutwardWps) — option for salary detection" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;align=left;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="1520" y="1010" width="600" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="71" value="Appro BE logic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1260" width="120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="72" value="External (T24 via MW)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="170" y="1260" width="140" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="73" value="Customer / RF app" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="320" y="1260" width="130" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="74" value="Agreed decision" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="460" y="1260" width="120" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="75" value="Step" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="590" y="1260" width="80" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="76" value="Manual queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="680" y="1260" width="110" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="77" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/iconoir-vol-3/24/one-finger-select-hand-gesture-128.png;rotation=90;" parent="1" vertex="1">
+          <mxGeometry x="682" y="1262" width="22" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="78" value="&lt;font color=&quot;#595959&quot;&gt;Companion to Reem_Finance_Personal_Loan_Workflow_v1.0 — this page summarises the STL overlay only; the base PL flow (rule engine, queues, DBR, DDA mechanics) is unchanged.&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="40" y="1310" width="1400" height="20" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
