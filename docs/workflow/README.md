@@ -7,9 +7,11 @@ latest images (the originals existed only as pictures). Every step badge sits ON
 
 | Product | Master (editable in draw.io / app.diagrams.net) | Version |
 |---|---|---|
-| Credit Card (NSTL NTB) | `cc_ntb/Reem_Finance_NSTL_NTB_CC_Workflow_v1.6.drawio` | v1.6 — 28/10 |
+| Credit Card — STL/FSTL integrated | `cc_ntb/Reem_Finance_CC_Workflow_v1.7.drawio` | v1.7 — 03/11 |
+| Credit Card (NSTL NTB, history) | `cc_ntb/Reem_Finance_NSTL_NTB_CC_Workflow_v1.6.drawio` | v1.6 — 28/10 |
 | CASA | `casa/Reem_Finance_CASA_Workflow_v1.0.drawio` | v1.0 — 28/10 |
-| Personal Loan | `personal_loan/Reem_Finance_Personal_Loan_Workflow_v1.0.drawio` | v1.0 — 28/10 |
+| Personal Loan — STL/FSTL integrated | `personal_loan/Reem_Finance_Personal_Loan_Workflow_v2.0.drawio` | v2.0 — 03/11 |
+| Personal Loan (history) | `personal_loan/Reem_Finance_Personal_Loan_Workflow_v1.0.drawio` | v1.0 — 28/10 |
 | PL Salary Transfer — agreed-flow summary | `pl_stl/Reem_Finance_PL_STL_Flow_Summary_v0.1.drawio` | v0.1 — 03/11 |
 
 The PL STL summary is a one-page design artefact, not a full workflow: band A is the

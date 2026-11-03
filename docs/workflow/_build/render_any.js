@@ -22,7 +22,7 @@ fs.writeFileSync(page_html, html);
 
 (async () => {
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 6700, height: 1900 }, deviceScaleFactor: 2 });
+  const page = await browser.newPage({ viewport: { width: 7600, height: 1900 }, deviceScaleFactor: 2 });
   page.on('pageerror', e => console.log('pageerror:', e.message));
   const misses = [];
   await page.route('**/*', route => {
