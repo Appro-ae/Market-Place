@@ -1,19 +1,23 @@
 """Appro-standard PPTX — Salary Transfer (CC + PL) design update, 4 slides.
 
-Yellow-led template per the Appro branding guidelines (2026-05-18): light-lavender
-cover with the navy corner circle, white content slides with the yellow-pill
-two-tone title, confidentiality header/footer, 4-circle brand icon, Lato only,
-5-colour palette only. Logo: width-only placement (aspect preserved); the white
-wordmark is used top-right where it sits on the navy corner circle (contrast rule).
+Yellow-led template per the Appro branding guidelines: white content slides with the
+yellow-pill two-tone title, navy corner circle, confidentiality header/footer, 4-circle
+brand icon, Lato only, 5-colour palette only. Logo: width-only placement; white wordmark
+top-right where it sits on the navy corner circle (contrast rule).
+
+Slide 1 reproduces the PO's "The journey decides the salary flow, not the customer"
+decision slide with the REAL journey screen; slides 2-4 carry the cases, the workflow +
+backend chips, and the real screens + open questions.
 
     python3 build/make_deck.py
 """
 import os
+import struct
 from pptx import Presentation
-from pptx.util import Inches, Pt, Emu
+from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import PP_ALIGN
+from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.oxml.ns import qn
 from lxml import etree
 
@@ -21,6 +25,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 REPO = '/home/user/Market-Place'
 BRDA = os.path.join(REPO, 'docs/brd/stl_cc_pl/assets')
+DECKA = os.path.join(ROOT, 'assets')
 LOGO_NAVY = os.path.join(REPO, 'docs/brd/push_notification/assets/appro_wordmark_navy.png')
 LOGO_WHITE = os.path.join(REPO, 'docs/proposal/manual_cif/build/assets/appro_wordmark_white.png')
 OUT = os.path.join(ROOT, 'Appro_RF_Salary_Transfer_Deck_V1.0.pptx')
@@ -46,7 +51,6 @@ def no_shadow(shape):
     for el in spPr.findall(qn('a:effectLst')):
         spPr.remove(el)
     etree.SubElement(spPr, qn('a:effectLst'))
-    # drop the <p:style> block too — its effectRef re-applies the theme shadow in renderers
     sp = shape._element
     for st in sp.findall(qn('p:style')):
         sp.remove(st)
@@ -61,11 +65,13 @@ def lato(run, size, bold=False, color=NAVY, italic=False):
 
 
 def text(slide, x, y, w, h, lines, size=11, bold=False, color=NAVY, align=PP_ALIGN.LEFT,
-         wrap=True, leading=None):
+         wrap=True, leading=None, italic=False, anchor=None):
     tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     tf = tb.text_frame
     tf.word_wrap = wrap
     tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
+    if anchor:
+        tf.vertical_anchor = anchor
     first = True
     for line in (lines if isinstance(lines, list) else [lines]):
         p = tf.paragraphs[0] if first else tf.add_paragraph()
@@ -73,13 +79,15 @@ def text(slide, x, y, w, h, lines, size=11, bold=False, color=NAVY, align=PP_ALI
         p.alignment = align
         if leading:
             p.line_spacing = leading
-        if isinstance(line, list):          # [(txt, size, bold, color), ...] runs
-            for t, s, b, c in line:
-                lato(p.add_run(), 0, 0)     # placeholder never used
+        if not isinstance(line, str):            # runs: [(txt, size, bold, color), ...]
+            for t, s2, b2, c2 in line:
+                r = p.add_run()
+                r.text = t
+                lato(r, s2, b2, c2, italic)
         else:
             r = p.add_run()
             r.text = line
-            lato(r, size, bold, color)
+            lato(r, size, bold, color, italic)
     return tb
 
 
@@ -98,6 +106,38 @@ def rect(slide, x, y, w, h, fill, line_color=None, radius=0.12, line_w=0.75):
         sh.line.color.rgb = line_color
         sh.line.width = Pt(line_w)
     no_shadow(sh)
+    return sh
+
+
+def oval(slide, x, y, d, fill):
+    c = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(x), Inches(y), Inches(d), Inches(d))
+    c.fill.solid()
+    c.fill.fore_color.rgb = fill
+    c.line.fill.background()
+    no_shadow(c)
+    return c
+
+
+def arrow(slide, x1, y1, x2, y2, color=BLUE, w=1.75):
+    conn = slide.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, Inches(x1), Inches(y1),
+                                      Inches(x2), Inches(y2))
+    conn.line.color.rgb = color
+    conn.line.width = Pt(w)
+    ln = conn.line._get_or_add_ln()
+    tail = etree.SubElement(ln, qn('a:tailEnd'))
+    tail.set('type', 'triangle')
+    tail.set('w', 'med')
+    tail.set('len', 'med')
+    for st in conn._element.findall(qn('p:style')):
+        conn._element.remove(st)
+    return conn
+
+
+def pill(slide, x, y, t, filled=True):
+    sh = rect(slide, x, y, 0.72, 0.3, BLUE if filled else WHITE,
+              None if filled else NAVY, radius=0.5)
+    text(slide, x, y + 0.045, 0.72, 0.22, t, 10, True, WHITE if filled else NAVY,
+         PP_ALIGN.CENTER)
     return sh
 
 
@@ -125,38 +165,21 @@ def card(slide, x, y, w, h, title, body, style='white', tsize=12, bsize=10, lead
 def section_label(slide, x, y, w, t, color=BLUE):
     tcol = NAVY if color == YELLOW else WHITE
     rect(slide, x, y, w, 0.35, color, None, radius=0.5)
-    tb = slide.shapes.add_textbox(Inches(x), Inches(y + 0.045), Inches(w), Inches(0.28))
-    tf = tb.text_frame
-    tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
-    p = tf.paragraphs[0]
-    p.alignment = PP_ALIGN.CENTER
-    r = p.add_run()
-    r.text = t
-    lato(r, 11, True, tcol)
+    text(slide, x, y + 0.045, w, 0.28, t, 11, True, tcol, PP_ALIGN.CENTER)
 
 
 def brand_icon(slide, x=0.3, y=7.08, color=BLUE):
     for xi in (x, x + 0.24, x + 0.48, x + 0.82):
-        c = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(xi), Inches(y),
-                                   Inches(0.18), Inches(0.18))
-        c.fill.solid()
-        c.fill.fore_color.rgb = color
-        c.line.fill.background()
-        no_shadow(c)
+        oval(slide, xi, y, 0.18, color)
 
 
 def content_slide(title1, title2, page):
     s = prs.slides.add_slide(BLANK)
-    rect(s, -0.1, -0.1, 13.55, 7.7, WHITE, None, radius=0.0)          # white bg
-    circ = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(11.5), Inches(-2.2),
-                              Inches(4.5), Inches(4.5))               # navy corner circle
-    circ.fill.solid()
-    circ.fill.fore_color.rgb = NAVY
-    circ.line.fill.background()
-    no_shadow(circ)
+    rect(s, -0.1, -0.1, 13.55, 7.7, WHITE, None, radius=0.0)
+    circ = oval(s, 11.5, -2.2, 4.5, NAVY)                   # navy corner circle
     text(s, 0.25, 0.04, 11.0, 0.18, HEADER, 7, False, NAVY)
     s.shapes.add_picture(LOGO_WHITE, Inches(11.55), Inches(0.33), width=Inches(1.5))
-    rect(s, 0.25, 0.54, 1.794, 0.30, YELLOW, None, radius=0.5)        # fixed pill
+    rect(s, 0.25, 0.54, 1.794, 0.30, YELLOW, None, radius=0.5)
     tb = s.shapes.add_textbox(Inches(0.3), Inches(0.40), Inches(11.0), Inches(0.55))
     tf = tb.text_frame
     tf.word_wrap = True
@@ -172,7 +195,6 @@ def content_slide(title1, title2, page):
 
 
 def pic(slide, path, x, y, w):
-    import struct
     b = open(path, 'rb').read(33)
     pw, ph = struct.unpack('>II', b[16:24])
     slide.shapes.add_picture(path, Inches(x), Inches(y), width=Inches(w),
@@ -180,21 +202,65 @@ def pic(slide, path, x, y, w):
     return w * ph / pw
 
 
-# ================= Slide 1 — cover (light lavender, navy circle) =================
-s = prs.slides.add_slide(BLANK)
-rect(s, -0.1, -0.1, 13.55, 7.7, LAVEND, None, radius=0.0)
-circ = s.shapes.add_shape(MSO_SHAPE.OVAL, Inches(10.3), Inches(4.5), Inches(6.0), Inches(6.0))
-circ.fill.solid(); circ.fill.fore_color.rgb = NAVY
-circ.line.fill.background(); no_shadow(circ)
-s.shapes.add_picture(LOGO_NAVY, Inches(0.8), Inches(1.2), width=Inches(2.2))
-text(s, 0.8, 2.05, 4.5, 0.35, 'Onboarding Powerhouse', 14, True, NAVY)
-text(s, 0.8, 2.65, 7.6, 1.5, 'Salary Transfer —\nCredit Card & Personal Loan'.split('\n'),
-     28, True, NAVY, leading=1.05)
-text(s, 0.8, 4.15, 7.4, 0.9,
-     'Design update: one toggle, four customer cases,\nthe account created along the way'.split('\n'),
-     18, False, BLUE, leading=1.1)
-text(s, 0.8, 5.35, 6.0, 0.3, 'Appro Onboarding Solutions FZ-LLC', 11, False, NAVY)
-text(s, 0.8, 7.1, 4.0, 0.25, 'V1.0  ·  04 November 2026', 11, False, NAVY)
+# ========== Slide 1 — the journey decides the salary flow, not the customer ==========
+s = content_slide('The journey ', 'decides the salary flow, not the customer', 1)
+
+# question cards (navy)
+rect(s, 0.5, 1.3, 3.25, 1.35, NAVY, None)
+oval(s, 0.68, 1.46, 0.34, YELLOW)
+text(s, 0.68, 1.5, 0.34, 0.26, '1', 13, True, NAVY, PP_ALIGN.CENTER)
+text(s, 1.14, 1.42, 2.5, 0.75, 'Is the salary already credited at the bank?', 12.5, True, WHITE, leading=1.05)
+text(s, 0.68, 2.2, 2.92, 0.4, 'Read from the bank’s ETL salary credits for an existing customer.',
+     9, False, WHITE, leading=1.05)
+
+rect(s, 0.5, 3.5, 3.25, 1.35, NAVY, None)
+oval(s, 0.68, 3.66, 0.34, YELLOW)
+text(s, 0.68, 3.7, 0.34, 0.26, '2', 13, True, NAVY, PP_ALIGN.CENTER)
+text(s, 1.14, 3.62, 2.5, 0.75, 'Will the customer move the salary?', 12.5, True, WHITE, leading=1.05)
+text(s, 0.68, 4.4, 2.92, 0.4, 'The “Transfer my salary to Reem Bank” toggle.',
+     9, False, WHITE, leading=1.05)
+
+# connectors + YES/NO pills
+arrow(s, 2.12, 2.65, 2.12, 3.5, NAVY)
+pill(s, 1.76, 2.92, 'NO', filled=False)
+arrow(s, 3.75, 1.97, 5.15, 1.97, BLUE)
+pill(s, 4.09, 1.82, 'YES')
+arrow(s, 3.75, 4.17, 5.15, 4.17, BLUE)
+pill(s, 4.09, 4.02, 'YES')
+arrow(s, 3.3, 4.85, 5.15, 5.45, NAVY)
+pill(s, 4.09, 5.0, 'NO', filled=False)
+
+# outcome cards
+rect(s, 5.15, 1.3, 4.3, 1.5, LAVEND, BLUE)
+text(s, 5.35, 1.42, 3.9, 0.35, [[('STL', 16, True, BLUE), ('   Salary transfer', 12, True, NAVY)]])
+text(s, 5.35, 1.82, 3.95, 0.9,
+     [[('Journey: ', 9.5, True, NAVY), ('“Salary account verified” replaces the transfer question; treated as STL.', 9.5, False, NAVY)],
+      [('Bank: ', 9.5, True, NAVY), ('account validated, salary-transfer pricing, disbursed.', 9.5, False, NAVY)]],
+     leading=1.1)
+
+rect(s, 5.15, 3.0, 4.3, 1.6, NAVY, None)
+text(s, 5.35, 3.13, 3.9, 0.35, [[('FSTL', 16, True, YELLOW), ('   Future salary transfer', 12, True, WHITE)]])
+text(s, 5.35, 3.55, 3.95, 0.95,
+     [[('Journey: ', 9.5, True, WHITE), ('customer opts in and signs the salary-transfer letter in the journey.', 9.5, False, WHITE)],
+      [('Bank: ', 9.5, True, WHITE), ('held with flags until the salary lands, then disbursed.', 9.5, False, WHITE)]],
+     leading=1.1)
+
+rect(s, 5.15, 4.8, 4.3, 1.5, LAVEND, BLUE)
+text(s, 5.35, 4.92, 3.9, 0.35, [[('NSTL', 16, True, BLUE), ('   No salary transfer', 12, True, NAVY)]])
+text(s, 5.35, 5.32, 3.95, 0.9,
+     [[('Journey: ', 9.5, True, NAVY), ('salary stays at the current bank; no transfer letter.', 9.5, False, NAVY)],
+      [('Bank: ', 9.5, True, NAVY), ('priced and processed as a non-salary-transfer product.', 9.5, False, NAVY)]],
+     leading=1.1)
+
+text(s, 0.5, 6.5, 8.9, 0.3,
+     'The salary flag travels with every application to the bank’s Ops and Fulfillment queues.',
+     10, False, NAVY, italic=True)
+
+# real journey screen (toggle ON)
+ph = pic(s, os.path.join(DECKA, 'real_details_toggle_on.png'), 9.85, 1.15, 2.32)
+text(s, 9.6, 1.15 + ph + 0.06, 2.85, 0.4,
+     [[('Question 2 in the journey. ', 9.5, True, NAVY), ('Toggle ON sets FSTL.', 9.5, False, NAVY)]],
+     align=PP_ALIGN.CENTER)
 
 # ================= Slide 2 — business context & client cases =================
 s = content_slide('Business ', 'Context & Client Cases', 2)
@@ -242,46 +308,48 @@ h = pic(s, os.path.join(BRDA, 'Flow_STL_Statuses.png'), 0.5, 4.62, 6.0)
 text(s, 0.5, 4.62 + h + 0.06, 6.0, 0.3,
      'New portal statuses — letter reminders D7 · 10 · 13 · 26, cut-off D28, offer expiry D30',
      9, False, NAVY, PP_ALIGN.CENTER)
-h2 = pic(s, os.path.join(BRDA, 'PL_FSTL_Fulfilment.png'), 1.15, 5.52, 4.7)
-section_label(s, 6.9, 1.15, 3.4, 'BACKEND LOGIC UPDATES', BLUE)
-card(s, 6.9, 1.65, 5.9, 2.5, 'Decision & data rules',
-     ['Classification before render: own-account salary credit in T / T-1 (primary), bureau IBAN match '
-      '(confirmatory), products list for has-account.',
-      'No IBAN question on FSTL/STL — the salaried IBAN and the disbursement choice belong to NSTL only.',
-      'Grace is derived from the salary date and adjusted once, on the offer, within pricing-matrix bounds.'])
-card(s, 6.9, 4.3, 5.9, 2.5, 'Fulfilment rules',
-     ['Order rule: the account and IBAN exist before the loan or card — the settlement fields and the '
-      'letter need them; one core call returns both.',
-      'Release condition: letter validated AND the first salary credit detected by the account-'
-      'transactions watcher — never one alone.',
-      'Repayment: STL/FSTL by standing instruction from the Reem account — no DDA; NSTL keeps the DDA.'])
+pic(s, os.path.join(BRDA, 'PL_FSTL_Fulfilment.png'), 1.15, 5.52, 4.7)
 
-# ================= Slide 4 — journey, portal & open questions =================
+section_label(s, 6.9, 1.15, 3.4, 'BACKEND LOGIC — THE FIVE RULES', BLUE)
+CHIPS = [
+    ('Detect before render', 'T/T-1 salary credit on own account · bureau IBAN match · products list for has-account'),
+    ('Account + IBAN first', 'one core call returns both — before the loan or card is booked'),
+    ('Hold & release', 'letter validated AND first salary credit detected — never one alone'),
+    ('Repayment', 'standing instruction from the Reem account · DDA stays NSTL-only'),
+    ('Nothing asked twice', 'no IBAN on FSTL/STL · grace derived, tuned once on the offer'),
+]
+cy = 1.72
+for i, (lead, rest) in enumerate(CHIPS):
+    rect(s, 6.9, cy, 5.9, 0.82, LAVEND, BLUE, radius=0.22)
+    oval(s, 7.08, cy + 0.25, 0.32, BLUE)
+    text(s, 7.08, cy + 0.29, 0.32, 0.26, str(i + 1), 12, True, WHITE, PP_ALIGN.CENTER)
+    text(s, 7.55, cy + 0.1, 5.1, 0.62,
+         [[(lead + '  ', 12.5, True, NAVY), ('— ' + rest, 10.5, False, NAVY)]],
+         leading=1.08, anchor=MSO_ANCHOR.MIDDLE)
+    cy += 0.95
+
+# ================= Slide 4 — journey screens & open questions =================
 s = content_slide('Customer ', 'Journey & Open Questions', 4)
-shots = [('SC1_Details_Salary_Toggle_FSTL.png', 'Toggle + salary date\n(FSTL — C1/C3/C4)'),
-         ('SC2_Details_C2_Nothing_Asked.png', 'C2 detected —\nnothing asked'),
-         ('SC4_Offer_Grace_Period.png', 'Grace on the offer,\nsalary-aligned default')]
-for i, (f, cap) in enumerate(shots):
-    x = 0.5 + i * 1.52
-    pic(s, os.path.join(BRDA, f), x, 1.2, 1.38)
-    text(s, x - 0.06, 4.24, 1.5, 0.5, cap.split('\n'), 8.5, False, NAVY, PP_ALIGN.CENTER)
-card(s, 0.5, 4.95, 4.58, 1.95, 'Super Portal',
-     ['Application Details adds: Salary Type · Case C1–C4 · Grace Days · 1st Instalment Date · Letter status.',
-      'One structured audit entry per salary-transfer event.',
-      'Letter validated in the Sales/Ops queue; release by Disbursement Maker–Checker.'], 'lavender')
+text(s, 0.5, 1.08, 4.6, 0.3, 'The live details screen (step 5/8)', 11, True, BLUE)
+ph1 = pic(s, os.path.join(DECKA, 'real_details_toggle_on.png'), 0.6, 1.5, 1.62)
+ph2 = pic(s, os.path.join(DECKA, 'real_details_nstl_iban.png'), 2.7, 1.5, 1.66)
+text(s, 0.35, 1.5 + ph1 + 0.08, 2.1, 0.6,
+     ['Toggle ON — salary credit', 'date sets the 1st instalment'], 8.5, False, NAVY, PP_ALIGN.CENTER, leading=1.1)
+text(s, 2.55, 1.5 + ph1 + 0.08, 2.1, 0.6,
+     ['Toggle OFF — salaried IBAN', 'for the direct debit (as today)'], 8.5, False, NAVY, PP_ALIGN.CENTER, leading=1.1)
+card(s, 0.5, 5.85, 4.3, 1.05, 'Super Portal',
+     ['Application Details adds Salary Type · Case C1–C4 · Grace Days · 1st Instalment · Letter status; '
+      'letter validated in Sales/Ops, release by Maker–Checker.'], 'lavender', bsize=10)
+
 section_label(s, 5.4, 1.15, 4.6, 'OPEN QUESTIONS FOR REEM BANK', BLUE)
-card(s, 5.4, 1.65, 7.4, 3.9, 'Appro proposal sits in BRD §10 — confirming it is enough to proceed',
+card(s, 5.4, 1.65, 7.4, 3.75, 'Appro proposal sits in BRD §10 — confirming it is enough to proceed',
      ['1.  Funds hold / release mechanism at booking — CORE',
       '2.  Debit card for the account created along the way — CARDS',
       '3.  Standing instruction for STL repayment — CORE',
       '4.  Confirm: no security cheque, any variant — CREDIT POLICY',
       '5.  Arabic copy: toggle, letter, five client emails — BUSINESS',
       '6.  Letter validation SLA in the 28-day window — OPERATIONS',
-      '7.  C2 with toggle OFF — repayment account — BUSINESS'], 'white', bsize=11.5, leading=1.3)
-card(s, 5.4, 5.75, 7.4, 1.15, 'Where everything lives',
-     ['Workflows v2.0 / v1.7 (draw.io masters + renders) · clickable prototype v6 · '
-      'BRD_Salary_Transfer_CC_PL_V1.0 (Word + PDF + screens pack) · one-page summary slide.'],
-     'lavender', bsize=10.5)
+      '7.  C2 with toggle OFF — repayment account — BUSINESS'], 'white', bsize=12, leading=1.5)
 
 prs.save(OUT)
 print('written', OUT)
