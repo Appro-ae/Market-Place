@@ -1,0 +1,166 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  @font-face{font-family:Lato;src:url('file:///home/user/Market-Place/docs/proposal/manual_cif/build/assets/Lato-Regular.ttf')}
+  @font-face{font-family:Lato;font-weight:700;src:url('file:///home/user/Market-Place/docs/proposal/manual_cif/build/assets/Lato-Bold.ttf')}
+  @font-face{font-family:Lato;font-weight:900;src:url('file:///home/user/Market-Place/docs/proposal/manual_cif/build/assets/Lato-Black.ttf')}
+  @page{size:1280px 720px;margin:0}
+  :root{--navy:#1A214D;--blue:#3B7EF6;--gold:#FDBA23;--ink:#20264f;--grey:#5b6185;--line:#dce1f2;--chip:#eef2fc}
+  *{box-sizing:border-box;margin:0}
+  body{width:1280px;height:720px;font-family:Lato,Arial,sans-serif;color:var(--ink);background:#fff;overflow:hidden}
+  #slide{width:1280px;height:720px;display:flex;flex-direction:column}
+
+  /* header */
+  .hd{background:var(--navy);color:#fff;padding:11px 26px 10px;display:flex;align-items:center;gap:22px}
+  .hd .k{font-size:10px;font-weight:700;letter-spacing:2.4px;color:var(--gold);margin-bottom:4px}
+  .hd h1{font-size:19px;font-weight:900;line-height:1.2;letter-spacing:.1px}
+  .hd .meta{margin-left:auto;text-align:right;flex:0 0 auto}
+  .hd .meta img{height:30px;display:block;margin:0 0 6px auto}
+  .hd .meta div{font-size:10.5px;color:#b9c2e8;font-weight:700}
+
+  /* body */
+  .bd{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding:9px 26px 4px;min-height:0;overflow:hidden}
+  .col{padding:0 14px;border-right:1px solid var(--line)}
+  .col:first-child{padding-left:0}
+  .col:last-child{border-right:0;padding-right:0}
+  .sec{display:flex;align-items:center;gap:7px;margin:4px 0 7px}
+  .sec i{font-style:normal;width:17px;height:17px;border-radius:4px;background:var(--navy);color:#fff;
+    font-size:10.5px;font-weight:900;display:flex;align-items:center;justify-content:center}
+  .sec b{font-size:11px;font-weight:900;letter-spacing:1.6px;color:var(--navy)}
+  .intro{font-size:10px;line-height:1.38;color:var(--grey);margin-bottom:5px}
+  .intro b{color:var(--ink)}
+
+  .case{display:flex;gap:8px;padding:4px 0;border-top:1px solid var(--line)}
+  .case .cn{flex:0 0 26px;height:20px;border-radius:5px;background:var(--chip);color:var(--navy);
+    font-size:10.5px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .case.hot .cn{background:var(--gold);color:var(--navy)}
+  .case h4{font-size:10.8px;font-weight:900}
+  .case p{font-size:9.7px;line-height:1.32;color:var(--grey)}
+  .anchor{margin-top:7px;background:#fff7e8;border:1.5px solid var(--gold);border-radius:8px;padding:6px 8px;
+    font-size:9.8px;line-height:1.36}
+  .anchor b{color:var(--navy)}
+
+  .wf{border:1px solid var(--line);border-radius:8px;padding:6px 8px 5px;margin-bottom:6px}
+  .wf .t{display:flex;align-items:baseline;gap:7px;margin-bottom:2px}
+  .wf .t b{font-size:11px;font-weight:900}
+  .vchip{font-size:8.5px;font-weight:900;background:var(--blue);color:#fff;border-radius:999px;padding:1.5px 7px}
+  .wf p{font-size:9.7px;line-height:1.34;color:var(--grey)}
+  .wf p b{color:var(--ink)}
+  .pills{width:100%;margin:2px 0 1px}
+  .cap{font-size:9px;color:var(--grey);text-align:center;margin-bottom:6px}
+
+  ul.be{list-style:none;margin-top:1px}
+  ul.be li{font-size:9.8px;line-height:1.33;color:var(--grey);padding:2px 0 2px 11px;position:relative}
+  ul.be li:before{content:'';position:absolute;left:0;top:7.5px;width:5px;height:5px;border-radius:50%;background:var(--blue)}
+  ul.be b{color:var(--ink)}
+
+  .shots{display:flex;gap:8px;justify-content:center;margin-bottom:2px}
+  .shots figure{flex:0 1 106px;text-align:center}
+  .shots img{width:100%;border-radius:8px;display:block}
+  .shots figcaption{font-size:8.5px;color:var(--grey);margin-top:2px;line-height:1.2}
+  .portal{margin-top:6px}
+  .portal .imgwrap{height:142px;overflow:hidden;border:1px solid var(--line);border-radius:6px}
+  .portal img{width:100%;display:block}
+  .portal .cap{text-align:left;margin:3px 0 0;line-height:1.3}
+
+  /* open questions band */
+  .oq{border-top:2.5px solid var(--navy);padding:8px 26px 6px;background:#f7f9fe}
+  .oq .sec{margin:0 0 6px}
+  .qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 10px}
+  .q{display:flex;gap:7px;align-items:flex-start}
+  .q i{font-style:normal;flex:0 0 15px;height:15px;border-radius:50%;background:var(--navy);color:#fff;
+    font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .q div{font-size:9.8px;line-height:1.3;color:var(--ink)}
+  .q span{display:inline-block;font-size:8.5px;font-weight:900;color:var(--navy);background:var(--gold);
+    border-radius:999px;padding:0 6px;margin-left:4px;vertical-align:1px}
+
+  .ft{display:flex;align-items:center;gap:10px;padding:5px 26px 7px;border-top:1px solid var(--line)}
+  .ft .dots{display:flex;gap:4px}
+  .ft .dots i{width:7px;height:7px;border-radius:50%}
+  .ft div{font-size:8.6px;color:var(--grey)}
+  .ft .r{margin-left:auto;font-weight:700;color:var(--navy)}
+</style>
+<div id="slide">
+  <div class="hd">
+    <div>
+      <div class="k">REEM BANK · SALARY TRANSFER — CREDIT CARD &amp; PERSONAL LOAN · DESIGN UPDATE</div>
+      <h1>One toggle, four customer cases — and the account is created along the way,<br>so no salary-transfer customer ever leaves the journey</h1>
+    </div>
+    <div class="meta">
+      <img src="file:///home/user/Market-Place/docs/proposal/manual_cif/build/assets/appro_wordmark_white.png" alt="appro">
+      <div>V1.0 · 04 Nov 2026</div>
+    </div>
+  </div>
+
+  <div class="bd">
+    <div class="col">
+      <div class="sec"><i>1</i><b>BUSINESS CONTEXT &amp; CLIENT CASES</b></div>
+      <div class="intro"><b>Salary-transfer pricing needs the salary at Reem Bank.</b> Today the journey knows only NSTL —
+      detected salaries, future transfers and clients without an account all fall out. The backend now classifies every
+      applicant before the screen renders and asks only what it cannot derive.</div>
+      <div class="case"><span class="cn">C1</span><div><h4>New to bank</h4>
+        <p>Toggle ON → FSTL · asks the 1st salary credit date · CIF + account + IBAN created at fulfilment</p></div></div>
+      <div class="case"><span class="cn">C2</span><div><h4>Salary already credits to Reem (detected)</h4>
+        <p>Toggle stays visible, relabelled · <b>asks nothing</b> · releases at creation — no letter, no hold</p></div></div>
+      <div class="case"><span class="cn">C3</span><div><h4>Has an account — salary elsewhere</h4>
+        <p>Toggle ON → FSTL · asks the date · existing account reused, letter carries its IBAN</p></div></div>
+      <div class="case hot"><span class="cn">C4</span><div><h4>Reem client without an account</h4>
+        <p>Toggle ON → FSTL · asks the date · <b>account created along the way</b> — previously a dead end</p></div></div>
+      <div class="anchor"><b>Design anchor:</b> a parallel application invalidates the one in progress — so the customer is
+      never sent out of the journey to open an account first. NSTL (toggle OFF) keeps today's flow untouched.</div>
+    </div>
+
+    <div class="col">
+      <div class="sec"><i>2</i><b>WORKFLOW UPDATES</b></div>
+      <div class="wf"><div class="t"><b>Personal Loan</b><span class="vchip">v2.0</span></div>
+        <p>Salary-type fork after acceptance → FSTL chain <b>15.1–15.7</b>: CIF → <b>account + IBAN (one call)</b> →
+        loan booked with <b>funds held</b> → letter → Ops validate → salary watcher → <b>release</b>. NSTL/DDA chain unchanged.</p></div>
+      <div class="wf"><div class="t"><b>Credit Card</b><span class="vchip">v1.7</span></div>
+        <p>Fork after Account Creation (NI) → <b>17.1–17.6</b>: account + IBAN → card created <b>INACTIVE</b> → letter →
+        validate → watcher → <b>activate</b> with STL pricing &amp; limit.</p></div>
+      <img class="pills" src="file:///home/user/Market-Place/docs/brd/stl_cc_pl/assets/Flow_STL_Statuses.png" alt="">
+      <div class="cap">New portal statuses — letter reminders D7 · 10 · 13 · 26, cut-off D28, offer expiry D30</div>
+      <div class="sec"><i>4</i><b>BACKEND LOGIC UPDATES</b></div>
+      <ul class="be">
+        <li><b>Classification before render:</b> own-account salary credit in T / T-1 (primary), bureau IBAN match (confirmatory), products list for has-account.</li>
+        <li><b>Order rule:</b> account + IBAN exist before the loan/card — settlement fields and the letter need them; one core call returns both.</li>
+        <li><b>Release condition:</b> letter validated <b>and</b> first salary credit detected by the account-transactions watcher — never one alone.</li>
+        <li><b>Repayment:</b> STL/FSTL by standing instruction from the Reem account — no DDA; NSTL keeps the DDA.</li>
+        <li><b>No IBAN question on FSTL/STL;</b> grace is derived and adjusted once, on the offer.</li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <div class="sec"><i>3</i><b>CUSTOMER JOURNEY &amp; SUPER PORTAL</b></div>
+      <div class="shots">
+        <figure><img src="file:///home/user/Market-Place/docs/brd/stl_cc_pl/assets/SC1_Details_Salary_Toggle_FSTL.png"><figcaption>Toggle + salary date<br>(FSTL — C1/C3/C4)</figcaption></figure>
+        <figure><img src="file:///home/user/Market-Place/docs/brd/stl_cc_pl/assets/SC2_Details_C2_Nothing_Asked.png"><figcaption>C2 detected —<br>nothing asked</figcaption></figure>
+        <figure><img src="file:///home/user/Market-Place/docs/brd/stl_cc_pl/assets/SC4_Offer_Grace_Period.png"><figcaption>Grace on the offer,<br>salary-aligned default</figcaption></figure>
+      </div>
+      <div class="portal">
+        <div class="imgwrap"><img src="file:///home/user/Market-Place/docs/brd/stl_cc_pl/assets/SC10_Portal_Audit_Trail.png"></div>
+        <div class="cap">Super Portal — Application Details adds Salary Type · Case · Grace Days · 1st Instalment · Letter
+        status; one audit entry per salary-transfer event; letter validated in Sales/Ops, release by Maker–Checker.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="oq">
+    <div class="sec"><i>5</i><b>OPEN QUESTIONS FOR REEM BANK — Appro proposal in the BRD §10; confirming it is enough to proceed</b></div>
+    <div class="qgrid">
+      <div class="q"><i>1</i><div>Funds hold / release mechanism at booking<span>CORE</span></div></div>
+      <div class="q"><i>2</i><div>Debit card for the account created along the way<span>CARDS</span></div></div>
+      <div class="q"><i>3</i><div>Standing instruction for STL repayment<span>CORE</span></div></div>
+      <div class="q"><i>4</i><div>Confirm: no security cheque, any variant<span>CREDIT POLICY</span></div></div>
+      <div class="q"><i>5</i><div>Arabic copy — toggle, letter, 5 client emails<span>BUSINESS</span></div></div>
+      <div class="q"><i>6</i><div>Letter validation SLA in the 28-day window<span>OPERATIONS</span></div></div>
+      <div class="q"><i>7</i><div>C2 with toggle OFF — repayment account<span>BUSINESS</span></div></div>
+    </div>
+  </div>
+
+  <div class="ft">
+    <div class="dots"><i style="background:#1A214D"></i><i style="background:#3B7EF6"></i><i style="background:#7FA7F9"></i><i style="background:#FDBA23"></i></div>
+    <div>Highly confidential — not to be shared without written consent · This is not a legally binding document</div>
+    <div class="r">Appro Onboarding Solutions FZ-LLC · prepared for Reem Bank · 1/1</div>
+  </div>
+</div>
