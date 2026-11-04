@@ -257,7 +257,7 @@ text(s, 0.5, 6.5, 8.9, 0.3,
      10, False, NAVY, italic=True)
 
 # real journey screen (toggle ON)
-ph = pic(s, os.path.join(DECKA, 'real_details_toggle_on.png'), 9.85, 1.15, 2.32)
+ph = pic(s, os.path.join(DECKA, 'shot_on.png'), 9.85, 1.15, 2.32)
 text(s, 9.6, 1.15 + ph + 0.06, 2.85, 0.4,
      [[('Question 2 in the journey. ', 9.5, True, NAVY), ('Toggle ON sets FSTL.', 9.5, False, NAVY)]],
      align=PP_ALIGN.CENTER)
@@ -331,15 +331,15 @@ for i, (lead, rest) in enumerate(CHIPS):
 # ================= Slide 4 — journey screens & open questions =================
 s = content_slide('Customer ', 'Journey & Open Questions', 4)
 text(s, 0.5, 1.08, 4.6, 0.3, 'The live details screen (step 5/8)', 11, True, BLUE)
-ph1 = pic(s, os.path.join(DECKA, 'real_details_toggle_on.png'), 0.6, 1.5, 1.62)
-ph2 = pic(s, os.path.join(DECKA, 'real_details_nstl_iban.png'), 2.7, 1.5, 1.66)
-text(s, 0.35, 1.5 + ph1 + 0.08, 2.1, 0.6,
+ph1 = pic(s, os.path.join(DECKA, 'shot_on.png'), 0.6, 1.45, 1.62)
+pic(s, os.path.join(DECKA, 'shot_off.png'), 2.72, 1.45, 1.62)
+text(s, 0.36, 1.45 + ph1 + 0.1, 2.1, 0.6,
      ['Toggle ON — salary credit', 'date sets the 1st instalment'], 8.5, False, NAVY, PP_ALIGN.CENTER, leading=1.1)
-text(s, 2.55, 1.5 + ph1 + 0.08, 2.1, 0.6,
+text(s, 2.48, 1.45 + ph1 + 0.1, 2.1, 0.6,
      ['Toggle OFF — salaried IBAN', 'for the direct debit (as today)'], 8.5, False, NAVY, PP_ALIGN.CENTER, leading=1.1)
-card(s, 0.5, 5.85, 4.3, 1.05, 'Super Portal',
-     ['Application Details adds Salary Type · Case C1–C4 · Grace Days · 1st Instalment · Letter status; '
-      'letter validated in Sales/Ops, release by Maker–Checker.'], 'lavender', bsize=10)
+card(s, 0.5, 6.0, 4.3, 1.0, 'FSTL adds one step — the letter',
+     ['The salary-transfer letter is uploaded inside the journey; Ops validate it before '
+      'release. Reminders D7 · 10 · 13 · 26 — cut-off D28.'], 'lavender', bsize=9.5)
 
 section_label(s, 5.4, 1.15, 4.6, 'OPEN QUESTIONS FOR REEM BANK', BLUE)
 card(s, 5.4, 1.65, 7.4, 3.75, 'Appro proposal sits in BRD §10 — confirming it is enough to proceed',
@@ -350,6 +350,76 @@ card(s, 5.4, 1.65, 7.4, 3.75, 'Appro proposal sits in BRD §10 — confirming it
       '5.  Arabic copy: toggle, letter, five client emails — BUSINESS',
       '6.  Letter validation SLA in the 28-day window — OPERATIONS',
       '7.  C2 with toggle OFF — repayment account — BUSINESS'], 'white', bsize=12, leading=1.5)
+card(s, 5.4, 5.6, 7.4, 1.3, 'Super Portal',
+     ['Application Details adds Salary Type · Case C1–C4 · Grace Days · 1st Instalment Date · Letter '
+      'status; one audit entry per salary-transfer event; letter validated in the Sales/Ops queue, '
+      'release by Disbursement Maker–Checker.'], 'lavender', bsize=10.5)
+
+# ================= Appendix — the three workflows, one per slide =================
+BRDA = os.path.join(REPO, 'docs/brd/stl_cc_pl/assets')
+APPX = [
+    dict(t='A — Personal Loan workflow v2.0 (STL integrated)',
+         img=os.path.join(REPO, 'docs/workflow/personal_loan/assets/pl_v2.png'),
+         chain=os.path.join(BRDA, 'PL_FSTL_Fulfilment.png'),
+         chg=('What v2.0 adds to the base journey',
+              ['•  Salary-transfer toggle + STL / FSTL / NSTL classification on the details step; '
+               'salaried IBAN asked only when the toggle is OFF (NSTL).',
+               '•  Repayment account + IBAN created before the loan; booking held, salary-transfer '
+               'letter uploaded inside the journey.',
+               '•  Release when the letter is validated AND the first salary lands — chain 15.1–15.7, '
+               'zoomed below.']),
+         cap='Full journey map (zoom in, or open the editable master: '
+             'Reem_Finance_Personal_Loan_Workflow_v2.0.drawio) · DDA / NSTL base journey unchanged'),
+    dict(t='B — Credit Card workflow v1.7 (STL integrated)',
+         img=os.path.join(REPO, 'docs/workflow/cc_ntb/assets/cc_v17.png'),
+         chain=os.path.join(BRDA, 'CC_FSTL_Fulfilment.png'),
+         chg=('What v1.7 adds to the base journey',
+              ['•  Same toggle + classification; the salary-type fork sits after Account Creation (NI).',
+               '•  Card issued INACTIVE with the salary-credit watcher on — chain 17.1–17.6, zoomed below.',
+               '•  Card activates when the letter is validated AND the first salary credit arrives.']),
+         cap='Full journey map (zoom in, or open the editable master: '
+             'Reem_Finance_CC_Workflow_v1.7.drawio) · NSTL base journey unchanged'),
+    dict(t='C — Salary Transfer agreed flow on one page',
+         img=os.path.join(REPO, 'docs/workflow/pl_stl/assets/pl_stl_summary.png'),
+         chain=None, chg=None,
+         cap='The journey decision model (one toggle, four cases) and the fulfilment chain with the core '
+             'service steps — APIs verified against MW spec v4.5 · master: '
+             'Reem_Finance_PL_STL_Flow_Summary_v0.1.drawio'),
+]
+from PIL import Image as PILImage
+
+page = 5
+for ap in APPX:
+    s = content_slide('Appendix ', ap['t'], page)
+    im = PILImage.open(ap['img'])
+    pw, phh = im.size
+    if ap['chain']:
+        # Panorama: full-width reference map on top, zoomed FSTL chain + change card below.
+        w = 12.5
+        h = w * phh / pw
+        s.shapes.add_picture(ap['img'], Inches(0.4 + (12.53 - w) / 2), Inches(1.22),
+                             width=Inches(w), height=Inches(h))
+        y = 1.22 + h + 0.14
+        section_label(s, 0.5, y, 5.0, 'NEW — FSTL FULFILMENT CHAIN (ZOOM)', BLUE)
+        cy = y + 0.44
+        ch = min(1.95, 6.58 - cy)
+        cw2, ch2 = PILImage.open(ap['chain']).size
+        cw = ch * cw2 / ch2
+        s.shapes.add_picture(ap['chain'], Inches(0.5), Inches(cy), width=Inches(cw), height=Inches(ch))
+        tt, lines = ap['chg']
+        cx = 0.5 + cw + 0.3
+        card(s, cx, cy, 12.9 - cx, ch, tt, lines, 'lavender', bsize=9.5)
+    else:
+        ratio = phh / pw
+        w, maxh = 12.5, 5.4
+        h = w * ratio
+        if h > maxh:
+            h = maxh
+            w = h / ratio
+        s.shapes.add_picture(ap['img'], Inches(0.4 + (12.53 - w) / 2), Inches(1.2 + (5.4 - h) / 2),
+                             width=Inches(w), height=Inches(h))
+    text(s, 0.5, 6.72, 12.3, 0.35, ap['cap'], 9.5, False, NAVY, PP_ALIGN.CENTER, italic=True)
+    page += 1
 
 prs.save(OUT)
 print('written', OUT)
